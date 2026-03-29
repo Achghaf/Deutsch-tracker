@@ -1024,6 +1024,8 @@ let currentRole = 'user'; // 'admin' | 'user'
 let currentLang = 'de';
 let _appInited = false;
 let _staticUiBound = false;
+let _adminAllUsers = [];
+let _adminRoleFilter = 'all';
 
 function isAdmin(){ return currentRole === 'admin'; }
 
@@ -3108,8 +3110,6 @@ async function adminLoadUsers(){
 
 
 // ===== ADMIN DASHBOARD PAGE =====
-let _adminAllUsers = [];
-let _adminRoleFilter = 'all';
 
 async function loadAdminPage(){
   if(!isAdmin()) return;
@@ -3187,6 +3187,7 @@ function renderAdminChart(){
 }
 
 function renderAdminUsersList(){
+  if(!Array.isArray(_adminAllUsers)) return;
   const search = (document.getElementById('admin-user-search')?.value||'').toLowerCase();
   const list = document.getElementById('admin-users-list-full');
   const now = new Date();
@@ -3226,6 +3227,7 @@ function renderAdminUsersList(){
 }
 
 function adminFilterUsers(){
+  if(!_adminAllUsers || !_adminAllUsers.length) return;
   renderAdminUsersList();
 }
 
