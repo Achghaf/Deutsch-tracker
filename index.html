@@ -414,7 +414,11 @@ h1 span{color:var(--gold)}
 .news-textarea{resize:vertical;min-height:96px;line-height:1.6}
 .news-textarea.body{min-height:180px}
 .news-compose-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.news-btn{padding:11px 16px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.news-btn{padding:11px 16px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.news-btn .btn-spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+.news-btn.loading .btn-spinner{display:block}
+.news-btn.loading .btn-label{display:none}
+.news-btn:disabled{opacity:0.5;cursor:default}
 .news-btn:active{transform:scale(0.97)}
 .news-btn.primary{background:var(--gold);color:var(--black)}
 .news-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--muted)}
@@ -854,7 +858,7 @@ h1 span{color:var(--gold)}
       </div>
 
       <div class="news-compose-actions">
-        <button class="news-btn primary" id="news-submit-btn" onclick="submitNewsPost()">Veröffentlichen</button>
+        <button class="news-btn primary" id="news-submit-btn" onclick="submitNewsPost()"><div class="btn-spinner"></div><span class="btn-label">Veröffentlichen</span></button>
         <button class="news-btn secondary" id="news-cancel-btn" onclick="cancelNewsEdit()" style="display:none">Abbrechen</button>
       </div>
       <div class="news-status" id="news-status"></div>
@@ -1033,6 +1037,9 @@ const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
 let currentRole = 'user'; // 'admin' | 'user'
+let newsFilter = 'all';
+let editingNewsId = null;
+let _newsPosts = [];
 let currentLang = 'de';
 let _appInited = false;
 let _staticUiBound = false;
@@ -2689,9 +2696,6 @@ function cancelStreakReminder(){
 
 
 // ===== NEWS / POSTS =====
-let newsFilter = 'all';
-let editingNewsId = null;
-let _newsPosts = []; // Supabase-backed global news posts
 
 function getNewsBadgeLabel(type){
   return type === 'news' ? t('news_badge_news') : t('news_badge_article');
@@ -2726,7 +2730,10 @@ function updateNewsComposerUi(){
   const status=document.getElementById('news-status');
   // Only admins see the composer
   if(composer) composer.style.display = isAdmin() ? '' : 'none';
-  if(submitBtn)submitBtn.textContent = editingNewsId ? t('news_update_btn') : t('news_publish_btn');
+  if(submitBtn){
+    const lbl = submitBtn.querySelector('.btn-label');
+    if(lbl) lbl.textContent = editingNewsId ? t('news_update_btn') : t('news_publish_btn');
+  }
   if(cancelBtn)cancelBtn.style.display = editingNewsId ? 'inline-flex' : 'none';
   if(status && editingNewsId){
     status.textContent = t('news_editing_hint');
@@ -2816,7 +2823,7 @@ async function submitNewsPost(){
   if(!body){ showToast(t('news_validation_body')); document.getElementById('news-body-input')?.focus(); return; }
 
   const btn=document.getElementById('news-submit-btn');
-  if(btn){btn.disabled=true;btn.textContent='...';}
+  if(btn){btn.disabled=true;btn.classList.add('loading');}
 
   try{
     if(editingNewsId){
@@ -2841,7 +2848,7 @@ async function submitNewsPost(){
   }catch(e){
     showToast('Error: '+(e.message||'Could not save post'));
   }finally{
-    if(btn) btn.disabled=false;
+    if(btn){btn.disabled=false;btn.classList.remove('loading');}
   }
 }
 
