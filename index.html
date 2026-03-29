@@ -2649,7 +2649,7 @@ async function doTranslate(){
 
   renderResultCards(input, ar || '—', en || '—', '');
   translateHistory.unshift({ de: input, ar: ar||'', en: en||'', phonetic:'', date: new Date().toLocaleDateString() });
-  translateHistory = uniqueHistory(translateHistory).slice(0, 50);
+  translateHistory = uniqueHistory(translateHistory).slice(0, 5);
   saveTranslateHistory();
   renderTranslateHistory();
 
