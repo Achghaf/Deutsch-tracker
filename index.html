@@ -629,19 +629,11 @@ function hideConfirmScreen(){
   showLoginScreen();
 }
 
-// Client-side per-email attempt tracking (best-effort UX enforcement).
-function getCreateAttempts(email){
-  try{
-    const key='createAttempts:'+email;
-    const arr=JSON.parse(localStorage.getItem(key)||'[]');
-    const cutoff=Date.now()-60*60*1000; // 1 hour
-    return arr.filter(ts=>Number(ts) > cutoff);
-  }catch(e){return []}
-}
-function saveCreateAttempts(email,arr){try{localStorage.setItem('createAttempts:'+email,JSON.stringify(arr))}catch(e){}
-}
-function addCreateAttempt(email){const arr=getCreateAttempts(email);arr.push(Date.now());saveCreateAttempts(email,arr);return arr}
-function clearCreateAttempts(email){try{localStorage.removeItem('createAttempts:'+email)}catch(e){}
+// No client-side signup throttling here.
+// Supabase already enforces server-side protections, and localStorage-based
+// limits can falsely block real users on the same browser.
+function getSignupRedirectUrl(){
+  return window.location.origin + window.location.pathname;
 }
 
 async function handleAuth(){
@@ -653,16 +645,6 @@ async function handleAuth(){
   if(authMode==='register'&&pwd!==confirm){showAuthError(t('error_pwd_match'));return;}
   if(pwd.length<6){showAuthError(t('error_pwd_short'));return;}
 
-  // Check local attempt history for this email (client-side UX guard)
-  if(authMode==='register'){
-    const attempts=getCreateAttempts(email);
-    if(attempts.length>=5){
-      // Use i18n message for limit reached
-      showAuthError(t('error_limit'));
-      return;
-    }
-  }
-
   btn.disabled=true;btn.textContent='...';
   document.getElementById('auth-error').classList.remove('visible');
   try{
@@ -672,13 +654,15 @@ async function handleAuth(){
       if(error) throw error;
       // If login succeeds, button state will reset via auth state change handler
     } else {
-      // Record this attempt (client-side) before calling the API
-      addCreateAttempt(email);
-      // Register a new user. Supabase will send a confirmation email.
-      const { error } = await _supa.auth.signUp({ email, password: pwd });
+      // Register a new user and force the confirmation email back to this page.
+      const { error } = await _supa.auth.signUp({
+        email,
+        password: pwd,
+        options: {
+          emailRedirectTo: getSignupRedirectUrl()
+        }
+      });
       if(error) throw error;
-      // On success, clear client-side attempts and show confirmation screen
-      clearCreateAttempts(email);
       showConfirmScreen();
       // Reset button state for next time
       btn.disabled = false;
@@ -697,8 +681,10 @@ async function handleAuth(){
     };
     // Map common server-side rate-limit / too-many requests messages
     const serverMsg = (e && e.message) ? e.message : '';
-    if(/too many/i.test(serverMsg) || /429/.test(serverMsg)){
+    if(/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)){
       showAuthError(t('error_too_many'));
+    } else if(/pre-authorized addresses/i.test(serverMsg) || /not part of the project's team/i.test(serverMsg)){
+      showAuthError(t('error_email_provider_restricted'));
     } else {
       showAuthError(msgs[serverMsg] || serverMsg || String(e));
     }
@@ -874,10 +860,17 @@ async function loadPdfs(){
   if(!currentUser)return;
   document.getElementById('pdf-grid').innerHTML='<div class="pdf-empty" style="grid-column:1/-1"><div class="spinner" style="margin:0 auto"></div></div>';
   try{
-    const {data}=await _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
+    const {data,error}=await _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
+    if(error)throw error;
     pdfs=data||[];
-  }catch(e){pdfs=[];}
-  renderPdfGrid();updateStorageBar();
+  }catch(e){
+    pdfs=[];
+    const msg=(e&&e.message)?e.message:t('pdf_list_error');
+    document.getElementById('pdf-grid').innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">⚠️</div><p>${t('pdf_list_error')}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.8">${msg}</p></div>`;
+    showToast(t('pdf_list_error'));
+  }
+  updateStorageBar();
+  if(pdfs.length)renderPdfGrid();
 }
 
 function updateStorageBar(){
@@ -898,32 +891,31 @@ function handleFiles(files){
   });
 }
 
-function uploadPdf(file){
+async function uploadPdf(file){
   const id=Date.now()+'_'+Math.random().toString(36).substr(2,6);
   const name=file.name.replace(/\.pdf$/i,'');
   const path=storagePath(id);
   const meta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString(getLocale()),added_at_ts:Date.now(),user_id:currentUser.id,uploading:true,progress:0};
   pdfs.unshift(meta);renderPdfGrid();
 
-  const xhr=new XMLHttpRequest();
-  xhr.upload.onprogress=e=>{
-    if(e.lengthComputable){
-      const pct=Math.round(e.loaded/e.total*100);
-      const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx].progress=pct;
-      const bar=document.getElementById('prog-fill-'+id);const txt=document.getElementById('prog-txt-'+id);
-      if(bar)bar.style.width=pct+'%';if(txt)txt.textContent=pct+'%';
-    }
-  };
+  try{
+    const {error:storageError}=await _supa.storage.from('pdfs').upload(path,file,{contentType:'application/pdf',upsert:false});
+    if(storageError)throw storageError;
 
-  // Use Supabase storage upload
-  _supa.storage.from('pdfs').upload(path,file,{contentType:'application/pdf',upsert:false})
-    .then(async({error})=>{
-      if(error){pdfs=pdfs.filter(p=>p.id!==id);renderPdfGrid();showToast(t('toast_upload_error_prefix')+' '+error.message);return;}
-      const dbMeta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString(getLocale()),added_at_ts:Date.now(),user_id:currentUser.id};
-      await _supa.from('pdf_files').insert(dbMeta);
-      const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx]={...dbMeta,uploading:false};
-      renderPdfGrid();updateStorageBar();showToast(t('toast_upload_success'));openRenameModal(id);
-    });
+    const dbMeta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString(getLocale()),added_at_ts:Date.now(),user_id:currentUser.id};
+    const {error:dbError}=await _supa.from('pdf_files').insert(dbMeta);
+    if(dbError){
+      await _supa.storage.from('pdfs').remove([path]);
+      throw dbError;
+    }
+
+    const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx]={...dbMeta,uploading:false};
+    renderPdfGrid();updateStorageBar();showToast(t('toast_upload_success'));openRenameModal(id);
+  }catch(e){
+    pdfs=pdfs.filter(p=>p.id!==id);
+    renderPdfGrid();updateStorageBar();
+    showToast(t('toast_upload_error_prefix')+' '+((e&&e.message)?e.message:t('generic_error')));
+  }
 }
 
 function renderPdfGrid(){
@@ -957,7 +949,8 @@ function renderPdfGrid(){
 }
 
 async function getPdfUrl(p){
-  const{data}=await _supa.storage.from('pdfs').createSignedUrl(p.storage_path,3600);
+  const{data,error}=await _supa.storage.from('pdfs').createSignedUrl(p.storage_path,3600);
+  if(error)throw error;
   return data?.signedUrl||null;
 }
 
@@ -1012,11 +1005,15 @@ async function deletePdf(id){
   if(!confirm(t('confirm_delete_pdf')))return;
   try{
     const p=pdfs.find(x=>String(x.id)===String(id));
-    if(p?.storage_path)await _supa.storage.from('pdfs').remove([p.storage_path]);
-    await _supa.from('pdf_files').delete().eq('id',id).eq('user_id',currentUser.id);
+    if(p?.storage_path){
+      const {error:storageError}=await _supa.storage.from('pdfs').remove([p.storage_path]);
+      if(storageError)throw storageError;
+    }
+    const {error:dbError}=await _supa.from('pdf_files').delete().eq('id',id).eq('user_id',currentUser.id);
+    if(dbError)throw dbError;
     pdfs=pdfs.filter(p=>String(p.id)!==String(id));
     renderPdfGrid();updateStorageBar();showToast(t('toast_deleted'));
-  }catch(e){showToast(t('toast_delete_error'));}
+  }catch(e){showToast(t('toast_delete_error')+' '+((e&&e.message)?e.message:''));}
 }
 
 function openRenameModal(id){
@@ -1030,9 +1027,10 @@ async function confirmRename(){
   const name=document.getElementById('rename-input').value.trim();const cat=document.getElementById('rename-cat').value;
   if(name)p.name=name;p.category=cat;
   try{
-    await _supa.from('pdf_files').update({name:p.name,category:p.category}).eq('id',p.id).eq('user_id',currentUser.id);
+    const {error}=await _supa.from('pdf_files').update({name:p.name,category:p.category}).eq('id',p.id).eq('user_id',currentUser.id);
+    if(error)throw error;
     renderPdfGrid();closeRenameModal();showToast(t('toast_saved'));
-  }catch(e){showToast(t('toast_save_error'));}
+  }catch(e){showToast(t('toast_save_error')+' '+((e&&e.message)?e.message:''));}
 }
 
 // ===== NAVIGATION =====
@@ -1204,8 +1202,8 @@ const i18n={
     error_fill_all:'Bitte fülle alle Felder aus.',
     error_pwd_match:'Die Passwörter stimmen nicht überein.',
     error_pwd_short:'Passwort zu kurz (min. 6 Zeichen).',
-    error_limit:'Dieses E‑Mail‑Konto hat das Limit von 5 Registrierungen pro Stunde erreicht. Bitte versuche es später erneut.',
-    error_too_many:'Zu viele Versuche. Bitte versuche es in einer Stunde erneut.',
+        error_too_many:'Zu viele Bestätigungs-E-Mails wurden gerade gesendet. Versuche es später erneut oder erhöhe in Supabase Auth die E-Mail-/Rate-Limits bzw. nutze ein eigenes SMTP.',
+    error_email_provider_restricted:'Die Standard-E-Mail-Zustellung von Supabase ist eingeschränkt. Nutze ein eigenes SMTP oder autorisierte Empfänger im Projekt.',
     error_invalid_login:'E‑Mail oder Passwort ist inkorrekt.',
     error_user_exists:'Diese E‑Mail wird bereits verwendet.',
     error_not_confirmed:'Prüfe deine E‑Mail, um dein Konto zu bestätigen.',
@@ -1218,6 +1216,8 @@ const i18n={
     toast_save_error:'⚠️ Speicherfehler',
     toast_upload_success:'✓ PDF gespeichert!',
     toast_upload_error_prefix:'⚠️ Upload fehlgeschlagen:',
+    pdf_list_error:'Dokumente konnten nicht geladen werden.',
+    generic_error:'Unbekannter Fehler',
     toast_only_pdf:'⚠️ Nur PDF-Dateien erlaubt',
     toast_file_too_big:'⚠️ Datei zu groß (max 50 MB)'
   },
@@ -1298,8 +1298,8 @@ const i18n={
     error_fill_all:'Please fill in all fields.',
     error_pwd_match:'Passwords do not match.',
     error_pwd_short:'Password too short (min. 6 chars).',
-    error_limit:'This email address has reached the limit of 5 sign-up attempts per hour. Please try again later.',
-    error_too_many:'Too many attempts. Please try again in one hour.',
+        error_too_many:'Too many confirmation emails were sent recently. Try again later, or increase the Supabase Auth email/rate limits or use custom SMTP.',
+    error_email_provider_restricted:'Supabase default email delivery is restricted. Use custom SMTP or authorized recipient addresses for this project.',
     error_invalid_login:'Email or password is incorrect.',
     error_user_exists:'This email is already in use.',
     error_not_confirmed:'Check your email to confirm your account.',
@@ -1312,6 +1312,8 @@ const i18n={
     toast_save_error:'⚠️ Save failed',
     toast_upload_success:'✓ PDF saved!',
     toast_upload_error_prefix:'⚠️ Upload failed:',
+    pdf_list_error:'Could not load documents.',
+    generic_error:'Unknown error',
     toast_only_pdf:'⚠️ Only PDF files are allowed',
     toast_file_too_big:'⚠️ File is too large (max 50 MB)'
   }
