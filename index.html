@@ -284,7 +284,7 @@ h1 span{color:var(--gold)}
 @media(max-width:399px){.overall-inner{grid-template-columns:1fr 1fr}.big-stat:nth-child(2){grid-column:span 2;order:-1}.month-sublabel{display:none}.arc-container{width:120px;height:75px}.arc-container svg{width:120px;height:120px;margin-top:-48px}}
 
 /* LANGUAGE SWITCHER */
-.lang-switcher{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0;background:#111;border:1px solid var(--border);border-radius:20px;overflow:hidden;z-index:250;box-shadow:0 2px 12px rgba(0,0,0,0.5)}
+.lang-switcher{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0;background:#111;border:1px solid var(--border);border-radius:20px;overflow:hidden;z-index:1101;box-shadow:0 2px 12px rgba(0,0,0,0.5)}
 .lang-btn{padding:5px 12px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px}
 .lang-btn.active{background:var(--gold);color:var(--black);font-weight:600}
 .lang-btn:first-child{border-radius:20px 0 0 20px}
@@ -337,7 +337,7 @@ h1 span{color:var(--gold)}
 <!-- APP LOADER -->
 <div class="app-loader visible" id="app-loader">
   <div class="big-spinner"></div>
-  <p>Connexion...</p>
+  <p id="loader-text">Verbindung...</p>
 </div>
 
 <!-- LOGIN SCREEN -->
@@ -348,13 +348,13 @@ h1 span{color:var(--gold)}
       <div class="login-title">Mein Ziel:<br><span>Deutsch B1</span></div>
       <div class="login-sub">5-Monats-Lernplan · Von Null zu B1</div>
       <div class="login-tabs">
-        <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Connexion</button>
-        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Créer un compte</button>
+        <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Anmelden</button>
+        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Konto erstellen</button>
       </div>
       <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="example@gmail.com" autocomplete="email" maxlength="254" required></div>
-      <div class="login-field"><label>Mot de passe</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
-      <div class="login-field" id="field-confirm" style="display:none"><label>Confirmer le mot de passe</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
-      <button class="login-btn" id="auth-btn" onclick="handleAuth()">Se connecter</button>
+      <div class="login-field"><label>Passwort</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="login-field" id="field-confirm" style="display:none"><label>Passwort bestätigen</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
+      <button class="login-btn" id="auth-btn" onclick="handleAuth()">Anmelden</button>
       <div class="login-error" id="auth-error"></div>
     </div>
   </div>
@@ -365,9 +365,9 @@ h1 span{color:var(--gold)}
   <div class="confirm-box">
     <div class="login-flag"></div>
     <div class="confirm-body">
-      <div class="confirm-title">Confirme ton e‑mail</div>
-      <div class="confirm-text">Nous t'avons envoyé un e‑mail de confirmation. Clique sur le lien dans cet e‑mail pour activer ton compte. Une fois confirmé, reviens ici et connecte‑toi.</div>
-      <button class="confirm-btn" onclick="hideConfirmScreen()">Retour à la connexion</button>
+      <div class="confirm-title">Bestätige deine E‑Mail</div>
+      <div class="confirm-text">Wir haben dir eine Bestätigungs‑E‑Mail geschickt. Klicke auf den Link, um dein Konto zu aktivieren. Sobald bestätigt, komm zurück und melde dich an.</div>
+      <button class="confirm-btn" onclick="hideConfirmScreen()">Zurück zur Anmeldung</button>
       <div class="confirm-msg" id="confirm-success-msg"></div>
     </div>
   </div>
@@ -492,7 +492,7 @@ h1 span{color:var(--gold)}
       <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
       <div class="upload-icon">📄</div>
       <div class="upload-title">PDF hochladen</div>
-      <div class="upload-sub">Stocké localement · Accessible hors ligne · Max 200 MB par fichier</div>
+      <div class="upload-sub">Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei</div>
     </div>
     <div class="pdf-categories">
       <button class="cat-btn active" data-cat="all">Alle</button>
@@ -570,24 +570,45 @@ const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 
 const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
+let currentLang = 'de';
+let _appInited = false;
+let _staticUiBound = false;
 
-// Immediately show the login screen.  On slow or blocked Supabase requests
-// the loader could remain visible and appear to hang.  By toggling the
-// loader off and the login screen on before checking the session, the UI
-// will always display a login form while background checks continue.
-document.getElementById('app-loader').classList.remove('visible');
-document.getElementById('login-screen').classList.add('visible');
+function setOverlayState(target){
+  document.getElementById('app-loader').classList.toggle('visible',target==='loader');
+  document.getElementById('login-screen').classList.toggle('visible',target==='login');
+  document.getElementById('confirm-screen').classList.toggle('visible',target==='confirm');
+}
+function showLoader(){setOverlayState('loader');}
+function showLoginScreen(){setOverlayState('login');}
+function showConfirmScreen(){setOverlayState('confirm');}
+function showAppShell(){setOverlayState('app');}
 
-// Eager session check — if a session exists, hide the login screen and let
-// onAuthStateChange handle initialization.  If there is no session,
-// the login screen remains visible.  We ignore the loader here since it
-// has already been hidden.
-_supa.auth.getSession().then(({data:{session}})=>{
-  if(session){
-    document.getElementById('login-screen').classList.remove('visible');
+async function bootstrapAuth(){
+  showLoader();
+  try{
+    const sessionResult=await Promise.race([
+      _supa.auth.getSession(),
+      new Promise(resolve=>setTimeout(()=>resolve({data:{session:null}}),2500))
+    ]);
+    const session=sessionResult?.data?.session||null;
+    if(session?.user){
+      currentUser=session.user;
+      showAppShell();
+      showUserBadge(currentUser);
+      switchPage('tracker');
+      if(!_appInited){_appInited=true;await initApp();}
+    }else{
+      const isSignupReturn=new URLSearchParams(window.location.search).get('type')==='signup';
+      if(isSignupReturn)showConfirmScreen();
+      else showLoginScreen();
+    }
+  }catch(e){
+    showLoginScreen();
   }
-  // onAuthStateChange will handle the rest
-});
+}
+bootstrapAuth();
+
 
 // ===== AUTH SUPABASE =====
 let authMode='login';
@@ -603,17 +624,9 @@ function switchAuthTab(mode){
 
 function showAuthError(msg){const el=document.getElementById('auth-error');el.textContent=msg;el.classList.add('visible');}
 
-// Show email confirmation screen after successful registration
-function showConfirmScreen(){
-  // Hide login and display confirm screen
-  document.getElementById('login-screen').classList.remove('visible');
-  document.getElementById('confirm-screen').classList.add('visible');
-}
-
 // Hide email confirmation screen and return to login screen
 function hideConfirmScreen(){
-  document.getElementById('confirm-screen').classList.remove('visible');
-  document.getElementById('login-screen').classList.add('visible');
+  showLoginScreen();
 }
 
 // Client-side per-email attempt tracking (best-effort UX enforcement).
@@ -636,9 +649,9 @@ async function handleAuth(){
   const pwd=document.getElementById('auth-password').value;
   const confirm=document.getElementById('auth-confirm').value;
   const btn=document.getElementById('auth-btn');
-  if(!email||!pwd){showAuthError('Remplis tous les champs.');return;}
-  if(authMode==='register'&&pwd!==confirm){showAuthError('Les mots de passe ne correspondent pas.');return;}
-  if(pwd.length<6){showAuthError('Mot de passe trop court (min 6 caractères).');return;}
+  if(!email||!pwd){showAuthError(t('error_fill_all'));return;}
+  if(authMode==='register'&&pwd!==confirm){showAuthError(t('error_pwd_match'));return;}
+  if(pwd.length<6){showAuthError(t('error_pwd_short'));return;}
 
   // Check local attempt history for this email (client-side UX guard)
   if(authMode==='register'){
@@ -697,28 +710,20 @@ async function logout(){
   await _supa.auth.signOut();
 }
 
-// Supabase gère la session automatiquement
-let _appInited = false;
-
-// Safety fallback removed: we now show the login screen immediately above.
-// Define _authTimeout as null so that clearTimeout(_authTimeout) is harmless.
-const _authTimeout = null;
+// Supabase handles the session automatically.
 
 _supa.auth.onAuthStateChange(async(event,session)=>{
-  clearTimeout(_authTimeout);
-  document.getElementById('app-loader').classList.remove('visible');
-  // Always hide the email confirmation screen on any auth state change
-  const confirmEl = document.getElementById('confirm-screen');
-  if(confirmEl) confirmEl.classList.remove('visible');
   if(session?.user){
     currentUser=session.user;
-    document.getElementById('login-screen').classList.remove('visible');
+    showAppShell();
     showUserBadge(currentUser);
+    switchPage('tracker');
     if(!_appInited){_appInited=true;await initApp();}
   }else{
     currentUser=null;
     _appInited=false;
-    document.getElementById('login-screen').classList.add('visible');
+    if(document.getElementById('confirm-screen').classList.contains('visible'))return;
+    showLoginScreen();
     ['mob-profile-btn','desk-profile-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
     closeProfileModal();
   }
@@ -738,16 +743,39 @@ function showUserBadge(user){
 }
 
 // ===== DATA =====
-const DATA={
-  months:[
-    {id:'m1',cls:'m1',title:'Monat 1',sub:'Grundlagen (A1)',desc:'Alphabet · Artikel · Basissätze',weeks:[{w:1,name:'Alphabet & Aussprache',topic:'Buchstaben, Umlaute ä/ö/ü, ß, ch/sch'},{w:2,name:'Grüße & Zahlen',topic:'Phrasen, Zahlen 1–1000, Tage, Monate'},{w:3,name:'Artikel & Genus',topic:'der/die/das Regeln, Genus erkennen'},{w:4,name:'sein, haben & Präsens',topic:'Konjugation, einfache Sätze'}]},
-    {id:'m2',cls:'m2',title:'Monat 2',sub:'A1 fertig, A2 Start',desc:'Fälle · Modalverben · Vergangenheit',weeks:[{w:5,name:'Nominativ & Akkusativ',topic:'Artikelveränderung, direkte Objekte'},{w:6,name:'Modalverben',topic:'können, müssen, wollen, dürfen, sollen, mögen'},{w:7,name:'Perfekt',topic:'haben/sein + Partizip II, unregelmäßige Formen'},{w:8,name:'Dativ + Präpositionen',topic:'mit, von, aus, bei, nach, seit, zu'}]},
-    {id:'m3',cls:'m3',title:'Monat 3',sub:'A2 fertig, B1 Einstieg',desc:'Wortschatz · Komplexe Grammatik · Gespräche',weeks:[{w:9,name:'Alltagswortschatz',topic:'Zuhause, Essen, Reisen, Einkaufen – 500 Wörter'},{w:10,name:'Wechselpräpositionen',topic:'an, auf, in, über, neben – Akk. vs Dat.'},{w:11,name:'Genitiv',topic:'des/der Besitz, formales Schreiben'},{w:12,name:'Wiederholung & Sprechen',topic:'Mock-Gespräche, A2 Checkpoint'}]},
-    {id:'m4',cls:'m4',title:'Monat 4',sub:'B1 Grammatikkern',desc:'Nebensätze · Futur · Konjunktiv II',weeks:[{w:13,name:'Nebensätze',topic:'weil, dass, obwohl, wenn, als – Verb ans Ende'},{w:14,name:'Futur I',topic:'werden + Infinitiv, Pläne & Vorhersagen'},{w:15,name:'Konjunktiv II',topic:'würde, könnte, hätte – Höflichkeit & Hypothesen'},{w:16,name:'Hören & Lesen',topic:'Slow German Podcast, DW Artikel, B1 Texte'}]},
-    {id:'m5',cls:'m5',title:'Monat 5',sub:'B1 Konsolidierung',desc:'Flüssigkeit · Immersion · Prüfungsvorbereitung',weeks:[{w:17,name:'Wortschatzerweiterung',topic:'Arbeit, Meinungen, Emotionen – 1000+ Wörter'},{w:18,name:'Sprechübung',topic:'italki Stunden, Gespräche, Aussprache'},{w:19,name:'Schreiben & Verstehen',topic:'kurze E-Mails, DW Artikel, B1 Texte'},{w:20,name:'B1 Probetest & Review',topic:'Vollständiger Probetest, Schwachstellen, Review'}]},
-  ],
-  dailyTasks:[{id:'anki',name:'Anki Vokabeln',icon:'🃏',duration:'20 Min.'},{id:'grammar',name:'Grammatik/Thema',icon:'📖',duration:'30 Min.'},{id:'listen',name:'Hörverstehen',icon:'🎧',duration:'20 Min.'},{id:'speak',name:'Sprechen / Schreiben',icon:'🗣',duration:'20 Min.'}]
+const DATA_I18N={
+  de:{
+    months:[
+      {id:'m1',cls:'m1',title:'Monat 1',sub:'Grundlagen (A1)',desc:'Alphabet · Artikel · Basissätze',weeks:[{w:1,name:'Alphabet & Aussprache',topic:'Buchstaben, Umlaute ä/ö/ü, ß, ch/sch'},{w:2,name:'Grüße & Zahlen',topic:'Phrasen, Zahlen 1–1000, Tage, Monate'},{w:3,name:'Artikel & Genus',topic:'der/die/das Regeln, Genus erkennen'},{w:4,name:'sein, haben & Präsens',topic:'Konjugation, einfache Sätze'}]},
+      {id:'m2',cls:'m2',title:'Monat 2',sub:'A1 fertig, A2 Start',desc:'Fälle · Modalverben · Vergangenheit',weeks:[{w:5,name:'Nominativ & Akkusativ',topic:'Artikelveränderung, direkte Objekte'},{w:6,name:'Modalverben',topic:'können, müssen, wollen, dürfen, sollen, mögen'},{w:7,name:'Perfekt',topic:'haben/sein + Partizip II, unregelmäßige Formen'},{w:8,name:'Dativ + Präpositionen',topic:'mit, von, aus, bei, nach, seit, zu'}]},
+      {id:'m3',cls:'m3',title:'Monat 3',sub:'A2 fertig, B1 Einstieg',desc:'Wortschatz · Komplexe Grammatik · Gespräche',weeks:[{w:9,name:'Alltagswortschatz',topic:'Zuhause, Essen, Reisen, Einkaufen – 500 Wörter'},{w:10,name:'Wechselpräpositionen',topic:'an, auf, in, über, neben – Akk. vs Dat.'},{w:11,name:'Genitiv',topic:'des/der Besitz, formales Schreiben'},{w:12,name:'Wiederholung & Sprechen',topic:'Mock-Gespräche, A2 Checkpoint'}]},
+      {id:'m4',cls:'m4',title:'Monat 4',sub:'B1 Grammatikkern',desc:'Nebensätze · Futur · Konjunktiv II',weeks:[{w:13,name:'Nebensätze',topic:'weil, dass, obwohl, wenn, als – Verb ans Ende'},{w:14,name:'Futur I',topic:'werden + Infinitiv, Pläne & Vorhersagen'},{w:15,name:'Konjunktiv II',topic:'würde, könnte, hätte – Höflichkeit & Hypothesen'},{w:16,name:'Hören & Lesen',topic:'Slow German Podcast, DW Artikel, B1 Texte'}]},
+      {id:'m5',cls:'m5',title:'Monat 5',sub:'B1 Konsolidierung',desc:'Flüssigkeit · Immersion · Prüfungsvorbereitung',weeks:[{w:17,name:'Wortschatzerweiterung',topic:'Arbeit, Meinungen, Emotionen – 1000+ Wörter'},{w:18,name:'Sprechübung',topic:'italki Stunden, Gespräche, Aussprache'},{w:19,name:'Schreiben & Verstehen',topic:'kurze E-Mails, DW Artikel, B1 Texte'},{w:20,name:'B1 Probetest & Review',topic:'Vollständiger Probetest, Schwachstellen, Review'}]},
+    ],
+    dailyTasks:[
+      {id:'anki',name:'Anki Vokabeln',icon:'🃏',duration:'20 Min.'},
+      {id:'grammar',name:'Grammatik/Thema',icon:'📖',duration:'30 Min.'},
+      {id:'listen',name:'Hörverstehen',icon:'🎧',duration:'20 Min.'},
+      {id:'speak',name:'Sprechen / Schreiben',icon:'🗣',duration:'20 Min.'}
+    ]
+  },
+  en:{
+    months:[
+      {id:'m1',cls:'m1',title:'Month 1',sub:'Foundations (A1)',desc:'Alphabet · Articles · Basic sentences',weeks:[{w:1,name:'Alphabet & Pronunciation',topic:'Letters, umlauts ä/ö/ü, ß, ch/sch'},{w:2,name:'Greetings & Numbers',topic:'Phrases, numbers 1–1000, days, months'},{w:3,name:'Articles & Gender',topic:'der/die/das rules, recognizing gender'},{w:4,name:'sein, haben & Present tense',topic:'Conjugation, simple sentences'}]},
+      {id:'m2',cls:'m2',title:'Month 2',sub:'Finish A1, start A2',desc:'Cases · Modal verbs · Past tense',weeks:[{w:5,name:'Nominative & Accusative',topic:'Article changes, direct objects'},{w:6,name:'Modal verbs',topic:'can, must, want, may, should, like'},{w:7,name:'Perfect tense',topic:'haben/sein + past participle, irregular forms'},{w:8,name:'Dative + Prepositions',topic:'mit, von, aus, bei, nach, seit, zu'}]},
+      {id:'m3',cls:'m3',title:'Month 3',sub:'Finish A2, enter B1',desc:'Vocabulary · Complex grammar · Conversations',weeks:[{w:9,name:'Everyday vocabulary',topic:'Home, food, travel, shopping – 500 words'},{w:10,name:'Two-way prepositions',topic:'an, auf, in, über, neben – acc. vs dat.'},{w:11,name:'Genitive',topic:'des/der possession, formal writing'},{w:12,name:'Review & Speaking',topic:'Mock conversations, A2 checkpoint'}]},
+      {id:'m4',cls:'m4',title:'Month 4',sub:'Core B1 grammar',desc:'Subordinate clauses · Future · Subjunctive II',weeks:[{w:13,name:'Subordinate clauses',topic:'weil, dass, obwohl, wenn, als – verb at the end'},{w:14,name:'Future I',topic:'werden + infinitive, plans & predictions'},{w:15,name:'Konjunktiv II',topic:'would, could, had – politeness & hypotheses'},{w:16,name:'Listening & Reading',topic:'Slow German podcast, DW articles, B1 texts'}]},
+      {id:'m5',cls:'m5',title:'Month 5',sub:'B1 consolidation',desc:'Fluency · Immersion · Exam prep',weeks:[{w:17,name:'Vocabulary expansion',topic:'Work, opinions, emotions – 1000+ words'},{w:18,name:'Speaking practice',topic:'italki lessons, conversations, pronunciation'},{w:19,name:'Writing & Comprehension',topic:'Short emails, DW articles, B1 texts'},{w:20,name:'B1 mock test & review',topic:'Full mock test, weak points, review'}]},
+    ],
+    dailyTasks:[
+      {id:'anki',name:'Anki vocabulary',icon:'🃏',duration:'20 min'},
+      {id:'grammar',name:'Grammar / Topic',icon:'📖',duration:'30 min'},
+      {id:'listen',name:'Listening practice',icon:'🎧',duration:'20 min'},
+      {id:'speak',name:'Speaking / Writing',icon:'🗣',duration:'20 min'}
+    ]
+  }
 };
+function getData(){return DATA_I18N[currentLang]||DATA_I18N.de;}
 
 // ===== TRACKER STATE (Supabase) =====
 let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null};
@@ -770,6 +798,13 @@ function save(){
   },800);
 }
 function getToday(){return new Date().toDateString();}
+function getLocale(){return currentLang==='en'?'en-GB':'de-DE';}
+function updateTodayLabel(){
+  const todayLabel=document.getElementById('today-label');
+  if(todayLabel){
+    todayLabel.textContent=new Date().toLocaleDateString(getLocale(),{weekday:'long',day:'numeric',month:'long'});
+  }
+}
 function resetDailyIfNewDay(){
   const today=getToday();
   if(state.lastActiveDay!==today){
@@ -783,27 +818,30 @@ function computeProgress(){return Math.round(Object.keys(state.completedWeeks).f
 
 function renderJourney(){
   const bar=document.getElementById('journey-bar');bar.innerHTML='';
-  const pcts=DATA.months.map(m=>m.weeks.filter(w=>state.completedWeeks[w.w]).length/m.weeks.length);
-  DATA.months.forEach((m,i)=>{
+  const data=getData();
+  const pcts=data.months.map(m=>m.weeks.filter(w=>state.completedWeeks[w.w]).length/m.weeks.length);
+  data.months.forEach((m,i)=>{
     const p=pcts[i],isDone=p===1,isActive=p>0&&!isDone;
     const node=document.createElement('div');node.className='month-node';
     node.innerHTML=`<div class="month-dot ${isDone?'done':isActive?'active':'locked'}">${isDone?'✓':i+1}</div><div class="month-label">${m.title}</div><div class="month-sublabel">${m.sub}</div>`;
     bar.appendChild(node);
-    if(i<DATA.months.length-1){const conn=document.createElement('div');const np=pcts[i+1];conn.className='month-connector '+(p===1?'done':np>0?'partial':'');if(np>0&&np<1)conn.style.setProperty('--fill',Math.round(np*100)+'%');bar.appendChild(conn);}
+    if(i<data.months.length-1){const conn=document.createElement('div');const np=pcts[i+1];conn.className='month-connector '+(p===1?'done':np>0?'partial':'');if(np>0&&np<1)conn.style.setProperty('--fill',Math.round(np*100)+'%');bar.appendChild(conn);}
   });
 }
 function renderMonths(){
   const grid=document.getElementById('months-grid');grid.innerHTML='';
-  DATA.months.forEach(m=>{
+  const data=getData();
+  data.months.forEach(m=>{
     const done=m.weeks.filter(w=>state.completedWeeks[w.w]).length,pct=Math.round(done/m.weeks.length*100),isDone=pct===100,isActive=pct>0&&!isDone;
     const card=document.createElement('div');card.className=`month-card ${m.cls} ${isDone?'done':isActive?'active':''}`;
-    card.innerHTML=`<div class="month-card-header"><div><div class="month-card-title">${m.title} — ${m.sub}</div><div class="month-card-sub">${m.desc}</div></div><div class="month-pct" style="color:${isDone?'var(--green)':'var(--gold)'}">${pct}%</div></div><div style="height:8px"></div><div class="month-progress-bar"><div class="month-progress-fill" style="width:${pct}%"></div></div><div class="weeks-list">${m.weeks.map(w=>{const wDone=!!state.completedWeeks[w.w];return`<div class="week-row" onclick="toggleWeek(${w.w})"><div class="week-check ${wDone?'done':''}">${wDone?'✓':''}</div><div class="week-info"><div class="week-name">Woche ${w.w}: ${w.name}</div><div class="week-topic">${w.topic}</div></div><div class="week-num">W${w.w}</div></div>`;}).join('')}</div>`;
+    card.innerHTML=`<div class="month-card-header"><div><div class="month-card-title">${m.title} — ${m.sub}</div><div class="month-card-sub">${m.desc}</div></div><div class="month-pct" style="color:${isDone?'var(--green)':'var(--gold)'}">${pct}%</div></div><div style="height:8px"></div><div class="month-progress-bar"><div class="month-progress-fill" style="width:${pct}%"></div></div><div class="weeks-list">${m.weeks.map(w=>{const wDone=!!state.completedWeeks[w.w];return`<div class="week-row" onclick="toggleWeek(${w.w})"><div class="week-check ${wDone?'done':''}">${wDone?'✓':''}</div><div class="week-info"><div class="week-name">${t('week_label')} ${w.w}: ${w.name}</div><div class="week-topic">${w.topic}</div></div><div class="week-num">W${w.w}</div></div>`;}).join('')}</div>`;
     grid.appendChild(card);
   });
 }
 function renderDaily(){
   const grid=document.getElementById('daily-grid');grid.innerHTML='';
-  DATA.dailyTasks.forEach(t=>{
+  const data=getData();
+  data.dailyTasks.forEach(t=>{
     const done=!!state.dailyDone[t.id],card=document.createElement('div');
     card.className=`task-card ${done?'done':''}`;card.onclick=()=>toggleTask(t.id);
     card.innerHTML=`<div class="task-icon">${t.icon}</div><div class="task-info"><div class="task-name">${t.name}</div><div class="task-duration">${t.duration}</div></div><div class="task-checkbox">${done?'✓':''}</div>`;
@@ -821,8 +859,8 @@ function updateStats(){
   document.getElementById('arc-pct').textContent=pct;
   document.getElementById('arc-circle').style.strokeDashoffset=2*Math.PI*65*(1-pct/100);
 }
-function toggleWeek(w){state.completedWeeks[w]=!state.completedWeeks[w];showToast(state.completedWeeks[w]?`✓ Woche ${w} abgeschlossen!`:`Woche ${w} zurückgesetzt`);save();render();}
-function toggleTask(id){state.dailyDone[id]=!state.dailyDone[id];save();renderDaily();updateStats();if(Object.values(state.dailyDone).every(Boolean))showToast('🔥 Alle Aufgaben heute erledigt!');}
+function toggleWeek(w){state.completedWeeks[w]=!state.completedWeeks[w];showToast(state.completedWeeks[w]?t('toast_week_done').replace('{week}',w):t('toast_week_reset').replace('{week}',w));save();render();}
+function toggleTask(id){state.dailyDone[id]=!state.dailyDone[id];save();renderDaily();updateStats();if(Object.values(state.dailyDone).every(Boolean))showToast(t('toast_all_tasks_done'));}
 function resetAll(){if(!confirm(t('confirm_reset')))return;state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null};save();document.getElementById('notes-area').value='';render();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
@@ -845,7 +883,8 @@ async function loadPdfs(){
 function updateStorageBar(){
   const totalBytes=pdfs.reduce((a,p)=>a+(p.size||0),0);
   const mb=(totalBytes/1024/1024).toFixed(1);
-  document.getElementById('storage-info').textContent=`${mb} MB · ${pdfs.length} fichier${pdfs.length!==1?'s':''} · ☁️ Supabase Cloud`;
+  const fileWord=pdfs.length===1?t('storage_file_singular'):t('storage_file_plural');
+  document.getElementById('storage-info').textContent=`${mb} MB · ${pdfs.length} ${fileWord} · ☁️ Supabase`;
   const pct=Math.min(100,parseFloat(mb)/500*100);
   document.getElementById('storage-fill').style.width=pct+'%';
   document.getElementById('storage-fill').style.background=pct>80?'var(--red)':pct>50?'var(--gold)':'var(--green)';
@@ -853,8 +892,8 @@ function updateStorageBar(){
 
 function handleFiles(files){
   Array.from(files).forEach(file=>{
-    if(!file.type.includes('pdf')&&!file.name.endsWith('.pdf')){showToast('⚠️ Nur PDF-Dateien erlaubt');return;}
-    if(file.size>50*1024*1024){showToast('⚠️ Datei zu groß (max 50 MB)');return;}
+    if(!file.type.includes('pdf')&&!file.name.endsWith('.pdf')){showToast(t('toast_only_pdf'));return;}
+    if(file.size>50*1024*1024){showToast(t('toast_file_too_big'));return;}
     uploadPdf(file);
   });
 }
@@ -863,7 +902,7 @@ function uploadPdf(file){
   const id=Date.now()+'_'+Math.random().toString(36).substr(2,6);
   const name=file.name.replace(/\.pdf$/i,'');
   const path=storagePath(id);
-  const meta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString('de-DE'),added_at_ts:Date.now(),user_id:currentUser.id,uploading:true,progress:0};
+  const meta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString(getLocale()),added_at_ts:Date.now(),user_id:currentUser.id,uploading:true,progress:0};
   pdfs.unshift(meta);renderPdfGrid();
 
   const xhr=new XMLHttpRequest();
@@ -879,19 +918,28 @@ function uploadPdf(file){
   // Use Supabase storage upload
   _supa.storage.from('pdfs').upload(path,file,{contentType:'application/pdf',upsert:false})
     .then(async({error})=>{
-      if(error){pdfs=pdfs.filter(p=>p.id!==id);renderPdfGrid();showToast('⚠️ Upload fehlgeschlagen: '+error.message);return;}
-      const dbMeta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString('de-DE'),added_at_ts:Date.now(),user_id:currentUser.id};
+      if(error){pdfs=pdfs.filter(p=>p.id!==id);renderPdfGrid();showToast(t('toast_upload_error_prefix')+' '+error.message);return;}
+      const dbMeta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString(getLocale()),added_at_ts:Date.now(),user_id:currentUser.id};
       await _supa.from('pdf_files').insert(dbMeta);
       const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx]={...dbMeta,uploading:false};
-      renderPdfGrid();updateStorageBar();showToast('✓ PDF gespeichert!');openRenameModal(id);
+      renderPdfGrid();updateStorageBar();showToast(t('toast_upload_success'));openRenameModal(id);
     });
 }
 
 function renderPdfGrid(){
   const grid=document.getElementById('pdf-grid');
   const filtered=currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter);
-  if(filtered.length===0){grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?'Noch keine Dokumente. Lade dein erstes PDF hoch!':'Keine Dokumente in dieser Kategorie.'}</p></div>`;return;}
-  const cats={grammar:'📘 Grammatik',vocabulary:'📚 Vokabeln',exercise:'✏️ Übungen',exam:'📝 Prüfung',other:'📄 Sonstiges'};
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat')}</p></div>`;
+    return;
+  }
+  const cats={
+    grammar:t('cat_grammar'),
+    vocabulary:t('cat_vocab'),
+    exercise:t('cat_exercise'),
+    exam:t('cat_exam'),
+    other:t('cat_other')
+  };
   const fmt=b=>b>1024*1024?(b/1024/1024).toFixed(1)+' MB':Math.round(b/1024)+' KB';
   grid.innerHTML=filtered.map(p=>`
     <div class="pdf-card" id="card-${p.id}">
@@ -899,11 +947,11 @@ function renderPdfGrid(){
         ${p.uploading?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon">⏫</div>`:`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>`}
       </div>
       <div class="pdf-card-body">
-        <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||'📄 Sonstiges'}</div>
+        <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||t('cat_other')}</div>
         <div class="pdf-card-name" title="${p.name}">${p.name}</div>
-        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.addedAt}</span></div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||''}</span></div>
       </div>
-      ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">👁 Voir</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">✏️ Edit</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">🗑</button></div>`}
+      ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">${t('pdf_view_btn')}</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">${t('pdf_edit_btn')}</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">${t('pdf_delete_btn')}</button></div>`}
     </div>`).join('');
   filtered.filter(p=>!p.uploading).forEach(p=>generateThumbnail(p));
 }
@@ -931,21 +979,21 @@ async function openPdf(id){
   document.getElementById('pdf-modal').classList.add('open');
   document.body.style.overflow='hidden';
   const body=document.getElementById('modal-body');
-  body.innerHTML='<div class="pdf-loading"><div class="spinner"></div><span style="font-size:0.8rem;color:var(--muted)">Laden...</span></div>';
+  body.innerHTML=`<div class="pdf-loading"><div class="spinner"></div><span style="font-size:0.8rem;color:var(--muted)">${t('loading')}</span></div>`;
   try{
     const url=await getPdfUrl(p);
-    if(!url){body.innerHTML='<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">Fichier introuvable.</p></div>';return;}
-    if(typeof pdfjsLib==='undefined'){body.innerHTML=`<div style="padding:20px;text-align:center"><a href="${url}" target="_blank" style="color:var(--gold)">📥 Ouvrir le PDF</a></div>`;return;}
+    if(!url){body.innerHTML=`<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">${t('pdf_missing')}</p></div>`;return;}
+    if(typeof pdfjsLib==='undefined'){body.innerHTML=`<div style="padding:20px;text-align:center"><a href="${url}" target="_blank" style="color:var(--gold)">${t('pdf_open_external')}</a></div>`;return;}
     pdfDoc=await pdfjsLib.getDocument({url}).promise;
     totalPages=pdfDoc.numPages;currentPage=1;
     body.innerHTML='<canvas id="pdf-canvas"></canvas>';
     await renderPdfPage(currentPage);
-  }catch(e){body.innerHTML='<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">Fehler beim Laden.</p></div>';}
+  }catch(e){body.innerHTML=`<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">${t('pdf_load_error')}</p></div>`;}
 }
 
 async function renderPdfPage(num){
   if(!pdfDoc)return;
-  document.getElementById('page-info').textContent=`Seite ${num} / ${totalPages}`;
+  document.getElementById('page-info').textContent=`${t('pdf_page')} ${num} / ${totalPages}`;
   document.getElementById('prev-page').disabled=num<=1;
   document.getElementById('next-page').disabled=num>=totalPages;
   try{
@@ -961,14 +1009,14 @@ async function changePage(delta){const n=currentPage+delta;if(n<1||n>totalPages)
 function closePdfModal(){document.getElementById('pdf-modal').classList.remove('open');document.body.style.overflow='';pdfDoc=null;}
 
 async function deletePdf(id){
-  if(!confirm('PDF löschen?'))return;
+  if(!confirm(t('confirm_delete_pdf')))return;
   try{
     const p=pdfs.find(x=>String(x.id)===String(id));
     if(p?.storage_path)await _supa.storage.from('pdfs').remove([p.storage_path]);
     await _supa.from('pdf_files').delete().eq('id',id).eq('user_id',currentUser.id);
     pdfs=pdfs.filter(p=>String(p.id)!==String(id));
-    renderPdfGrid();updateStorageBar();showToast('🗑 Gelöscht');
-  }catch(e){showToast('⚠️ Fehler beim Löschen');}
+    renderPdfGrid();updateStorageBar();showToast(t('toast_deleted'));
+  }catch(e){showToast(t('toast_delete_error'));}
 }
 
 function openRenameModal(id){
@@ -983,8 +1031,8 @@ async function confirmRename(){
   if(name)p.name=name;p.category=cat;
   try{
     await _supa.from('pdf_files').update({name:p.name,category:p.category}).eq('id',p.id).eq('user_id',currentUser.id);
-    renderPdfGrid();closeRenameModal();showToast('✓ Gespeichert');
-  }catch(e){showToast('⚠️ Speicherfehler');}
+    renderPdfGrid();closeRenameModal();showToast(t('toast_saved'));
+  }catch(e){showToast(t('toast_save_error'));}
 }
 
 // ===== NAVIGATION =====
@@ -999,20 +1047,36 @@ function switchPage(page){
 
 // ===== INIT =====
 async function initApp(){
-  await loadState();resetDailyIfNewDay();
-  document.getElementById('today-label').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
-  const notesEl=document.getElementById('notes-area');notesEl.value=state.notes||'';notesEl.addEventListener('input',()=>{state.notes=notesEl.value;save();});
+  await loadState();
+  resetDailyIfNewDay();
+  updateTodayLabel();
+
+  const notesEl=document.getElementById('notes-area');
+  notesEl.value=state.notes||'';
+
+  if(!_staticUiBound){
+    _staticUiBound=true;
+    notesEl.addEventListener('input',()=>{state.notes=notesEl.value;save();});
+    document.getElementById('pdf-input').addEventListener('change',e=>handleFiles(e.target.files));
+    const zone=document.getElementById('upload-zone');
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');handleFiles(e.dataTransfer.files);});
+    document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{
+      currentFilter=btn.dataset.cat;
+      document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPdfGrid();
+      updateStorageBar();
+    }));
+    document.querySelectorAll('.desk-nav-item[data-page]').forEach(item=>item.addEventListener('click',()=>switchPage(item.dataset.page)));
+    document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
+    document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
+    document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
+  }
+
   render();
-  document.getElementById('pdf-input').addEventListener('change',e=>handleFiles(e.target.files));
-  const zone=document.getElementById('upload-zone');
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
-  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');handleFiles(e.dataTransfer.files);});
-  document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPdfGrid();}));
-  document.querySelectorAll('.desk-nav-item[data-page]').forEach(item=>item.addEventListener('click',()=>switchPage(item.dataset.page)));
-  document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
-  document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
-  document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
+  updateStorageBar();
 }
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
@@ -1063,8 +1127,9 @@ async function saveProfileChanges(){
 
 // ===== i18n =====
 const i18n={
-  // German translations
   de:{
+    app_title:'Mein Ziel: Deutsch B1',
+    loader_connecting:'Verbindung...',
     nav_tracker:'Tracker',
     nav_docs:'Dokumente',
     login_title_1:'Mein Ziel:',
@@ -1075,6 +1140,8 @@ const i18n={
     label_email:'E‑Mail',
     label_pwd:'Passwort',
     label_confirm:'Passwort bestätigen',
+    placeholder_email:'beispiel@gmail.com',
+    placeholder_pwd:'••••••••',
     btn_login:'Anmelden',
     btn_register:'Konto erstellen',
     logout:'Abmelden',
@@ -1097,17 +1164,31 @@ const i18n={
     notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
     pdf_title:'📁 Meine Dokumente',
     storage_label:'💾 Lokal',
+    storage_loading:'Lädt...',
+    storage_file_singular:'Datei',
+    storage_file_plural:'Dateien',
     upload_title:'PDF hochladen',
     upload_sub:'Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei',
-    storage_loading:'Lädt...',
     cat_all:'Alle',
     cat_grammar:'📘 Grammatik',
     cat_vocab:'📚 Vokabeln',
     cat_exercise:'✏️ Übungen',
     cat_exam:'📝 Prüfung',
     cat_other:'📄 Sonstiges',
+    pdf_empty_all:'Noch keine Dokumente. Lade dein erstes PDF hoch!',
+    pdf_empty_cat:'Keine Dokumente in dieser Kategorie.',
+    pdf_view_btn:'👁 Öffnen',
+    pdf_edit_btn:'✏️ Bearbeiten',
+    pdf_delete_btn:'🗑 Löschen',
+    pdf_page:'Seite',
+    pdf_missing:'Datei nicht gefunden.',
+    pdf_open_external:'📥 PDF öffnen',
+    pdf_load_error:'Fehler beim Laden.',
+    loading:'Lädt...',
+    week_label:'Woche',
     confirm_logout:'Abmelden?',
     confirm_reset:'Alles zurücksetzen?',
+    confirm_delete_pdf:'PDF löschen?',
     lbl_new_pwd:'Neues Passwort',
     lbl_confirm_pwd:'Passwort bestätigen',
     profile_save:'💾 Änderungen speichern',
@@ -1116,47 +1197,92 @@ const i18n={
     profile_pwd_mismatch:'Passwörter stimmen nicht überein.',
     profile_pwd_short:'Passwort zu kurz (min 6 Zeichen).',
     profile_saved:'✓ Passwort aktualisiert!',
-    // Confirmation screen
     confirm_title:'Bestätige deine E‑Mail',
     confirm_text:'Wir haben dir eine Bestätigungs‑E‑Mail geschickt. Klicke auf den Link, um dein Konto zu aktivieren. Sobald bestätigt, komm zurück und melde dich an.',
     confirm_btn:'Zurück zur Anmeldung',
     confirm_success:'✓ Deine E‑Mail wurde bestätigt! Du kannst dich jetzt anmelden.',
-    // Error messages
+    error_fill_all:'Bitte fülle alle Felder aus.',
+    error_pwd_match:'Die Passwörter stimmen nicht überein.',
+    error_pwd_short:'Passwort zu kurz (min. 6 Zeichen).',
     error_limit:'Dieses E‑Mail‑Konto hat das Limit von 5 Registrierungen pro Stunde erreicht. Bitte versuche es später erneut.',
     error_too_many:'Zu viele Versuche. Bitte versuche es in einer Stunde erneut.',
     error_invalid_login:'E‑Mail oder Passwort ist inkorrekt.',
-    error_user_exists:'Dieses E‑Mail wird bereits verwendet.',
+    error_user_exists:'Diese E‑Mail wird bereits verwendet.',
     error_not_confirmed:'Prüfe deine E‑Mail, um dein Konto zu bestätigen.',
+    toast_week_done:'✓ Woche {week} abgeschlossen!',
+    toast_week_reset:'Woche {week} zurückgesetzt',
+    toast_all_tasks_done:'🔥 Alle Aufgaben heute erledigt!',
+    toast_deleted:'🗑 Gelöscht',
+    toast_delete_error:'⚠️ Fehler beim Löschen',
+    toast_saved:'✓ Gespeichert',
+    toast_save_error:'⚠️ Speicherfehler',
+    toast_upload_success:'✓ PDF gespeichert!',
+    toast_upload_error_prefix:'⚠️ Upload fehlgeschlagen:',
+    toast_only_pdf:'⚠️ Nur PDF-Dateien erlaubt',
+    toast_file_too_big:'⚠️ Datei zu groß (max 50 MB)'
   },
-  // English translations
   en:{
-    nav_tracker:'Tracker', nav_docs:'Documents',
-    login_title_1:'My Goal:', login_title_2:'German B1',
+    app_title:'My Goal: German B1',
+    loader_connecting:'Connecting...',
+    nav_tracker:'Tracker',
+    nav_docs:'Documents',
+    login_title_1:'My Goal:',
+    login_title_2:'German B1',
     login_sub:'5-Month Study Plan · From Zero to B1',
-    tab_login:'Log in', tab_register:'Create account',
-    label_email:'Email', label_pwd:'Password', label_confirm:'Confirm password',
-    btn_login:'Log in', btn_register:'Create account',
-    logout:'Log out', logout_mob:'↩',
+    tab_login:'Log in',
+    tab_register:'Create account',
+    label_email:'Email',
+    label_pwd:'Password',
+    label_confirm:'Confirm password',
+    placeholder_email:'example@gmail.com',
+    placeholder_pwd:'••••••••',
+    btn_login:'Log in',
+    btn_register:'Create account',
+    logout:'Log out',
+    logout_mob:'↩',
     reset_btn:'↺ Reset',
-    h1_1:'My Goal:', h1_2:'German B1',
+    h1_1:'My Goal:',
+    h1_2:'German B1',
     h1_sub:'5-Month Study Plan · From Zero to B1',
     badge:'🎯 B1 LEVEL',
     progress_label:'Progress',
-    lbl_weeks:'Weeks', lbl_streak:'🔥 Streak',
-    lbl_vocab:'Vocabulary', lbl_hours:'Hours', lbl_today:'Today', lbl_days:'Days left',
+    lbl_weeks:'Weeks',
+    lbl_streak:'🔥 Streak',
+    lbl_vocab:'Vocabulary',
+    lbl_hours:'Hours',
+    lbl_today:'Today',
+    lbl_days:'Days left',
     section_journey:'5-Month Journey',
     section_daily:'Daily Tasks',
     section_notes:'Notes',
     notes_placeholder:'Write your thoughts in German...',
     pdf_title:'📁 My Documents',
     storage_label:'💾 Cloud',
+    storage_loading:'Loading...',
+    storage_file_singular:'file',
+    storage_file_plural:'files',
     upload_title:'Upload PDF',
     upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
-    storage_loading:'Loading...',
-    cat_all:'All', cat_grammar:'📘 Grammar', cat_vocab:'📚 Vocabulary',
-    cat_exercise:'✏️ Exercises', cat_exam:'📝 Exam', cat_other:'📄 Other',
+    cat_all:'All',
+    cat_grammar:'📘 Grammar',
+    cat_vocab:'📚 Vocabulary',
+    cat_exercise:'✏️ Exercises',
+    cat_exam:'📝 Exam',
+    cat_other:'📄 Other',
+    pdf_empty_all:'No documents yet. Upload your first PDF!',
+    pdf_empty_cat:'No documents in this category.',
+    pdf_view_btn:'👁 Open',
+    pdf_edit_btn:'✏️ Edit',
+    pdf_delete_btn:'🗑 Delete',
+    pdf_page:'Page',
+    pdf_missing:'File not found.',
+    pdf_open_external:'📥 Open PDF',
+    pdf_load_error:'Failed to load the PDF.',
+    loading:'Loading...',
+    week_label:'Week',
     confirm_logout:'Log out?',
     confirm_reset:'Reset all progress?',
+    confirm_delete_pdf:'Delete PDF?',
     lbl_new_pwd:'New password',
     lbl_confirm_pwd:'Confirm password',
     profile_save:'💾 Save changes',
@@ -1165,110 +1291,148 @@ const i18n={
     profile_pwd_mismatch:'Passwords do not match.',
     profile_pwd_short:'Password too short (min 6 chars).',
     profile_saved:'✓ Password updated!',
+    confirm_title:'Confirm your email',
+    confirm_text:'We sent you a confirmation email. Click the link in that email to activate your account. Once confirmed, come back and log in.',
+    confirm_btn:'Back to login',
+    confirm_success:'✓ Your email has been confirmed! You can now log in.',
+    error_fill_all:'Please fill in all fields.',
+    error_pwd_match:'Passwords do not match.',
+    error_pwd_short:'Password too short (min. 6 chars).',
+    error_limit:'This email address has reached the limit of 5 sign-up attempts per hour. Please try again later.',
+    error_too_many:'Too many attempts. Please try again in one hour.',
+    error_invalid_login:'Email or password is incorrect.',
+    error_user_exists:'This email is already in use.',
+    error_not_confirmed:'Check your email to confirm your account.',
+    toast_week_done:'✓ Week {week} completed!',
+    toast_week_reset:'Week {week} reset',
+    toast_all_tasks_done:'🔥 All tasks completed today!',
+    toast_deleted:'🗑 Deleted',
+    toast_delete_error:'⚠️ Delete failed',
+    toast_saved:'✓ Saved',
+    toast_save_error:'⚠️ Save failed',
+    toast_upload_success:'✓ PDF saved!',
+    toast_upload_error_prefix:'⚠️ Upload failed:',
+    toast_only_pdf:'⚠️ Only PDF files are allowed',
+    toast_file_too_big:'⚠️ File is too large (max 50 MB)'
   }
 };
-// Set default language to German
-let currentLang='de';
-
-function setLang(lang){
-  currentLang=lang;
-  localStorage.setItem('app_lang',lang);
-  // Toggle active classes for language buttons
-  document.getElementById('lang-de').classList.toggle('active',lang==='de');
-  document.getElementById('lang-en').classList.toggle('active',lang==='en');
-  applyLang();
-}
 
 function t(key){return(i18n[currentLang]||i18n.de)[key]||key;}
 
+function setLang(lang){
+  currentLang=lang==='en'?'en':'de';
+  localStorage.setItem('app_lang',currentLang);
+  document.documentElement.lang=currentLang;
+  document.title=t('app_title');
+  document.getElementById('lang-de').classList.toggle('active',currentLang==='de');
+  document.getElementById('lang-en').classList.toggle('active',currentLang==='en');
+  applyLang();
+  if(_appInited){
+    updateTodayLabel();
+    render();
+    renderPdfGrid();
+    updateStorageBar();
+    if(pdfDoc){renderPdfPage(currentPage);}
+  }
+}
+
 function applyLang(){
   const L=i18n[currentLang]||i18n.de;
-  // Nav
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(L[k])el.textContent=L[k];});
-  // Login screen
+  document.documentElement.lang=currentLang;
+  document.title=L.app_title||document.title;
+
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.dataset.i18n;
+    if(L[k])el.textContent=L[k];
+  });
+
+  const loaderText=document.getElementById('loader-text');if(loaderText)loaderText.textContent=L.loader_connecting;
   const lt=document.querySelector('.login-title');if(lt)lt.innerHTML=L.login_title_1+'<br><span>'+L.login_title_2+'</span>';
   const ls=document.querySelector('.login-sub');if(ls)ls.textContent=L.login_sub;
   const tl=document.getElementById('tab-login');if(tl)tl.textContent=L.tab_login;
-  const tr2=document.getElementById('tab-register');if(tr2)tr2.textContent=L.tab_register;
+  const tr=document.getElementById('tab-register');if(tr)tr.textContent=L.tab_register;
+
+  const emailInput=document.getElementById('auth-email');if(emailInput)emailInput.placeholder=L.placeholder_email;
+  const pwdInput=document.getElementById('auth-password');if(pwdInput)pwdInput.placeholder=L.placeholder_pwd;
+  const confirmInput=document.getElementById('auth-confirm');if(confirmInput)confirmInput.placeholder=L.placeholder_pwd;
+
   document.querySelectorAll('.login-field label').forEach((el,i)=>{
     if(i===0)el.textContent=L.label_email;
     if(i===1)el.textContent=L.label_pwd;
     if(i===2)el.textContent=L.label_confirm;
   });
+
   const ab=document.getElementById('auth-btn');if(ab)ab.textContent=authMode==='login'?L.btn_login:L.btn_register;
-  // Header
+
   const h1=document.querySelector('h1');if(h1)h1.innerHTML=L.h1_1+'<br><span>'+L.h1_2+'</span>';
   const hsub=document.querySelector('header p');if(hsub)hsub.textContent=L.h1_sub;
   const badge=document.querySelector('.level-badge');if(badge)badge.textContent=L.badge;
-  // Overall
   const mpl=document.querySelector('.main-progress-label');if(mpl)mpl.textContent=L.progress_label;
-  const sw=document.getElementById('stat-weeks');if(sw){const lbl=sw.nextElementSibling;if(lbl)lbl.textContent=L.lbl_weeks;}
-  const st=document.getElementById('stat-streak');if(st){const lbl=st.nextElementSibling;if(lbl)lbl.textContent=L.lbl_streak;}
-  const sv=document.getElementById('stat-vocab');if(sv){const lbl=sv.nextElementSibling;if(lbl)lbl.textContent=L.lbl_vocab;}
-  const sh=document.getElementById('stat-hours');if(sh){const lbl=sh.nextElementSibling;if(lbl)lbl.textContent=L.lbl_hours;}
-  const stasks=document.getElementById('stat-tasks');if(stasks){const lbl=stasks.nextElementSibling;if(lbl)lbl.textContent=L.lbl_today;}
-  const sdl=document.getElementById('stat-days-left');if(sdl){const lbl=sdl.nextElementSibling;if(lbl)lbl.textContent=L.lbl_days;}
-  // Section titles
-  const titles=document.querySelectorAll('.section-title');
-  titles.forEach(el=>{
-    const txt=el.textContent.trim();
-    if(txt.includes('Monate Reise')||txt.includes('Month Journey'))el.textContent=L.section_journey;
-    else if(txt.includes('gliche Aufgaben')||txt.includes('Daily'))el.textContent=L.section_daily;
-    else if(txt.includes('Notizen')||txt.includes('Notes'))el.textContent=L.section_notes;
-    else if(txt.includes('Dokumente')||txt.includes('Documents'))el.textContent=L.pdf_title;
-  });
-  // Notes placeholder
-  const na=document.getElementById('notes-area');if(na)na.placeholder=L.notes_placeholder;
-  // PDF page
-  const sl=document.querySelector('.storage-label');if(sl)sl.textContent=L.storage_label;
-  const si=document.getElementById('storage-info');if(si&&si.textContent.includes('Charg'))si.textContent=L.storage_loading;
-  const ut=document.querySelector('.upload-title');if(ut)ut.textContent=L.upload_title;
-  const us=document.querySelector('.upload-sub');if(us)us.textContent=L.upload_sub;
-  // Category buttons
+
+  const sw=document.getElementById('stat-weeks');if(sw&&sw.nextElementSibling)sw.nextElementSibling.textContent=L.lbl_weeks;
+  const st=document.getElementById('stat-streak');if(st&&st.nextElementSibling)st.nextElementSibling.textContent=L.lbl_streak;
+  const sv=document.getElementById('stat-vocab');if(sv&&sv.nextElementSibling)sv.nextElementSibling.textContent=L.lbl_vocab;
+  const sh=document.getElementById('stat-hours');if(sh&&sh.nextElementSibling)sh.nextElementSibling.textContent=L.lbl_hours;
+  const stasks=document.getElementById('stat-tasks');if(stasks&&stasks.nextElementSibling)stasks.nextElementSibling.textContent=L.lbl_today;
+  const sdl=document.getElementById('stat-days-left');if(sdl&&sdl.nextElementSibling)sdl.nextElementSibling.textContent=L.lbl_days;
+
+  const journeyTitle=document.querySelector('.journey-section .section-title');if(journeyTitle)journeyTitle.textContent=L.section_journey;
+  const dailyTitle=document.querySelector('.daily-section .section-title');if(dailyTitle)dailyTitle.textContent=L.section_daily;
+  const notesTitle=document.querySelector('.notes-section .section-title');if(notesTitle)notesTitle.textContent=L.section_notes;
+  const pdfTitle=document.querySelector('.pdf-page .section-title');if(pdfTitle)pdfTitle.textContent=L.pdf_title;
+
+  const notesArea=document.getElementById('notes-area');if(notesArea)notesArea.placeholder=L.notes_placeholder;
+  const storageLabel=document.querySelector('.storage-label');if(storageLabel)storageLabel.textContent=L.storage_label;
+  const storageInfo=document.getElementById('storage-info');if(storageInfo&&storageInfo.textContent.includes('Charg')||storageInfo&&storageInfo.textContent.includes('Load'))storageInfo.textContent=L.storage_loading;
+  const uploadTitle=document.querySelector('.upload-title');if(uploadTitle)uploadTitle.textContent=L.upload_title;
+  const uploadSub=document.querySelector('.upload-sub');if(uploadSub)uploadSub.textContent=L.upload_sub;
+
   document.querySelectorAll('.cat-btn').forEach(btn=>{
     const cat=btn.dataset.cat;
     const map={all:'cat_all',grammar:'cat_grammar',vocabulary:'cat_vocab',exercise:'cat_exercise',exam:'cat_exam',other:'cat_other'};
     if(map[cat]&&L[map[cat]])btn.textContent=L[map[cat]];
   });
-  // Reset button
+
+  const desktopNav=document.querySelectorAll('.desk-nav-item[data-page]');
+  if(desktopNav[0])desktopNav[0].textContent='📊 '+L.nav_tracker;
+  if(desktopNav[1])desktopNav[1].textContent='📁 '+L.nav_docs;
+
   const rb=document.querySelector('.reset-btn');if(rb)rb.textContent=L.reset_btn;
-  // Confirmation screen
-  const ct=document.querySelector('.confirm-title');if(ct){ct.textContent=L.confirm_title||ct.textContent;}
-  const ctext=document.querySelector('.confirm-text');if(ctext){ctext.textContent=L.confirm_text||ctext.textContent;}
-  const cb=document.querySelector('.confirm-btn');if(cb){cb.textContent=L.confirm_btn||cb.textContent;}
-  // Only update the success message placeholder if it already contains text
-  const cm=document.getElementById('confirm-success-msg');if(cm&&cm.textContent){cm.textContent=L.confirm_success||cm.textContent;}
-  // Profile modal if open
+  const ct=document.querySelector('.confirm-title');if(ct)ct.textContent=L.confirm_title;
+  const ctext=document.querySelector('.confirm-text');if(ctext)ctext.textContent=L.confirm_text;
+  const cb=document.querySelector('.confirm-btn');if(cb)cb.textContent=L.confirm_btn;
+  const cm=document.getElementById('confirm-success-msg');if(cm&&cm.textContent)cm.textContent=L.confirm_success;
+
+  const prevBtn=document.getElementById('prev-page');if(prevBtn)prevBtn.textContent='◀ '+(currentLang==='en'?'Prev':'Zurück');
+  const nextBtn=document.getElementById('next-page');if(nextBtn)nextBtn.textContent=(currentLang==='en'?'Next':'Weiter')+' ▶';
+
+  const renameTitle=document.querySelector('.rename-title');if(renameTitle)renameTitle.textContent=currentLang==='en'?'✏️ Edit document':'✏️ Dokument bearbeiten';
+  const renameInput=document.getElementById('rename-input');if(renameInput)renameInput.placeholder=currentLang==='en'?'Document name...':'Dokumentname...';
+  const renameBtns=document.querySelectorAll('.rename-btn');
+  if(renameBtns[0])renameBtns[0].textContent=currentLang==='en'?'Cancel':'Abbrechen';
+  if(renameBtns[1])renameBtns[1].textContent=currentLang==='en'?'Save':'Speichern';
+
   if(document.getElementById('profile-modal').classList.contains('open'))applyProfileLang();
 }
 
-// Init language based on saved preference or default to German
 (() => {
-  const saved = localStorage.getItem('app_lang') || 'de';
-  currentLang = saved;
-  // Toggle active state for each language button
-  const deBtn = document.getElementById('lang-de');
-  const enBtn = document.getElementById('lang-en');
-  if(deBtn) deBtn.classList.toggle('active', saved === 'de');
-  if(enBtn) enBtn.classList.toggle('active', saved === 'en');
-  applyLang();
-  // After language setup, check for Supabase email confirmation redirects and show success message
-  try {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('type') === 'signup') {
-      const msgEl = document.getElementById('confirm-success-msg');
-      if (msgEl) {
-        msgEl.textContent = t('confirm_success') || msgEl.textContent;
+  const saved=localStorage.getItem('app_lang')||'de';
+  setLang(saved);
+
+  try{
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('type')==='signup'){
+      const msgEl=document.getElementById('confirm-success-msg');
+      if(msgEl){
+        msgEl.textContent=t('confirm_success');
         msgEl.classList.add('visible');
       }
-      // Show the confirmation screen instead of the login screen
-      document.getElementById('login-screen').classList.remove('visible');
-      document.getElementById('confirm-screen').classList.add('visible');
-      if (history && history.replaceState) {
-        history.replaceState({}, document.title, window.location.pathname);
+      showConfirmScreen();
+      if(history&&history.replaceState){
+        history.replaceState({},document.title,window.location.pathname);
       }
     }
-  } catch(e) {}
+  }catch(e){}
 })();
 </script>
 </body>
