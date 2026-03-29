@@ -2587,15 +2587,27 @@ function restoreHistory(i){
   window.scrollTo(0,0);
 }
 
+async function fetchWithTimeout(url, ms=8000){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
+    return r;
+  } catch(e) {
+    clearTimeout(timer);
+    throw e;
+  }
+}
+
 async function translateOne(text, targetLang){
-  // MyMemory: CORS-safe, no API key needed, 10k words/day with email param
   const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}&de=achghaf.translator@gmail.com`;
-  const r = await fetch(url, { mode: 'cors' });
+  const r = await fetchWithTimeout(url, 8000);
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
   const d = await r.json();
   const responseStatus = d?.responseStatus;
   const tx = d?.responseData?.translatedText || '';
-  if(responseStatus === 403 || !tx) throw new Error(`API error: ${responseStatus} — ${d?.responseDetails || 'empty'}`);
+  if(responseStatus === 403 || !tx) throw new Error(`API ${responseStatus}: ${d?.responseDetails || 'empty'}`);
   return tx;
 }
 
