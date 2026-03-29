@@ -1357,6 +1357,11 @@ async function initApp(){
     }));
     bindNavigationControls();
     document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
+    const docsSearchEl=document.getElementById('docs-search');
+    if(docsSearchEl){
+      docsSearchEl.addEventListener('input',()=>{docsSearchTerm=docsSearchEl.value;renderPdfGrid();});
+      docsSearchEl.addEventListener('search',()=>{docsSearchTerm=docsSearchEl.value;renderPdfGrid();}); // handles clear button on mobile
+    }
     document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
   scheduleMidnightReset();
     document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
