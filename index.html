@@ -501,6 +501,54 @@ h1 span{color:var(--gold)}
 .translate-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:0.82rem}
 .translate-empty-icon{font-size:2rem;margin-bottom:8px}
 
+/* ADMIN PAGE */
+.admin-page{padding:0 16px 40px;max-width:1100px;margin:0 auto}
+.admin-hero{padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.admin-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:0.05em;line-height:1}
+.admin-hero-title span{color:var(--gold)}
+.admin-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+.admin-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 16px;position:relative;overflow:hidden}
+.admin-stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.admin-stat-card.gold::before{background:var(--gold)}
+.admin-stat-card.green::before{background:var(--green)}
+.admin-stat-card.blue::before{background:var(--blue)}
+.admin-stat-card.red::before{background:var(--red)}
+.admin-stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--white);line-height:1}
+.admin-stat-label{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.admin-stat-sub{font-size:0.68rem;color:var(--muted);margin-top:6px}
+.admin-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.admin-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.admin-chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:28px}
+.admin-chart-bars{display:flex;align-items:flex-end;gap:6px;height:100px;margin-top:8px}
+.admin-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.admin-bar{width:100%;background:var(--gold);border-radius:3px 3px 0 0;min-height:2px;transition:height 0.6s ease;opacity:0.85}
+.admin-bar-label{font-size:0.55rem;color:var(--muted);text-align:center;white-space:nowrap}
+.admin-bar-val{font-size:0.6rem;color:var(--gold);font-family:'DM Mono',monospace}
+.admin-users-wrap{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:28px}
+.admin-users-toolbar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.admin-search{flex:1;min-width:140px;background:#111;border:1px solid var(--border);border-radius:5px;padding:8px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none}
+.admin-search:focus{border-color:var(--gold)}
+.admin-filter-btn{padding:6px 12px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s}
+.admin-filter-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.admin-refresh-btn{padding:6px 12px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s;margin-left:auto}
+.admin-refresh-btn:hover{border-color:var(--gold);color:var(--gold)}
+.admin-user-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(42,42,42,0.6);transition:background 0.15s}
+.admin-user-row:last-child{border-bottom:none}
+.admin-user-row:hover{background:rgba(255,255,255,0.02)}
+.admin-user-avatar{width:34px;height:34px;border-radius:50%;background:var(--mid);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;flex-shrink:0;border:1px solid var(--border)}
+.admin-user-avatar.is-admin{background:rgba(232,184,75,0.15);border-color:rgba(232,184,75,0.4);color:var(--gold)}
+.admin-user-info{flex:1;min-width:0}
+.admin-user-email{font-size:0.8rem;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-user-date{font-size:0.65rem;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+.admin-role-badge{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;font-weight:600;flex-shrink:0}
+.admin-role-badge.admin{background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.3)}
+.admin-role-badge.user{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
+.admin-role-select{background:#111;border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;outline:none}
+.admin-role-select:focus{border-color:var(--gold)}
+.admin-empty{text-align:center;padding:40px 16px;color:var(--muted);font-size:0.82rem}
+.admin-new-badge{display:inline-block;font-size:0.55rem;background:rgba(61,186,110,0.15);color:var(--green);border:1px solid rgba(61,186,110,0.3);border-radius:20px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 </head>
@@ -586,6 +634,7 @@ h1 span{color:var(--gold)}
   <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg> Dokumente</button>
   <button type="button" class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="Open News"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News</button>
   <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer</button>
+  <button type="button" class="desk-nav-item" data-page="admin" id="desk-admin-nav" style="display:none" onclick="switchPage('admin')" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin</button>
   <div class="desk-nav-right">
     <button class="profile-icon-btn" id="desk-profile-btn" style="display:none" onclick="openProfileModal()" title="Profile">?</button>
   </div>
@@ -862,6 +911,65 @@ h1 span{color:var(--gold)}
   </div>
 </div>
 
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div class="admin-page">
+    <div class="admin-hero">
+      <div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
+      <div class="admin-hero-title">👑 Admin <span>Dashboard</span></div>
+      <div class="admin-hero-sub">User management &amp; signup stats</div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card gold">
+        <div class="admin-stat-num" id="admin-stat-total">—</div>
+        <div class="admin-stat-label">Total Users</div>
+        <div class="admin-stat-sub" id="admin-stat-total-sub">Loading...</div>
+      </div>
+      <div class="admin-stat-card green">
+        <div class="admin-stat-num" id="admin-stat-today">—</div>
+        <div class="admin-stat-label">New Today</div>
+        <div class="admin-stat-sub" id="admin-stat-today-sub">Loading...</div>
+      </div>
+      <div class="admin-stat-card blue">
+        <div class="admin-stat-num" id="admin-stat-week">—</div>
+        <div class="admin-stat-label">This Week</div>
+        <div class="admin-stat-sub" id="admin-stat-week-sub">Loading...</div>
+      </div>
+      <div class="admin-stat-card red">
+        <div class="admin-stat-num" id="admin-stat-admins">—</div>
+        <div class="admin-stat-label">Admins</div>
+        <div class="admin-stat-sub" id="admin-stat-admins-sub">Loading...</div>
+      </div>
+    </div>
+
+    <!-- SIGNUPS CHART -->
+    <div class="admin-section-title">Signups — Last 7 Days</div>
+    <div class="admin-chart-wrap">
+      <div class="admin-chart-bars" id="admin-chart-bars">
+        <div class="admin-empty" style="width:100%">Loading chart...</div>
+      </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="admin-section-title">All Users</div>
+    <div class="admin-users-wrap">
+      <div class="admin-users-toolbar">
+        <input class="admin-search" id="admin-user-search" placeholder="🔍 Search by email..." oninput="adminFilterUsers()">
+        <button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)">All</button>
+        <button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">👑 Admin</button>
+        <button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)">👤 Users</button>
+        <button class="admin-refresh-btn" onclick="loadAdminPage()">↻ Refresh</button>
+      </div>
+      <div id="admin-users-list-full">
+        <div class="admin-empty">Loading users...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
@@ -879,6 +987,10 @@ h1 span{color:var(--gold)}
   <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
     <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
+  </div>
+  <div class="nav-item" data-page="admin" id="mob-admin-nav" style="display:none" onclick="switchPage('admin')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="nav-label">Admin</div>
   </div>
 </nav>
 
@@ -949,6 +1061,13 @@ function applyRoleUI(){
   if(admin && adminPanel && adminPanel.style.display !== 'none'){
     adminLoadUsers();
   }
+  // Admin nav items — only visible to admins
+  const deskAdminNav = document.getElementById('desk-admin-nav');
+  const mobAdminNav = document.getElementById('mob-admin-nav');
+  if(deskAdminNav) deskAdminNav.style.display = admin ? '' : 'none';
+  if(mobAdminNav) mobAdminNav.style.display = admin ? '' : 'none';
+  // If user tries to stay on admin page without permission, redirect
+  if(!admin && activeAppPage === 'admin') switchPage('tracker');
 }
 
 function wait(ms){
@@ -1634,6 +1753,7 @@ function switchPage(page){
     if(page==='translate') initTranslatePage();
     if(page==='news') initNewsPage();
     if(page==='pdf') loadPdfs();
+    if(page==='admin') loadAdminPage();
   }catch(err){
     console.error('Page init error for', page, err);
   }
@@ -2983,6 +3103,154 @@ async function adminLoadUsers(){
     }).join('');
   } catch(e){
     listEl.innerHTML = `<span style="color:#ff6b6b;font-size:0.72rem">Erreur: ${e?.message||e}</span>`;
+  }
+}
+
+
+// ===== ADMIN DASHBOARD PAGE =====
+let _adminAllUsers = [];
+let _adminRoleFilter = 'all';
+
+async function loadAdminPage(){
+  if(!isAdmin()) return;
+  document.getElementById('admin-stat-total').textContent = '—';
+  document.getElementById('admin-stat-today').textContent = '—';
+  document.getElementById('admin-stat-week').textContent = '—';
+  document.getElementById('admin-stat-admins').textContent = '—';
+  document.getElementById('admin-users-list-full').innerHTML = '<div class="admin-empty">Loading...</div>';
+  document.getElementById('admin-chart-bars').innerHTML = '<div class="admin-empty" style="width:100%">Loading chart...</div>';
+
+  try {
+    const { data, error } = await _supa.rpc('list_users_with_roles');
+    if(error) throw error;
+    _adminAllUsers = data || [];
+    renderAdminStats();
+    renderAdminChart();
+    renderAdminUsersList();
+  } catch(e){
+    document.getElementById('admin-users-list-full').innerHTML =
+      `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||e}<br><small>Make sure the Supabase SQL functions are created.</small></div>`;
+  }
+}
+
+function renderAdminStats(){
+  const users = _adminAllUsers;
+  const total = users.length;
+  const admins = users.filter(u => u.role === 'admin').length;
+
+  const now = new Date();
+  const todayStr = now.toDateString();
+  const weekAgo = new Date(now); weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const toDay = users.filter(u => {
+    if(!u.created_at) return false;
+    return new Date(u.created_at).toDateString() === todayStr;
+  }).length;
+  const thisWeek = users.filter(u => {
+    if(!u.created_at) return false;
+    return new Date(u.created_at) >= weekAgo;
+  }).length;
+
+  document.getElementById('admin-stat-total').textContent = total;
+  document.getElementById('admin-stat-total-sub').textContent = `${admins} admin${admins!==1?'s':''}, ${total-admins} user${total-admins!==1?'s':''}`;
+  document.getElementById('admin-stat-today').textContent = toDay;
+  document.getElementById('admin-stat-today-sub').textContent = toDay > 0 ? '🆕 New signups!' : 'No signups yet';
+  document.getElementById('admin-stat-week').textContent = thisWeek;
+  document.getElementById('admin-stat-week-sub').textContent = 'Last 7 days';
+  document.getElementById('admin-stat-admins').textContent = admins;
+  document.getElementById('admin-stat-admins-sub').textContent = admins === 1 ? 'Only you' : `${admins} admins`;
+}
+
+function renderAdminChart(){
+  const users = _adminAllUsers;
+  const bars = document.getElementById('admin-chart-bars');
+  const days = [];
+  for(let i = 6; i >= 0; i--){
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days.push({ date: d, label: d.toLocaleDateString('en',{weekday:'short'}), count: 0 });
+  }
+  users.forEach(u => {
+    if(!u.created_at) return;
+    const ud = new Date(u.created_at).toDateString();
+    days.forEach(d => { if(d.date.toDateString() === ud) d.count++; });
+  });
+  const max = Math.max(...days.map(d => d.count), 1);
+  bars.innerHTML = days.map(d => {
+    const h = Math.max(Math.round((d.count / max) * 96), d.count > 0 ? 4 : 2);
+    const isToday = d.date.toDateString() === new Date().toDateString();
+    return `<div class="admin-bar-col">
+      <div class="admin-bar-val">${d.count > 0 ? d.count : ''}</div>
+      <div class="admin-bar" style="height:${h}px;opacity:${isToday?'1':'0.55'};background:${isToday?'var(--gold)':'var(--blue)'}"></div>
+      <div class="admin-bar-label" style="color:${isToday?'var(--gold)':'var(--muted)'}">${d.label}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminUsersList(){
+  const search = (document.getElementById('admin-user-search')?.value||'').toLowerCase();
+  const list = document.getElementById('admin-users-list-full');
+  const now = new Date();
+
+  let filtered = _adminAllUsers.filter(u => {
+    const matchRole = _adminRoleFilter === 'all' || u.role === _adminRoleFilter;
+    const matchSearch = !search || (u.email||'').toLowerCase().includes(search);
+    return matchRole && matchSearch;
+  });
+
+  if(filtered.length === 0){
+    list.innerHTML = '<div class="admin-empty">No users found.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(u => {
+    const role = u.role || 'user';
+    const initial = (u.email||'?')[0].toUpperCase();
+    const created = u.created_at ? new Date(u.created_at) : null;
+    const dateStr = created ? created.toLocaleDateString('en',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const diffMs = created ? now - created : null;
+    const isNew = diffMs !== null && diffMs < 7 * 24 * 60 * 60 * 1000;
+    const isAdmin = role === 'admin';
+    return `<div class="admin-user-row">
+      <div class="admin-user-avatar ${isAdmin?'is-admin':''}">${initial}</div>
+      <div class="admin-user-info">
+        <div class="admin-user-email">${u.email||'—'}${isNew ? '<span class="admin-new-badge">NEW</span>' : ''}</div>
+        <div class="admin-user-date">Joined ${dateStr}</div>
+      </div>
+      <span class="admin-role-badge ${role}">${role === 'admin' ? '👑 admin' : '👤 user'}</span>
+      <select class="admin-role-select" onchange="adminChangeRole('${u.email}', this.value, this)">
+        <option value="user" ${role==='user'?'selected':''}>User</option>
+        <option value="admin" ${role==='admin'?'selected':''}>Admin</option>
+      </select>
+    </div>`;
+  }).join('');
+}
+
+function adminFilterUsers(){
+  renderAdminUsersList();
+}
+
+function adminSetFilter(role, btn){
+  _adminRoleFilter = role;
+  document.querySelectorAll('.admin-filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderAdminUsersList();
+}
+
+async function adminChangeRole(email, newRole, selectEl){
+  if(!isAdmin()) return;
+  selectEl.disabled = true;
+  try {
+    const { error } = await _supa.rpc('set_user_role', { target_email: email, new_role: newRole });
+    if(error) throw error;
+    // Update local data
+    const u = _adminAllUsers.find(x => x.email === email);
+    if(u) u.role = newRole;
+    showToast(`✓ ${email} → ${newRole}`);
+    renderAdminStats();
+    renderAdminUsersList();
+  } catch(e) {
+    showToast('✗ ' + (e?.message||String(e)));
+    selectEl.disabled = false;
   }
 }
 
