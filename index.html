@@ -2616,8 +2616,6 @@ async function doTranslate(){
   if(!input){ showToast(t('translate_empty')||'Enter a German word or sentence'); return; }
 
   const btn = document.getElementById('translate-btn');
-  btn.disabled = true;
-  btn.classList.add('loading');
 
   document.getElementById('translate-results').innerHTML = `
     <div class="translate-card">
@@ -2646,8 +2644,6 @@ async function doTranslate(){
           </div>
         </div>
       </div>`;
-    btn.disabled = false;
-    btn.classList.remove('loading');
     return;
   }
 
@@ -2658,7 +2654,6 @@ async function doTranslate(){
   renderTranslateHistory();
 
   const btnAfter = document.getElementById('translate-btn');
-  if(btnAfter){ btnAfter.disabled = false; btnAfter.classList.remove('loading'); }
 }
 
 function initTranslatePage(){
