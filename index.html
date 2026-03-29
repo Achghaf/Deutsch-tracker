@@ -2587,39 +2587,16 @@ function restoreHistory(i){
   window.scrollTo(0,0);
 }
 
-async function tryGoogleTranslate(text, targetLang){
-  // Unofficial Google Translate endpoint — no API key, no rate limit for normal use
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=de&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
-  const r = await fetch(url);
-  if(!r.ok) throw new Error('google http ' + r.status);
-  const d = await r.json();
-  // Response structure: [ [ ["translatedText","original",...], ... ], ... ]
-  const translated = (d?.[0] || []).map(seg => seg?.[0] || '').join('');
-  if(!translated) throw new Error('google empty');
-  return translated;
-}
-
-async function tryMyMemory(text, targetLang){
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}&de=translator@deutsch-b1.app`;
-  const r = await fetch(url);
-  if(!r.ok) throw new Error('mymemory http ' + r.status);
-  const d = await r.json();
-  const tx = d?.responseData?.translatedText || '';
-  if(!tx || tx.toUpperCase().includes('MYMEMORY WARNING') || tx.toUpperCase().includes('QUERY LIMIT'))
-    throw new Error('mymemory limit');
-  return tx;
-}
-
 async function translateOne(text, targetLang){
-  // Google first (best, no limits), MyMemory as fallback
-  try { return await tryGoogleTranslate(text, targetLang); } catch(e1){
-    console.warn('Google Translate failed, trying MyMemory:', e1.message);
-    return await tryMyMemory(text, targetLang);
-  }
-}
-
-function inferPhonetic(text){
-  return (!text.trim() || /\s/.test(text.trim())) ? '' : '';
+  // MyMemory: CORS-safe, no API key needed, 10k words/day with email param
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}&de=achghaf.translator@gmail.com`;
+  const r = await fetch(url, { mode: 'cors' });
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json();
+  const responseStatus = d?.responseStatus;
+  const tx = d?.responseData?.translatedText || '';
+  if(responseStatus === 403 || !tx) throw new Error(`API error: ${responseStatus} — ${d?.responseDetails || 'empty'}`);
+  return tx;
 }
 
 async function doTranslate(){
@@ -2633,37 +2610,40 @@ async function doTranslate(){
   document.getElementById('translate-results').innerHTML = `
     <div class="translate-card">
       <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇸🇦</span> ${t('lang_arabic')||'Arabic'}</div></div>
-      <div class="translate-card-body"><div class="translate-result-text loading-shimmer"></div></div>
+      <div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div>
     </div>
     <div class="translate-card">
       <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇬🇧</span> ${t('lang_english')||'English'}</div></div>
-      <div class="translate-card-body"><div class="translate-result-text loading-shimmer"></div></div>
+      <div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div>
     </div>
   `;
 
-  try {
-    const [ar, en] = await Promise.all([
-      translateOne(input, 'ar'),
-      translateOne(input, 'en')
-    ]);
+  let arErr = '', enErr = '';
+  let ar = '', en = '';
 
-    const phonetic = inferPhonetic(input);
-    renderResultCards(input, ar, en, phonetic);
+  try { ar = await translateOne(input, 'ar'); } catch(e){ arErr = e.message; }
+  try { en = await translateOne(input, 'en'); } catch(e){ enErr = e.message; }
 
-    translateHistory.unshift({ de: input, ar, en, phonetic, date: new Date().toLocaleDateString() });
-    translateHistory = uniqueHistory(translateHistory).slice(0, 50);
-    saveTranslateHistory();
-    renderTranslateHistory();
-
-  } catch(e) {
+  if(!ar && !en){
     document.getElementById('translate-results').innerHTML = `
       <div class="translate-card" style="border-color:rgba(204,31,31,0.3)">
         <div class="translate-card-body">
-          <div class="translate-result-text" style="color:#ff6b6b">⚠ ${t('translate_error')||'Translation failed. Please try again.'}</div>
+          <div class="translate-result-text" style="color:#ff6b6b;font-size:0.85rem">
+            ⚠ Translation failed.<br>
+            <span style="font-size:0.72rem;color:#888;font-family:monospace">AR: ${arErr}<br>EN: ${enErr}</span>
+          </div>
         </div>
       </div>`;
-    console.error('Translator error:', e);
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    return;
   }
+
+  renderResultCards(input, ar || '—', en || '—', '');
+  translateHistory.unshift({ de: input, ar: ar||'', en: en||'', phonetic:'', date: new Date().toLocaleDateString() });
+  translateHistory = uniqueHistory(translateHistory).slice(0, 50);
+  saveTranslateHistory();
+  renderTranslateHistory();
 
   btn.disabled = false;
   btn.classList.remove('loading');
