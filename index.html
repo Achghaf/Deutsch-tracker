@@ -574,6 +574,10 @@ let currentLang = 'de';
 let _appInited = false;
 let _staticUiBound = false;
 
+function wait(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
 function setOverlayState(target){
   document.getElementById('app-loader').classList.toggle('visible',target==='loader');
   document.getElementById('login-screen').classList.toggle('visible',target==='login');
@@ -584,6 +588,30 @@ function showLoginScreen(){setOverlayState('login');}
 function showConfirmScreen(){setOverlayState('confirm');}
 function showAppShell(){setOverlayState('app');}
 
+async function startAuthenticatedApp(user){
+  currentUser=user;
+  showUserBadge(currentUser);
+  try{
+    if(!_appInited){
+      _appInited=true;
+      await initApp();
+    }else{
+      updateTodayLabel();
+      render();
+      updateStorageBar();
+    }
+  }catch(err){
+    console.error('App init error:', err);
+    try{
+      updateTodayLabel();
+      render();
+      updateStorageBar();
+    }catch(_){ }
+  }
+  showAppShell();
+  switchPage(activeAppPage||'tracker');
+}
+
 async function bootstrapAuth(){
   showLoader();
   try{
@@ -593,17 +621,14 @@ async function bootstrapAuth(){
     ]);
     const session=sessionResult?.data?.session||null;
     if(session?.user){
-      currentUser=session.user;
-      showAppShell();
-      showUserBadge(currentUser);
-      if(!_appInited){_appInited=true;await initApp();}
-      switchPage(activeAppPage||'tracker');
+      await startAuthenticatedApp(session.user);
     }else{
       const isSignupReturn=new URLSearchParams(window.location.search).get('type')==='signup';
       if(isSignupReturn)showConfirmScreen();
       else showLoginScreen();
     }
   }catch(e){
+    console.error('Auth bootstrap error:', e);
     showLoginScreen();
   }
 }
@@ -700,11 +725,7 @@ async function logout(){
 
 _supa.auth.onAuthStateChange(async(event,session)=>{
   if(session?.user){
-    currentUser=session.user;
-    showAppShell();
-    showUserBadge(currentUser);
-    if(!_appInited){_appInited=true;await initApp();}
-    switchPage(activeAppPage||'tracker');
+    await startAuthenticatedApp(session.user);
   }else{
     currentUser=null;
     _appInited=false;
@@ -1055,10 +1076,6 @@ async function initApp(){
     if(savedPage==='tracker'||savedPage==='pdf')activeAppPage=savedPage;
   }catch(e){}
 
-  await loadState();
-  resetDailyIfNewDay();
-  updateTodayLabel();
-
   const notesEl=document.getElementById('notes-area');
   notesEl.value=state.notes||'';
 
@@ -1086,8 +1103,26 @@ async function initApp(){
     document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
   }
 
+  updateTodayLabel();
   render();
   updateStorageBar();
+
+  const stateLoad=loadState()
+    .then(()=>{
+      resetDailyIfNewDay();
+      notesEl.value=state.notes||'';
+      updateTodayLabel();
+      render();
+      updateStorageBar();
+    })
+    .catch(err=>{
+      console.error('State load error:', err);
+      updateTodayLabel();
+      render();
+      updateStorageBar();
+    });
+
+  await Promise.race([stateLoad, wait(1200)]);
 }
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
