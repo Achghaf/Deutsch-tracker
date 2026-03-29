@@ -429,7 +429,7 @@ h1 span{color:var(--gold)}
   </div>
 
   <div class="journey-section container">
-    <div class="section-title">5-Monate Reise</div>
+    <div class="section-title" data-section="journey">5-Monate Reise</div>
     <div class="journey-bar" id="journey-bar"></div>
   </div>
 
@@ -441,14 +441,14 @@ h1 span{color:var(--gold)}
   </div>
 
   <div class="daily-section">
-    <div class="section-title">Tägliche Aufgaben</div>
+    <div class="section-title" data-section="daily">Tägliche Aufgaben</div>
     <div class="daily-grid" id="daily-grid"></div>
   </div>
 
   <div class="months-grid" id="months-grid"></div>
 
   <div class="notes-section">
-    <div class="section-title">Notizen</div>
+    <div class="section-title" data-section="notes">Notizen</div>
     <div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
   </div>
 </div>
@@ -456,7 +456,7 @@ h1 span{color:var(--gold)}
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
   <div class="pdf-page">
-    <div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
+    <div class="section-title" data-section="pdf" style="margin-bottom:20px;">📁 Meine Dokumente</div>
     <div class="storage-bar">
       <span class="storage-label">💾 Local</span>
       <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
@@ -466,7 +466,7 @@ h1 span{color:var(--gold)}
       <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
       <div class="upload-icon">📄</div>
       <div class="upload-title">PDF hochladen</div>
-      <div class="upload-sub">Stocké localement · Accessible hors ligne · Max 200 MB par fichier</div>
+      <div class="upload-sub">Stocké dans le cloud · Accessible partout · Max 50 MB par fichier</div>
     </div>
     <div class="pdf-categories">
       <button class="cat-btn active" data-cat="all">Alle</button>
@@ -805,7 +805,7 @@ function renderPdfGrid(){
       <div class="pdf-card-body">
         <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||'📄 Sonstiges'}</div>
         <div class="pdf-card-name" title="${p.name}">${p.name}</div>
-        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.addedAt}</span></div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||p.addedAt||''}</span></div>
       </div>
       ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">👁 Voir</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">✏️ Edit</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">🗑</button></div>`}
     </div>`).join('');
@@ -987,9 +987,9 @@ const i18n={
     section_notes:'Notizen',
     notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
     pdf_title:'📁 Meine Dokumente',
-    storage_label:'💾 Local',
+    storage_label:'☁️ Supabase Cloud',
     upload_title:'PDF hochladen',
-    upload_sub:'Stocké localement · Accessible hors ligne · Max 200 MB par fichier',
+    upload_sub:'Stocké dans le cloud · Accessible partout · Max 50 MB par fichier',
     storage_loading:'Chargement...',
     cat_all:'Alle', cat_grammar:'📘 Grammatik', cat_vocab:'📚 Vokabeln',
     cat_exercise:'✏️ Übungen', cat_exam:'📝 Prüfung', cat_other:'📄 Sonstiges',
@@ -1024,9 +1024,9 @@ const i18n={
     section_notes:'Notes',
     notes_placeholder:'Write your thoughts in German...',
     pdf_title:'📁 My Documents',
-    storage_label:'💾 Cloud',
+    storage_label:'☁️ Supabase Cloud',
     upload_title:'Upload PDF',
-    upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
+    upload_sub:'Stored in cloud · Accessible anywhere · Max 50 MB per file',
     storage_loading:'Loading...',
     cat_all:'All', cat_grammar:'📘 Grammar', cat_vocab:'📚 Vocabulary',
     cat_exercise:'✏️ Exercises', cat_exam:'📝 Exam', cat_other:'📄 Other',
@@ -1081,20 +1081,15 @@ function applyLang(){
   const sh=document.getElementById('stat-hours');if(sh){const lbl=sh.nextElementSibling;if(lbl)lbl.textContent=L.lbl_hours;}
   const stasks=document.getElementById('stat-tasks');if(stasks){const lbl=stasks.nextElementSibling;if(lbl)lbl.textContent=L.lbl_today;}
   const sdl=document.getElementById('stat-days-left');if(sdl){const lbl=sdl.nextElementSibling;if(lbl)lbl.textContent=L.lbl_days;}
-  // Section titles
-  const titles=document.querySelectorAll('.section-title');
-  titles.forEach(el=>{
-    const txt=el.textContent.trim();
-    if(txt.includes('Monate Reise')||txt.includes('Month Journey'))el.textContent=L.section_journey;
-    else if(txt.includes('gliche Aufgaben')||txt.includes('Daily'))el.textContent=L.section_daily;
-    else if(txt.includes('Notizen')||txt.includes('Notes'))el.textContent=L.section_notes;
-    else if(txt.includes('Dokumente')||txt.includes('Documents'))el.textContent=L.pdf_title;
+  // Section titles (reliable via data-section attr)
+  const sectionMap={journey:'section_journey',daily:'section_daily',notes:'section_notes',pdf:'pdf_title'};
+  document.querySelectorAll('.section-title[data-section]').forEach(el=>{
+    const key=sectionMap[el.dataset.section];if(key&&L[key])el.textContent=L[key];
   });
   // Notes placeholder
   const na=document.getElementById('notes-area');if(na)na.placeholder=L.notes_placeholder;
   // PDF page
   const sl=document.querySelector('.storage-label');if(sl)sl.textContent=L.storage_label;
-  const si=document.getElementById('storage-info');if(si&&si.textContent.includes('Charg'))si.textContent=L.storage_loading;
   const ut=document.querySelector('.upload-title');if(ut)ut.textContent=L.upload_title;
   const us=document.querySelector('.upload-sub');if(us)us.textContent=L.upload_sub;
   // Category buttons
