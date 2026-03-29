@@ -66,7 +66,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .page.active{display:block}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
 .nav-icon{font-size:1.3rem;line-height:1}
 .nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
@@ -596,8 +596,8 @@ async function bootstrapAuth(){
       currentUser=session.user;
       showAppShell();
       showUserBadge(currentUser);
-      switchPage('tracker');
       if(!_appInited){_appInited=true;await initApp();}
+      switchPage(activeAppPage||'tracker');
     }else{
       const isSignupReturn=new URLSearchParams(window.location.search).get('type')==='signup';
       if(isSignupReturn)showConfirmScreen();
@@ -703,8 +703,8 @@ _supa.auth.onAuthStateChange(async(event,session)=>{
     currentUser=session.user;
     showAppShell();
     showUserBadge(currentUser);
-    switchPage('tracker');
     if(!_appInited){_appInited=true;await initApp();}
+    switchPage(activeAppPage||'tracker');
   }else{
     currentUser=null;
     _appInited=false;
@@ -766,6 +766,7 @@ function getData(){return DATA_I18N[currentLang]||DATA_I18N.de;}
 // ===== TRACKER STATE (Supabase) =====
 let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null};
 let saveTimeout=null;
+let activeAppPage='tracker';
 
 async function loadState(){
   if(!currentUser)return;
@@ -1035,8 +1036,12 @@ async function confirmRename(){
 
 // ===== NAVIGATION =====
 function switchPage(page){
+  const target=document.getElementById('page-'+page);
+  if(!target)return;
+  activeAppPage=page;
+  try{localStorage.setItem('active_app_page',page);}catch(e){}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   document.querySelectorAll('.desk-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   if(page==='pdf')loadPdfs();
@@ -1045,6 +1050,11 @@ function switchPage(page){
 
 // ===== INIT =====
 async function initApp(){
+  try{
+    const savedPage=localStorage.getItem('active_app_page');
+    if(savedPage==='tracker'||savedPage==='pdf')activeAppPage=savedPage;
+  }catch(e){}
+
   await loadState();
   resetDailyIfNewDay();
   updateTodayLabel();
@@ -1067,7 +1077,10 @@ async function initApp(){
       renderPdfGrid();
       updateStorageBar();
     }));
-    document.querySelectorAll('.desk-nav-item[data-page]').forEach(item=>item.addEventListener('click',()=>switchPage(item.dataset.page)));
+    document.querySelectorAll('.desk-nav-item[data-page], .nav-item[data-page]').forEach(item=>{
+      item.addEventListener('click',()=>switchPage(item.dataset.page));
+      item.style.cursor='pointer';
+    });
     document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
     document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
     document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
