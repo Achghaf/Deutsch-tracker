@@ -745,6 +745,26 @@ h1 span{color:var(--gold)}
         <div class="profile-divider"></div>
         <button class="profile-btn danger" onclick="logout()">↩ Log out</button>
       </div>
+
+      <!-- ADMIN PANEL -->
+      <div id="admin-panel" style="display:none;margin-top:16px">
+        <div class="profile-divider"></div>
+        <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 10px;font-weight:600">👑 Admin — Gestion des rôles</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">Entrez l'email de l'utilisateur pour changer son rôle.</div>
+        <div class="profile-field">
+          <label>Email utilisateur</label>
+          <input type="email" id="admin-target-email" placeholder="user@example.com" style="width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none">
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button onclick="adminSetRole('user')" style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👤 Définir User</button>
+          <button onclick="adminSetRole('admin')" style="flex:1;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:6px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👑 Définir Admin</button>
+        </div>
+        <div id="admin-panel-msg" style="font-size:0.75rem;margin-top:8px;min-height:18px"></div>
+        <div class="profile-divider" style="margin-top:12px"></div>
+        <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Utilisateurs enregistrés</div>
+        <div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Chargement...</div>
+        <button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Rafraîchir</button>
+      </div>
     </div>
   </div>
 </div>
@@ -888,9 +908,48 @@ const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 
 const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
+let currentRole = 'user'; // 'admin' | 'user'
 let currentLang = 'de';
 let _appInited = false;
 let _staticUiBound = false;
+
+function isAdmin(){ return currentRole === 'admin'; }
+
+const USER_PAGES = ['tracker','pdf','translate','news'];
+
+function applyRoleUI(){
+  const admin = isAdmin();
+  // News nav items — visible for everyone (users can read, only admin can write)
+  document.querySelectorAll('.nav-item[data-page="news"], .desk-nav-item[data-page="news"]')
+    .forEach(el => el.style.display = '');
+  // News composer — hidden for users
+  const composer = document.querySelector('.news-composer');
+  if(composer) composer.style.display = admin ? '' : 'none';
+  // Reset button — hidden for users
+  document.querySelectorAll('.reset-btn').forEach(el => el.style.display = admin ? '' : 'none');
+  // Role badge in profile
+  let roleBadge = document.getElementById('role-badge');
+  if(!roleBadge){
+    roleBadge = document.createElement('div');
+    roleBadge.id = 'role-badge';
+    roleBadge.style.cssText = 'display:inline-block;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-top:4px;font-weight:600;';
+    const nameEl = document.getElementById('profile-display-name');
+    if(nameEl) nameEl.insertAdjacentElement('afterend', roleBadge);
+  }
+  roleBadge.textContent = admin ? '\u{1F451} Admin' : '\u{1F464} User';
+  roleBadge.style.background = admin ? 'rgba(232,184,75,0.15)' : 'rgba(255,255,255,0.07)';
+  roleBadge.style.color = admin ? 'var(--gold)' : 'var(--muted)';
+  roleBadge.style.border = admin ? '1px solid rgba(232,184,75,0.3)' : '1px solid var(--border)';
+  // Edit/delete buttons in news posts
+  document.querySelectorAll('.news-icon-btn').forEach(b => b.style.display = admin ? '' : 'none');
+  // Admin panel in profile
+  const adminPanel = document.getElementById('admin-panel');
+  if(adminPanel) adminPanel.style.display = admin ? 'block' : 'none';
+  // If admin opens profile, load users
+  if(admin && adminPanel && adminPanel.style.display !== 'none'){
+    adminLoadUsers();
+  }
+}
 
 function wait(ms){
   return new Promise(resolve=>setTimeout(resolve,ms));
@@ -908,6 +967,10 @@ function showAppShell(){setOverlayState('app');}
 
 async function startAuthenticatedApp(user){
   currentUser=user;
+  // Role resolution: hardcoded admin email + user_metadata fallback
+  const ADMIN_EMAIL = 'achrafbensaid01@gmail.com';
+  const meta = user.user_metadata || {};
+  currentRole = (user.email === ADMIN_EMAIL || meta.role === 'admin') ? 'admin' : 'user';
   showUserBadge(currentUser);
   try{
     if(!_appInited){
@@ -1004,7 +1067,8 @@ async function handleAuth(){
         email,
         password: pwd,
         options: {
-          emailRedirectTo: getSignupRedirectUrl()
+          emailRedirectTo: getSignupRedirectUrl(),
+          data: { role: email === 'achrafbensaid01@gmail.com' ? 'admin' : 'user' }
         }
       });
       if(error) throw error;
@@ -1068,6 +1132,7 @@ function showUserBadge(user){
   document.getElementById('profile-display-email').textContent=email;
   document.getElementById('profile-email-input').value=email;
   updateDocsAccountHint();
+  applyRoleUI();
 }
 
 // ===== DATA =====
@@ -1256,7 +1321,7 @@ function toggleTask(id){
     showToast('🔥 '+t('toast_all_tasks_done')+' Streak gesichert!');
   }
 }
-function resetAll(){if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,newsPosts:Array.isArray(state.newsPosts)?state.newsPosts:[],reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
+function resetAll(){if(!isAdmin()){showToast('⛔ Admin only');return;}if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,newsPosts:Array.isArray(state.newsPosts)?state.newsPosts:[],reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
@@ -1549,6 +1614,11 @@ async function confirmRename(){
 
 // ===== NAVIGATION =====
 function switchPage(page){
+  // Role guard: users can only access allowed pages
+  if(!isAdmin() && !USER_PAGES.includes(page)){
+    showToast('⛔ Access restricted');
+    return;
+  }
   const target=document.getElementById('page-'+page);
   if(!target)return;
 
@@ -1659,6 +1729,7 @@ async function initApp(){
     });
 
   await Promise.race([stateLoad, wait(6000)]);
+  applyRoleUI();
 }
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
@@ -1672,6 +1743,8 @@ function openProfileModal(){
   document.body.style.overflow='hidden';
   applyProfileLang();
   updateNotifToggleUI();
+  applyRoleUI();
+  if(isAdmin()) adminLoadUsers();
 }
 function closeProfileModal(){
   document.getElementById('profile-modal').classList.remove('open');
@@ -2531,6 +2604,7 @@ function updateNewsComposerUi(){
 function renderNewsPage(){
   ensureNewsState();
   updateNewsComposerUi();
+  if(typeof applyRoleUI==='function') setTimeout(applyRoleUI,0);
   const list=document.getElementById('news-list');
   if(!list) return;
   const items = [...state.newsPosts]
@@ -2582,6 +2656,7 @@ function setNewsFilter(filter, btn){
 }
 
 function submitNewsPost(){
+  if(!isAdmin()){showToast('⛔ Admin only');return;}
   ensureNewsState();
   const title=(document.getElementById('news-title-input')?.value||'').trim();
   const type=(document.getElementById('news-type-select')?.value||'article').trim();
@@ -2626,6 +2701,7 @@ function submitNewsPost(){
 }
 
 function editNewsPost(id){
+  if(!isAdmin()){showToast('⛔ Admin only');return;}
   ensureNewsState();
   const item = state.newsPosts.find(post => post.id === id);
   if(!item) return;
@@ -2644,6 +2720,7 @@ function cancelNewsEdit(){
 }
 
 function deleteNewsPost(id){
+  if(!isAdmin()){showToast('⛔ Admin only');return;}
   ensureNewsState();
   if(!confirm(t('news_delete_confirm'))) return;
   state.newsPosts = state.newsPosts.filter(item => item.id !== id);
@@ -2861,6 +2938,51 @@ function initTranslatePage(){
         doTranslate();
       }
     });
+  }
+}
+
+// ===== ADMIN ROLE MANAGEMENT =====
+async function adminSetRole(role){
+  const email = (document.getElementById('admin-target-email')?.value||'').trim().toLowerCase();
+  const msgEl = document.getElementById('admin-panel-msg');
+  if(!email){ msgEl.style.color='#ff6b6b'; msgEl.textContent='⚠ Entrez un email.'; return; }
+  if(!isAdmin()){ msgEl.style.color='#ff6b6b'; msgEl.textContent='⛔ Accès refusé.'; return; }
+  msgEl.style.color='var(--muted)'; msgEl.textContent='⏳ Mise à jour...';
+  try{
+    // Use Supabase admin API via edge function or RPC
+    // We use a custom RPC function 'set_user_role' (see setup instructions)
+    const { data, error } = await _supa.rpc('set_user_role', { target_email: email, new_role: role });
+    if(error) throw error;
+    msgEl.style.color='var(--green)';
+    msgEl.textContent = `✓ ${email} → ${role === 'admin' ? '👑 Admin' : '👤 User'}`;
+    document.getElementById('admin-target-email').value = '';
+    adminLoadUsers();
+  } catch(e){
+    msgEl.style.color='#ff6b6b';
+    msgEl.textContent = '✗ ' + (e?.message || String(e));
+  }
+}
+
+async function adminLoadUsers(){
+  const listEl = document.getElementById('admin-users-list');
+  if(!listEl || !isAdmin()) return;
+  listEl.textContent = 'Chargement...';
+  try{
+    const { data, error } = await _supa.rpc('list_users_with_roles');
+    if(error) throw error;
+    if(!data || data.length === 0){ listEl.textContent = 'Aucun utilisateur trouvé.'; return; }
+    listEl.innerHTML = data.map(u => {
+      const role = u.role || 'user';
+      const badge = role === 'admin'
+        ? '<span style="color:var(--gold);font-size:0.65rem">👑 admin</span>'
+        : '<span style="color:var(--muted);font-size:0.65rem">👤 user</span>';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--white);font-size:0.75rem">${u.email}</span>
+        ${badge}
+      </div>`;
+    }).join('');
+  } catch(e){
+    listEl.innerHTML = `<span style="color:#ff6b6b;font-size:0.72rem">Erreur: ${e?.message||e}</span>`;
   }
 }
 
