@@ -21,9 +21,17 @@ body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif
 body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,0.012) 60px,rgba(255,255,255,0.012) 61px),repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.012) 60px,rgba(255,255,255,0.012) 61px);pointer-events:none;z-index:0}
 
 /* LOGIN */
-.login-screen{display:none;position:fixed;inset:0;background:var(--black);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.login-screen{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:24px;overflow:hidden;
+  background-color:#0a0a0a;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(204,31,31,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 85%, rgba(91,126,201,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(232,184,75,0.06) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.013) 60px, rgba(255,255,255,0.013) 61px);
+}
 .login-screen.visible{display:flex}
-.login-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.login-box{position:relative;z-index:1;width:100%;max-width:380px;background:rgba(18,18,18,0.85);border:1px solid rgba(232,184,75,0.12);border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .login-flag{height:6px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
 .login-body{padding:32px 28px}
 .login-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;line-height:1;margin-bottom:4px}
@@ -229,11 +237,16 @@ h1 span{color:var(--gold)}
 .pdf-empty p{font-size:0.8rem}
 
 
-.docs-sync-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-8px 0 18px;flex-wrap:wrap}
+.docs-sync-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-8px 0 14px;flex-wrap:wrap}
 .docs-account{font-size:0.72rem;color:var(--muted);word-break:break-all}
+.docs-toolbar{display:flex;align-items:center;gap:10px;margin:0 0 18px;flex-wrap:wrap}
+.docs-search-wrap{flex:1;min-width:220px}
+.docs-search-input{width:100%;background:#111;border:1px solid var(--border);border-radius:999px;padding:11px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.docs-search-input:focus{border-color:var(--gold)}
+.docs-search-input::placeholder{color:#666}
 .pdf-refresh-btn{padding:7px 12px;border:1px solid var(--border);border-radius:18px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
 .pdf-refresh-btn:hover,.pdf-refresh-btn:active{border-color:var(--gold);color:var(--gold)}
-@media(max-width:767px){.docs-sync-row{align-items:flex-start}.pdf-grid{grid-template-columns:1fr}.pdf-preview{height:120px}.pdf-card-body{padding:10px 12px}.pdf-card-meta{flex-wrap:wrap;gap:6px}.pdf-actions{padding:0 12px 12px}.pdf-action-btn{padding:9px 7px;font-size:0.72rem}}
+@media(max-width:767px){.docs-sync-row{align-items:flex-start}.docs-toolbar{flex-direction:column;align-items:stretch}.docs-search-wrap{width:100%;min-width:0}.pdf-grid{grid-template-columns:1fr}.pdf-preview{height:120px}.pdf-card-body{padding:10px 12px}.pdf-card-meta{flex-wrap:wrap;gap:6px}.pdf-actions{padding:0 12px 12px}.pdf-action-btn{padding:9px 7px;font-size:0.72rem}}
 
 /* PDF VIEWER */
 .pdf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column}
@@ -245,8 +258,12 @@ h1 span{color:var(--gold)}
 .page-nav-btn{background:var(--card);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
 .page-nav-btn:disabled{opacity:0.3;cursor:default}
 .page-info{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)}
-.pdf-modal-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:12px;-webkit-overflow-scrolling:touch}
+.pdf-modal-body{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:12px;-webkit-overflow-scrolling:touch}
 .pdf-modal-body canvas{max-width:100%;width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
+.pdf-scroll-pages{width:min(100%,980px);display:flex;flex-direction:column;gap:18px;margin:0 auto}
+.pdf-page-sheet{background:#111;border:1px solid var(--border);border-radius:8px;padding:10px}
+.pdf-page-label{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);margin-bottom:8px}
+.pdf-page-sheet canvas{display:block;width:100%;height:auto;background:white}
 
 /* RENAME MODAL */
 .rename-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:center;justify-content:center;padding:16px}
@@ -498,6 +515,11 @@ h1 span{color:var(--gold)}
     <div class="docs-sync-row">
       <span class="docs-account" id="docs-account">—</span>
       <button class="pdf-refresh-btn" type="button" onclick="refreshDocs()" id="docs-refresh-btn">↻ Sync</button>
+    </div>
+    <div class="docs-toolbar">
+      <div class="docs-search-wrap">
+        <input type="search" id="docs-search" class="docs-search-input" placeholder="Dokument suchen..." autocomplete="off">
+      </div>
     </div>
     <div class="pdf-upload-zone" id="upload-zone">
       <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
@@ -886,7 +908,7 @@ function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
 // ===== PDF (Supabase Storage + DB) =====
-let pdfs=[],currentFilter='all',editingId=null,pdfDoc=null,currentPage=1,totalPages=1;
+let pdfs=[],currentFilter='all',editingId=null,pdfDoc=null,currentPage=1,totalPages=1,docsSearchTerm='',pdfScrollHandler=null;
 
 function storagePath(id){return currentUser.id+'/'+id+'.pdf';}
 
@@ -971,11 +993,17 @@ async function uploadPdf(file){
 
 function renderPdfGrid(){
   const grid=document.getElementById('pdf-grid');
-  const filtered=currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter);
+  const search=docsSearchTerm.trim().toLowerCase();
+  const filtered=(currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter)).filter(p=>{
+    if(!search)return true;
+    const hay=[p.name||'',p.category||''].join(' ').toLowerCase();
+    return hay.includes(search);
+  });
   const lightMode=isPhoneDocsView();
   if(filtered.length===0){
     const email=currentUser?.email||'—';
-    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat')}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
+    const emptyMsg=search?t('pdf_empty_search'):(currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat'));
+    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${emptyMsg}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
     return;
   }
   const cats={
@@ -1038,37 +1066,98 @@ async function openPdf(id){
     if(typeof pdfjsLib==='undefined'){body.innerHTML=`<div style="padding:20px;text-align:center"><a href="${url}" target="_blank" style="color:var(--gold)">${t('pdf_open_external')}</a></div>`;return;}
     pdfDoc=await pdfjsLib.getDocument({url}).promise;
     totalPages=pdfDoc.numPages;currentPage=1;
-    body.innerHTML='<canvas id="pdf-canvas"></canvas>';
-    await renderPdfPage(currentPage);
+    body.innerHTML='<div class="pdf-scroll-pages" id="pdf-scroll-pages"></div>';
+    await renderPdfDocumentVertical();
   }catch(e){body.innerHTML=`<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">${t('pdf_load_error')}</p></div>`;}
 }
 
-async function renderPdfPage(num){
-  if(!pdfDoc)return;
-  document.getElementById('page-info').textContent=`${t('pdf_page')} ${num} / ${totalPages}`;
-  document.getElementById('prev-page').disabled=num<=1;
-  document.getElementById('next-page').disabled=num>=totalPages;
-  try{
-    const page=await pdfDoc.getPage(num);
-    const canvas=document.getElementById('pdf-canvas');
-    if(!canvas)return;
-    const w=document.getElementById('modal-body').clientWidth-32;
-    const vp=page.getViewport({scale:1});
-    const scale=Math.min(w/vp.width,2);
-    const sv=page.getViewport({scale});
-    const dpr=Math.min(window.devicePixelRatio||1,2);
-    const ctx=canvas.getContext('2d');
-    canvas.style.width=sv.width+'px';
-    canvas.style.height=sv.height+'px';
-    canvas.width=Math.floor(sv.width*dpr);
-    canvas.height=Math.floor(sv.height*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    await page.render({canvasContext:ctx,viewport:sv}).promise;
-  }catch(e){}
+function updatePdfViewerInfo(pageNum){
+  currentPage=Math.max(1,Math.min(totalPages||1,pageNum||1));
+  document.getElementById('page-info').textContent=`${t('pdf_page')} ${currentPage} / ${totalPages} · ${t('pdf_vertical_hint')}`;
+  document.getElementById('prev-page').disabled=currentPage<=1;
+  document.getElementById('next-page').disabled=currentPage>=totalPages;
 }
 
-async function changePage(delta){const n=currentPage+delta;if(n<1||n>totalPages)return;currentPage=n;await renderPdfPage(currentPage);}
-function closePdfModal(){document.getElementById('pdf-modal').classList.remove('open');document.body.style.overflow='';pdfDoc=null;}
+function removePdfScrollHandler(){
+  const body=document.getElementById('modal-body');
+  if(body&&pdfScrollHandler){body.removeEventListener('scroll',pdfScrollHandler);}
+  pdfScrollHandler=null;
+}
+
+function bindPdfScrollHandler(){
+  removePdfScrollHandler();
+  const body=document.getElementById('modal-body');
+  const pages=[...body.querySelectorAll('.pdf-page-sheet')];
+  if(!pages.length)return;
+  pdfScrollHandler=()=>{
+    const bodyTop=body.getBoundingClientRect().top;
+    let bestPage=1;
+    let bestDist=Infinity;
+    pages.forEach((el,idx)=>{
+      const dist=Math.abs(el.getBoundingClientRect().top-bodyTop-12);
+      if(dist<bestDist){bestDist=dist;bestPage=idx+1;}
+    });
+    updatePdfViewerInfo(bestPage);
+  };
+  body.addEventListener('scroll',pdfScrollHandler,{passive:true});
+  pdfScrollHandler();
+}
+
+async function renderPdfDocumentVertical(){
+  if(!pdfDoc)return;
+  const wrap=document.getElementById('pdf-scroll-pages');
+  if(!wrap)return;
+  removePdfScrollHandler();
+  wrap.innerHTML='';
+  updatePdfViewerInfo(1);
+  const body=document.getElementById('modal-body');
+  const availableWidth=Math.max(260,Math.min((body.clientWidth||800)-40,940));
+  for(let num=1;num<=totalPages;num++){
+    const sheet=document.createElement('div');
+    sheet.className='pdf-page-sheet';
+    sheet.dataset.page=String(num);
+    sheet.innerHTML=`<div class="pdf-page-label">${t('pdf_page')} ${num}</div><canvas></canvas>`;
+    wrap.appendChild(sheet);
+
+    try{
+      const page=await pdfDoc.getPage(num);
+      const canvas=sheet.querySelector('canvas');
+      const vp=page.getViewport({scale:1});
+      const scale=Math.min(availableWidth/vp.width,2.2);
+      const sv=page.getViewport({scale});
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      const ctx=canvas.getContext('2d');
+      canvas.style.width=sv.width+'px';
+      canvas.style.height=sv.height+'px';
+      canvas.width=Math.floor(sv.width*dpr);
+      canvas.height=Math.floor(sv.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      await page.render({canvasContext:ctx,viewport:sv}).promise;
+    }catch(e){
+      sheet.insertAdjacentHTML('beforeend',`<div style="padding:10px 0 0;color:var(--muted);font-size:0.75rem">${t('pdf_load_error')}</div>`);
+    }
+  }
+  requestAnimationFrame(()=>{
+    body.scrollTop=0;
+    bindPdfScrollHandler();
+    updatePdfViewerInfo(1);
+  });
+}
+
+async function renderPdfPage(num){
+  await renderPdfDocumentVertical();
+  const target=document.querySelector(`.pdf-page-sheet[data-page="${Math.max(1,Math.min(totalPages||1,num||1))}"]`);
+  if(target)target.scrollIntoView({behavior:'auto',block:'start'});
+  updatePdfViewerInfo(num||1);
+}
+
+async function changePage(delta){
+  const n=currentPage+delta;if(n<1||n>totalPages)return;
+  const target=document.querySelector(`.pdf-page-sheet[data-page="${n}"]`);
+  if(target){target.scrollIntoView({behavior:'smooth',block:'start'});}
+  updatePdfViewerInfo(n);
+}
+function closePdfModal(){document.getElementById('pdf-modal').classList.remove('open');document.body.style.overflow='';removePdfScrollHandler();pdfDoc=null;}
 
 async function deletePdf(id){
   if(!confirm(t('confirm_delete_pdf')))return;
@@ -1284,6 +1373,9 @@ const i18n={
     docs_for_account:'Dokumente für:',
     docs_refresh_btn:'↻ Synchronisieren',
     toast_docs_refreshed:'↻ Dokumente synchronisiert',
+    pdf_search_placeholder:'Dokument suchen...',
+    pdf_empty_search:'Keine Dokumente passen zu deiner Suche.',
+    pdf_vertical_hint:'vertikal scrollen',
     upload_title:'PDF hochladen',
     upload_sub:'Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei',
     cat_all:'Alle',
@@ -1384,6 +1476,9 @@ const i18n={
     docs_for_account:'Documents for:',
     docs_refresh_btn:'↻ Sync',
     toast_docs_refreshed:'↻ Documents synced',
+    pdf_search_placeholder:'Search documents...',
+    pdf_empty_search:'No documents match your search.',
+    pdf_vertical_hint:'scroll vertically',
     upload_title:'Upload PDF',
     upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
     cat_all:'All',
@@ -1510,6 +1605,8 @@ function applyLang(){
   const notesArea=document.getElementById('notes-area');if(notesArea)notesArea.placeholder=L.notes_placeholder;
   const storageLabel=document.querySelector('.storage-label');if(storageLabel)storageLabel.textContent=L.storage_label;
   const storageInfo=document.getElementById('storage-info');if(storageInfo&&storageInfo.textContent.includes('Charg')||storageInfo&&storageInfo.textContent.includes('Load'))storageInfo.textContent=L.storage_loading;
+  const docsRefreshBtn=document.getElementById('docs-refresh-btn');if(docsRefreshBtn)docsRefreshBtn.textContent=L.docs_refresh_btn;
+  const docsSearch=document.getElementById('docs-search');if(docsSearch)docsSearch.placeholder=L.pdf_search_placeholder;
   const uploadTitle=document.querySelector('.upload-title');if(uploadTitle)uploadTitle.textContent=L.upload_title;
   const uploadSub=document.querySelector('.upload-sub');if(uploadSub)uploadSub.textContent=L.upload_sub;
 
@@ -1531,6 +1628,7 @@ function applyLang(){
 
   const prevBtn=document.getElementById('prev-page');if(prevBtn)prevBtn.textContent='◀ '+(currentLang==='en'?'Prev':'Zurück');
   const nextBtn=document.getElementById('next-page');if(nextBtn)nextBtn.textContent=(currentLang==='en'?'Next':'Weiter')+' ▶';
+  if(pdfDoc){updatePdfViewerInfo(currentPage);document.querySelectorAll('.pdf-page-label').forEach((el,idx)=>el.textContent=`${t('pdf_page')} ${idx+1}`);}
 
   const renameTitle=document.querySelector('.rename-title');if(renameTitle)renameTitle.textContent=currentLang==='en'?'✏️ Edit document':'✏️ Dokument bearbeiten';
   const renameInput=document.getElementById('rename-input');if(renameInput)renameInput.placeholder=currentLang==='en'?'Document name...':'Dokumentname...';
