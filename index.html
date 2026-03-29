@@ -1530,36 +1530,51 @@ async function confirmRename(){
 
 // ===== NAVIGATION =====
 function switchPage(page){
-  if(page==='translate') initTranslatePage();
-  if(page==='news') initNewsPage();
   const target=document.getElementById('page-'+page);
   if(!target)return;
+
   activeAppPage=page;
   try{localStorage.setItem('active_app_page',page);}catch(e){}
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   document.querySelectorAll('.desk-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
-  if(page==='pdf')loadPdfs();
+
+  try{
+    if(page==='translate') initTranslatePage();
+    if(page==='news') initNewsPage();
+    if(page==='pdf') loadPdfs();
+  }catch(err){
+    console.error('Page init error for', page, err);
+  }
+
   window.scrollTo(0,0);
 }
 
 function bindNavigationControls(){
   document.querySelectorAll('.desk-nav-item[data-page], .nav-item[data-page]').forEach(item=>{
-    if(item.dataset.navBound==='1')return;
-    item.dataset.navBound='1';
-    item.addEventListener('click',e=>{
-      e.preventDefault();
-      e.stopPropagation();
-      switchPage(item.dataset.page);
-    });
-    item.addEventListener('keydown',e=>{
+    const page=item.dataset.page;
+    if(!page)return;
+
+    item.style.cursor='pointer';
+    item.setAttribute('role', item.tagName==='BUTTON' ? item.getAttribute('role') || 'button' : 'button');
+    if(!item.hasAttribute('tabindex') && item.tagName!=='BUTTON') item.setAttribute('tabindex','0');
+
+    item.onclick=(e)=>{
+      if(e){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchPage(page);
+    };
+
+    item.onkeydown=(e)=>{
       if(e.key==='Enter'||e.key===' '){
         e.preventDefault();
-        switchPage(item.dataset.page);
+        switchPage(page);
       }
-    });
-    item.style.cursor='pointer';
+    };
   });
 }
 
@@ -2172,13 +2187,7 @@ window.addEventListener('resize',()=>{
 });
 
 document.addEventListener('DOMContentLoaded',()=>{
-  try{bindNavigationControls();}catch(e){}
-  const deskPdfBtn=document.querySelector('.desk-nav-item[data-page="pdf"]');
-  if(deskPdfBtn){deskPdfBtn.onclick=()=>switchPage('pdf');}
-  const deskNewsBtn=document.querySelector('.desk-nav-item[data-page="news"]');
-  if(deskNewsBtn){deskNewsBtn.onclick=()=>switchPage('news');}
-  const deskTrackerBtn=document.querySelector('.desk-nav-item[data-page="tracker"]');
-  if(deskTrackerBtn){deskTrackerBtn.onclick=()=>switchPage('tracker');}
+  try{bindNavigationControls();}catch(e){console.error('Navigation bind error:', e);}
 });
 
 // ===== STREAK REMINDER NOTIFICATIONS =====
