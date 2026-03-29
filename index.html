@@ -233,6 +233,7 @@ h1 span{color:var(--gold)}
 .docs-account{font-size:0.72rem;color:var(--muted);word-break:break-all}
 .pdf-refresh-btn{padding:7px 12px;border:1px solid var(--border);border-radius:18px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
 .pdf-refresh-btn:hover,.pdf-refresh-btn:active{border-color:var(--gold);color:var(--gold)}
+@media(max-width:767px){.docs-sync-row{align-items:flex-start}.pdf-grid{grid-template-columns:1fr}.pdf-preview{height:120px}.pdf-card-body{padding:10px 12px}.pdf-card-meta{flex-wrap:wrap;gap:6px}.pdf-actions{padding:0 12px 12px}.pdf-action-btn{padding:9px 7px;font-size:0.72rem}}
 
 /* PDF VIEWER */
 .pdf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column}
@@ -895,6 +896,8 @@ function updateDocsAccountHint(){
   const email=currentUser?.email||'—';
   el.textContent=`${t('docs_for_account')} ${email}`;
 }
+function isPhoneDocsView(){return window.matchMedia('(max-width: 767px)').matches;}
+function shouldRenderDocThumbnails(){return !isPhoneDocsView();}
 
 async function refreshDocs(){
   await loadPdfs();
@@ -969,6 +972,7 @@ async function uploadPdf(file){
 function renderPdfGrid(){
   const grid=document.getElementById('pdf-grid');
   const filtered=currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter);
+  const lightMode=isPhoneDocsView();
   if(filtered.length===0){
     const email=currentUser?.email||'—';
     grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat')}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
@@ -985,7 +989,11 @@ function renderPdfGrid(){
   grid.innerHTML=filtered.map(p=>`
     <div class="pdf-card" id="card-${p.id}">
       <div class="pdf-preview" onclick="${p.uploading?'':` openPdf('${p.id}')`}">
-        ${p.uploading?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon">⏫</div>`:`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>`}
+        ${p.uploading
+          ?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon">⏫</div>`
+          :lightMode
+            ?`<div class="pdf-preview-icon" style="display:flex;opacity:0.95;flex-direction:column;gap:10px"><span style="font-size:2.4rem">📄</span><span style="font-size:0.72rem;color:var(--muted);letter-spacing:0.06em">${t('pdf_tap_open')}</span></div>`
+            :`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>`}
       </div>
       <div class="pdf-card-body">
         <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||t('cat_other')}</div>
@@ -994,7 +1002,9 @@ function renderPdfGrid(){
       </div>
       ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">${t('pdf_view_btn')}</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">${t('pdf_edit_btn')}</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">${t('pdf_delete_btn')}</button></div>`}
     </div>`).join('');
-  filtered.filter(p=>!p.uploading).forEach(p=>generateThumbnail(p));
+  if(shouldRenderDocThumbnails()){
+    filtered.filter(p=>!p.uploading).forEach(p=>generateThumbnail(p));
+  }
 }
 
 async function getPdfUrl(p){
@@ -1039,11 +1049,21 @@ async function renderPdfPage(num){
   document.getElementById('prev-page').disabled=num<=1;
   document.getElementById('next-page').disabled=num>=totalPages;
   try{
-    const page=await pdfDoc.getPage(num);const canvas=document.getElementById('pdf-canvas');if(!canvas)return;
-    const w=document.getElementById('modal-body').clientWidth-32;const vp=page.getViewport({scale:1});
-    const scale=Math.min(w/vp.width,2);const sv=page.getViewport({scale});
-    canvas.width=sv.width;canvas.height=sv.height;
-    await page.render({canvasContext:canvas.getContext('2d'),viewport:sv}).promise;
+    const page=await pdfDoc.getPage(num);
+    const canvas=document.getElementById('pdf-canvas');
+    if(!canvas)return;
+    const w=document.getElementById('modal-body').clientWidth-32;
+    const vp=page.getViewport({scale:1});
+    const scale=Math.min(w/vp.width,2);
+    const sv=page.getViewport({scale});
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const ctx=canvas.getContext('2d');
+    canvas.style.width=sv.width+'px';
+    canvas.style.height=sv.height+'px';
+    canvas.width=Math.floor(sv.width*dpr);
+    canvas.height=Math.floor(sv.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    await page.render({canvasContext:ctx,viewport:sv}).promise;
   }catch(e){}
 }
 
@@ -1318,7 +1338,8 @@ const i18n={
     pdf_list_error:'Dokumente konnten nicht geladen werden.',
     generic_error:'Unbekannter Fehler',
     toast_only_pdf:'⚠️ Nur PDF-Dateien erlaubt',
-    toast_file_too_big:'⚠️ Datei zu groß (max 50 MB)'
+    toast_file_too_big:'⚠️ Datei zu groß (max 50 MB)',
+    pdf_tap_open:'Tippen zum Öffnen'
   },
   en:{
     app_title:'My Goal: German B1',
@@ -1417,7 +1438,8 @@ const i18n={
     pdf_list_error:'Could not load documents.',
     generic_error:'Unknown error',
     toast_only_pdf:'⚠️ Only PDF files are allowed',
-    toast_file_too_big:'⚠️ File is too large (max 50 MB)'
+    toast_file_too_big:'⚠️ File is too large (max 50 MB)',
+    pdf_tap_open:'Tap to open'
   }
 };
 
@@ -1539,6 +1561,18 @@ function applyLang(){
   }catch(e){}
   bindNavigationControls();
 })();
+
+let _lastDocsPhoneMode=isPhoneDocsView();
+window.addEventListener('resize',()=>{
+  const nowPhone=isPhoneDocsView();
+  if(nowPhone!==_lastDocsPhoneMode){
+    _lastDocsPhoneMode=nowPhone;
+    if(activeAppPage==='pdf')renderPdfGrid();
+  }
+  if(pdfDoc&&document.getElementById('pdf-modal').classList.contains('open')){
+    renderPdfPage(currentPage);
+  }
+});
 
 document.addEventListener('DOMContentLoaded',()=>{
   try{bindNavigationControls();}catch(e){}
