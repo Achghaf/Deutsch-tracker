@@ -2,7 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Mein Ziel: Deutsch B1</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -23,9 +25,10 @@
     --m3: #3aaa74;
     --m4: #cc1f1f;
     --m5: #8b3dba;
+    --nav-h: 56px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   body {
     background: var(--black);
@@ -33,29 +36,59 @@
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
   }
 
-  /* BG pattern */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 60px,
-      rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px
-    ), repeating-linear-gradient(
-      90deg, transparent, transparent 60px,
-      rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px
-    );
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px), repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
     pointer-events: none;
     z-index: 0;
   }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  /* ===== PAGES ===== */
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; }
 
-  /* HEADER */
+  /* ===== BOTTOM NAV ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+    background: #111;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 6px;
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-icon { font-size: 1.3rem; line-height: 1; }
+  .nav-label { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
+  .nav-item.active .nav-label { color: var(--gold); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(232,184,75,0.5)); }
+
+  /* ===== CONTAINER ===== */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; position: relative; z-index: 1; }
+
+  /* ===== HEADER ===== */
   header {
-    padding: 48px 24px 32px;
+    padding: 36px 16px 24px;
     border-bottom: 1px solid var(--border);
     position: relative;
     overflow: hidden;
@@ -75,12 +108,12 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 16px;
   }
 
   h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-size: clamp(2.2rem, 8vw, 5rem);
     letter-spacing: 0.02em;
     line-height: 0.95;
     color: var(--white);
@@ -97,23 +130,19 @@
 
   .level-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     letter-spacing: 0.1em;
     background: var(--red);
     color: white;
-    padding: 6px 16px;
+    padding: 5px 14px;
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
   }
 
-  .start-date {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
+  .start-date { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); }
 
-  /* OVERALL PROGRESS */
+  /* ===== OVERALL ===== */
   .overall-section {
-    padding: 32px 24px;
+    padding: 24px 16px;
     border-bottom: 1px solid var(--border);
   }
 
@@ -122,84 +151,77 @@
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 24px;
+    gap: 16px;
     align-items: center;
   }
 
-  .big-stat {
-    text-align: center;
-  }
+  .big-stat { text-align: center; }
 
   .big-stat .num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     color: var(--gold);
     line-height: 1;
   }
 
   .big-stat .label {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--muted);
     margin-top: 4px;
   }
 
-  .main-progress-wrap {
-    text-align: center;
-  }
+  .main-progress-wrap { text-align: center; }
 
   .main-progress-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     letter-spacing: 0.12em;
     color: var(--muted);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .arc-container {
     position: relative;
-    width: 160px;
-    height: 100px;
+    width: 140px;
+    height: 85px;
     margin: 0 auto;
     overflow: hidden;
   }
 
-  .arc-container svg { width: 160px; height: 160px; margin-top: -60px; }
+  .arc-container svg { width: 140px; height: 140px; margin-top: -55px; }
 
   .arc-pct {
     position: absolute;
     bottom: 0; left: 50%;
     transform: translateX(-50%);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     color: var(--white);
     line-height: 1;
   }
 
-  /* JOURNEY BAR */
+  /* ===== JOURNEY ===== */
   .journey-section {
-    padding: 40px 24px;
+    padding: 32px 16px;
     border-bottom: 1px solid var(--border);
+    max-width: 1148px;
+    margin: 0 auto;
   }
 
   .section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     letter-spacing: 0.1em;
     color: var(--gold);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
 
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .journey-bar {
     display: flex;
@@ -207,6 +229,8 @@
     gap: 0;
     position: relative;
     margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
   }
 
   .month-node {
@@ -214,20 +238,20 @@
     flex-direction: column;
     align-items: center;
     flex: 1;
+    min-width: 60px;
     position: relative;
     cursor: pointer;
   }
 
   .month-dot {
-    width: 44px;
-    height: 44px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     border: 3px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     transition: all 0.3s;
     background: var(--card);
     position: relative;
@@ -235,25 +259,24 @@
   }
 
   .month-dot.done { border-color: var(--green); background: rgba(61,186,110,0.15); color: var(--green); }
-  .month-dot.active { border-color: var(--gold); background: rgba(232,184,75,0.15); color: var(--gold); box-shadow: 0 0 20px rgba(232,184,75,0.3); }
+  .month-dot.active { border-color: var(--gold); background: rgba(232,184,75,0.15); color: var(--gold); box-shadow: 0 0 18px rgba(232,184,75,0.3); }
   .month-dot.locked { color: var(--muted); }
 
   .month-connector {
     flex: 1;
+    min-width: 20px;
     height: 3px;
     background: var(--border);
     position: relative;
-    margin-top: -22px;
+    margin-top: -20px;
     z-index: 1;
   }
 
   .month-connector.done { background: var(--green); }
-  .month-connector.partial {
-    background: linear-gradient(90deg, var(--green) var(--fill, 0%), var(--border) var(--fill, 0%));
-  }
+  .month-connector.partial { background: linear-gradient(90deg, var(--green) var(--fill, 0%), var(--border) var(--fill, 0%)); }
 
   .month-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -262,20 +285,20 @@
   }
 
   .month-sublabel {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: #3a3a3a;
     text-align: center;
-    max-width: 80px;
+    max-width: 70px;
     line-height: 1.3;
     margin-top: 2px;
   }
 
-  /* MONTHS GRID */
+  /* ===== MONTHS GRID ===== */
   .months-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 0 24px 40px;
+    gap: 16px;
+    padding: 0 16px 32px;
     max-width: 1148px;
     margin: 0 auto;
   }
@@ -283,7 +306,7 @@
   .month-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 2px;
+    border-radius: 4px;
     overflow: hidden;
     transition: border-color 0.25s;
   }
@@ -293,7 +316,7 @@
   .month-card.done { border-color: rgba(61,186,110,0.3); }
 
   .month-card-header {
-    padding: 16px 20px;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -302,83 +325,51 @@
     overflow: hidden;
   }
 
-  .month-card-header::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px;
-  }
-
+  .month-card-header::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
   .month-card.m1 .month-card-header::before { background: var(--m1); }
   .month-card.m2 .month-card-header::before { background: var(--m2); }
   .month-card.m3 .month-card-header::before { background: var(--m3); }
   .month-card.m4 .month-card-header::before { background: var(--m4); }
   .month-card.m5 .month-card-header::before { background: var(--m5); }
 
-  .month-card-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.05em;
-  }
-
+  .month-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; }
   .month-card.m1 .month-card-title { color: var(--m1); }
   .month-card.m2 .month-card-title { color: var(--m2); }
   .month-card.m3 .month-card-title { color: var(--m3); }
   .month-card.m4 .month-card-title { color: var(--m4); }
   .month-card.m5 .month-card-title { color: var(--m5); }
 
-  .month-card-sub {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .month-card-sub { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .month-pct { font-family: 'DM Mono', monospace; font-size: 0.82rem; font-weight: 500; }
 
-  .month-pct {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-
-  .month-progress-bar {
-    height: 3px;
-    background: var(--border);
-    margin: 0 20px 16px;
-  }
-
-  .month-progress-fill {
-    height: 100%;
-    transition: width 0.6s ease;
-    border-radius: 2px;
-  }
-
+  .month-progress-bar { height: 3px; background: var(--border); margin: 0 16px 14px; }
+  .month-progress-fill { height: 100%; transition: width 0.6s ease; border-radius: 2px; }
   .month-card.m1 .month-progress-fill { background: var(--m1); }
   .month-card.m2 .month-progress-fill { background: var(--m2); }
   .month-card.m3 .month-progress-fill { background: var(--m3); }
   .month-card.m4 .month-progress-fill { background: var(--m4); }
   .month-card.m5 .month-progress-fill { background: var(--m5); }
 
-  /* WEEKS */
-  .weeks-list { padding: 0 20px 16px; }
+  .weeks-list { padding: 0 16px 12px; }
 
   .week-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 9px 0;
+    gap: 10px;
+    padding: 10px 8px;
     border-bottom: 1px solid rgba(42,42,42,0.5);
     cursor: pointer;
     transition: background 0.15s;
-    border-radius: 2px;
-    padding-left: 8px;
+    border-radius: 4px;
     margin: 0 -8px;
+    min-height: 48px;
   }
 
   .week-row:last-child { border-bottom: none; }
-  .week-row:hover { background: rgba(255,255,255,0.03); }
+  .week-row:active { background: rgba(255,255,255,0.05); }
 
   .week-check {
-    width: 20px; height: 20px;
+    width: 22px; height: 22px;
     border: 2px solid var(--border);
     border-radius: 50%;
     flex-shrink: 0;
@@ -388,79 +379,41 @@
   }
 
   .week-check.done { border-color: var(--green); background: var(--green); color: white; }
-  .week-check.active { border-color: var(--gold); }
 
-  .week-info { flex: 1; }
+  .week-info { flex: 1; min-width: 0; }
+  .week-name { font-size: 0.8rem; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+  .week-topic { font-size: 0.67rem; color: var(--muted); font-family: 'DM Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .week-num { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: #333; flex-shrink: 0; }
 
-  .week-name {
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--white);
-    margin-bottom: 2px;
-  }
-
-  .week-topic {
-    font-size: 0.7rem;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-  }
-
-  .week-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: #333;
-  }
-
-  /* DAILY TASKS */
-  .daily-section {
-    padding: 0 24px 40px;
-    max-width: 1148px;
-    margin: 0 auto;
-  }
+  /* ===== DAILY ===== */
+  .daily-section { padding: 0 16px 32px; max-width: 1148px; margin: 0 auto; }
 
   .daily-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
   }
 
   .task-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 16px;
+    border-radius: 4px;
+    padding: 14px;
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
     cursor: pointer;
     transition: all 0.2s;
+    min-height: 64px;
   }
 
-  .task-card:hover { border-color: #3a3a3a; transform: translateY(-1px); }
+  .task-card:active { transform: scale(0.98); }
   .task-card.done { border-color: rgba(61,186,110,0.4); background: rgba(61,186,110,0.05); }
-
-  .task-icon {
-    font-size: 1.4rem;
-    flex-shrink: 0;
-    line-height: 1;
-  }
-
+  .task-icon { font-size: 1.3rem; flex-shrink: 0; line-height: 1; }
   .task-info { flex: 1; }
-
-  .task-name {
-    font-weight: 600;
-    font-size: 0.82rem;
-    margin-bottom: 3px;
-  }
-
+  .task-name { font-weight: 600; font-size: 0.8rem; margin-bottom: 3px; }
   .task-card.done .task-name { text-decoration: line-through; color: var(--muted); }
-
-  .task-duration {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--gold);
-  }
-
+  .task-duration { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--gold); }
   .task-checkbox {
     width: 18px; height: 18px;
     border: 2px solid var(--border);
@@ -470,58 +423,40 @@
     font-size: 0.6rem;
     transition: all 0.2s;
   }
-
   .task-card.done .task-checkbox { background: var(--green); border-color: var(--green); color: white; }
 
-  /* STATS ROW */
+  /* ===== STATS ===== */
   .stats-row {
-    display: flex;
-    gap: 12px;
-    padding: 0 24px 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 16px 24px;
     max-width: 1148px;
     margin: 0 auto;
-    flex-wrap: wrap;
   }
 
   .stat-pill {
     background: var(--card);
     border: 1px solid var(--border);
-    padding: 12px 20px;
+    border-radius: 4px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 140px;
+    gap: 10px;
   }
 
-  .stat-pill-icon { font-size: 1.3rem; }
+  .stat-pill-icon { font-size: 1.2rem; }
+  .stat-pill-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gold); line-height: 1; }
+  .stat-pill-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  .stat-pill-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .stat-pill-label {
-    font-size: 0.65rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  /* NOTES */
-  .notes-section {
-    padding: 0 24px 48px;
-    max-width: 1148px;
-    margin: 0 auto;
-  }
+  /* ===== NOTES ===== */
+  .notes-section { padding: 0 16px 32px; max-width: 1148px; margin: 0 auto; }
 
   .notes-box {
     background: var(--card);
     border: 1px solid var(--border);
-    padding: 16px 20px;
-    border-radius: 2px;
+    padding: 14px 16px;
+    border-radius: 4px;
   }
 
   .notes-box textarea {
@@ -535,52 +470,423 @@
     min-height: 80px;
     outline: none;
     line-height: 1.7;
+    -webkit-appearance: none;
   }
 
   .notes-box textarea::placeholder { color: #333; }
 
-  /* RESET BTN */
+  /* ===== PDF SECTION ===== */
+  .pdf-page { padding: 24px 16px; max-width: 1148px; margin: 0 auto; }
+
+  .pdf-upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 24px;
+    background: rgba(255,255,255,0.01);
+    position: relative;
+  }
+
+  .pdf-upload-zone:hover, .pdf-upload-zone.drag-over {
+    border-color: var(--gold);
+    background: rgba(232,184,75,0.04);
+  }
+
+  .pdf-upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+  .upload-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .upload-sub { font-size: 0.75rem; color: var(--muted); }
+
+  .pdf-categories {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .cat-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .cat-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(232,184,75,0.08); }
+  .cat-btn:active { transform: scale(0.96); }
+
+  .pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .pdf-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+
+  .pdf-card:hover { border-color: #3a3a3a; }
+
+  .pdf-preview {
+    height: 160px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .pdf-preview canvas { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .pdf-preview-icon { font-size: 3rem; opacity: 0.3; }
+
+  .pdf-card-body { padding: 12px 14px; }
+
+  .pdf-card-name {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--white);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pdf-card-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+  }
+
+  .pdf-cat-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .cat-grammar { background: rgba(91,126,201,0.2); color: var(--m1); }
+  .cat-vocabulary { background: rgba(181,131,42,0.2); color: var(--m2); }
+  .cat-exercise { background: rgba(58,170,116,0.2); color: var(--m3); }
+  .cat-exam { background: rgba(204,31,31,0.2); color: var(--m4); }
+  .cat-other { background: rgba(139,61,186,0.2); color: var(--m5); }
+
+  .pdf-actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 14px 12px;
+  }
+
+  .pdf-action-btn {
+    flex: 1;
+    padding: 7px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+  }
+
+  .pdf-action-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .pdf-action-btn.danger:hover { border-color: var(--red); color: var(--red); }
+  .pdf-action-btn:active { transform: scale(0.96); }
+
+  .pdf-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .pdf-empty .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.4; }
+  .pdf-empty p { font-size: 0.8rem; }
+
+  /* ===== PDF VIEWER MODAL ===== */
+  .pdf-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 500;
+    flex-direction: column;
+  }
+
+  .pdf-modal.open { display: flex; }
+
+  .pdf-modal-header {
+    padding: 12px 16px;
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-title {
+    flex: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    width: 32px; height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-controls {
+    padding: 10px 16px;
+    background: #0d0d0d;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .page-nav-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+
+  .page-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .page-nav-btn:not(:disabled):active { background: var(--border); }
+
+  .page-info { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); }
+
+  .pdf-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pdf-modal-body canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+
+  /* ===== RENAME MODAL ===== */
+  .rename-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 600;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .rename-modal.open { display: flex; }
+
+  .rename-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .rename-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    color: var(--gold);
+  }
+
+  .rename-input {
+    width: 100%;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .rename-input:focus { border-color: var(--gold); }
+
+  .rename-select {
+    width: 100%;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .rename-select:focus { border-color: var(--gold); }
+
+  .rename-actions { display: flex; gap: 10px; }
+
+  .rename-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .rename-btn.confirm { background: var(--gold); color: var(--black); }
+  .rename-btn.cancel { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .rename-btn:active { transform: scale(0.97); }
+
+  /* ===== HEADER ACTIONS ===== */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .today-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
   .reset-btn {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 7px 14px;
     cursor: pointer;
     transition: all 0.2s;
+    border-radius: 3px;
+    min-height: 36px;
   }
 
   .reset-btn:hover { border-color: var(--red); color: var(--red); }
 
-  .header-actions {
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));
+    right: 16px;
+    left: 16px;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    padding: 12px 20px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 300;
+    pointer-events: none;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ===== LOADING ===== */
+  .pdf-loading {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 12px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    padding: 20px;
+    height: 100%;
   }
 
-  .today-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
   }
 
-  /* streak */
-  .streak-fire { color: #ff6b35; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* responsiveness */
-  @media (max-width: 640px) {
-    .overall-inner { grid-template-columns: 1fr 1fr; }
-    .big-stat:last-child { grid-column: span 2; }
-    .months-grid { grid-template-columns: 1fr; }
-    .month-sublabel { display: none; }
-  }
-
-  /* animations */
+  /* ===== ANIMATIONS ===== */
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   .month-card { animation: fadeIn 0.4s ease both; }
   .month-card:nth-child(2) { animation-delay: 0.05s; }
@@ -588,131 +894,284 @@
   .month-card:nth-child(4) { animation-delay: 0.15s; }
   .month-card:nth-child(5) { animation-delay: 0.2s; }
 
-  .toast {
-    position: fixed;
-    bottom: 24px; right: 24px;
-    background: var(--gold);
-    color: var(--black);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 0.08em;
-    padding: 12px 24px;
-    transform: translateY(80px);
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 100;
-    pointer-events: none;
+  /* ===== RESPONSIVE ===== */
+  @media (min-width: 600px) {
+    .stats-row { grid-template-columns: repeat(4, 1fr); }
+    .daily-grid { grid-template-columns: repeat(4, 1fr); }
+    .toast { left: auto; width: auto; min-width: 260px; }
   }
 
-  .toast.show { transform: translateY(0); opacity: 1; }
+  @media (min-width: 768px) {
+    .months-grid { grid-template-columns: repeat(2, 1fr); }
+    body { padding-bottom: 0; }
+    .bottom-nav { display: none; }
+    .desktop-nav { display: flex !important; }
+    .toast { bottom: 24px; }
+  }
+
+  @media (max-width: 399px) {
+    .overall-inner { grid-template-columns: 1fr 1fr; }
+    .big-stat:nth-child(2) { grid-column: span 2; order: -1; }
+    .month-sublabel { display: none; }
+    .arc-container { width: 120px; height: 75px; }
+    .arc-container svg { width: 120px; height: 120px; margin-top: -48px; }
+  }
+
+  /* ===== DESKTOP NAV ===== */
+  .desktop-nav {
+    display: none;
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .desk-nav-item {
+    padding: 14px 20px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .desk-nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .desk-nav-item:hover { color: var(--white); }
+
+  /* ===== PDF STORAGE WARNING ===== */
+  .storage-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .storage-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .storage-track { flex: 1; min-width: 120px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .storage-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s; }
+  .storage-info { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<header>
-  <div class="flag-stripe"></div>
-  <div class="header-inner">
-    <div>
-      <h1>Mein Ziel:<br><span>Deutsch B1</span></h1>
-      <p style="font-size:0.75rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
+<!-- PDF VIEWER MODAL -->
+<div class="pdf-modal" id="pdf-modal">
+  <div class="pdf-modal-header">
+    <button class="modal-close-btn" onclick="closePdfModal()">✕</button>
+    <div class="pdf-modal-title" id="modal-title">Document</div>
+  </div>
+  <div class="pdf-modal-controls">
+    <button class="page-nav-btn" id="prev-page" onclick="changePage(-1)">◀ Prev</button>
+    <span class="page-info" id="page-info">Page 1 / 1</span>
+    <button class="page-nav-btn" id="next-page" onclick="changePage(1)">Next ▶</button>
+  </div>
+  <div class="pdf-modal-body" id="modal-body">
+    <canvas id="pdf-canvas"></canvas>
+  </div>
+</div>
+
+<!-- RENAME MODAL -->
+<div class="rename-modal" id="rename-modal">
+  <div class="rename-box">
+    <div class="rename-title">✏️ Dokument bearbeiten</div>
+    <input type="text" class="rename-input" id="rename-input" placeholder="Dokumentname...">
+    <select class="rename-select" id="rename-cat">
+      <option value="grammar">📘 Grammatik</option>
+      <option value="vocabulary">📚 Vokabeln</option>
+      <option value="exercise">✏️ Übungen</option>
+      <option value="exam">📝 Prüfung</option>
+      <option value="other">📄 Sonstiges</option>
+    </select>
+    <div class="rename-actions">
+      <button class="rename-btn cancel" onclick="closeRenameModal()">Abbrechen</button>
+      <button class="rename-btn confirm" onclick="confirmRename()">Speichern</button>
     </div>
-    <div class="header-actions">
-      <div class="header-meta">
-        <div class="level-badge">🎯 B1 NIVEAU</div>
-        <div class="today-label" id="today-label"></div>
+  </div>
+</div>
+
+<!-- DESKTOP NAV -->
+<nav class="desktop-nav" id="desktop-nav">
+  <div class="desk-nav-item active" data-page="tracker">📊 Tracker</div>
+  <div class="desk-nav-item" data-page="pdf">📁 Dokumente</div>
+</nav>
+
+<!-- TRACKER PAGE -->
+<div class="page active" id="page-tracker">
+
+  <header>
+    <div class="flag-stripe"></div>
+    <div class="header-inner">
+      <div>
+        <h1>Mein Ziel:<br><span>Deutsch B1</span></h1>
+        <p style="font-size:0.72rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
       </div>
-      <button class="reset-btn" onclick="resetAll()">↺ Zurücksetzen</button>
-    </div>
-  </div>
-</header>
-
-<!-- OVERALL STATS -->
-<div class="overall-section">
-  <div class="overall-inner">
-    <div class="big-stat">
-      <div class="num" id="stat-weeks">0</div>
-      <div class="label">Wochen abgeschlossen</div>
-    </div>
-    <div class="big-stat main-progress-wrap">
-      <div class="main-progress-label">Gesamtfortschritt</div>
-      <div class="arc-container">
-        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="80" cy="80" r="65" fill="none" stroke="#2a2a2a" stroke-width="12"/>
-          <circle id="arc-circle" cx="80" cy="80" r="65" fill="none"
-            stroke="var(--gold)" stroke-width="12"
-            stroke-dasharray="408.41" stroke-dashoffset="408.41"
-            stroke-linecap="round"
-            transform="rotate(-90 80 80)"
-            style="transition: stroke-dashoffset 0.8s ease;"/>
-        </svg>
-        <div class="arc-pct"><span id="arc-pct">0</span>%</div>
+      <div class="header-actions">
+        <div class="header-meta">
+          <div class="level-badge">🎯 B1 NIVEAU</div>
+          <div class="today-label" id="today-label"></div>
+        </div>
+        <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
       </div>
     </div>
-    <div class="big-stat">
-      <div class="num" id="stat-streak">0</div>
-      <div class="label">🔥 Tage Streak</div>
+  </header>
+
+  <!-- OVERALL STATS -->
+  <div class="overall-section">
+    <div class="overall-inner">
+      <div class="big-stat">
+        <div class="num" id="stat-weeks">0</div>
+        <div class="label">Wochen</div>
+      </div>
+      <div class="big-stat main-progress-wrap">
+        <div class="main-progress-label">Fortschritt</div>
+        <div class="arc-container">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="80" r="65" fill="none" stroke="#2a2a2a" stroke-width="12"/>
+            <circle id="arc-circle" cx="80" cy="80" r="65" fill="none"
+              stroke="var(--gold)" stroke-width="12"
+              stroke-dasharray="408.41" stroke-dashoffset="408.41"
+              stroke-linecap="round"
+              transform="rotate(-90 80 80)"
+              style="transition: stroke-dashoffset 0.8s ease;"/>
+          </svg>
+          <div class="arc-pct"><span id="arc-pct">0</span>%</div>
+        </div>
+      </div>
+      <div class="big-stat">
+        <div class="num" id="stat-streak">0</div>
+        <div class="label">🔥 Streak</div>
+      </div>
     </div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="journey-section container">
+    <div class="section-title">5-Monate Reise</div>
+    <div class="journey-bar" id="journey-bar"></div>
+  </div>
+
+  <!-- STATS PILLS -->
+  <div class="stats-row">
+    <div class="stat-pill">
+      <div class="stat-pill-icon">📚</div>
+      <div>
+        <div class="stat-pill-val" id="stat-vocab">0</div>
+        <div class="stat-pill-label">Vokabeln</div>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-icon">⏱</div>
+      <div>
+        <div class="stat-pill-val" id="stat-hours">0</div>
+        <div class="stat-pill-label">Stunden</div>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-icon">✅</div>
+      <div>
+        <div class="stat-pill-val" id="stat-tasks">0</div>
+        <div class="stat-pill-label">Heute</div>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-icon">🗓</div>
+      <div>
+        <div class="stat-pill-val" id="stat-days-left">140</div>
+        <div class="stat-pill-label">Tage noch</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY TASKS -->
+  <div class="daily-section">
+    <div class="section-title">Tägliche Aufgaben</div>
+    <div class="daily-grid" id="daily-grid"></div>
+  </div>
+
+  <!-- MONTHS -->
+  <div class="months-grid" id="months-grid"></div>
+
+  <!-- NOTES -->
+  <div class="notes-section">
+    <div class="section-title">Notizen</div>
+    <div class="notes-box">
+      <textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch... Neue Wörter, was schwierig war, was gut lief..."></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- PDF PAGE -->
+<div class="page" id="page-pdf">
+  <div class="pdf-page">
+
+    <div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
+
+    <!-- Storage bar -->
+    <div class="storage-bar" id="storage-bar">
+      <span class="storage-label">Speicher</span>
+      <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
+      <span class="storage-info" id="storage-info">0 MB / ~5 MB</span>
+    </div>
+
+    <!-- Upload zone -->
+    <div class="pdf-upload-zone" id="upload-zone">
+      <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
+      <div class="upload-icon">📄</div>
+      <div class="upload-title">PDF hochladen</div>
+      <div class="upload-sub">Tippe hier oder ziehe Dateien rein<br>Grammatik · Vokabeln · Übungen · Prüfungen</div>
+    </div>
+
+    <!-- Category filter -->
+    <div class="pdf-categories" id="pdf-categories">
+      <button class="cat-btn active" data-cat="all">Alle</button>
+      <button class="cat-btn" data-cat="grammar">📘 Grammatik</button>
+      <button class="cat-btn" data-cat="vocabulary">📚 Vokabeln</button>
+      <button class="cat-btn" data-cat="exercise">✏️ Übungen</button>
+      <button class="cat-btn" data-cat="exam">📝 Prüfung</button>
+      <button class="cat-btn" data-cat="other">📄 Sonstiges</button>
+    </div>
+
+    <!-- PDF Grid -->
+    <div class="pdf-grid" id="pdf-grid"></div>
+
   </div>
 </div>
 
-<!-- JOURNEY -->
-<div class="journey-section container">
-  <div class="section-title">5-Monate Reise</div>
-  <div class="journey-bar" id="journey-bar"></div>
-</div>
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
+    <div class="nav-icon">📊</div>
+    <div class="nav-label">Tracker</div>
+  </div>
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+    <div class="nav-icon">📁</div>
+    <div class="nav-label">Dokumente</div>
+  </div>
+</nav>
 
-<!-- STATS PILLS -->
-<div class="stats-row">
-  <div class="stat-pill">
-    <div class="stat-pill-icon">📚</div>
-    <div>
-      <div class="stat-pill-val" id="stat-vocab">0</div>
-      <div class="stat-pill-label">Vokabeln gelernt</div>
-    </div>
-  </div>
-  <div class="stat-pill">
-    <div class="stat-pill-icon">⏱</div>
-    <div>
-      <div class="stat-pill-val" id="stat-hours">0</div>
-      <div class="stat-pill-label">Stunden gesamt</div>
-    </div>
-  </div>
-  <div class="stat-pill">
-    <div class="stat-pill-icon">✅</div>
-    <div>
-      <div class="stat-pill-val" id="stat-tasks">0</div>
-      <div class="stat-pill-label">Tagesaufgaben heute</div>
-    </div>
-  </div>
-  <div class="stat-pill">
-    <div class="stat-pill-icon">🗓</div>
-    <div>
-      <div class="stat-pill-val" id="stat-days-left">140</div>
-      <div class="stat-pill-label">Tage verbleibend</div>
-    </div>
-  </div>
-</div>
-
-<!-- DAILY TASKS -->
-<div class="daily-section">
-  <div class="section-title">Meine täglichen Aufgaben</div>
-  <div class="daily-grid" id="daily-grid"></div>
-</div>
-
-<!-- MONTHS -->
-<div class="months-grid" id="months-grid"></div>
-
-<!-- NOTES -->
-<div class="notes-section">
-  <div class="section-title">Notizen</div>
-  <div class="notes-box">
-    <textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch... Neue Wörter, was schwierig war, was gut lief..."></textarea>
-  </div>
-</div>
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script>
+// ===== PDF.js setup =====
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+// ===== DATA =====
 const DATA = {
   months: [
     {
@@ -774,6 +1233,7 @@ const DATA = {
   ]
 };
 
+// ===== TRACKER STATE =====
 let state = {
   completedWeeks: {},
   dailyDone: {},
@@ -784,11 +1244,13 @@ let state = {
   lastActiveDay: null,
 };
 
-function save() { localStorage.setItem('deutsch_b1_v2', JSON.stringify(state)); }
+function save() { try { localStorage.setItem('deutsch_b1_v3', JSON.stringify(state)); } catch(e) {} }
 
 function load() {
-  const raw = localStorage.getItem('deutsch_b1_v2');
-  if (raw) state = { ...state, ...JSON.parse(raw) };
+  try {
+    const raw = localStorage.getItem('deutsch_b1_v3');
+    if (raw) state = { ...state, ...JSON.parse(raw) };
+  } catch(e) {}
   if (!state.startDate) { state.startDate = new Date().toDateString(); save(); }
 }
 
@@ -797,7 +1259,6 @@ function getToday() { return new Date().toDateString(); }
 function resetDailyIfNewDay() {
   const today = getToday();
   if (state.lastActiveDay !== today) {
-    // update streak
     const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
     if (state.lastActiveDay === yesterday.toDateString()) {
       state.streak = (state.streak || 0) + 1;
@@ -811,18 +1272,16 @@ function resetDailyIfNewDay() {
 }
 
 function computeProgress() {
-  const totalWeeks = 20;
   const done = Object.keys(state.completedWeeks).filter(k => state.completedWeeks[k]).length;
-  return Math.round((done / totalWeeks) * 100);
+  return Math.round((done / 20) * 100);
 }
 
 function renderJourney() {
   const bar = document.getElementById('journey-bar');
   bar.innerHTML = '';
   const monthPcts = DATA.months.map(m => {
-    const total = m.weeks.length;
     const done = m.weeks.filter(w => state.completedWeeks[w.w]).length;
-    return done / total;
+    return done / m.weeks.length;
   });
 
   DATA.months.forEach((m, i) => {
@@ -832,19 +1291,15 @@ function renderJourney() {
     const node = document.createElement('div');
     node.className = 'month-node';
     node.innerHTML = `
-      <div class="month-dot ${isDone ? 'done' : isActive ? 'active' : 'locked'}">
-        ${isDone ? '✓' : i + 1}
-      </div>
+      <div class="month-dot ${isDone ? 'done' : isActive ? 'active' : 'locked'}">${isDone ? '✓' : i + 1}</div>
       <div class="month-label">${m.title}</div>
       <div class="month-sublabel">${m.sub}</div>
     `;
     bar.appendChild(node);
-
     if (i < DATA.months.length - 1) {
       const conn = document.createElement('div');
-      const prevDone = pct === 1;
       const nextPct = monthPcts[i + 1];
-      conn.className = 'month-connector ' + (prevDone ? 'done' : nextPct > 0 ? 'partial' : '');
+      conn.className = 'month-connector ' + (pct === 1 ? 'done' : nextPct > 0 ? 'partial' : '');
       if (nextPct > 0 && nextPct < 1) conn.style.setProperty('--fill', Math.round(nextPct * 100) + '%');
       bar.appendChild(conn);
     }
@@ -855,15 +1310,12 @@ function renderMonths() {
   const grid = document.getElementById('months-grid');
   grid.innerHTML = '';
   DATA.months.forEach(m => {
-    const total = m.weeks.length;
     const done = m.weeks.filter(w => state.completedWeeks[w.w]).length;
-    const pct = Math.round((done / total) * 100);
+    const pct = Math.round((done / m.weeks.length) * 100);
     const isDone = pct === 100;
     const isActive = pct > 0 && !isDone;
-
     const card = document.createElement('div');
     card.className = `month-card ${m.cls} ${isDone ? 'done' : isActive ? 'active' : ''}`;
-
     card.innerHTML = `
       <div class="month-card-header">
         <div>
@@ -873,9 +1325,7 @@ function renderMonths() {
         <div class="month-pct" style="color:${isDone ? 'var(--green)' : 'var(--gold)'}">${pct}%</div>
       </div>
       <div style="height:8px"></div>
-      <div class="month-progress-bar">
-        <div class="month-progress-fill" style="width:${pct}%"></div>
-      </div>
+      <div class="month-progress-bar"><div class="month-progress-fill" style="width:${pct}%"></div></div>
       <div class="weeks-list">
         ${m.weeks.map(w => {
           const wDone = !!state.completedWeeks[w.w];
@@ -919,33 +1369,26 @@ function updateStats() {
   const weeksD = Object.keys(state.completedWeeks).filter(k => state.completedWeeks[k]).length;
   const pct = computeProgress();
   const tasksD = Object.keys(state.dailyDone).filter(k => state.dailyDone[k]).length;
-
   document.getElementById('stat-weeks').textContent = weeksD;
   document.getElementById('stat-streak').textContent = state.streak || 0;
-  document.getElementById('stat-vocab').textContent = weeksD >= 9 ? (weeksD >= 17 ? '1000+' : '500+') : Math.min(weeksD * 40, 300);
+  document.getElementById('stat-vocab').textContent = weeksD >= 17 ? '1000+' : weeksD >= 9 ? '500+' : Math.min(weeksD * 40, 300);
   document.getElementById('stat-hours').textContent = weeksD * 10;
   document.getElementById('stat-tasks').textContent = tasksD + '/4';
   document.getElementById('stat-days-left').textContent = Math.max(0, 140 - weeksD * 7);
   document.getElementById('arc-pct').textContent = pct;
-
   const circ = 2 * Math.PI * 65;
-  const offset = circ * (1 - pct / 100);
-  document.getElementById('arc-circle').style.strokeDashoffset = offset;
+  document.getElementById('arc-circle').style.strokeDashoffset = circ * (1 - pct / 100);
 }
 
 function toggleWeek(w) {
   state.completedWeeks[w] = !state.completedWeeks[w];
-  const msg = state.completedWeeks[w] ? `✓ Woche ${w} abgeschlossen!` : `Woche ${w} zurückgesetzt`;
-  showToast(msg);
-  save();
-  render();
+  showToast(state.completedWeeks[w] ? `✓ Woche ${w} abgeschlossen!` : `Woche ${w} zurückgesetzt`);
+  save(); render();
 }
 
 function toggleTask(id) {
   state.dailyDone[id] = !state.dailyDone[id];
-  save();
-  renderDaily();
-  updateStats();
+  save(); renderDaily(); updateStats();
   if (Object.values(state.dailyDone).every(Boolean)) showToast('🔥 Alle Aufgaben heute erledigt!');
 }
 
@@ -965,27 +1408,327 @@ function resetAll() {
   }
 }
 
-function render() {
-  renderJourney();
-  renderMonths();
-  renderDaily();
-  updateStats();
+function render() { renderJourney(); renderMonths(); renderDaily(); updateStats(); }
+
+// ===== PDF STORAGE =====
+let pdfs = []; // [{id, name, category, size, dataUrl, addedAt}]
+let currentFilter = 'all';
+let editingId = null;
+
+// PDF viewer state
+let pdfDoc = null;
+let currentPage = 1;
+let totalPages = 1;
+let viewingId = null;
+
+function loadPdfs() {
+  try {
+    const raw = localStorage.getItem('deutsch_pdfs_v1');
+    if (raw) pdfs = JSON.parse(raw);
+  } catch(e) { pdfs = []; }
 }
 
+function savePdfs() {
+  try {
+    localStorage.setItem('deutsch_pdfs_v1', JSON.stringify(pdfs));
+    updateStorageBar();
+  } catch(e) {
+    showToast('⚠️ Speicher voll! PDF gelöscht.');
+  }
+}
+
+function updateStorageBar() {
+  try {
+    let total = 0;
+    for (let key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) total += (localStorage[key].length * 2);
+    }
+    const mb = (total / 1024 / 1024).toFixed(1);
+    const pct = Math.min(100, (total / 1024 / 1024) / 5 * 100);
+    document.getElementById('storage-fill').style.width = pct + '%';
+    document.getElementById('storage-info').textContent = mb + ' MB / ~5 MB';
+    document.getElementById('storage-fill').style.background = pct > 80 ? 'var(--red)' : pct > 60 ? 'var(--gold)' : 'var(--green)';
+  } catch(e) {}
+}
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.includes('pdf') && !file.name.endsWith('.pdf')) {
+      showToast('⚠️ Nur PDF-Dateien erlaubt');
+      return;
+    }
+    const maxSize = 3 * 1024 * 1024; // 3MB per file
+    if (file.size > maxSize) {
+      showToast('⚠️ Datei zu groß (max 3MB)');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const newPdf = {
+        id: Date.now() + Math.random(),
+        name: file.name.replace('.pdf', ''),
+        category: 'other',
+        size: file.size,
+        dataUrl: e.target.result,
+        addedAt: new Date().toLocaleDateString('de-DE')
+      };
+      pdfs.unshift(newPdf);
+      try {
+        savePdfs();
+        renderPdfGrid();
+        showToast('✓ PDF gespeichert!');
+        // Auto-open rename for new file
+        openRenameModal(newPdf.id);
+      } catch(err) {
+        pdfs.shift();
+        showToast('⚠️ Nicht genug Speicherplatz');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPdfGrid() {
+  const grid = document.getElementById('pdf-grid');
+  const filtered = currentFilter === 'all' ? pdfs : pdfs.filter(p => p.category === currentFilter);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="pdf-empty" style="grid-column:1/-1">
+        <div class="empty-icon">📂</div>
+        <p>${currentFilter === 'all' ? 'Noch keine Dokumente. Lade dein erstes PDF hoch!' : 'Keine Dokumente in dieser Kategorie.'}</p>
+      </div>
+    `;
+    return;
+  }
+
+  const catLabels = { grammar: '📘 Grammatik', vocabulary: '📚 Vokabeln', exercise: '✏️ Übungen', exam: '📝 Prüfung', other: '📄 Sonstiges' };
+  const sizeFmt = b => b > 1024*1024 ? (b/1024/1024).toFixed(1)+' MB' : Math.round(b/1024)+' KB';
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="pdf-card" id="card-${p.id}">
+      <div class="pdf-preview" onclick="openPdf('${p.id}')">
+        <canvas id="thumb-${p.id}"></canvas>
+        <div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>
+      </div>
+      <div class="pdf-card-body">
+        <div class="pdf-cat-tag cat-${p.category}">${catLabels[p.category] || '📄 Sonstiges'}</div>
+        <div class="pdf-card-name" title="${p.name}">${p.name}</div>
+        <div class="pdf-card-meta">
+          <span>${sizeFmt(p.size)}</span>
+          <span>${p.addedAt}</span>
+        </div>
+      </div>
+      <div class="pdf-actions">
+        <button class="pdf-action-btn" onclick="openPdf('${p.id}')">👁 Anzeigen</button>
+        <button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">✏️ Edit</button>
+        <button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Generate thumbnails
+  filtered.forEach(p => generateThumbnail(p));
+}
+
+async function generateThumbnail(p) {
+  if (typeof pdfjsLib === 'undefined') {
+    const icon = document.getElementById('icon-' + p.id);
+    if (icon) { icon.style.display = 'flex'; }
+    return;
+  }
+  try {
+    const loadingTask = pdfjsLib.getDocument(p.dataUrl);
+    const pdf = await loadingTask.promise;
+    const page = await pdf.getPage(1);
+    const canvas = document.getElementById('thumb-' + p.id);
+    if (!canvas) return;
+    const viewport = page.getViewport({ scale: 0.5 });
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+  } catch(e) {
+    const icon = document.getElementById('icon-' + p.id);
+    if (icon) icon.style.display = 'flex';
+  }
+}
+
+async function openPdf(id) {
+  const p = pdfs.find(x => String(x.id) === String(id));
+  if (!p) return;
+  viewingId = id;
+  document.getElementById('modal-title').textContent = p.name;
+  document.getElementById('pdf-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '<div class="pdf-loading"><div class="spinner"></div><span style="font-size:0.8rem;color:var(--muted)">Laden...</span></div>';
+
+  if (typeof pdfjsLib === 'undefined') {
+    body.innerHTML = '<p style="color:var(--muted);padding:20px;font-size:0.8rem;">PDF.js nicht verfügbar. Bitte Internet verbinden.</p>';
+    return;
+  }
+
+  try {
+    pdfDoc = await pdfjsLib.getDocument(p.dataUrl).promise;
+    totalPages = pdfDoc.numPages;
+    currentPage = 1;
+    body.innerHTML = '<canvas id="pdf-canvas"></canvas>';
+    await renderPage(currentPage);
+  } catch(e) {
+    body.innerHTML = '<p style="color:var(--muted);padding:20px;font-size:0.8rem;">Fehler beim Laden des PDFs.</p>';
+  }
+}
+
+async function renderPage(num) {
+  if (!pdfDoc) return;
+  document.getElementById('page-info').textContent = `Seite ${num} / ${totalPages}`;
+  document.getElementById('prev-page').disabled = num <= 1;
+  document.getElementById('next-page').disabled = num >= totalPages;
+
+  try {
+    const page = await pdfDoc.getPage(num);
+    const canvas = document.getElementById('pdf-canvas');
+    if (!canvas) return;
+    const containerWidth = document.getElementById('modal-body').clientWidth - 32;
+    const viewport = page.getViewport({ scale: 1 });
+    const scale = Math.min(containerWidth / viewport.width, 2);
+    const scaled = page.getViewport({ scale });
+    canvas.width = scaled.width;
+    canvas.height = scaled.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: scaled }).promise;
+  } catch(e) {}
+}
+
+async function changePage(delta) {
+  const next = currentPage + delta;
+  if (next < 1 || next > totalPages) return;
+  currentPage = next;
+  await renderPage(currentPage);
+}
+
+function closePdfModal() {
+  document.getElementById('pdf-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  pdfDoc = null;
+  viewingId = null;
+}
+
+function deletePdf(id) {
+  if (!confirm('PDF löschen?')) return;
+  pdfs = pdfs.filter(p => String(p.id) !== String(id));
+  savePdfs();
+  renderPdfGrid();
+  showToast('🗑 Gelöscht');
+}
+
+function openRenameModal(id) {
+  const p = pdfs.find(x => String(x.id) === String(id));
+  if (!p) return;
+  editingId = id;
+  document.getElementById('rename-input').value = p.name;
+  document.getElementById('rename-cat').value = p.category || 'other';
+  document.getElementById('rename-modal').classList.add('open');
+}
+
+function closeRenameModal() {
+  document.getElementById('rename-modal').classList.remove('open');
+  editingId = null;
+}
+
+function confirmRename() {
+  if (!editingId) return;
+  const p = pdfs.find(x => String(x.id) === String(editingId));
+  if (!p) return;
+  const newName = document.getElementById('rename-input').value.trim();
+  const newCat = document.getElementById('rename-cat').value;
+  if (newName) p.name = newName;
+  p.category = newCat;
+  savePdfs();
+  renderPdfGrid();
+  closeRenameModal();
+  showToast('✓ Gespeichert');
+}
+
+// ===== NAVIGATION =====
+let currentPage_ = 'tracker';
+
+function switchPage(page) {
+  currentPage_ = page;
+
+  // pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+
+  // bottom nav
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.page === page);
+  });
+
+  // desktop nav
+  document.querySelectorAll('.desk-nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.page === page);
+  });
+
+  if (page === 'pdf') { renderPdfGrid(); updateStorageBar(); }
+
+  window.scrollTo(0, 0);
+}
+
+// ===== INIT =====
 function init() {
   load();
+  loadPdfs();
   resetDailyIfNewDay();
 
-  // today label
   const now = new Date();
-  document.getElementById('today-label').textContent = now.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('today-label').textContent = now.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  // notes
   const notesEl = document.getElementById('notes-area');
   notesEl.value = state.notes || '';
   notesEl.addEventListener('input', () => { state.notes = notesEl.value; save(); });
 
   render();
+  updateStorageBar();
+
+  // File input
+  document.getElementById('pdf-input').addEventListener('change', e => handleFiles(e.target.files));
+
+  // Drag & drop
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  // Category filters
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentFilter = btn.dataset.cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPdfGrid();
+    });
+  });
+
+  // Desktop nav
+  document.querySelectorAll('.desk-nav-item').forEach(item => {
+    item.addEventListener('click', () => switchPage(item.dataset.page));
+  });
+
+  // Rename modal: close on backdrop
+  document.getElementById('rename-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('rename-modal')) closeRenameModal();
+  });
+
+  // Enter key in rename
+  document.getElementById('rename-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmRename();
+    if (e.key === 'Escape') closeRenameModal();
+  });
 }
 
 init();
