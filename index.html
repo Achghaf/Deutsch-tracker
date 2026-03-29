@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Deutsch B1">
@@ -200,7 +200,7 @@ h1 span{color:var(--gold)}
 .cat-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
 .cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
 .cat-btn:active{transform:scale(0.96)}
-.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
 .pdf-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s}
 .pdf-card:hover{border-color:#3a3a3a}
 .pdf-preview{height:160px;background:#111;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
@@ -550,7 +550,7 @@ h1 span{color:var(--gold)}
 
 <!-- LANGUAGE SWITCHER -->
 <div class="lang-switcher" id="lang-switcher">
-  <button class="lang-btn active" onclick="setLang('fr')" id="lang-fr">🇫🇷 FR</button>
+  <button class="lang-btn active" onclick="setLang('de')" id="lang-de">🇩🇪 DE</button>
   <button class="lang-btn" onclick="setLang('en')" id="lang-en">🇬🇧 EN</button>
 </div>
 
@@ -571,11 +571,20 @@ const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
 
-// Eager session check — shows login immediately if no session exists
+// Immediately show the login screen.  On slow or blocked Supabase requests
+// the loader could remain visible and appear to hang.  By toggling the
+// loader off and the login screen on before checking the session, the UI
+// will always display a login form while background checks continue.
+document.getElementById('app-loader').classList.remove('visible');
+document.getElementById('login-screen').classList.add('visible');
+
+// Eager session check — if a session exists, hide the login screen and let
+// onAuthStateChange handle initialization.  If there is no session,
+// the login screen remains visible.  We ignore the loader here since it
+// has already been hidden.
 _supa.auth.getSession().then(({data:{session}})=>{
-  if(!session){
-    document.getElementById('app-loader').classList.remove('visible');
-    document.getElementById('login-screen').classList.add('visible');
+  if(session){
+    document.getElementById('login-screen').classList.remove('visible');
   }
   // onAuthStateChange will handle the rest
 });
@@ -587,7 +596,8 @@ function switchAuthTab(mode){
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
   document.getElementById('tab-register').classList.toggle('active',mode==='register');
   document.getElementById('field-confirm').style.display=mode==='register'?'block':'none';
-  document.getElementById('auth-btn').textContent=mode==='login'?'Se connecter':'Créer le compte';
+  // Update the authentication button text based on the selected mode and current language
+  document.getElementById('auth-btn').textContent=mode==='login'?t('btn_login'):t('btn_register');
   document.getElementById('auth-error').classList.remove('visible');
 }
 
@@ -634,7 +644,8 @@ async function handleAuth(){
   if(authMode==='register'){
     const attempts=getCreateAttempts(email);
     if(attempts.length>=5){
-      showAuthError('Cet email a atteint la limite de 5 inscriptions par heure. Réessaie plus tard.');
+      // Use i18n message for limit reached
+      showAuthError(t('error_limit'));
       return;
     }
   }
@@ -658,21 +669,23 @@ async function handleAuth(){
       showConfirmScreen();
       // Reset button state for next time
       btn.disabled = false;
-      btn.textContent = 'Créer le compte';
+      // Reset the button text using the current language
+      btn.textContent = t('btn_register');
     }
   } catch(e){
     // Reset button state on error
     btn.disabled = false;
-    btn.textContent = authMode === 'login' ? 'Se connecter' : 'Créer le compte';
+    // Use translated button label based on the current mode
+    btn.textContent = authMode === 'login' ? t('btn_login') : t('btn_register');
     const msgs = {
-      'Invalid login credentials': 'Email ou mot de passe incorrect.',
-      'User already registered': 'Cet email est déjà utilisé.',
-      'Email not confirmed': 'Vérifie ta boîte mail pour confirmer ton compte.',
+      'Invalid login credentials': t('error_invalid_login'),
+      'User already registered': t('error_user_exists'),
+      'Email not confirmed': t('error_not_confirmed'),
     };
     // Map common server-side rate-limit / too-many requests messages
     const serverMsg = (e && e.message) ? e.message : '';
     if(/too many/i.test(serverMsg) || /429/.test(serverMsg)){
-      showAuthError('Trop de tentatives. Réessaie dans une heure.');
+      showAuthError(t('error_too_many'));
     } else {
       showAuthError(msgs[serverMsg] || serverMsg || String(e));
     }
@@ -687,11 +700,9 @@ async function logout(){
 // Supabase gère la session automatiquement
 let _appInited = false;
 
-// Safety fallback: if Supabase doesn't respond in 5s, show login
-const _authTimeout = setTimeout(()=>{
-  document.getElementById('app-loader').classList.remove('visible');
-  document.getElementById('login-screen').classList.add('visible');
-}, 5000);
+// Safety fallback removed: we now show the login screen immediately above.
+// Define _authTimeout as null so that clearTimeout(_authTimeout) is harmless.
+const _authTimeout = null;
 
 _supa.auth.onAuthStateChange(async(event,session)=>{
   clearTimeout(_authTimeout);
@@ -1023,7 +1034,7 @@ function handleProfileOverlayClick(e){
   if(e.target===document.getElementById('profile-modal'))closeProfileModal();
 }
 function applyProfileLang(){
-  const L=i18n[currentLang]||i18n.fr;
+  const L=i18n[currentLang]||i18n.de;
   const lbl_e=document.getElementById('lbl-email');if(lbl_e)lbl_e.textContent=L.label_email||'Email';
   const lbl_p=document.getElementById('lbl-new-pwd');if(lbl_p)lbl_p.textContent=L.lbl_new_pwd||'New password';
   const lbl_c=document.getElementById('lbl-confirm-pwd');if(lbl_c)lbl_c.textContent=L.lbl_confirm_pwd||'Confirm password';
@@ -1036,7 +1047,7 @@ async function saveProfileChanges(){
   const msg=document.getElementById('profile-msg');
   const btn=document.getElementById('profile-save-btn');
   msg.className='profile-msg';
-  const L=i18n[currentLang]||i18n.fr;
+  const L=i18n[currentLang]||i18n.de;
   if(!pwd1&&!pwd2){msg.textContent=L.profile_no_change||'Enter a new password to update.';msg.className='profile-msg error';return;}
   if(pwd1!==pwd2){msg.textContent=L.profile_pwd_mismatch||'Passwords do not match.';msg.className='profile-msg error';return;}
   if(pwd1.length<6){msg.textContent=L.profile_pwd_short||'Password too short (min 6 chars).';msg.className='profile-msg error';return;}
@@ -1052,43 +1063,72 @@ async function saveProfileChanges(){
 
 // ===== i18n =====
 const i18n={
-  fr:{
-    nav_tracker:'Tracker', nav_docs:'Dokumente',
-    login_title_1:'Mein Ziel:', login_title_2:'Deutsch B1',
+  // German translations
+  de:{
+    nav_tracker:'Tracker',
+    nav_docs:'Dokumente',
+    login_title_1:'Mein Ziel:',
+    login_title_2:'Deutsch B1',
     login_sub:'5-Monats-Lernplan · Von Null zu B1',
-    tab_login:'Connexion', tab_register:'Créer un compte',
-    label_email:'Email', label_pwd:'Mot de passe', label_confirm:'Confirmer le mot de passe',
-    btn_login:'Se connecter', btn_register:'Créer le compte',
-    logout:'Déconnexion', logout_mob:'↩',
-    reset_btn:'↺ Reset',
-    h1_1:'Mein Ziel:', h1_2:'Deutsch B1',
+    tab_login:'Anmelden',
+    tab_register:'Konto erstellen',
+    label_email:'E‑Mail',
+    label_pwd:'Passwort',
+    label_confirm:'Passwort bestätigen',
+    btn_login:'Anmelden',
+    btn_register:'Konto erstellen',
+    logout:'Abmelden',
+    logout_mob:'↩',
+    reset_btn:'↺ Zurücksetzen',
+    h1_1:'Mein Ziel:',
+    h1_2:'Deutsch B1',
     h1_sub:'5-Monats-Lernplan · Von Null zu B1',
-    badge:'🎯 B1 NIVEAU',
+    badge:'🎯 B1‑Niveau',
     progress_label:'Fortschritt',
-    lbl_weeks:'Wochen', lbl_streak:'🔥 Streak',
-    lbl_vocab:'Vokabeln', lbl_hours:'Stunden', lbl_today:'Heute', lbl_days:'Tage noch',
-    section_journey:'5-Monate Reise',
+    lbl_weeks:'Wochen',
+    lbl_streak:'🔥 Streak',
+    lbl_vocab:'Vokabeln',
+    lbl_hours:'Stunden',
+    lbl_today:'Heute',
+    lbl_days:'Tage noch',
+    section_journey:'5‑Monate Reise',
     section_daily:'Tägliche Aufgaben',
     section_notes:'Notizen',
     notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
     pdf_title:'📁 Meine Dokumente',
-    storage_label:'💾 Local',
+    storage_label:'💾 Lokal',
     upload_title:'PDF hochladen',
-    upload_sub:'Stocké localement · Accessible hors ligne · Max 200 MB par fichier',
-    storage_loading:'Chargement...',
-    cat_all:'Alle', cat_grammar:'📘 Grammatik', cat_vocab:'📚 Vokabeln',
-    cat_exercise:'✏️ Übungen', cat_exam:'📝 Prüfung', cat_other:'📄 Sonstiges',
-    confirm_logout:'Se déconnecter ?',
-    confirm_reset:'Wirklich alles zurücksetzen?',
-    lbl_new_pwd:'Nouveau mot de passe',
-    lbl_confirm_pwd:'Confirmer le mot de passe',
-    profile_save:'💾 Enregistrer',
-    profile_logout:'↩ Déconnexion',
-    profile_no_change:'Entrez un nouveau mot de passe.',
-    profile_pwd_mismatch:'Les mots de passe ne correspondent pas.',
-    profile_pwd_short:'Mot de passe trop court (min 6 caractères).',
-    profile_saved:'✓ Mot de passe mis à jour !',
+    upload_sub:'Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei',
+    storage_loading:'Lädt...',
+    cat_all:'Alle',
+    cat_grammar:'📘 Grammatik',
+    cat_vocab:'📚 Vokabeln',
+    cat_exercise:'✏️ Übungen',
+    cat_exam:'📝 Prüfung',
+    cat_other:'📄 Sonstiges',
+    confirm_logout:'Abmelden?',
+    confirm_reset:'Alles zurücksetzen?',
+    lbl_new_pwd:'Neues Passwort',
+    lbl_confirm_pwd:'Passwort bestätigen',
+    profile_save:'💾 Änderungen speichern',
+    profile_logout:'↩ Abmelden',
+    profile_no_change:'Gib ein neues Passwort ein.',
+    profile_pwd_mismatch:'Passwörter stimmen nicht überein.',
+    profile_pwd_short:'Passwort zu kurz (min 6 Zeichen).',
+    profile_saved:'✓ Passwort aktualisiert!',
+    // Confirmation screen
+    confirm_title:'Bestätige deine E‑Mail',
+    confirm_text:'Wir haben dir eine Bestätigungs‑E‑Mail geschickt. Klicke auf den Link, um dein Konto zu aktivieren. Sobald bestätigt, komm zurück und melde dich an.',
+    confirm_btn:'Zurück zur Anmeldung',
+    confirm_success:'✓ Deine E‑Mail wurde bestätigt! Du kannst dich jetzt anmelden.',
+    // Error messages
+    error_limit:'Dieses E‑Mail‑Konto hat das Limit von 5 Registrierungen pro Stunde erreicht. Bitte versuche es später erneut.',
+    error_too_many:'Zu viele Versuche. Bitte versuche es in einer Stunde erneut.',
+    error_invalid_login:'E‑Mail oder Passwort ist inkorrekt.',
+    error_user_exists:'Dieses E‑Mail wird bereits verwendet.',
+    error_not_confirmed:'Prüfe deine E‑Mail, um dein Konto zu bestätigen.',
   },
+  // English translations
   en:{
     nav_tracker:'Tracker', nav_docs:'Documents',
     login_title_1:'My Goal:', login_title_2:'German B1',
@@ -1127,20 +1167,22 @@ const i18n={
     profile_saved:'✓ Password updated!',
   }
 };
-let currentLang='fr';
+// Set default language to German
+let currentLang='de';
 
 function setLang(lang){
   currentLang=lang;
   localStorage.setItem('app_lang',lang);
-  document.getElementById('lang-fr').classList.toggle('active',lang==='fr');
+  // Toggle active classes for language buttons
+  document.getElementById('lang-de').classList.toggle('active',lang==='de');
   document.getElementById('lang-en').classList.toggle('active',lang==='en');
   applyLang();
 }
 
-function t(key){return(i18n[currentLang]||i18n.fr)[key]||key;}
+function t(key){return(i18n[currentLang]||i18n.de)[key]||key;}
 
 function applyLang(){
-  const L=i18n[currentLang]||i18n.fr;
+  const L=i18n[currentLang]||i18n.de;
   // Nav
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(L[k])el.textContent=L[k];});
   // Login screen
@@ -1190,12 +1232,44 @@ function applyLang(){
   });
   // Reset button
   const rb=document.querySelector('.reset-btn');if(rb)rb.textContent=L.reset_btn;
+  // Confirmation screen
+  const ct=document.querySelector('.confirm-title');if(ct){ct.textContent=L.confirm_title||ct.textContent;}
+  const ctext=document.querySelector('.confirm-text');if(ctext){ctext.textContent=L.confirm_text||ctext.textContent;}
+  const cb=document.querySelector('.confirm-btn');if(cb){cb.textContent=L.confirm_btn||cb.textContent;}
+  // Only update the success message placeholder if it already contains text
+  const cm=document.getElementById('confirm-success-msg');if(cm&&cm.textContent){cm.textContent=L.confirm_success||cm.textContent;}
   // Profile modal if open
   if(document.getElementById('profile-modal').classList.contains('open'))applyProfileLang();
 }
 
-// Init lang
-(()=>{const saved=localStorage.getItem('app_lang')||'fr';currentLang=saved;document.getElementById('lang-'+saved).classList.add('active');document.getElementById('lang-'+('fr'===saved?'en':'fr')).classList.remove('active');applyLang();})();
+// Init language based on saved preference or default to German
+(() => {
+  const saved = localStorage.getItem('app_lang') || 'de';
+  currentLang = saved;
+  // Toggle active state for each language button
+  const deBtn = document.getElementById('lang-de');
+  const enBtn = document.getElementById('lang-en');
+  if(deBtn) deBtn.classList.toggle('active', saved === 'de');
+  if(enBtn) enBtn.classList.toggle('active', saved === 'en');
+  applyLang();
+  // After language setup, check for Supabase email confirmation redirects and show success message
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('type') === 'signup') {
+      const msgEl = document.getElementById('confirm-success-msg');
+      if (msgEl) {
+        msgEl.textContent = t('confirm_success') || msgEl.textContent;
+        msgEl.classList.add('visible');
+      }
+      // Show the confirmation screen instead of the login screen
+      document.getElementById('login-screen').classList.remove('visible');
+      document.getElementById('confirm-screen').classList.add('visible');
+      if (history && history.replaceState) {
+        history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
