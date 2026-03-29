@@ -331,6 +331,54 @@ h1 span{color:var(--gold)}
 .profile-icon-btn{width:32px;height:32px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;font-weight:700;color:var(--black);transition:all 0.2s;flex-shrink:0}
 .profile-icon-btn:hover{box-shadow:0 0 0 2px var(--gold),0 0 12px rgba(232,184,75,0.3)}
 .profile-icon-btn:active{transform:scale(0.93)}
+/* ===== NOTIFICATIONS ===== */
+.notif-btn{position:relative;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.2s;flex-shrink:0}
+.notif-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notif-btn svg{pointer-events:none}
+.notif-badge{position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;background:var(--red);color:#fff;border-radius:999px;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #111;display:none}
+.notif-badge.visible{display:flex}
+
+/* Notification dropdown panel */
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:340px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.6);z-index:9999;overflow:hidden;display:none}
+.notif-panel.open{display:block}
+.notif-panel-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.notif-panel-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;color:var(--white)}
+.notif-mark-read{font-size:0.68rem;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0}
+.notif-mark-read:hover{color:var(--gold)}
+.notif-list{max-height:320px;overflow-y:auto}
+.notif-item{padding:12px 16px;border-bottom:1px solid rgba(42,42,42,0.5);cursor:default;transition:background 0.15s;position:relative}
+.notif-item:last-child{border-bottom:none}
+.notif-item.unread{background:rgba(232,184,75,0.05)}
+.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
+.notif-item-title{font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:3px}
+.notif-item-body{font-size:0.75rem;color:var(--muted);line-height:1.45}
+.notif-item-date{font-size:0.62rem;color:var(--muted);margin-top:5px;font-family:'DM Mono',monospace}
+.notif-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:0.8rem}
+
+/* Admin send notification modal */
+.notif-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
+.notif-modal-overlay.open{display:flex}
+.notif-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:440px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.7)}
+.notif-modal-flag{height:5px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
+.notif-modal-body{padding:24px}
+.notif-modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;margin-bottom:18px;color:var(--white)}
+.notif-modal-title span{color:var(--gold)}
+.notif-field{margin-bottom:14px}
+.notif-field label{display:block;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.notif-field input,.notif-field textarea,.notif-field select{width:100%;background:#111;border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.notif-field input:focus,.notif-field textarea:focus,.notif-field select:focus{border-color:var(--gold)}
+.notif-field textarea{resize:vertical;min-height:80px}
+.notif-modal-actions{display:flex;gap:10px;margin-top:18px}
+.notif-send-btn{flex:1;padding:12px;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.08em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+.notif-send-btn .btn-spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,0.25);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+.notif-send-btn.loading .btn-spinner{display:block}
+.notif-send-btn.loading .btn-label{display:none}
+.notif-cancel-btn{padding:12px 18px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.notif-cancel-btn:hover{border-color:var(--white);color:var(--white)}
+
+/* Mobile notif bell */
+.mob-notif-wrap{position:relative;display:flex;align-items:center}
+
 
 /* PROFILE MODAL */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:700;align-items:flex-end;justify-content:center}
@@ -542,6 +590,11 @@ h1 span{color:var(--gold)}
 .admin-user-row:hover{background:rgba(255,255,255,0.02)}
 .admin-user-avatar{width:34px;height:34px;border-radius:50%;background:var(--mid);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;flex-shrink:0;border:1px solid var(--border)}
 .admin-user-avatar.is-admin{background:rgba(232,184,75,0.15);border-color:rgba(232,184,75,0.4);color:var(--gold)}
+.admin-avatar-wrap{position:relative;flex-shrink:0}
+.status-dot{position:absolute;bottom:1px;right:1px;width:9px;height:9px;border-radius:50%;border:2px solid #111}
+.status-dot.online{background:#3dba6e;box-shadow:0 0 5px rgba(61,186,110,0.6)}
+.status-dot.offline{background:#555}
+.status-dot.away{background:#e8b84b;box-shadow:0 0 5px rgba(232,184,75,0.5)}
 .admin-user-info{flex:1;min-width:0}
 .admin-user-email{font-size:0.8rem;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .admin-user-date{font-size:0.65rem;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
@@ -640,6 +693,23 @@ h1 span{color:var(--gold)}
   <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer</button>
   <button type="button" class="desk-nav-item" data-page="admin" id="desk-admin-nav" style="display:none" onclick="switchPage('admin')" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin</button>
   <div class="desk-nav-right">
+    <!-- Notification Bell -->
+    <div style="position:relative">
+      <button class="notif-btn" id="desk-notif-btn" onclick="toggleNotifPanel()" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge"></span>
+      </button>
+      <div class="notif-panel" id="notif-panel">
+        <div class="notif-panel-head">
+          <span class="notif-panel-title">🔔 Notifications</span>
+          <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+        </div>
+        <div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
+        <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
+          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+        </div>
+      </div>
+    </div>
     <button class="profile-icon-btn" id="desk-profile-btn" style="display:none" onclick="openProfileModal()" title="Profile">?</button>
   </div>
 </nav>
@@ -1008,7 +1078,27 @@ h1 span{color:var(--gold)}
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
     <div class="nav-label">Admin</div>
   </div>
+  <!-- Mobile notification bell -->
+  <div class="nav-item" onclick="toggleNotifPanel()" style="position:relative">
+    <div class="nav-icon" style="position:relative;display:inline-flex">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
+    </div>
+    <div class="nav-label">Alerts</div>
+  </div>
 </nav>
+
+<!-- Mobile notification panel (full-width bottom sheet) -->
+<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
+  <div class="notif-panel-head" style="padding:14px 18px">
+    <span class="notif-panel-title">🔔 Notifications</span>
+    <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+  </div>
+  <div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
+  <div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
+    <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+  </div>
+</div>
 
 <!-- LANGUAGE SWITCHER -->
 <div class="lang-fab" id="lang-fab">
@@ -1018,6 +1108,37 @@ h1 span{color:var(--gold)}
     <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
   </div>
   <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐</button>
+</div>
+
+<!-- NOTIFICATION SEND MODAL -->
+<div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
+  <div class="notif-modal">
+    <div class="notif-modal-flag"></div>
+    <div class="notif-modal-body">
+      <div class="notif-modal-title">📣 Send <span>Notification</span></div>
+      <div class="notif-field">
+        <label>Target</label>
+        <select id="notif-target-select">
+          <option value="all">🌍 All Users</option>
+        </select>
+      </div>
+      <div class="notif-field">
+        <label>Title</label>
+        <input type="text" id="notif-title-input" placeholder="Notification title...">
+      </div>
+      <div class="notif-field">
+        <label>Message</label>
+        <textarea id="notif-body-input" placeholder="Write your message here..."></textarea>
+      </div>
+      <div class="notif-modal-actions">
+        <button class="notif-cancel-btn" onclick="closeNotifModal()">Cancel</button>
+        <button class="notif-send-btn" id="notif-send-btn" onclick="sendNotification()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label">Send</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Supabase -->
@@ -1133,6 +1254,8 @@ async function startAuthenticatedApp(user){
   }
   showAppShell();
   switchPage(activeAppPage||'tracker');
+  initNotifications();
+  startPresenceHeartbeat();
 }
 
 async function bootstrapAuth(){
@@ -2888,6 +3011,193 @@ function initNewsPage(){
   loadNewsPosts();
 }
 
+// ===== PRESENCE =====
+let _userPresence = {}; // { email: lastSeenTimestamp }
+let _presenceInterval = null;
+
+async function startPresenceHeartbeat(){
+  if(!currentUser) return;
+  const sendBeat = async () => {
+    try{
+      await _supa.from('user_presence').upsert({
+        email: currentUser.email,
+        last_seen: new Date().toISOString()
+      }, { onConflict: 'email' });
+    }catch(e){}
+  };
+  sendBeat();
+  clearInterval(_presenceInterval);
+  _presenceInterval = setInterval(sendBeat, 30000);
+  // Also send on page visibility change
+  document.addEventListener('visibilitychange', ()=>{
+    if(!document.hidden) sendBeat();
+  });
+}
+
+async function fetchPresence(){
+  if(!isAdmin()) return;
+  try{
+    const {data,error} = await _supa.from('user_presence').select('email,last_seen');
+    if(error) throw error;
+    _userPresence = {};
+    (data||[]).forEach(row=>{
+      _userPresence[row.email] = new Date(row.last_seen).getTime();
+    });
+  }catch(e){ _userPresence = {}; }
+}
+
+// ===== NOTIFICATIONS =====
+let _notifications = [];
+let _notifPanelOpen = false;
+
+async function initNotifications(){
+  await loadNotifications();
+  // Populate target select with users if admin
+  if(isAdmin()){
+    document.querySelectorAll('#admin-notif-send-row,#mob-admin-notif-send-row').forEach(el=>el.style.display='');
+    populateNotifTargets();
+  }
+}
+
+async function populateNotifTargets(){
+  const sel = document.getElementById('notif-target-select');
+  if(!sel) return;
+  sel.innerHTML = '<option value="all">🌍 All Users</option>';
+  if(_adminAllUsers && _adminAllUsers.length){
+    _adminAllUsers.forEach(u=>{
+      const opt = document.createElement('option');
+      opt.value = u.email;
+      opt.textContent = '👤 ' + u.email;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+async function loadNotifications(){
+  try{
+    let query = _supa.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);
+    if(!isAdmin()){
+      query = query.or(`target.eq.all,target.eq.${currentUser.email}`);
+    }
+    const {data,error} = await query;
+    if(error) throw error;
+    _notifications = data || [];
+  }catch(e){
+    _notifications = [];
+  }
+  renderNotifBadge();
+  renderNotifList();
+}
+
+function getUnreadCount(){
+  const readIds = JSON.parse(localStorage.getItem('notif_read_'+currentUser?.id)||'[]');
+  return _notifications.filter(n=>!readIds.includes(n.id)).length;
+}
+
+function renderNotifBadge(){
+  const count = getUnreadCount();
+  document.querySelectorAll('.notif-badge').forEach(el=>{
+    el.textContent = count > 9 ? '9+' : count;
+    el.classList.toggle('visible', count > 0);
+  });
+}
+
+function renderNotifList(){
+  const readIds = JSON.parse(localStorage.getItem('notif_read_'+currentUser?.id)||'[]');
+  const html = _notifications.length === 0
+    ? '<div class="notif-empty">No notifications yet</div>'
+    : _notifications.map(n=>`
+        <div class="notif-item ${readIds.includes(n.id)?'':'unread'}" onclick="markOneRead('${n.id}')">
+          <div class="notif-item-title">${escapeHtml(n.title||'')}</div>
+          <div class="notif-item-body">${escapeHtml(n.body||'')}</div>
+          <div class="notif-item-date">${formatNewsDate(n.created_at)}${n.target!=='all'?' · 👤 '+escapeHtml(n.target):''}</div>
+        </div>`).join('');
+  document.querySelectorAll('#notif-list,#mob-notif-list').forEach(el=>{ if(el) el.innerHTML=html; });
+}
+
+function toggleNotifPanel(){
+  _notifPanelOpen = !_notifPanelOpen;
+  // desktop
+  const dp = document.getElementById('notif-panel');
+  if(dp) dp.classList.toggle('open', _notifPanelOpen);
+  // mobile
+  const mp = document.getElementById('mob-notif-panel');
+  if(mp) mp.style.display = _notifPanelOpen ? 'flex' : 'none';
+  if(_notifPanelOpen) loadNotifications();
+}
+
+// Close panel when clicking outside
+document.addEventListener('click', e=>{
+  if(!_notifPanelOpen) return;
+  const dp = document.getElementById('notif-panel');
+  const btn = document.getElementById('desk-notif-btn');
+  const mp = document.getElementById('mob-notif-panel');
+  if(dp && !dp.contains(e.target) && btn && !btn.contains(e.target) && mp && !mp.contains(e.target)){
+    _notifPanelOpen = false;
+    if(dp) dp.classList.remove('open');
+    if(mp) mp.style.display = 'none';
+  }
+});
+
+function markOneRead(id){
+  const readIds = JSON.parse(localStorage.getItem('notif_read_'+currentUser?.id)||'[]');
+  if(!readIds.includes(id)) readIds.push(id);
+  localStorage.setItem('notif_read_'+currentUser?.id, JSON.stringify(readIds));
+  renderNotifBadge();
+  renderNotifList();
+}
+
+function markAllRead(){
+  const ids = _notifications.map(n=>n.id);
+  localStorage.setItem('notif_read_'+currentUser?.id, JSON.stringify(ids));
+  renderNotifBadge();
+  renderNotifList();
+}
+
+function openNotifModal(){
+  _notifPanelOpen = false;
+  document.getElementById('notif-panel')?.classList.remove('open');
+  const mp = document.getElementById('mob-notif-panel');
+  if(mp) mp.style.display='none';
+  if(isAdmin() && _adminAllUsers.length) populateNotifTargets();
+  document.getElementById('notif-modal-overlay').classList.add('open');
+}
+
+function closeNotifModal(e){
+  if(e && e.target !== document.getElementById('notif-modal-overlay')) return;
+  document.getElementById('notif-modal-overlay').classList.remove('open');
+  document.getElementById('notif-title-input').value='';
+  document.getElementById('notif-body-input').value='';
+}
+
+async function sendNotification(){
+  if(!isAdmin()){showToast('⛔ Admin only');return;}
+  const title = document.getElementById('notif-title-input').value.trim();
+  const body = document.getElementById('notif-body-input').value.trim();
+  const target = document.getElementById('notif-target-select').value;
+  if(!title){showToast('Title is required');return;}
+  if(!body){showToast('Message is required');return;}
+  const btn = document.getElementById('notif-send-btn');
+  if(btn){btn.disabled=true;btn.classList.add('loading');}
+  try{
+    const {error} = await _supa.from('notifications').insert({
+      title, body, target,
+      created_at: new Date().toISOString(),
+      sender_email: currentUser?.email||''
+    });
+    if(error) throw error;
+    showToast('✅ Notification sent!');
+    document.getElementById('notif-modal-overlay').classList.remove('open');
+    document.getElementById('notif-title-input').value='';
+    document.getElementById('notif-body-input').value='';
+    await loadNotifications();
+  }catch(e){
+    showToast('Error: '+(e.message||'Could not send'));
+  }finally{
+    if(btn){btn.disabled=false;btn.classList.remove('loading');}
+  }
+}
+
 // ===== TRANSLATOR =====
 let translateHistory = [];
 let _translatePageBound = false;
@@ -3156,6 +3466,7 @@ async function loadAdminPage(){
     const { data, error } = await _supa.rpc('list_users_with_roles');
     if(error) throw error;
     _adminAllUsers = data || [];
+    await fetchPresence();
     renderAdminStats();
     renderAdminChart();
     renderAdminUsersList();
@@ -3295,12 +3606,23 @@ function renderAdminUsersList(){
     const dateStr = created ? created.toLocaleDateString('en',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const diffMs = created ? now - created : null;
     const isNew = diffMs !== null && diffMs < 7 * 24 * 60 * 60 * 1000;
-    const isAdmin = role === 'admin';
+    const isAdm = role === 'admin';
+    // Presence
+    const presenceTs = _userPresence[u.email];
+    let dotClass = 'offline', dotTitle = 'Offline';
+    if(presenceTs){
+      const diffSec = (Date.now() - presenceTs) / 1000;
+      if(diffSec < 45){ dotClass = 'online'; dotTitle = 'Online'; }
+      else if(diffSec < 180){ dotClass = 'away'; dotTitle = 'Away'; }
+    }
     return `<div class="admin-user-row">
-      <div class="admin-user-avatar ${isAdmin?'is-admin':''}">${initial}</div>
+      <div class="admin-avatar-wrap">
+        <div class="admin-user-avatar ${isAdm?'is-admin':''}">${initial}</div>
+        <span class="status-dot ${dotClass}" title="${dotTitle}"></span>
+      </div>
       <div class="admin-user-info">
         <div class="admin-user-email">${u.email||'—'}${isNew ? '<span class="admin-new-badge">NEW</span>' : ''}</div>
-        <div class="admin-user-date">Joined ${dateStr}</div>
+        <div class="admin-user-date">Joined ${dateStr} · <span style="color:${dotClass==='online'?'var(--green)':dotClass==='away'?'var(--gold)':'var(--muted)'}">${dotTitle}</span></div>
       </div>
       <span class="admin-role-badge ${role}">${role === 'admin' ? '👑 admin' : '👤 user'}</span>
       <select class="admin-role-select" onchange="adminChangeRole('${u.email}', this.value, this)">
