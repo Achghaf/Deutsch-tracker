@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mein Ziel: Deutsch B1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0e0e0e;
+    --white: #f5f0e8;
+    --gold: #e8b84b;
+    --red: #cc1f1f;
+    --dark-red: #8b1111;
+    --mid: #1e1e1e;
+    --card: #161616;
+    --border: #2a2a2a;
+    --muted: #555;
+    --green: #3dba6e;
+    --blue: #3a82f7;
+    --m1: #5b7ec9;
+    --m2: #b5832a;
+    --m3: #3aaa74;
+    --m4: #cc1f1f;
+    --m5: #8b3dba;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 60px,
+      rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px
+    ), repeating-linear-gradient(
+      90deg, transparent, transparent 60px,
+      rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    padding: 48px 24px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flag-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #000 33.3%, #cc1f1f 33.3% 66.6%, #e8b84b 66.6%);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    color: var(--white);
+  }
+
+  h1 span { color: var(--gold); }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .level-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    background: var(--red);
+    color: white;
+    padding: 6px 16px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .start-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* OVERALL PROGRESS */
+  .overall-section {
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .overall-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .big-stat {
+    text-align: center;
+  }
+
+  .big-stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .big-stat .label {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .main-progress-wrap {
+    text-align: center;
+  }
+
+  .main-progress-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .arc-container {
+    position: relative;
+    width: 160px;
+    height: 100px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .arc-container svg { width: 160px; height: 160px; margin-top: -60px; }
+
+  .arc-pct {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  /* JOURNEY BAR */
+  .journey-section {
+    padding: 40px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .journey-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .month-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .month-dot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    background: var(--card);
+    position: relative;
+    z-index: 2;
+  }
+
+  .month-dot.done { border-color: var(--green); background: rgba(61,186,110,0.15); color: var(--green); }
+  .month-dot.active { border-color: var(--gold); background: rgba(232,184,75,0.15); color: var(--gold); box-shadow: 0 0 20px rgba(232,184,75,0.3); }
+  .month-dot.locked { color: var(--muted); }
+
+  .month-connector {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    position: relative;
+    margin-top: -22px;
+    z-index: 1;
+  }
+
+  .month-connector.done { background: var(--green); }
+  .month-connector.partial {
+    background: linear-gradient(90deg, var(--green) var(--fill, 0%), var(--border) var(--fill, 0%));
+  }
+
+  .month-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .month-sublabel {
+    font-size: 0.6rem;
+    color: #3a3a3a;
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+
+  /* MONTHS GRID */
+  .months-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 0 24px 40px;
+    max-width: 1148px;
+    margin: 0 auto;
+  }
+
+  .month-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.25s;
+  }
+
+  .month-card:hover { border-color: #3a3a3a; }
+  .month-card.active { border-color: var(--gold); }
+  .month-card.done { border-color: rgba(61,186,110,0.3); }
+
+  .month-card-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .month-card-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .month-card.m1 .month-card-header::before { background: var(--m1); }
+  .month-card.m2 .month-card-header::before { background: var(--m2); }
+  .month-card.m3 .month-card-header::before { background: var(--m3); }
+  .month-card.m4 .month-card-header::before { background: var(--m4); }
+  .month-card.m5 .month-card-header::before { background: var(--m5); }
+
+  .month-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .month-card.m1 .month-card-title { color: var(--m1); }
+  .month-card.m2 .month-card-title { color: var(--m2); }
+  .month-card.m3 .month-card-title { color: var(--m3); }
+  .month-card.m4 .month-card-title { color: var(--m4); }
+  .month-card.m5 .month-card-title { color: var(--m5); }
+
+  .month-card-sub {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .month-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .month-progress-bar {
+    height: 3px;
+    background: var(--border);
+    margin: 0 20px 16px;
+  }
+
+  .month-progress-fill {
+    height: 100%;
+    transition: width 0.6s ease;
+    border-radius: 2px;
+  }
+
+  .month-card.m1 .month-progress-fill { background: var(--m1); }
+  .month-card.m2 .month-progress-fill { background: var(--m2); }
+  .month-card.m3 .month-progress-fill { background: var(--m3); }
+  .month-card.m4 .month-progress-fill { background: var(--m4); }
+  .month-card.m5 .month-progress-fill { background: var(--m5); }
+
+  /* WEEKS */
+  .weeks-list { padding: 0 20px 16px; }
+
+  .week-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(42,42,42,0.5);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 2px;
+    padding-left: 8px;
+    margin: 0 -8px;
+  }
+
+  .week-row:last-child { border-bottom: none; }
+  .week-row:hover { background: rgba(255,255,255,0.03); }
+
+  .week-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-size: 0.65rem;
+  }
+
+  .week-check.done { border-color: var(--green); background: var(--green); color: white; }
+  .week-check.active { border-color: var(--gold); }
+
+  .week-info { flex: 1; }
+
+  .week-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .week-topic {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .week-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: #333;
+  }
+
+  /* DAILY TASKS */
+  .daily-section {
+    padding: 0 24px 40px;
+    max-width: 1148px;
+    margin: 0 auto;
+  }
+
+  .daily-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .task-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .task-card:hover { border-color: #3a3a3a; transform: translateY(-1px); }
+  .task-card.done { border-color: rgba(61,186,110,0.4); background: rgba(61,186,110,0.05); }
+
+  .task-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .task-info { flex: 1; }
+
+  .task-name {
+    font-weight: 600;
+    font-size: 0.82rem;
+    margin-bottom: 3px;
+  }
+
+  .task-card.done .task-name { text-decoration: line-through; color: var(--muted); }
+
+  .task-duration {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+  }
+
+  .task-checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    transition: all 0.2s;
+  }
+
+  .task-card.done .task-checkbox { background: var(--green); border-color: var(--green); color: white; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    padding: 0 24px 24px;
+    max-width: 1148px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .stat-pill-icon { font-size: 1.3rem; }
+
+  .stat-pill-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-pill-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* NOTES */
+  .notes-section {
+    padding: 0 24px 48px;
+    max-width: 1148px;
+    margin: 0 auto;
+  }
+
+  .notes-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 2px;
+  }
+
+  .notes-box textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    line-height: 1.7;
+  }
+
+  .notes-box textarea::placeholder { color: #333; }
+
+  /* RESET BTN */
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .today-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  /* streak */
+  .streak-fire { color: #ff6b35; }
+
+  /* responsiveness */
+  @media (max-width: 640px) {
+    .overall-inner { grid-template-columns: 1fr 1fr; }
+    .big-stat:last-child { grid-column: span 2; }
+    .months-grid { grid-template-columns: 1fr; }
+    .month-sublabel { display: none; }
+  }
+
+  /* animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .month-card { animation: fadeIn 0.4s ease both; }
+  .month-card:nth-child(2) { animation-delay: 0.05s; }
+  .month-card:nth-child(3) { animation-delay: 0.1s; }
+  .month-card:nth-child(4) { animation-delay: 0.15s; }
+  .month-card:nth-child(5) { animation-delay: 0.2s; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    padding: 12px 24px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="flag-stripe"></div>
+  <div class="header-inner">
+    <div>
+      <h1>Mein Ziel:<br><span>Deutsch B1</span></h1>
+      <p style="font-size:0.75rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
+    </div>
+    <div class="header-actions">
+      <div class="header-meta">
+        <div class="level-badge">🎯 B1 NIVEAU</div>
+        <div class="today-label" id="today-label"></div>
+      </div>
+      <button class="reset-btn" onclick="resetAll()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+</header>
+
+<!-- OVERALL STATS -->
+<div class="overall-section">
+  <div class="overall-inner">
+    <div class="big-stat">
+      <div class="num" id="stat-weeks">0</div>
+      <div class="label">Wochen abgeschlossen</div>
+    </div>
+    <div class="big-stat main-progress-wrap">
+      <div class="main-progress-label">Gesamtfortschritt</div>
+      <div class="arc-container">
+        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="80" r="65" fill="none" stroke="#2a2a2a" stroke-width="12"/>
+          <circle id="arc-circle" cx="80" cy="80" r="65" fill="none"
+            stroke="var(--gold)" stroke-width="12"
+            stroke-dasharray="408.41" stroke-dashoffset="408.41"
+            stroke-linecap="round"
+            transform="rotate(-90 80 80)"
+            style="transition: stroke-dashoffset 0.8s ease;"/>
+        </svg>
+        <div class="arc-pct"><span id="arc-pct">0</span>%</div>
+      </div>
+    </div>
+    <div class="big-stat">
+      <div class="num" id="stat-streak">0</div>
+      <div class="label">🔥 Tage Streak</div>
+    </div>
+  </div>
+</div>
+
+<!-- JOURNEY -->
+<div class="journey-section container">
+  <div class="section-title">5-Monate Reise</div>
+  <div class="journey-bar" id="journey-bar"></div>
+</div>
+
+<!-- STATS PILLS -->
+<div class="stats-row">
+  <div class="stat-pill">
+    <div class="stat-pill-icon">📚</div>
+    <div>
+      <div class="stat-pill-val" id="stat-vocab">0</div>
+      <div class="stat-pill-label">Vokabeln gelernt</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-pill-icon">⏱</div>
+    <div>
+      <div class="stat-pill-val" id="stat-hours">0</div>
+      <div class="stat-pill-label">Stunden gesamt</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-pill-icon">✅</div>
+    <div>
+      <div class="stat-pill-val" id="stat-tasks">0</div>
+      <div class="stat-pill-label">Tagesaufgaben heute</div>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <div class="stat-pill-icon">🗓</div>
+    <div>
+      <div class="stat-pill-val" id="stat-days-left">140</div>
+      <div class="stat-pill-label">Tage verbleibend</div>
+    </div>
+  </div>
+</div>
+
+<!-- DAILY TASKS -->
+<div class="daily-section">
+  <div class="section-title">Meine täglichen Aufgaben</div>
+  <div class="daily-grid" id="daily-grid"></div>
+</div>
+
+<!-- MONTHS -->
+<div class="months-grid" id="months-grid"></div>
+
+<!-- NOTES -->
+<div class="notes-section">
+  <div class="section-title">Notizen</div>
+  <div class="notes-box">
+    <textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch... Neue Wörter, was schwierig war, was gut lief..."></textarea>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  months: [
+    {
+      id: 'm1', cls: 'm1', title: 'Monat 1', sub: 'Grundlagen (A1)',
+      desc: 'Alphabet · Artikel · Basissätze',
+      weeks: [
+        { w: 1, name: 'Alphabet & Aussprache', topic: 'Buchstaben, Umlaute ä/ö/ü, ß, ch/sch' },
+        { w: 2, name: 'Grüße & Zahlen', topic: 'Phrasen, Zahlen 1–1000, Tage, Monate' },
+        { w: 3, name: 'Artikel & Genus', topic: 'der/die/das Regeln, Genus erkennen' },
+        { w: 4, name: 'sein, haben & Präsens', topic: 'Konjugation, einfache Sätze' },
+      ]
+    },
+    {
+      id: 'm2', cls: 'm2', title: 'Monat 2', sub: 'A1 fertig, A2 Start',
+      desc: 'Fälle · Modalverben · Vergangenheit',
+      weeks: [
+        { w: 5, name: 'Nominativ & Akkusativ', topic: 'Artikelveränderung, direkte Objekte' },
+        { w: 6, name: 'Modalverben', topic: 'können, müssen, wollen, dürfen, sollen, mögen' },
+        { w: 7, name: 'Perfekt', topic: 'haben/sein + Partizip II, unregelmäßige Formen' },
+        { w: 8, name: 'Dativ + Präpositionen', topic: 'mit, von, aus, bei, nach, seit, zu' },
+      ]
+    },
+    {
+      id: 'm3', cls: 'm3', title: 'Monat 3', sub: 'A2 fertig, B1 Einstieg',
+      desc: 'Wortschatz · Komplexe Grammatik · Gespräche',
+      weeks: [
+        { w: 9, name: 'Alltagswortschatz', topic: 'Zuhause, Essen, Reisen, Einkaufen – 500 Wörter' },
+        { w: 10, name: 'Wechselpräpositionen', topic: 'an, auf, in, über, neben – Akk. vs Dat.' },
+        { w: 11, name: 'Genitiv', topic: 'des/der Besitz, formales Schreiben' },
+        { w: 12, name: 'Wiederholung & Sprechen', topic: 'Mock-Gespräche, A2 Checkpoint' },
+      ]
+    },
+    {
+      id: 'm4', cls: 'm4', title: 'Monat 4', sub: 'B1 Grammatikkern',
+      desc: 'Nebensätze · Futur · Konjunktiv II',
+      weeks: [
+        { w: 13, name: 'Nebensätze', topic: 'weil, dass, obwohl, wenn, als – Verb ans Ende' },
+        { w: 14, name: 'Futur I', topic: 'werden + Infinitiv, Pläne & Vorhersagen' },
+        { w: 15, name: 'Konjunktiv II', topic: 'würde, könnte, hätte – Höflichkeit & Hypothesen' },
+        { w: 16, name: 'Hören & Lesen', topic: 'Slow German Podcast, DW Artikel, B1 Texte' },
+      ]
+    },
+    {
+      id: 'm5', cls: 'm5', title: 'Monat 5', sub: 'B1 Konsolidierung',
+      desc: 'Flüssigkeit · Immersion · Prüfungsvorbereitung',
+      weeks: [
+        { w: 17, name: 'Wortschatzerweiterung', topic: 'Arbeit, Meinungen, Emotionen – 1000+ Wörter' },
+        { w: 18, name: 'Sprechübung', topic: 'italki Stunden, Gespräche, Aussprache' },
+        { w: 19, name: 'Schreiben & Verstehen', topic: 'kurze E-Mails, DW Artikel, B1 Texte' },
+        { w: 20, name: 'B1 Probetest & Review', topic: 'Vollständiger Probetest, Schwachstellen, Review' },
+      ]
+    },
+  ],
+  dailyTasks: [
+    { id: 'anki', name: 'Anki Vokabeln', icon: '🃏', duration: '20 Min.' },
+    { id: 'grammar', name: 'Grammatik/Thema', icon: '📖', duration: '30 Min.' },
+    { id: 'listen', name: 'Hörverstehen', icon: '🎧', duration: '20 Min.' },
+    { id: 'speak', name: 'Sprechen / Schreiben', icon: '🗣', duration: '20 Min.' },
+  ]
+};
+
+let state = {
+  completedWeeks: {},
+  dailyDone: {},
+  notes: '',
+  streak: 0,
+  vocab: 0,
+  startDate: null,
+  lastActiveDay: null,
+};
+
+function save() { localStorage.setItem('deutsch_b1_v2', JSON.stringify(state)); }
+
+function load() {
+  const raw = localStorage.getItem('deutsch_b1_v2');
+  if (raw) state = { ...state, ...JSON.parse(raw) };
+  if (!state.startDate) { state.startDate = new Date().toDateString(); save(); }
+}
+
+function getToday() { return new Date().toDateString(); }
+
+function resetDailyIfNewDay() {
+  const today = getToday();
+  if (state.lastActiveDay !== today) {
+    // update streak
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    if (state.lastActiveDay === yesterday.toDateString()) {
+      state.streak = (state.streak || 0) + 1;
+    } else if (state.lastActiveDay && state.lastActiveDay !== today) {
+      state.streak = 0;
+    }
+    state.dailyDone = {};
+    state.lastActiveDay = today;
+    save();
+  }
+}
+
+function computeProgress() {
+  const totalWeeks = 20;
+  const done = Object.keys(state.completedWeeks).filter(k => state.completedWeeks[k]).length;
+  return Math.round((done / totalWeeks) * 100);
+}
+
+function renderJourney() {
+  const bar = document.getElementById('journey-bar');
+  bar.innerHTML = '';
+  const monthPcts = DATA.months.map(m => {
+    const total = m.weeks.length;
+    const done = m.weeks.filter(w => state.completedWeeks[w.w]).length;
+    return done / total;
+  });
+
+  DATA.months.forEach((m, i) => {
+    const pct = monthPcts[i];
+    const isDone = pct === 1;
+    const isActive = pct > 0 && !isDone;
+    const node = document.createElement('div');
+    node.className = 'month-node';
+    node.innerHTML = `
+      <div class="month-dot ${isDone ? 'done' : isActive ? 'active' : 'locked'}">
+        ${isDone ? '✓' : i + 1}
+      </div>
+      <div class="month-label">${m.title}</div>
+      <div class="month-sublabel">${m.sub}</div>
+    `;
+    bar.appendChild(node);
+
+    if (i < DATA.months.length - 1) {
+      const conn = document.createElement('div');
+      const prevDone = pct === 1;
+      const nextPct = monthPcts[i + 1];
+      conn.className = 'month-connector ' + (prevDone ? 'done' : nextPct > 0 ? 'partial' : '');
+      if (nextPct > 0 && nextPct < 1) conn.style.setProperty('--fill', Math.round(nextPct * 100) + '%');
+      bar.appendChild(conn);
+    }
+  });
+}
+
+function renderMonths() {
+  const grid = document.getElementById('months-grid');
+  grid.innerHTML = '';
+  DATA.months.forEach(m => {
+    const total = m.weeks.length;
+    const done = m.weeks.filter(w => state.completedWeeks[w.w]).length;
+    const pct = Math.round((done / total) * 100);
+    const isDone = pct === 100;
+    const isActive = pct > 0 && !isDone;
+
+    const card = document.createElement('div');
+    card.className = `month-card ${m.cls} ${isDone ? 'done' : isActive ? 'active' : ''}`;
+
+    card.innerHTML = `
+      <div class="month-card-header">
+        <div>
+          <div class="month-card-title">${m.title} — ${m.sub}</div>
+          <div class="month-card-sub">${m.desc}</div>
+        </div>
+        <div class="month-pct" style="color:${isDone ? 'var(--green)' : 'var(--gold)'}">${pct}%</div>
+      </div>
+      <div style="height:8px"></div>
+      <div class="month-progress-bar">
+        <div class="month-progress-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="weeks-list">
+        ${m.weeks.map(w => {
+          const wDone = !!state.completedWeeks[w.w];
+          return `
+          <div class="week-row" onclick="toggleWeek(${w.w})">
+            <div class="week-check ${wDone ? 'done' : ''}">${wDone ? '✓' : ''}</div>
+            <div class="week-info">
+              <div class="week-name">Woche ${w.w}: ${w.name}</div>
+              <div class="week-topic">${w.topic}</div>
+            </div>
+            <div class="week-num">W${w.w}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderDaily() {
+  const grid = document.getElementById('daily-grid');
+  grid.innerHTML = '';
+  DATA.dailyTasks.forEach(t => {
+    const done = !!state.dailyDone[t.id];
+    const card = document.createElement('div');
+    card.className = `task-card ${done ? 'done' : ''}`;
+    card.onclick = () => toggleTask(t.id);
+    card.innerHTML = `
+      <div class="task-icon">${t.icon}</div>
+      <div class="task-info">
+        <div class="task-name">${t.name}</div>
+        <div class="task-duration">${t.duration}</div>
+      </div>
+      <div class="task-checkbox">${done ? '✓' : ''}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function updateStats() {
+  const weeksD = Object.keys(state.completedWeeks).filter(k => state.completedWeeks[k]).length;
+  const pct = computeProgress();
+  const tasksD = Object.keys(state.dailyDone).filter(k => state.dailyDone[k]).length;
+
+  document.getElementById('stat-weeks').textContent = weeksD;
+  document.getElementById('stat-streak').textContent = state.streak || 0;
+  document.getElementById('stat-vocab').textContent = weeksD >= 9 ? (weeksD >= 17 ? '1000+' : '500+') : Math.min(weeksD * 40, 300);
+  document.getElementById('stat-hours').textContent = weeksD * 10;
+  document.getElementById('stat-tasks').textContent = tasksD + '/4';
+  document.getElementById('stat-days-left').textContent = Math.max(0, 140 - weeksD * 7);
+  document.getElementById('arc-pct').textContent = pct;
+
+  const circ = 2 * Math.PI * 65;
+  const offset = circ * (1 - pct / 100);
+  document.getElementById('arc-circle').style.strokeDashoffset = offset;
+}
+
+function toggleWeek(w) {
+  state.completedWeeks[w] = !state.completedWeeks[w];
+  const msg = state.completedWeeks[w] ? `✓ Woche ${w} abgeschlossen!` : `Woche ${w} zurückgesetzt`;
+  showToast(msg);
+  save();
+  render();
+}
+
+function toggleTask(id) {
+  state.dailyDone[id] = !state.dailyDone[id];
+  save();
+  renderDaily();
+  updateStats();
+  if (Object.values(state.dailyDone).every(Boolean)) showToast('🔥 Alle Aufgaben heute erledigt!');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function resetAll() {
+  if (confirm('Wirklich alles zurücksetzen?')) {
+    state = { completedWeeks: {}, dailyDone: {}, notes: '', streak: 0, vocab: 0, startDate: new Date().toDateString(), lastActiveDay: null };
+    save();
+    document.getElementById('notes-area').value = '';
+    render();
+  }
+}
+
+function render() {
+  renderJourney();
+  renderMonths();
+  renderDaily();
+  updateStats();
+}
+
+function init() {
+  load();
+  resetDailyIfNewDay();
+
+  // today label
+  const now = new Date();
+  document.getElementById('today-label').textContent = now.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  // notes
+  const notesEl = document.getElementById('notes-area');
+  notesEl.value = state.notes || '';
+  notesEl.addEventListener('input', () => { state.notes = notesEl.value; save(); });
+
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
