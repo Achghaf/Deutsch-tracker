@@ -392,7 +392,7 @@ h1 span{color:var(--gold)}
 </nav>
 
 <!-- TRACKER PAGE -->
-<div class="page active" id="page-tracker">
+<div class="page" id="page-tracker">
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
@@ -904,6 +904,8 @@ function switchPage(page){
 // ===== INIT =====
 async function initApp(){
   await loadState();resetDailyIfNewDay();
+  // Show the app content only now that auth is confirmed
+  switchPage('tracker');
   document.getElementById('today-label').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
   const notesEl=document.getElementById('notes-area');notesEl.value=state.notes||'';notesEl.addEventListener('input',()=>{state.notes=notesEl.value;save();});
   render();
