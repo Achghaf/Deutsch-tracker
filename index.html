@@ -545,6 +545,15 @@ const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
 
+// Eager session check — shows login immediately if no session exists
+_supa.auth.getSession().then(({data:{session}})=>{
+  if(!session){
+    document.getElementById('app-loader').classList.remove('visible');
+    document.getElementById('login-screen').classList.add('visible');
+  }
+  // onAuthStateChange will handle the rest
+});
+
 // ===== AUTH SUPABASE =====
 let authMode='login';
 function switchAuthTab(mode){
@@ -594,15 +603,25 @@ async function logout(){
 }
 
 // Supabase gère la session automatiquement
+let _appInited = false;
+
+// Safety fallback: if Supabase doesn't respond in 5s, show login
+const _authTimeout = setTimeout(()=>{
+  document.getElementById('app-loader').classList.remove('visible');
+  document.getElementById('login-screen').classList.add('visible');
+}, 5000);
+
 _supa.auth.onAuthStateChange(async(event,session)=>{
+  clearTimeout(_authTimeout);
   document.getElementById('app-loader').classList.remove('visible');
   if(session?.user){
     currentUser=session.user;
     document.getElementById('login-screen').classList.remove('visible');
     showUserBadge(currentUser);
-    await initApp();
+    if(!_appInited){_appInited=true;await initApp();}
   }else{
     currentUser=null;
+    _appInited=false;
     document.getElementById('login-screen').classList.add('visible');
     ['mob-profile-btn','desk-profile-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
     closeProfileModal();
