@@ -1255,7 +1255,7 @@ async function startAuthenticatedApp(user){
   showAppShell();
   switchPage(activeAppPage||'tracker');
   initNotifications();
-  startPresenceHeartbeat();
+  setTimeout(startPresenceHeartbeat, 1000);
 }
 
 async function bootstrapAuth(){
@@ -3462,11 +3462,11 @@ async function loadAdminPage(){
   document.getElementById('admin-users-list-full').innerHTML = '<div class="admin-empty">Loading...</div>';
   document.getElementById('admin-chart-bars').innerHTML = '<div class="admin-empty" style="width:100%">Loading chart...</div>';
 
+  // Step 1: users list
   try {
     const { data, error } = await _supa.rpc('list_users_with_roles');
     if(error) throw error;
     _adminAllUsers = data || [];
-    await fetchPresence();
     renderAdminStats();
     renderAdminChart();
     renderAdminUsersList();
@@ -3474,7 +3474,15 @@ async function loadAdminPage(){
     document.getElementById('admin-users-list-full').innerHTML =
       `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||e}<br><small>Make sure the Supabase SQL functions are created.</small></div>`;
   }
-  adminLoadDocs();
+
+  // Step 2: presence (after small delay to avoid lock conflict)
+  await new Promise(r => setTimeout(r, 300));
+  await fetchPresence();
+  renderAdminUsersList();
+
+  // Step 3: documents
+  await new Promise(r => setTimeout(r, 300));
+  await adminLoadDocs();
 }
 
 let _adminAllDocs = [];
