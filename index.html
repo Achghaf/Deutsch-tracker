@@ -1135,7 +1135,7 @@
     <div class="storage-bar" id="storage-bar">
       <span class="storage-label">Speicher</span>
       <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
-      <span class="storage-info" id="storage-info">0 MB / ~5 MB</span>
+      <span class="storage-info" id="storage-info">0 MB · IndexedDB</span>
     </div>
 
     <!-- Upload zone -->
@@ -1433,33 +1433,84 @@ let currentPage = 1;
 let totalPages = 1;
 let viewingId = null;
 
-function loadPdfs() {
+// ===== INDEXEDDB SETUP =====
+let db = null;
+const DB_NAME = 'DeutschTrackerDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'pdfs';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (db) { resolve(db); return; }
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) {
+        d.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbGetAll() {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbPut(record) {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction(STORE_NAME, 'readwrite');
+    const req = tx.objectStore(STORE_NAME).put(record);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbDelete(id) {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction(STORE_NAME, 'readwrite');
+    const req = tx.objectStore(STORE_NAME).delete(id);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbGet(id) {
+  const d = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).get(id);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function loadPdfs() {
   try {
-    const raw = localStorage.getItem('deutsch_pdfs_v1');
-    if (raw) pdfs = JSON.parse(raw);
+    const all = await dbGetAll();
+    pdfs = all.sort((a, b) => (b.addedAt_ts || 0) - (a.addedAt_ts || 0));
+    renderPdfGrid();
+    updateStorageBar();
   } catch(e) { pdfs = []; }
 }
 
-function savePdfs() {
+async function updateStorageBar() {
   try {
-    localStorage.setItem('deutsch_pdfs_v1', JSON.stringify(pdfs));
-    updateStorageBar();
-  } catch(e) {
-    showToast('⚠️ Speicher voll! PDF gelöscht.');
-  }
-}
-
-function updateStorageBar() {
-  try {
-    let total = 0;
-    for (let key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) total += (localStorage[key].length * 2);
-    }
-    const mb = (total / 1024 / 1024).toFixed(1);
-    const pct = Math.min(100, (total / 1024 / 1024) / 5 * 100);
+    const totalBytes = pdfs.reduce((acc, p) => acc + (p.size || 0), 0);
+    const mb = (totalBytes / 1024 / 1024).toFixed(1);
+    const pct = Math.min(100, (totalBytes / 1024 / 1024) / 500 * 100);
     document.getElementById('storage-fill').style.width = pct + '%';
-    document.getElementById('storage-info').textContent = mb + ' MB / ~5 MB';
-    document.getElementById('storage-fill').style.background = pct > 80 ? 'var(--red)' : pct > 60 ? 'var(--gold)' : 'var(--green)';
+    document.getElementById('storage-info').textContent = mb + ' MB · IndexedDB (pas de limite fixe)';
+    document.getElementById('storage-fill').style.background = pct > 80 ? 'var(--red)' : pct > 50 ? 'var(--gold)' : 'var(--green)';
   } catch(e) {}
 }
 
@@ -1469,33 +1520,35 @@ function handleFiles(files) {
       showToast('⚠️ Nur PDF-Dateien erlaubt');
       return;
     }
-    const maxSize = 3 * 1024 * 1024; // 3MB per file
+    const maxSize = 200 * 1024 * 1024; // 200MB per file
     if (file.size > maxSize) {
-      showToast('⚠️ Datei zu groß (max 3MB)');
+      showToast('⚠️ Datei zu groß (max 200 MB)');
       return;
     }
+    showToast('⏳ Wird gespeichert...');
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const newPdf = {
         id: Date.now() + Math.random(),
-        name: file.name.replace('.pdf', ''),
+        name: file.name.replace(/\.pdf$/i, ''),
         category: 'other',
         size: file.size,
         dataUrl: e.target.result,
-        addedAt: new Date().toLocaleDateString('de-DE')
+        addedAt: new Date().toLocaleDateString('de-DE'),
+        addedAt_ts: Date.now()
       };
-      pdfs.unshift(newPdf);
       try {
-        savePdfs();
+        await dbPut(newPdf);
+        pdfs.unshift(newPdf);
         renderPdfGrid();
+        updateStorageBar();
         showToast('✓ PDF gespeichert!');
-        // Auto-open rename for new file
         openRenameModal(newPdf.id);
       } catch(err) {
-        pdfs.shift();
-        showToast('⚠️ Nicht genug Speicherplatz');
+        showToast('⚠️ Speicherfehler: ' + (err.message || 'Unbekannt'));
       }
     };
+    reader.onerror = () => showToast('⚠️ Datei konnte nicht gelesen werden');
     reader.readAsDataURL(file);
   });
 }
@@ -1546,11 +1599,13 @@ function renderPdfGrid() {
 async function generateThumbnail(p) {
   if (typeof pdfjsLib === 'undefined') {
     const icon = document.getElementById('icon-' + p.id);
-    if (icon) { icon.style.display = 'flex'; }
+    if (icon) icon.style.display = 'flex';
     return;
   }
   try {
-    const loadingTask = pdfjsLib.getDocument(p.dataUrl);
+    const full = await dbGet(p.id);
+    if (!full || !full.dataUrl) throw new Error('no data');
+    const loadingTask = pdfjsLib.getDocument(full.dataUrl);
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(1);
     const canvas = document.getElementById('thumb-' + p.id);
@@ -1566,10 +1621,10 @@ async function generateThumbnail(p) {
 }
 
 async function openPdf(id) {
-  const p = pdfs.find(x => String(x.id) === String(id));
-  if (!p) return;
+  const meta = pdfs.find(x => String(x.id) === String(id));
+  if (!meta) return;
   viewingId = id;
-  document.getElementById('modal-title').textContent = p.name;
+  document.getElementById('modal-title').textContent = meta.name;
   document.getElementById('pdf-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 
@@ -1582,7 +1637,10 @@ async function openPdf(id) {
   }
 
   try {
-    pdfDoc = await pdfjsLib.getDocument(p.dataUrl).promise;
+    // Fetch full record from IndexedDB (has dataUrl)
+    const full = await dbGet(id);
+    if (!full || !full.dataUrl) throw new Error('Not found');
+    pdfDoc = await pdfjsLib.getDocument(full.dataUrl).promise;
     totalPages = pdfDoc.numPages;
     currentPage = 1;
     body.innerHTML = '<canvas id="pdf-canvas"></canvas>';
@@ -1626,12 +1684,17 @@ function closePdfModal() {
   viewingId = null;
 }
 
-function deletePdf(id) {
+async function deletePdf(id) {
   if (!confirm('PDF löschen?')) return;
-  pdfs = pdfs.filter(p => String(p.id) !== String(id));
-  savePdfs();
-  renderPdfGrid();
-  showToast('🗑 Gelöscht');
+  try {
+    await dbDelete(id);
+    pdfs = pdfs.filter(p => String(p.id) !== String(id));
+    renderPdfGrid();
+    updateStorageBar();
+    showToast('🗑 Gelöscht');
+  } catch(e) {
+    showToast('⚠️ Fehler beim Löschen');
+  }
 }
 
 function openRenameModal(id) {
@@ -1648,7 +1711,7 @@ function closeRenameModal() {
   editingId = null;
 }
 
-function confirmRename() {
+async function confirmRename() {
   if (!editingId) return;
   const p = pdfs.find(x => String(x.id) === String(editingId));
   if (!p) return;
@@ -1656,10 +1719,20 @@ function confirmRename() {
   const newCat = document.getElementById('rename-cat').value;
   if (newName) p.name = newName;
   p.category = newCat;
-  savePdfs();
-  renderPdfGrid();
-  closeRenameModal();
-  showToast('✓ Gespeichert');
+  try {
+    // Get full record, update metadata, save back
+    const full = await dbGet(p.id);
+    if (full) {
+      full.name = p.name;
+      full.category = p.category;
+      await dbPut(full);
+    }
+    renderPdfGrid();
+    closeRenameModal();
+    showToast('✓ Gespeichert');
+  } catch(e) {
+    showToast('⚠️ Speicherfehler');
+  }
 }
 
 // ===== NAVIGATION =====
@@ -1682,15 +1755,14 @@ function switchPage(page) {
     n.classList.toggle('active', n.dataset.page === page);
   });
 
-  if (page === 'pdf') { renderPdfGrid(); updateStorageBar(); }
+  if (page === 'pdf') { loadPdfs(); }
 
   window.scrollTo(0, 0);
 }
 
 // ===== INIT =====
-function init() {
+async function init() {
   load();
-  loadPdfs();
   resetDailyIfNewDay();
 
   const now = new Date();
@@ -1701,7 +1773,9 @@ function init() {
   notesEl.addEventListener('input', () => { state.notes = notesEl.value; save(); });
 
   render();
-  updateStorageBar();
+
+  // Load PDFs from IndexedDB
+  await loadPdfs();
 
   // File input
   document.getElementById('pdf-input').addEventListener('change', e => handleFiles(e.target.files));
