@@ -42,6 +42,19 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .login-error{background:rgba(204,31,31,0.15);border:1px solid rgba(204,31,31,0.3);border-radius:6px;padding:10px 14px;font-size:0.78rem;color:#ff6b6b;margin-top:12px;display:none}
 .login-error.visible{display:block}
 
+/* EMAIL CONFIRMATION SCREEN */
+.confirm-screen{display:none;position:fixed;inset:0;background:var(--black);z-index:1000;align-items:center;justify-content:center;padding:24px;text-align:center}
+.confirm-screen.visible{display:flex}
+.confirm-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.confirm-box .login-flag{height:6px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
+.confirm-box .confirm-body{padding:32px 28px}
+.confirm-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;margin-bottom:12px;color:var(--gold)}
+.confirm-text{font-size:0.8rem;color:var(--muted);line-height:1.4;margin-bottom:24px}
+.confirm-btn{width:100%;padding:12px;background:var(--gold);color:var(--black);border:none;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.confirm-btn:active{transform:scale(0.98);opacity:0.9}
+.confirm-msg{font-size:0.78rem;color:var(--green);margin-top:12px;display:none}
+.confirm-msg.visible{display:block}
+
 /* APP LOADER */
 .app-loader{display:none;position:fixed;inset:0;background:var(--black);z-index:900;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .app-loader.visible{display:flex}
@@ -187,11 +200,11 @@ h1 span{color:var(--gold)}
 .cat-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
 .cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
 .cat-btn:active{transform:scale(0.96)}
-.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
 .pdf-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s}
 .pdf-card:hover{border-color:#3a3a3a}
 .pdf-preview{height:160px;background:#111;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
-.pdf-preview canvas{max-width:100%;max-height:100%;object-fit:contain}
+.pdf-preview canvas{max-width:100%;max-height:100%;object-fit:contain;width:100%;height:auto}
 .pdf-preview-icon{font-size:3rem;opacity:0.3}
 .pdf-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10}
 .upload-progress-bar{width:70%;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
@@ -225,8 +238,8 @@ h1 span{color:var(--gold)}
 .page-nav-btn{background:var(--card);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
 .page-nav-btn:disabled{opacity:0.3;cursor:default}
 .page-info{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)}
-.pdf-modal-body{flex:1;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:16px;-webkit-overflow-scrolling:touch}
-.pdf-modal-body canvas{max-width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
+.pdf-modal-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:12px;-webkit-overflow-scrolling:touch}
+.pdf-modal-body canvas{max-width:100%;width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
 
 /* RENAME MODAL */
 .rename-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:center;justify-content:center;padding:16px}
@@ -338,11 +351,24 @@ h1 span{color:var(--gold)}
         <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Connexion</button>
         <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Créer un compte</button>
       </div>
-      <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="ton@email.com" autocomplete="email"></div>
+      <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="example@gmail.com" autocomplete="email" maxlength="254" required></div>
       <div class="login-field"><label>Mot de passe</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
       <div class="login-field" id="field-confirm" style="display:none"><label>Confirmer le mot de passe</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
       <button class="login-btn" id="auth-btn" onclick="handleAuth()">Se connecter</button>
       <div class="login-error" id="auth-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL CONFIRMATION SCREEN -->
+<div class="confirm-screen" id="confirm-screen">
+  <div class="confirm-box">
+    <div class="login-flag"></div>
+    <div class="confirm-body">
+      <div class="confirm-title">Confirme ton e‑mail</div>
+      <div class="confirm-text">Nous t'avons envoyé un e‑mail de confirmation. Clique sur le lien dans cet e‑mail pour activer ton compte. Une fois confirmé, reviens ici et connecte‑toi.</div>
+      <button class="confirm-btn" onclick="hideConfirmScreen()">Retour à la connexion</button>
+      <div class="confirm-msg" id="confirm-success-msg"></div>
     </div>
   </div>
 </div>
@@ -392,7 +418,7 @@ h1 span{color:var(--gold)}
 </nav>
 
 <!-- TRACKER PAGE -->
-<div class="page" id="page-tracker">
+<div class="page active" id="page-tracker">
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
@@ -429,7 +455,7 @@ h1 span{color:var(--gold)}
   </div>
 
   <div class="journey-section container">
-    <div class="section-title" data-section="journey">5-Monate Reise</div>
+    <div class="section-title">5-Monate Reise</div>
     <div class="journey-bar" id="journey-bar"></div>
   </div>
 
@@ -441,14 +467,14 @@ h1 span{color:var(--gold)}
   </div>
 
   <div class="daily-section">
-    <div class="section-title" data-section="daily">Tägliche Aufgaben</div>
+    <div class="section-title">Tägliche Aufgaben</div>
     <div class="daily-grid" id="daily-grid"></div>
   </div>
 
   <div class="months-grid" id="months-grid"></div>
 
   <div class="notes-section">
-    <div class="section-title" data-section="notes">Notizen</div>
+    <div class="section-title">Notizen</div>
     <div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
   </div>
 </div>
@@ -456,7 +482,7 @@ h1 span{color:var(--gold)}
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
   <div class="pdf-page">
-    <div class="section-title" data-section="pdf" style="margin-bottom:20px;">📁 Meine Dokumente</div>
+    <div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
     <div class="storage-bar">
       <span class="storage-label">💾 Local</span>
       <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
@@ -466,7 +492,7 @@ h1 span{color:var(--gold)}
       <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
       <div class="upload-icon">📄</div>
       <div class="upload-title">PDF hochladen</div>
-      <div class="upload-sub">Stocké dans le cloud · Accessible partout · Max 50 MB par fichier</div>
+      <div class="upload-sub">Stocké localement · Accessible hors ligne · Max 200 MB par fichier</div>
     </div>
     <div class="pdf-categories">
       <button class="cat-btn active" data-cat="all">Alle</button>
@@ -495,7 +521,7 @@ h1 span{color:var(--gold)}
     <div class="profile-body">
       <div class="profile-field">
         <label id="lbl-email">Email</label>
-        <input type="email" id="profile-email-input" readonly>
+        <input type="email" id="profile-email-input" readonly maxlength="254">
       </div>
       <div class="profile-divider"></div>
       <div class="profile-field">
@@ -567,6 +593,34 @@ function switchAuthTab(mode){
 
 function showAuthError(msg){const el=document.getElementById('auth-error');el.textContent=msg;el.classList.add('visible');}
 
+// Show email confirmation screen after successful registration
+function showConfirmScreen(){
+  // Hide login and display confirm screen
+  document.getElementById('login-screen').classList.remove('visible');
+  document.getElementById('confirm-screen').classList.add('visible');
+}
+
+// Hide email confirmation screen and return to login screen
+function hideConfirmScreen(){
+  document.getElementById('confirm-screen').classList.remove('visible');
+  document.getElementById('login-screen').classList.add('visible');
+}
+
+// Client-side per-email attempt tracking (best-effort UX enforcement).
+function getCreateAttempts(email){
+  try{
+    const key='createAttempts:'+email;
+    const arr=JSON.parse(localStorage.getItem(key)||'[]');
+    const cutoff=Date.now()-60*60*1000; // 1 hour
+    return arr.filter(ts=>Number(ts) > cutoff);
+  }catch(e){return []}
+}
+function saveCreateAttempts(email,arr){try{localStorage.setItem('createAttempts:'+email,JSON.stringify(arr))}catch(e){}
+}
+function addCreateAttempt(email){const arr=getCreateAttempts(email);arr.push(Date.now());saveCreateAttempts(email,arr);return arr}
+function clearCreateAttempts(email){try{localStorage.removeItem('createAttempts:'+email)}catch(e){}
+}
+
 async function handleAuth(){
   const email=document.getElementById('auth-email').value.trim().toLowerCase();
   const pwd=document.getElementById('auth-password').value;
@@ -575,25 +629,53 @@ async function handleAuth(){
   if(!email||!pwd){showAuthError('Remplis tous les champs.');return;}
   if(authMode==='register'&&pwd!==confirm){showAuthError('Les mots de passe ne correspondent pas.');return;}
   if(pwd.length<6){showAuthError('Mot de passe trop court (min 6 caractères).');return;}
+
+  // Check local attempt history for this email (client-side UX guard)
+  if(authMode==='register'){
+    const attempts=getCreateAttempts(email);
+    if(attempts.length>=5){
+      showAuthError('Cet email a atteint la limite de 5 inscriptions par heure. Réessaie plus tard.');
+      return;
+    }
+  }
+
   btn.disabled=true;btn.textContent='...';
   document.getElementById('auth-error').classList.remove('visible');
   try{
-    let error;
     if(authMode==='login'){
-      ({error}=await _supa.auth.signInWithPassword({email,password:pwd}));
-    }else{
-      ({error}=await _supa.auth.signUp({email,password:pwd}));
+      // Attempt to sign in with provided credentials
+      const { error } = await _supa.auth.signInWithPassword({ email, password: pwd });
+      if(error) throw error;
+      // If login succeeds, button state will reset via auth state change handler
+    } else {
+      // Record this attempt (client-side) before calling the API
+      addCreateAttempt(email);
+      // Register a new user. Supabase will send a confirmation email.
+      const { error } = await _supa.auth.signUp({ email, password: pwd });
+      if(error) throw error;
+      // On success, clear client-side attempts and show confirmation screen
+      clearCreateAttempts(email);
+      showConfirmScreen();
+      // Reset button state for next time
+      btn.disabled = false;
+      btn.textContent = 'Créer le compte';
     }
-    if(error)throw error;
-  }catch(e){
-    btn.disabled=false;
-    btn.textContent=authMode==='login'?'Se connecter':'Créer le compte';
-    const msgs={
-      'Invalid login credentials':'Email ou mot de passe incorrect.',
-      'User already registered':'Cet email est déjà utilisé.',
-      'Email not confirmed':'Vérifie ta boîte mail pour confirmer ton compte.',
+  } catch(e){
+    // Reset button state on error
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Se connecter' : 'Créer le compte';
+    const msgs = {
+      'Invalid login credentials': 'Email ou mot de passe incorrect.',
+      'User already registered': 'Cet email est déjà utilisé.',
+      'Email not confirmed': 'Vérifie ta boîte mail pour confirmer ton compte.',
     };
-    showAuthError(msgs[e.message]||e.message);
+    // Map common server-side rate-limit / too-many requests messages
+    const serverMsg = (e && e.message) ? e.message : '';
+    if(/too many/i.test(serverMsg) || /429/.test(serverMsg)){
+      showAuthError('Trop de tentatives. Réessaie dans une heure.');
+    } else {
+      showAuthError(msgs[serverMsg] || serverMsg || String(e));
+    }
   }
 }
 
@@ -614,6 +696,9 @@ const _authTimeout = setTimeout(()=>{
 _supa.auth.onAuthStateChange(async(event,session)=>{
   clearTimeout(_authTimeout);
   document.getElementById('app-loader').classList.remove('visible');
+  // Always hide the email confirmation screen on any auth state change
+  const confirmEl = document.getElementById('confirm-screen');
+  if(confirmEl) confirmEl.classList.remove('visible');
   if(session?.user){
     currentUser=session.user;
     document.getElementById('login-screen').classList.remove('visible');
@@ -805,7 +890,7 @@ function renderPdfGrid(){
       <div class="pdf-card-body">
         <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||'📄 Sonstiges'}</div>
         <div class="pdf-card-name" title="${p.name}">${p.name}</div>
-        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||p.addedAt||''}</span></div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.addedAt}</span></div>
       </div>
       ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">👁 Voir</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">✏️ Edit</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">🗑</button></div>`}
     </div>`).join('');
@@ -904,8 +989,6 @@ function switchPage(page){
 // ===== INIT =====
 async function initApp(){
   await loadState();resetDailyIfNewDay();
-  // Show the app content only now that auth is confirmed
-  switchPage('tracker');
   document.getElementById('today-label').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
   const notesEl=document.getElementById('notes-area');notesEl.value=state.notes||'';notesEl.addEventListener('input',()=>{state.notes=notesEl.value;save();});
   render();
@@ -989,9 +1072,9 @@ const i18n={
     section_notes:'Notizen',
     notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
     pdf_title:'📁 Meine Dokumente',
-    storage_label:'☁️ Supabase Cloud',
+    storage_label:'💾 Local',
     upload_title:'PDF hochladen',
-    upload_sub:'Stocké dans le cloud · Accessible partout · Max 50 MB par fichier',
+    upload_sub:'Stocké localement · Accessible hors ligne · Max 200 MB par fichier',
     storage_loading:'Chargement...',
     cat_all:'Alle', cat_grammar:'📘 Grammatik', cat_vocab:'📚 Vokabeln',
     cat_exercise:'✏️ Übungen', cat_exam:'📝 Prüfung', cat_other:'📄 Sonstiges',
@@ -1026,9 +1109,9 @@ const i18n={
     section_notes:'Notes',
     notes_placeholder:'Write your thoughts in German...',
     pdf_title:'📁 My Documents',
-    storage_label:'☁️ Supabase Cloud',
+    storage_label:'💾 Cloud',
     upload_title:'Upload PDF',
-    upload_sub:'Stored in cloud · Accessible anywhere · Max 50 MB per file',
+    upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
     storage_loading:'Loading...',
     cat_all:'All', cat_grammar:'📘 Grammar', cat_vocab:'📚 Vocabulary',
     cat_exercise:'✏️ Exercises', cat_exam:'📝 Exam', cat_other:'📄 Other',
@@ -1083,15 +1166,20 @@ function applyLang(){
   const sh=document.getElementById('stat-hours');if(sh){const lbl=sh.nextElementSibling;if(lbl)lbl.textContent=L.lbl_hours;}
   const stasks=document.getElementById('stat-tasks');if(stasks){const lbl=stasks.nextElementSibling;if(lbl)lbl.textContent=L.lbl_today;}
   const sdl=document.getElementById('stat-days-left');if(sdl){const lbl=sdl.nextElementSibling;if(lbl)lbl.textContent=L.lbl_days;}
-  // Section titles (reliable via data-section attr)
-  const sectionMap={journey:'section_journey',daily:'section_daily',notes:'section_notes',pdf:'pdf_title'};
-  document.querySelectorAll('.section-title[data-section]').forEach(el=>{
-    const key=sectionMap[el.dataset.section];if(key&&L[key])el.textContent=L[key];
+  // Section titles
+  const titles=document.querySelectorAll('.section-title');
+  titles.forEach(el=>{
+    const txt=el.textContent.trim();
+    if(txt.includes('Monate Reise')||txt.includes('Month Journey'))el.textContent=L.section_journey;
+    else if(txt.includes('gliche Aufgaben')||txt.includes('Daily'))el.textContent=L.section_daily;
+    else if(txt.includes('Notizen')||txt.includes('Notes'))el.textContent=L.section_notes;
+    else if(txt.includes('Dokumente')||txt.includes('Documents'))el.textContent=L.pdf_title;
   });
   // Notes placeholder
   const na=document.getElementById('notes-area');if(na)na.placeholder=L.notes_placeholder;
   // PDF page
   const sl=document.querySelector('.storage-label');if(sl)sl.textContent=L.storage_label;
+  const si=document.getElementById('storage-info');if(si&&si.textContent.includes('Charg'))si.textContent=L.storage_loading;
   const ut=document.querySelector('.upload-title');if(ut)ut.textContent=L.upload_title;
   const us=document.querySelector('.upload-sub');if(us)us.textContent=L.upload_sub;
   // Category buttons
