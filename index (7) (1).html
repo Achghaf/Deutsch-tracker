@@ -200,11 +200,11 @@ h1 span{color:var(--gold)}
 .cat-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
 .cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
 .cat-btn:active{transform:scale(0.96)}
-.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
 .pdf-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s}
 .pdf-card:hover{border-color:#3a3a3a}
 .pdf-preview{height:160px;background:#111;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
-.pdf-preview canvas{max-width:100%;max-height:100%;object-fit:contain}
+.pdf-preview canvas{max-width:100%;max-height:100%;object-fit:contain;width:100%;height:auto}
 .pdf-preview-icon{font-size:3rem;opacity:0.3}
 .pdf-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10}
 .upload-progress-bar{width:70%;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
@@ -238,8 +238,8 @@ h1 span{color:var(--gold)}
 .page-nav-btn{background:var(--card);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
 .page-nav-btn:disabled{opacity:0.3;cursor:default}
 .page-info{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)}
-.pdf-modal-body{flex:1;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:16px;-webkit-overflow-scrolling:touch}
-.pdf-modal-body canvas{max-width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
+.pdf-modal-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:12px;-webkit-overflow-scrolling:touch}
+.pdf-modal-body canvas{max-width:100%;width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
 
 /* RENAME MODAL */
 .rename-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:center;justify-content:center;padding:16px}
@@ -351,7 +351,7 @@ h1 span{color:var(--gold)}
         <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Connexion</button>
         <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Créer un compte</button>
       </div>
-      <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="ton@email.com" autocomplete="email"></div>
+      <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="example@gmail.com" autocomplete="email" maxlength="254" required></div>
       <div class="login-field"><label>Mot de passe</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
       <div class="login-field" id="field-confirm" style="display:none"><label>Confirmer le mot de passe</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
       <button class="login-btn" id="auth-btn" onclick="handleAuth()">Se connecter</button>
@@ -521,7 +521,7 @@ h1 span{color:var(--gold)}
     <div class="profile-body">
       <div class="profile-field">
         <label id="lbl-email">Email</label>
-        <input type="email" id="profile-email-input" readonly>
+        <input type="email" id="profile-email-input" readonly maxlength="254">
       </div>
       <div class="profile-divider"></div>
       <div class="profile-field">
@@ -606,6 +606,21 @@ function hideConfirmScreen(){
   document.getElementById('login-screen').classList.add('visible');
 }
 
+// Client-side per-email attempt tracking (best-effort UX enforcement).
+function getCreateAttempts(email){
+  try{
+    const key='createAttempts:'+email;
+    const arr=JSON.parse(localStorage.getItem(key)||'[]');
+    const cutoff=Date.now()-60*60*1000; // 1 hour
+    return arr.filter(ts=>Number(ts) > cutoff);
+  }catch(e){return []}
+}
+function saveCreateAttempts(email,arr){try{localStorage.setItem('createAttempts:'+email,JSON.stringify(arr))}catch(e){}
+}
+function addCreateAttempt(email){const arr=getCreateAttempts(email);arr.push(Date.now());saveCreateAttempts(email,arr);return arr}
+function clearCreateAttempts(email){try{localStorage.removeItem('createAttempts:'+email)}catch(e){}
+}
+
 async function handleAuth(){
   const email=document.getElementById('auth-email').value.trim().toLowerCase();
   const pwd=document.getElementById('auth-password').value;
@@ -614,6 +629,16 @@ async function handleAuth(){
   if(!email||!pwd){showAuthError('Remplis tous les champs.');return;}
   if(authMode==='register'&&pwd!==confirm){showAuthError('Les mots de passe ne correspondent pas.');return;}
   if(pwd.length<6){showAuthError('Mot de passe trop court (min 6 caractères).');return;}
+
+  // Check local attempt history for this email (client-side UX guard)
+  if(authMode==='register'){
+    const attempts=getCreateAttempts(email);
+    if(attempts.length>=5){
+      showAuthError('Cet email a atteint la limite de 5 inscriptions par heure. Réessaie plus tard.');
+      return;
+    }
+  }
+
   btn.disabled=true;btn.textContent='...';
   document.getElementById('auth-error').classList.remove('visible');
   try{
@@ -623,10 +648,13 @@ async function handleAuth(){
       if(error) throw error;
       // If login succeeds, button state will reset via auth state change handler
     } else {
+      // Record this attempt (client-side) before calling the API
+      addCreateAttempt(email);
       // Register a new user. Supabase will send a confirmation email.
       const { error } = await _supa.auth.signUp({ email, password: pwd });
       if(error) throw error;
-      // Show confirmation screen to inform the user to check their email
+      // On success, clear client-side attempts and show confirmation screen
+      clearCreateAttempts(email);
       showConfirmScreen();
       // Reset button state for next time
       btn.disabled = false;
@@ -641,7 +669,13 @@ async function handleAuth(){
       'User already registered': 'Cet email est déjà utilisé.',
       'Email not confirmed': 'Vérifie ta boîte mail pour confirmer ton compte.',
     };
-    showAuthError(msgs[e.message] || e.message);
+    // Map common server-side rate-limit / too-many requests messages
+    const serverMsg = (e && e.message) ? e.message : '';
+    if(/too many/i.test(serverMsg) || /429/.test(serverMsg)){
+      showAuthError('Trop de tentatives. Réessaie dans une heure.');
+    } else {
+      showAuthError(msgs[serverMsg] || serverMsg || String(e));
+    }
   }
 }
 
