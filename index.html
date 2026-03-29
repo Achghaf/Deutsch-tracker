@@ -1,6 +1,972 @@
 <!DOCTYPE html>
 <html lang="de">
+<head><!DOCTYPE html>
+<html lang="de">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Deutsch B1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0e0e0e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+<title>Mein Ziel: Deutsch B1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom))}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,0.012) 60px,rgba(255,255,255,0.012) 61px),repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.012) 60px,rgba(255,255,255,0.012) 61px);pointer-events:none;z-index:0}
+
+/* LOGIN */
+.login-screen{display:none;position:fixed;inset:0;background:var(--black);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.login-screen.visible{display:flex}
+.login-box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.login-flag{height:6px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
+.login-body{padding:32px 28px}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;line-height:1;margin-bottom:4px}
+.login-title span{color:var(--gold)}
+.login-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px}
+.login-tabs{display:flex;margin-bottom:24px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.login-tab{flex:1;padding:8px;text-align:center;font-size:0.78rem;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:0.06em;transition:all 0.2s}
+.login-tab.active{background:var(--gold);color:var(--black)}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+.login-field input{width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:11px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.login-field input:focus{border-color:var(--gold)}
+.login-btn{width:100%;padding:12px;background:var(--gold);color:var(--black);border:none;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.login-btn:active{transform:scale(0.98);opacity:0.9}
+.login-btn:disabled{opacity:0.5;cursor:default}
+.login-error{background:rgba(204,31,31,0.15);border:1px solid rgba(204,31,31,0.3);border-radius:6px;padding:10px 14px;font-size:0.78rem;color:#ff6b6b;margin-top:12px;display:none}
+.login-error.visible{display:block}
+
+/* APP LOADER */
+.app-loader{display:none;position:fixed;inset:0;background:var(--black);z-index:900;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.app-loader.visible{display:flex}
+.big-spinner{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+.app-loader p{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted)}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:1}
+.page.active{display:block}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
+.nav-icon{font-size:1.3rem;line-height:1}
+.nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
+.nav-item.active .nav-label{color:var(--gold)}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 6px rgba(232,184,75,0.5))}
+
+/* HEADER */
+header{padding:36px 16px 24px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.flag-stripe{position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,8vw,5rem);letter-spacing:0.02em;line-height:0.95;color:var(--white)}
+h1 span{color:var(--gold)}
+.header-meta{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.level-badge{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;background:var(--red);color:white;padding:5px 14px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.today-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted)}
+.user-badge{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;font-size:0.72rem;color:var(--muted)}
+.user-avatar{width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:var(--black);flex-shrink:0}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.08em;padding:5px 10px;cursor:pointer;transition:all 0.2s;border-radius:3px}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all 0.2s;border-radius:3px;min-height:36px}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* OVERALL */
+.overall-section{padding:24px 16px;border-bottom:1px solid var(--border)}
+.overall-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:center}
+.big-stat{text-align:center}
+.big-stat .num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,4rem);color:var(--gold);line-height:1}
+.big-stat .label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.main-progress-wrap{text-align:center}
+.main-progress-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px}
+.arc-container{position:relative;width:140px;height:85px;margin:0 auto;overflow:hidden}
+.arc-container svg{width:140px;height:140px;margin-top:-55px}
+.arc-pct{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--white);line-height:1}
+
+/* JOURNEY */
+.journey-section{padding:32px 16px;border-bottom:1px solid var(--border);max-width:1148px;margin:0 auto}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.journey-bar{display:flex;align-items:center;position:relative;margin-bottom:16px;overflow-x:auto;padding-bottom:8px}
+.month-node{display:flex;flex-direction:column;align-items:center;flex:1;min-width:60px;position:relative;cursor:pointer}
+.month-dot{width:40px;height:40px;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;transition:all 0.3s;background:var(--card);position:relative;z-index:2}
+.month-dot.done{border-color:var(--green);background:rgba(61,186,110,0.15);color:var(--green)}
+.month-dot.active{border-color:var(--gold);background:rgba(232,184,75,0.15);color:var(--gold);box-shadow:0 0 18px rgba(232,184,75,0.3)}
+.month-dot.locked{color:var(--muted)}
+.month-connector{flex:1;min-width:20px;height:3px;background:var(--border);position:relative;margin-top:-20px;z-index:1}
+.month-connector.done{background:var(--green)}
+.month-connector.partial{background:linear-gradient(90deg,var(--green) var(--fill,0%),var(--border) var(--fill,0%))}
+.month-label{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:10px;text-align:center}
+.month-sublabel{font-size:0.55rem;color:#3a3a3a;text-align:center;max-width:70px;line-height:1.3;margin-top:2px}
+
+/* MONTHS */
+.months-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:0 16px 32px;max-width:1148px;margin:0 auto}
+.month-card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:border-color 0.25s}
+.month-card.active{border-color:var(--gold)}
+.month-card.done{border-color:rgba(61,186,110,0.3)}
+.month-card-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.month-card-header::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.month-card.m1 .month-card-header::before{background:var(--m1)}
+.month-card.m2 .month-card-header::before{background:var(--m2)}
+.month-card.m3 .month-card-header::before{background:var(--m3)}
+.month-card.m4 .month-card-header::before{background:var(--m4)}
+.month-card.m5 .month-card-header::before{background:var(--m5)}
+.month-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em}
+.month-card.m1 .month-card-title{color:var(--m1)}
+.month-card.m2 .month-card-title{color:var(--m2)}
+.month-card.m3 .month-card-title{color:var(--m3)}
+.month-card.m4 .month-card-title{color:var(--m4)}
+.month-card.m5 .month-card-title{color:var(--m5)}
+.month-card-sub{font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.month-pct{font-family:'DM Mono',monospace;font-size:0.82rem;font-weight:500}
+.month-progress-bar{height:3px;background:var(--border);margin:0 16px 14px}
+.month-progress-fill{height:100%;transition:width 0.6s ease;border-radius:2px}
+.month-card.m1 .month-progress-fill{background:var(--m1)}
+.month-card.m2 .month-progress-fill{background:var(--m2)}
+.month-card.m3 .month-progress-fill{background:var(--m3)}
+.month-card.m4 .month-progress-fill{background:var(--m4)}
+.month-card.m5 .month-progress-fill{background:var(--m5)}
+.weeks-list{padding:0 16px 12px}
+.week-row{display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid rgba(42,42,42,0.5);cursor:pointer;transition:background 0.15s;border-radius:4px;margin:0 -8px;min-height:48px}
+.week-row:last-child{border-bottom:none}
+.week-row:active{background:rgba(255,255,255,0.05)}
+.week-check{width:22px;height:22px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0.65rem}
+.week-check.done{border-color:var(--green);background:var(--green);color:white}
+.week-info{flex:1;min-width:0}
+.week-name{font-size:0.8rem;font-weight:500;color:var(--white);margin-bottom:2px}
+.week-topic{font-size:0.67rem;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.week-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:#333;flex-shrink:0}
+
+/* DAILY */
+.daily-section{padding:0 16px 32px;max-width:1148px;margin:0 auto}
+.daily-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.task-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:all 0.2s;min-height:64px}
+.task-card:active{transform:scale(0.98)}
+.task-card.done{border-color:rgba(61,186,110,0.4);background:rgba(61,186,110,0.05)}
+.task-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+.task-info{flex:1}
+.task-name{font-weight:600;font-size:0.8rem;margin-bottom:3px}
+.task-card.done .task-name{text-decoration:line-through;color:var(--muted)}
+.task-duration{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gold)}
+.task-checkbox{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.2s}
+.task-card.done .task-checkbox{background:var(--green);border-color:var(--green);color:white}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 24px;max-width:1148px;margin:0 auto}
+.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.stat-pill-icon{font-size:1.2rem}
+.stat-pill-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);line-height:1}
+.stat-pill-label{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+
+/* NOTES */
+.notes-section{padding:0 16px 32px;max-width:1148px;margin:0 auto}
+.notes-box{background:var(--card);border:1px solid var(--border);padding:14px 16px;border-radius:4px}
+.notes-box textarea{width:100%;background:transparent;border:none;color:var(--white);font-family:'DM Mono',monospace;font-size:0.8rem;resize:vertical;min-height:80px;outline:none;line-height:1.7;-webkit-appearance:none}
+.notes-box textarea::placeholder{color:#333}
+
+/* PDF PAGE */
+.pdf-page{padding:24px 16px;max-width:1148px;margin:0 auto}
+.storage-bar{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.storage-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.storage-track{flex:1;min-width:120px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.storage-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s}
+.storage-info{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);white-space:nowrap}
+.pdf-upload-zone{border:2px dashed var(--border);border-radius:8px;padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.3s;margin-bottom:24px;background:rgba(255,255,255,0.01);position:relative}
+.pdf-upload-zone:hover,.pdf-upload-zone.drag-over{border-color:var(--gold);background:rgba(232,184,75,0.04)}
+.pdf-upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.5rem;margin-bottom:12px}
+.upload-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.08em;color:var(--white);margin-bottom:6px}
+.upload-sub{font-size:0.75rem;color:var(--muted)}
+.pdf-categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.cat-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
+.cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
+.cat-btn:active{transform:scale(0.96)}
+.pdf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pdf-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s}
+.pdf-card:hover{border-color:#3a3a3a}
+.pdf-preview{height:160px;background:#111;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer}
+.pdf-preview canvas{max-width:100%;max-height:100%;object-fit:contain}
+.pdf-preview-icon{font-size:3rem;opacity:0.3}
+.pdf-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10}
+.upload-progress-bar{width:70%;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.upload-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.3s}
+.upload-progress-text{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gold)}
+.pdf-card-body{padding:12px 14px}
+.pdf-card-name{font-weight:600;font-size:0.82rem;color:var(--white);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdf-card-meta{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);display:flex;gap:10px}
+.pdf-cat-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.cat-grammar{background:rgba(91,126,201,0.2);color:var(--m1)}
+.cat-vocabulary{background:rgba(181,131,42,0.2);color:var(--m2)}
+.cat-exercise{background:rgba(58,170,116,0.2);color:var(--m3)}
+.cat-exam{background:rgba(204,31,31,0.2);color:var(--m4)}
+.cat-other{background:rgba(139,61,186,0.2);color:var(--m5)}
+.pdf-actions{display:flex;gap:8px;padding:0 14px 12px}
+.pdf-action-btn{flex:1;padding:7px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--muted);font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;text-align:center}
+.pdf-action-btn:hover{border-color:var(--gold);color:var(--gold)}
+.pdf-action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.pdf-action-btn:active{transform:scale(0.96)}
+.pdf-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.pdf-empty .empty-icon{font-size:3rem;margin-bottom:12px;opacity:0.4}
+.pdf-empty p{font-size:0.8rem}
+
+/* PDF VIEWER */
+.pdf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column}
+.pdf-modal.open{display:flex}
+.pdf-modal-header{padding:12px 16px;background:#111;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.pdf-modal-title{flex:1;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-close-btn{background:transparent;border:1px solid var(--border);color:var(--white);width:32px;height:32px;border-radius:4px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pdf-modal-controls{padding:10px 16px;background:#0d0d0d;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
+.page-nav-btn{background:var(--card);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
+.page-nav-btn:disabled{opacity:0.3;cursor:default}
+.page-info{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)}
+.pdf-modal-body{flex:1;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:16px;-webkit-overflow-scrolling:touch}
+.pdf-modal-body canvas{max-width:100%;height:auto;border:1px solid var(--border);border-radius:2px}
+
+/* RENAME MODAL */
+.rename-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:600;align-items:center;justify-content:center;padding:16px}
+.rename-modal.open{display:flex}
+.rename-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;width:100%;max-width:400px}
+.rename-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.08em;margin-bottom:16px;color:var(--gold)}
+.rename-input{width:100%;background:#111;border:1px solid var(--border);border-radius:4px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;margin-bottom:12px;outline:none;-webkit-appearance:none}
+.rename-input:focus{border-color:var(--gold)}
+.rename-select{width:100%;background:#111;border:1px solid var(--border);border-radius:4px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;margin-bottom:16px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+.rename-select:focus{border-color:var(--gold)}
+.rename-actions{display:flex;gap:10px}
+.rename-btn{flex:1;padding:10px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:none}
+.rename-btn.confirm{background:var(--gold);color:var(--black)}
+.rename-btn.cancel{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.rename-btn:active{transform:scale(0.97)}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));right:16px;left:16px;background:var(--gold);color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;padding:12px 20px;transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:300;pointer-events:none;border-radius:4px;text-align:center}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* SPINNER */
+.pdf-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;height:100%}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.month-card{animation:fadeIn 0.4s ease both}
+.month-card:nth-child(2){animation-delay:0.05s}
+.month-card:nth-child(3){animation-delay:0.1s}
+.month-card:nth-child(4){animation-delay:0.15s}
+.month-card:nth-child(5){animation-delay:0.2s}
+
+/* DESKTOP NAV */
+.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;align-items:center}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s}
+.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
+.desk-nav-item:hover{color:var(--white)}
+.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+/* RESPONSIVE */
+@media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
+@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}body{padding-bottom:0}.bottom-nav{display:none}.desktop-nav{display:flex!important}.toast{bottom:24px}}
+@media(max-width:399px){.overall-inner{grid-template-columns:1fr 1fr}.big-stat:nth-child(2){grid-column:span 2;order:-1}.month-sublabel{display:none}.arc-container{width:120px;height:75px}.arc-container svg{width:120px;height:120px;margin-top:-48px}}
+
+/* LANGUAGE SWITCHER */
+.lang-switcher{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0;background:#111;border:1px solid var(--border);border-radius:20px;overflow:hidden;z-index:250;box-shadow:0 2px 12px rgba(0,0,0,0.5)}
+.lang-btn{padding:5px 12px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+.lang-btn.active{background:var(--gold);color:var(--black);font-weight:600}
+.lang-btn:first-child{border-radius:20px 0 0 20px}
+.lang-btn:last-child{border-radius:0 20px 20px 0}
+@media(min-width:768px){.lang-switcher{bottom:16px;left:auto;right:24px;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- APP LOADER -->
+<div class="app-loader visible" id="app-loader">
+  <div class="big-spinner"></div>
+  <p>Connexion...</p>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-flag"></div>
+    <div class="login-body">
+      <div class="login-title">Mein Ziel:<br><span>Deutsch B1</span></div>
+      <div class="login-sub">5-Monats-Lernplan · Von Null zu B1</div>
+      <div class="login-tabs">
+        <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Connexion</button>
+        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Créer un compte</button>
+      </div>
+      <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="ton@email.com" autocomplete="email"></div>
+      <div class="login-field"><label>Mot de passe</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="login-field" id="field-confirm" style="display:none"><label>Confirmer le mot de passe</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
+      <button class="login-btn" id="auth-btn" onclick="handleAuth()">Se connecter</button>
+      <div class="login-error" id="auth-error"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- PDF VIEWER MODAL -->
+<div class="pdf-modal" id="pdf-modal">
+  <div class="pdf-modal-header">
+    <button class="modal-close-btn" onclick="closePdfModal()">✕</button>
+    <div class="pdf-modal-title" id="modal-title">Document</div>
+  </div>
+  <div class="pdf-modal-controls">
+    <button class="page-nav-btn" id="prev-page" onclick="changePage(-1)">◀ Prev</button>
+    <span class="page-info" id="page-info">Seite 1 / 1</span>
+    <button class="page-nav-btn" id="next-page" onclick="changePage(1)">Next ▶</button>
+  </div>
+  <div class="pdf-modal-body" id="modal-body"><canvas id="pdf-canvas"></canvas></div>
+</div>
+
+<!-- RENAME MODAL -->
+<div class="rename-modal" id="rename-modal">
+  <div class="rename-box">
+    <div class="rename-title">✏️ Dokument bearbeiten</div>
+    <input type="text" class="rename-input" id="rename-input" placeholder="Dokumentname...">
+    <select class="rename-select" id="rename-cat">
+      <option value="grammar">📘 Grammatik</option>
+      <option value="vocabulary">📚 Vokabeln</option>
+      <option value="exercise">✏️ Übungen</option>
+      <option value="exam">📝 Prüfung</option>
+      <option value="other">📄 Sonstiges</option>
+    </select>
+    <div class="rename-actions">
+      <button class="rename-btn cancel" onclick="closeRenameModal()">Abbrechen</button>
+      <button class="rename-btn confirm" onclick="confirmRename()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESKTOP NAV -->
+<nav class="desktop-nav" id="desktop-nav">
+  <div class="desk-nav-item active" data-page="tracker">📊 Tracker</div>
+  <div class="desk-nav-item" data-page="pdf">📁 Dokumente</div>
+  <div class="desk-nav-right">
+    <div class="user-badge" id="desk-user-badge" style="display:none">
+      <div class="user-avatar" id="desk-avatar">?</div>
+      <span id="desk-email" style="font-size:0.7rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    </div>
+    <button class="logout-btn" id="desk-logout" style="display:none" onclick="logout()">Déconnexion</button>
+  </div>
+</nav>
+
+<!-- TRACKER PAGE -->
+<div class="page active" id="page-tracker">
+  <header>
+    <div class="flag-stripe"></div>
+    <div class="header-inner">
+      <div>
+        <h1>Mein Ziel:<br><span>Deutsch B1</span></h1>
+        <p style="font-size:0.72rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
+      </div>
+      <div class="header-actions">
+        <div class="header-meta">
+          <div class="level-badge">🎯 B1 NIVEAU</div>
+          <div class="today-label" id="today-label"></div>
+        </div>
+        <div class="user-badge" id="mob-user-badge" style="display:none">
+          <div class="user-avatar" id="mob-avatar">?</div>
+          <span id="mob-email" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.65rem;"></span>
+        </div>
+        <button class="logout-btn" id="mob-logout" style="display:none" onclick="logout()">↩</button>
+        <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="overall-section">
+    <div class="overall-inner">
+      <div class="big-stat"><div class="num" id="stat-weeks">0</div><div class="label">Wochen</div></div>
+      <div class="big-stat main-progress-wrap">
+        <div class="main-progress-label">Fortschritt</div>
+        <div class="arc-container">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="80" r="65" fill="none" stroke="#2a2a2a" stroke-width="12"/>
+            <circle id="arc-circle" cx="80" cy="80" r="65" fill="none" stroke="var(--gold)" stroke-width="12" stroke-dasharray="408.41" stroke-dashoffset="408.41" stroke-linecap="round" transform="rotate(-90 80 80)" style="transition:stroke-dashoffset 0.8s ease"/>
+          </svg>
+          <div class="arc-pct"><span id="arc-pct">0</span>%</div>
+        </div>
+      </div>
+      <div class="big-stat"><div class="num" id="stat-streak">0</div><div class="label">🔥 Streak</div></div>
+    </div>
+  </div>
+
+  <div class="journey-section container">
+    <div class="section-title">5-Monate Reise</div>
+    <div class="journey-bar" id="journey-bar"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stat-pill-icon">📚</div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
+    <div class="stat-pill"><div class="stat-pill-icon">⏱</div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
+    <div class="stat-pill"><div class="stat-pill-icon">✅</div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
+    <div class="stat-pill"><div class="stat-pill-icon">🗓</div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
+  </div>
+
+  <div class="daily-section">
+    <div class="section-title">Tägliche Aufgaben</div>
+    <div class="daily-grid" id="daily-grid"></div>
+  </div>
+
+  <div class="months-grid" id="months-grid"></div>
+
+  <div class="notes-section">
+    <div class="section-title">Notizen</div>
+    <div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
+  </div>
+</div>
+
+<!-- PDF PAGE -->
+<div class="page" id="page-pdf">
+  <div class="pdf-page">
+    <div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
+    <div class="storage-bar">
+      <span class="storage-label">💾 Local</span>
+      <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
+      <span class="storage-info" id="storage-info">Chargement...</span>
+    </div>
+    <div class="pdf-upload-zone" id="upload-zone">
+      <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
+      <div class="upload-icon">📄</div>
+      <div class="upload-title">PDF hochladen</div>
+      <div class="upload-sub">Stocké localement · Accessible hors ligne · Max 200 MB par fichier</div>
+    </div>
+    <div class="pdf-categories">
+      <button class="cat-btn active" data-cat="all">Alle</button>
+      <button class="cat-btn" data-cat="grammar">📘 Grammatik</button>
+      <button class="cat-btn" data-cat="vocabulary">📚 Vokabeln</button>
+      <button class="cat-btn" data-cat="exercise">✏️ Übungen</button>
+      <button class="cat-btn" data-cat="exam">📝 Prüfung</button>
+      <button class="cat-btn" data-cat="other">📄 Sonstiges</button>
+    </div>
+    <div class="pdf-grid" id="pdf-grid"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_tracker">Tracker</div></div>
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')"><div class="nav-icon">📁</div><div class="nav-label" data-i18n="nav_docs">Dokumente</div></div>
+</nav>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher" id="lang-switcher">
+  <button class="lang-btn active" onclick="setLang('fr')" id="lang-fr">🇫🇷 FR</button>
+  <button class="lang-btn" onclick="setLang('en')" id="lang-en">🇬🇧 EN</button>
+</div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+// PDF.js
+if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ===== SUPABASE CONFIG — remplace ces 2 valeurs =====
+const SUPABASE_URL = 'https://crgqqzpkppmlhjyawumk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
+// =====================================================
+
+const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null;
+
+// ===== AUTH SUPABASE =====
+let authMode='login';
+function switchAuthTab(mode){
+  authMode=mode;
+  document.getElementById('tab-login').classList.toggle('active',mode==='login');
+  document.getElementById('tab-register').classList.toggle('active',mode==='register');
+  document.getElementById('field-confirm').style.display=mode==='register'?'block':'none';
+  document.getElementById('auth-btn').textContent=mode==='login'?'Se connecter':'Créer le compte';
+  document.getElementById('auth-error').classList.remove('visible');
+}
+
+function showAuthError(msg){const el=document.getElementById('auth-error');el.textContent=msg;el.classList.add('visible');}
+
+async function handleAuth(){
+  const email=document.getElementById('auth-email').value.trim().toLowerCase();
+  const pwd=document.getElementById('auth-password').value;
+  const confirm=document.getElementById('auth-confirm').value;
+  const btn=document.getElementById('auth-btn');
+  if(!email||!pwd){showAuthError('Remplis tous les champs.');return;}
+  if(authMode==='register'&&pwd!==confirm){showAuthError('Les mots de passe ne correspondent pas.');return;}
+  if(pwd.length<6){showAuthError('Mot de passe trop court (min 6 caractères).');return;}
+  btn.disabled=true;btn.textContent='...';
+  document.getElementById('auth-error').classList.remove('visible');
+  try{
+    let error;
+    if(authMode==='login'){
+      ({error}=await _supa.auth.signInWithPassword({email,password:pwd}));
+    }else{
+      ({error}=await _supa.auth.signUp({email,password:pwd}));
+    }
+    if(error)throw error;
+  }catch(e){
+    btn.disabled=false;
+    btn.textContent=authMode==='login'?'Se connecter':'Créer le compte';
+    const msgs={
+      'Invalid login credentials':'Email ou mot de passe incorrect.',
+      'User already registered':'Cet email est déjà utilisé.',
+      'Email not confirmed':'Vérifie ta boîte mail pour confirmer ton compte.',
+    };
+    showAuthError(msgs[e.message]||e.message);
+  }
+}
+
+async function logout(){
+  if(!confirm(t('confirm_logout')))return;
+  await _supa.auth.signOut();
+}
+
+// Supabase gère la session automatiquement
+_supa.auth.onAuthStateChange(async(event,session)=>{
+  document.getElementById('app-loader').classList.remove('visible');
+  if(session?.user){
+    currentUser=session.user;
+    document.getElementById('login-screen').classList.remove('visible');
+    showUserBadge(currentUser);
+    await initApp();
+  }else{
+    currentUser=null;
+    document.getElementById('login-screen').classList.add('visible');
+    ['mob-user-badge','desk-user-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    ['mob-logout','desk-logout'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  }
+});
+
+function showUserBadge(user){
+  const email=user.email||'';const initial=email[0].toUpperCase();
+  ['mob-avatar','desk-avatar'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=initial;});
+  const me=document.getElementById('mob-email');if(me)me.textContent=email;
+  const de=document.getElementById('desk-email');if(de)de.textContent=email;
+  ['mob-user-badge','desk-user-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='flex';});
+  ['mob-logout','desk-logout'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='block';});
+}
+
+// ===== DATA =====
+const DATA={
+  months:[
+    {id:'m1',cls:'m1',title:'Monat 1',sub:'Grundlagen (A1)',desc:'Alphabet · Artikel · Basissätze',weeks:[{w:1,name:'Alphabet & Aussprache',topic:'Buchstaben, Umlaute ä/ö/ü, ß, ch/sch'},{w:2,name:'Grüße & Zahlen',topic:'Phrasen, Zahlen 1–1000, Tage, Monate'},{w:3,name:'Artikel & Genus',topic:'der/die/das Regeln, Genus erkennen'},{w:4,name:'sein, haben & Präsens',topic:'Konjugation, einfache Sätze'}]},
+    {id:'m2',cls:'m2',title:'Monat 2',sub:'A1 fertig, A2 Start',desc:'Fälle · Modalverben · Vergangenheit',weeks:[{w:5,name:'Nominativ & Akkusativ',topic:'Artikelveränderung, direkte Objekte'},{w:6,name:'Modalverben',topic:'können, müssen, wollen, dürfen, sollen, mögen'},{w:7,name:'Perfekt',topic:'haben/sein + Partizip II, unregelmäßige Formen'},{w:8,name:'Dativ + Präpositionen',topic:'mit, von, aus, bei, nach, seit, zu'}]},
+    {id:'m3',cls:'m3',title:'Monat 3',sub:'A2 fertig, B1 Einstieg',desc:'Wortschatz · Komplexe Grammatik · Gespräche',weeks:[{w:9,name:'Alltagswortschatz',topic:'Zuhause, Essen, Reisen, Einkaufen – 500 Wörter'},{w:10,name:'Wechselpräpositionen',topic:'an, auf, in, über, neben – Akk. vs Dat.'},{w:11,name:'Genitiv',topic:'des/der Besitz, formales Schreiben'},{w:12,name:'Wiederholung & Sprechen',topic:'Mock-Gespräche, A2 Checkpoint'}]},
+    {id:'m4',cls:'m4',title:'Monat 4',sub:'B1 Grammatikkern',desc:'Nebensätze · Futur · Konjunktiv II',weeks:[{w:13,name:'Nebensätze',topic:'weil, dass, obwohl, wenn, als – Verb ans Ende'},{w:14,name:'Futur I',topic:'werden + Infinitiv, Pläne & Vorhersagen'},{w:15,name:'Konjunktiv II',topic:'würde, könnte, hätte – Höflichkeit & Hypothesen'},{w:16,name:'Hören & Lesen',topic:'Slow German Podcast, DW Artikel, B1 Texte'}]},
+    {id:'m5',cls:'m5',title:'Monat 5',sub:'B1 Konsolidierung',desc:'Flüssigkeit · Immersion · Prüfungsvorbereitung',weeks:[{w:17,name:'Wortschatzerweiterung',topic:'Arbeit, Meinungen, Emotionen – 1000+ Wörter'},{w:18,name:'Sprechübung',topic:'italki Stunden, Gespräche, Aussprache'},{w:19,name:'Schreiben & Verstehen',topic:'kurze E-Mails, DW Artikel, B1 Texte'},{w:20,name:'B1 Probetest & Review',topic:'Vollständiger Probetest, Schwachstellen, Review'}]},
+  ],
+  dailyTasks:[{id:'anki',name:'Anki Vokabeln',icon:'🃏',duration:'20 Min.'},{id:'grammar',name:'Grammatik/Thema',icon:'📖',duration:'30 Min.'},{id:'listen',name:'Hörverstehen',icon:'🎧',duration:'20 Min.'},{id:'speak',name:'Sprechen / Schreiben',icon:'🗣',duration:'20 Min.'}]
+};
+
+// ===== TRACKER STATE (Supabase) =====
+let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null};
+let saveTimeout=null;
+
+async function loadState(){
+  if(!currentUser)return;
+  try{
+    const {data}=await _supa.from('tracker_state').select('data').eq('user_id',currentUser.id).single();
+    if(data?.data)state={...state,...data.data};
+  }catch(e){}
+  if(!state.startDate)state.startDate=new Date().toDateString();
+}
+function save(){
+  if(!currentUser)return;
+  clearTimeout(saveTimeout);
+  saveTimeout=setTimeout(async()=>{
+    try{await _supa.from('tracker_state').upsert({user_id:currentUser.id,data:state,updated_at:new Date().toISOString()},{onConflict:'user_id'});}
+    catch(e){}
+  },800);
+}
+function getToday(){return new Date().toDateString();}
+function resetDailyIfNewDay(){
+  const today=getToday();
+  if(state.lastActiveDay!==today){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    if(state.lastActiveDay===yesterday.toDateString())state.streak=(state.streak||0)+1;
+    else if(state.lastActiveDay&&state.lastActiveDay!==today)state.streak=0;
+    state.dailyDone={};state.lastActiveDay=today;save();
+  }
+}
+function computeProgress(){return Math.round(Object.keys(state.completedWeeks).filter(k=>state.completedWeeks[k]).length/20*100);}
+
+function renderJourney(){
+  const bar=document.getElementById('journey-bar');bar.innerHTML='';
+  const pcts=DATA.months.map(m=>m.weeks.filter(w=>state.completedWeeks[w.w]).length/m.weeks.length);
+  DATA.months.forEach((m,i)=>{
+    const p=pcts[i],isDone=p===1,isActive=p>0&&!isDone;
+    const node=document.createElement('div');node.className='month-node';
+    node.innerHTML=`<div class="month-dot ${isDone?'done':isActive?'active':'locked'}">${isDone?'✓':i+1}</div><div class="month-label">${m.title}</div><div class="month-sublabel">${m.sub}</div>`;
+    bar.appendChild(node);
+    if(i<DATA.months.length-1){const conn=document.createElement('div');const np=pcts[i+1];conn.className='month-connector '+(p===1?'done':np>0?'partial':'');if(np>0&&np<1)conn.style.setProperty('--fill',Math.round(np*100)+'%');bar.appendChild(conn);}
+  });
+}
+function renderMonths(){
+  const grid=document.getElementById('months-grid');grid.innerHTML='';
+  DATA.months.forEach(m=>{
+    const done=m.weeks.filter(w=>state.completedWeeks[w.w]).length,pct=Math.round(done/m.weeks.length*100),isDone=pct===100,isActive=pct>0&&!isDone;
+    const card=document.createElement('div');card.className=`month-card ${m.cls} ${isDone?'done':isActive?'active':''}`;
+    card.innerHTML=`<div class="month-card-header"><div><div class="month-card-title">${m.title} — ${m.sub}</div><div class="month-card-sub">${m.desc}</div></div><div class="month-pct" style="color:${isDone?'var(--green)':'var(--gold)'}">${pct}%</div></div><div style="height:8px"></div><div class="month-progress-bar"><div class="month-progress-fill" style="width:${pct}%"></div></div><div class="weeks-list">${m.weeks.map(w=>{const wDone=!!state.completedWeeks[w.w];return`<div class="week-row" onclick="toggleWeek(${w.w})"><div class="week-check ${wDone?'done':''}">${wDone?'✓':''}</div><div class="week-info"><div class="week-name">Woche ${w.w}: ${w.name}</div><div class="week-topic">${w.topic}</div></div><div class="week-num">W${w.w}</div></div>`;}).join('')}</div>`;
+    grid.appendChild(card);
+  });
+}
+function renderDaily(){
+  const grid=document.getElementById('daily-grid');grid.innerHTML='';
+  DATA.dailyTasks.forEach(t=>{
+    const done=!!state.dailyDone[t.id],card=document.createElement('div');
+    card.className=`task-card ${done?'done':''}`;card.onclick=()=>toggleTask(t.id);
+    card.innerHTML=`<div class="task-icon">${t.icon}</div><div class="task-info"><div class="task-name">${t.name}</div><div class="task-duration">${t.duration}</div></div><div class="task-checkbox">${done?'✓':''}</div>`;
+    grid.appendChild(card);
+  });
+}
+function updateStats(){
+  const wd=Object.keys(state.completedWeeks).filter(k=>state.completedWeeks[k]).length,pct=computeProgress(),td=Object.keys(state.dailyDone).filter(k=>state.dailyDone[k]).length;
+  document.getElementById('stat-weeks').textContent=wd;
+  document.getElementById('stat-streak').textContent=state.streak||0;
+  document.getElementById('stat-vocab').textContent=wd>=17?'1000+':wd>=9?'500+':Math.min(wd*40,300);
+  document.getElementById('stat-hours').textContent=wd*10;
+  document.getElementById('stat-tasks').textContent=td+'/4';
+  document.getElementById('stat-days-left').textContent=Math.max(0,140-wd*7);
+  document.getElementById('arc-pct').textContent=pct;
+  document.getElementById('arc-circle').style.strokeDashoffset=2*Math.PI*65*(1-pct/100);
+}
+function toggleWeek(w){state.completedWeeks[w]=!state.completedWeeks[w];showToast(state.completedWeeks[w]?`✓ Woche ${w} abgeschlossen!`:`Woche ${w} zurückgesetzt`);save();render();}
+function toggleTask(id){state.dailyDone[id]=!state.dailyDone[id];save();renderDaily();updateStats();if(Object.values(state.dailyDone).every(Boolean))showToast('🔥 Alle Aufgaben heute erledigt!');}
+function resetAll(){if(!confirm(t('confirm_reset')))return;state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null};save();document.getElementById('notes-area').value='';render();}
+function render(){renderJourney();renderMonths();renderDaily();updateStats();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+// ===== PDF (Supabase Storage + DB) =====
+let pdfs=[],currentFilter='all',editingId=null,pdfDoc=null,currentPage=1,totalPages=1;
+
+function storagePath(id){return currentUser.id+'/'+id+'.pdf';}
+
+async function loadPdfs(){
+  if(!currentUser)return;
+  document.getElementById('pdf-grid').innerHTML='<div class="pdf-empty" style="grid-column:1/-1"><div class="spinner" style="margin:0 auto"></div></div>';
+  try{
+    const {data}=await _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
+    pdfs=data||[];
+  }catch(e){pdfs=[];}
+  renderPdfGrid();updateStorageBar();
+}
+
+function updateStorageBar(){
+  const totalBytes=pdfs.reduce((a,p)=>a+(p.size||0),0);
+  const mb=(totalBytes/1024/1024).toFixed(1);
+  document.getElementById('storage-info').textContent=`${mb} MB · ${pdfs.length} fichier${pdfs.length!==1?'s':''} · ☁️ Supabase Cloud`;
+  const pct=Math.min(100,parseFloat(mb)/500*100);
+  document.getElementById('storage-fill').style.width=pct+'%';
+  document.getElementById('storage-fill').style.background=pct>80?'var(--red)':pct>50?'var(--gold)':'var(--green)';
+}
+
+function handleFiles(files){
+  Array.from(files).forEach(file=>{
+    if(!file.type.includes('pdf')&&!file.name.endsWith('.pdf')){showToast('⚠️ Nur PDF-Dateien erlaubt');return;}
+    if(file.size>50*1024*1024){showToast('⚠️ Datei zu groß (max 50 MB)');return;}
+    uploadPdf(file);
+  });
+}
+
+function uploadPdf(file){
+  const id=Date.now()+'_'+Math.random().toString(36).substr(2,6);
+  const name=file.name.replace(/\.pdf$/i,'');
+  const path=storagePath(id);
+  const meta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString('de-DE'),added_at_ts:Date.now(),user_id:currentUser.id,uploading:true,progress:0};
+  pdfs.unshift(meta);renderPdfGrid();
+
+  const xhr=new XMLHttpRequest();
+  xhr.upload.onprogress=e=>{
+    if(e.lengthComputable){
+      const pct=Math.round(e.loaded/e.total*100);
+      const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx].progress=pct;
+      const bar=document.getElementById('prog-fill-'+id);const txt=document.getElementById('prog-txt-'+id);
+      if(bar)bar.style.width=pct+'%';if(txt)txt.textContent=pct+'%';
+    }
+  };
+
+  // Use Supabase storage upload
+  _supa.storage.from('pdfs').upload(path,file,{contentType:'application/pdf',upsert:false})
+    .then(async({error})=>{
+      if(error){pdfs=pdfs.filter(p=>p.id!==id);renderPdfGrid();showToast('⚠️ Upload fehlgeschlagen: '+error.message);return;}
+      const dbMeta={id,name,category:'other',size:file.size,storage_path:path,added_at:new Date().toLocaleDateString('de-DE'),added_at_ts:Date.now(),user_id:currentUser.id};
+      await _supa.from('pdf_files').insert(dbMeta);
+      const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx]={...dbMeta,uploading:false};
+      renderPdfGrid();updateStorageBar();showToast('✓ PDF gespeichert!');openRenameModal(id);
+    });
+}
+
+function renderPdfGrid(){
+  const grid=document.getElementById('pdf-grid');
+  const filtered=currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter);
+  if(filtered.length===0){grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?'Noch keine Dokumente. Lade dein erstes PDF hoch!':'Keine Dokumente in dieser Kategorie.'}</p></div>`;return;}
+  const cats={grammar:'📘 Grammatik',vocabulary:'📚 Vokabeln',exercise:'✏️ Übungen',exam:'📝 Prüfung',other:'📄 Sonstiges'};
+  const fmt=b=>b>1024*1024?(b/1024/1024).toFixed(1)+' MB':Math.round(b/1024)+' KB';
+  grid.innerHTML=filtered.map(p=>`
+    <div class="pdf-card" id="card-${p.id}">
+      <div class="pdf-preview" onclick="${p.uploading?'':` openPdf('${p.id}')`}">
+        ${p.uploading?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon">⏫</div>`:`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>`}
+      </div>
+      <div class="pdf-card-body">
+        <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||'📄 Sonstiges'}</div>
+        <div class="pdf-card-name" title="${p.name}">${p.name}</div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.addedAt}</span></div>
+      </div>
+      ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">👁 Voir</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">✏️ Edit</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">🗑</button></div>`}
+    </div>`).join('');
+  filtered.filter(p=>!p.uploading).forEach(p=>generateThumbnail(p));
+}
+
+async function getPdfUrl(p){
+  const{data}=await _supa.storage.from('pdfs').createSignedUrl(p.storage_path,3600);
+  return data?.signedUrl||null;
+}
+
+async function generateThumbnail(p){
+  if(typeof pdfjsLib==='undefined'){const i=document.getElementById('icon-'+p.id);if(i)i.style.display='flex';return;}
+  try{
+    const url=await getPdfUrl(p);if(!url)return;
+    const pdf=await pdfjsLib.getDocument({url}).promise;
+    const page=await pdf.getPage(1);
+    const canvas=document.getElementById('thumb-'+p.id);if(!canvas)return;
+    const vp=page.getViewport({scale:0.5});canvas.width=vp.width;canvas.height=vp.height;
+    await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+  }catch(e){const i=document.getElementById('icon-'+p.id);if(i)i.style.display='flex';}
+}
+
+async function openPdf(id){
+  const p=pdfs.find(x=>String(x.id)===String(id));if(!p)return;
+  document.getElementById('modal-title').textContent=p.name;
+  document.getElementById('pdf-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  const body=document.getElementById('modal-body');
+  body.innerHTML='<div class="pdf-loading"><div class="spinner"></div><span style="font-size:0.8rem;color:var(--muted)">Laden...</span></div>';
+  try{
+    const url=await getPdfUrl(p);
+    if(!url){body.innerHTML='<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">Fichier introuvable.</p></div>';return;}
+    if(typeof pdfjsLib==='undefined'){body.innerHTML=`<div style="padding:20px;text-align:center"><a href="${url}" target="_blank" style="color:var(--gold)">📥 Ouvrir le PDF</a></div>`;return;}
+    pdfDoc=await pdfjsLib.getDocument({url}).promise;
+    totalPages=pdfDoc.numPages;currentPage=1;
+    body.innerHTML='<canvas id="pdf-canvas"></canvas>';
+    await renderPdfPage(currentPage);
+  }catch(e){body.innerHTML='<div style="padding:20px;text-align:center"><p style="color:var(--muted);font-size:0.8rem">Fehler beim Laden.</p></div>';}
+}
+
+async function renderPdfPage(num){
+  if(!pdfDoc)return;
+  document.getElementById('page-info').textContent=`Seite ${num} / ${totalPages}`;
+  document.getElementById('prev-page').disabled=num<=1;
+  document.getElementById('next-page').disabled=num>=totalPages;
+  try{
+    const page=await pdfDoc.getPage(num);const canvas=document.getElementById('pdf-canvas');if(!canvas)return;
+    const w=document.getElementById('modal-body').clientWidth-32;const vp=page.getViewport({scale:1});
+    const scale=Math.min(w/vp.width,2);const sv=page.getViewport({scale});
+    canvas.width=sv.width;canvas.height=sv.height;
+    await page.render({canvasContext:canvas.getContext('2d'),viewport:sv}).promise;
+  }catch(e){}
+}
+
+async function changePage(delta){const n=currentPage+delta;if(n<1||n>totalPages)return;currentPage=n;await renderPdfPage(currentPage);}
+function closePdfModal(){document.getElementById('pdf-modal').classList.remove('open');document.body.style.overflow='';pdfDoc=null;}
+
+async function deletePdf(id){
+  if(!confirm('PDF löschen?'))return;
+  try{
+    const p=pdfs.find(x=>String(x.id)===String(id));
+    if(p?.storage_path)await _supa.storage.from('pdfs').remove([p.storage_path]);
+    await _supa.from('pdf_files').delete().eq('id',id).eq('user_id',currentUser.id);
+    pdfs=pdfs.filter(p=>String(p.id)!==String(id));
+    renderPdfGrid();updateStorageBar();showToast('🗑 Gelöscht');
+  }catch(e){showToast('⚠️ Fehler beim Löschen');}
+}
+
+function openRenameModal(id){
+  const p=pdfs.find(x=>String(x.id)===String(id));if(!p)return;
+  editingId=id;document.getElementById('rename-input').value=p.name;document.getElementById('rename-cat').value=p.category||'other';document.getElementById('rename-modal').classList.add('open');
+}
+function closeRenameModal(){document.getElementById('rename-modal').classList.remove('open');editingId=null;}
+async function confirmRename(){
+  if(!editingId)return;
+  const p=pdfs.find(x=>String(x.id)===String(editingId));if(!p)return;
+  const name=document.getElementById('rename-input').value.trim();const cat=document.getElementById('rename-cat').value;
+  if(name)p.name=name;p.category=cat;
+  try{
+    await _supa.from('pdf_files').update({name:p.name,category:p.category}).eq('id',p.id).eq('user_id',currentUser.id);
+    renderPdfGrid();closeRenameModal();showToast('✓ Gespeichert');
+  }catch(e){showToast('⚠️ Speicherfehler');}
+}
+
+// ===== NAVIGATION =====
+function switchPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  document.querySelectorAll('.desk-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  if(page==='pdf')loadPdfs();
+  window.scrollTo(0,0);
+}
+
+// ===== INIT =====
+async function initApp(){
+  await loadState();resetDailyIfNewDay();
+  document.getElementById('today-label').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
+  const notesEl=document.getElementById('notes-area');notesEl.value=state.notes||'';notesEl.addEventListener('input',()=>{state.notes=notesEl.value;save();});
+  render();
+  document.getElementById('pdf-input').addEventListener('change',e=>handleFiles(e.target.files));
+  const zone=document.getElementById('upload-zone');
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');handleFiles(e.dataTransfer.files);});
+  document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{currentFilter=btn.dataset.cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPdfGrid();}));
+  document.querySelectorAll('.desk-nav-item[data-page]').forEach(item=>item.addEventListener('click',()=>switchPage(item.dataset.page)));
+  document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
+  document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
+  document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
+}
+
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+// ===== i18n =====
+const i18n={
+  fr:{
+    nav_tracker:'Tracker', nav_docs:'Dokumente',
+    login_title_1:'Mein Ziel:', login_title_2:'Deutsch B1',
+    login_sub:'5-Monats-Lernplan · Von Null zu B1',
+    tab_login:'Connexion', tab_register:'Créer un compte',
+    label_email:'Email', label_pwd:'Mot de passe', label_confirm:'Confirmer le mot de passe',
+    btn_login:'Se connecter', btn_register:'Créer le compte',
+    logout:'Déconnexion', logout_mob:'↩',
+    reset_btn:'↺ Reset',
+    h1_1:'Mein Ziel:', h1_2:'Deutsch B1',
+    h1_sub:'5-Monats-Lernplan · Von Null zu B1',
+    badge:'🎯 B1 NIVEAU',
+    progress_label:'Fortschritt',
+    lbl_weeks:'Wochen', lbl_streak:'🔥 Streak',
+    lbl_vocab:'Vokabeln', lbl_hours:'Stunden', lbl_today:'Heute', lbl_days:'Tage noch',
+    section_journey:'5-Monate Reise',
+    section_daily:'Tägliche Aufgaben',
+    section_notes:'Notizen',
+    notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
+    pdf_title:'📁 Meine Dokumente',
+    storage_label:'💾 Local',
+    upload_title:'PDF hochladen',
+    upload_sub:'Stocké localement · Accessible hors ligne · Max 200 MB par fichier',
+    storage_loading:'Chargement...',
+    cat_all:'Alle', cat_grammar:'📘 Grammatik', cat_vocab:'📚 Vokabeln',
+    cat_exercise:'✏️ Übungen', cat_exam:'📝 Prüfung', cat_other:'📄 Sonstiges',
+    confirm_logout:'Se déconnecter ?',
+    confirm_reset:'Wirklich alles zurücksetzen?',
+  },
+  en:{
+    nav_tracker:'Tracker', nav_docs:'Documents',
+    login_title_1:'My Goal:', login_title_2:'German B1',
+    login_sub:'5-Month Study Plan · From Zero to B1',
+    tab_login:'Log in', tab_register:'Create account',
+    label_email:'Email', label_pwd:'Password', label_confirm:'Confirm password',
+    btn_login:'Log in', btn_register:'Create account',
+    logout:'Log out', logout_mob:'↩',
+    reset_btn:'↺ Reset',
+    h1_1:'My Goal:', h1_2:'German B1',
+    h1_sub:'5-Month Study Plan · From Zero to B1',
+    badge:'🎯 B1 LEVEL',
+    progress_label:'Progress',
+    lbl_weeks:'Weeks', lbl_streak:'🔥 Streak',
+    lbl_vocab:'Vocabulary', lbl_hours:'Hours', lbl_today:'Today', lbl_days:'Days left',
+    section_journey:'5-Month Journey',
+    section_daily:'Daily Tasks',
+    section_notes:'Notes',
+    notes_placeholder:'Write your thoughts in German...',
+    pdf_title:'📁 My Documents',
+    storage_label:'💾 Cloud',
+    upload_title:'Upload PDF',
+    upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
+    storage_loading:'Loading...',
+    cat_all:'All', cat_grammar:'📘 Grammar', cat_vocab:'📚 Vocabulary',
+    cat_exercise:'✏️ Exercises', cat_exam:'📝 Exam', cat_other:'📄 Other',
+    confirm_logout:'Log out?',
+    confirm_reset:'Reset all progress?',
+  }
+};
+let currentLang='fr';
+
+function setLang(lang){
+  currentLang=lang;
+  localStorage.setItem('app_lang',lang);
+  document.getElementById('lang-fr').classList.toggle('active',lang==='fr');
+  document.getElementById('lang-en').classList.toggle('active',lang==='en');
+  applyLang();
+}
+
+function t(key){return(i18n[currentLang]||i18n.fr)[key]||key;}
+
+function applyLang(){
+  const L=i18n[currentLang]||i18n.fr;
+  // Nav
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(L[k])el.textContent=L[k];});
+  // Login screen
+  const lt=document.querySelector('.login-title');if(lt)lt.innerHTML=L.login_title_1+'<br><span>'+L.login_title_2+'</span>';
+  const ls=document.querySelector('.login-sub');if(ls)ls.textContent=L.login_sub;
+  const tl=document.getElementById('tab-login');if(tl)tl.textContent=L.tab_login;
+  const tr2=document.getElementById('tab-register');if(tr2)tr2.textContent=L.tab_register;
+  document.querySelectorAll('.login-field label').forEach((el,i)=>{
+    if(i===0)el.textContent=L.label_email;
+    if(i===1)el.textContent=L.label_pwd;
+    if(i===2)el.textContent=L.label_confirm;
+  });
+  const ab=document.getElementById('auth-btn');if(ab)ab.textContent=authMode==='login'?L.btn_login:L.btn_register;
+  // Header
+  const h1=document.querySelector('h1');if(h1)h1.innerHTML=L.h1_1+'<br><span>'+L.h1_2+'</span>';
+  const hsub=document.querySelector('header p');if(hsub)hsub.textContent=L.h1_sub;
+  const badge=document.querySelector('.level-badge');if(badge)badge.textContent=L.badge;
+  // Overall
+  const mpl=document.querySelector('.main-progress-label');if(mpl)mpl.textContent=L.progress_label;
+  const sw=document.getElementById('stat-weeks');if(sw){const lbl=sw.nextElementSibling;if(lbl)lbl.textContent=L.lbl_weeks;}
+  const st=document.getElementById('stat-streak');if(st){const lbl=st.nextElementSibling;if(lbl)lbl.textContent=L.lbl_streak;}
+  const sv=document.getElementById('stat-vocab');if(sv){const lbl=sv.nextElementSibling;if(lbl)lbl.textContent=L.lbl_vocab;}
+  const sh=document.getElementById('stat-hours');if(sh){const lbl=sh.nextElementSibling;if(lbl)lbl.textContent=L.lbl_hours;}
+  const stasks=document.getElementById('stat-tasks');if(stasks){const lbl=stasks.nextElementSibling;if(lbl)lbl.textContent=L.lbl_today;}
+  const sdl=document.getElementById('stat-days-left');if(sdl){const lbl=sdl.nextElementSibling;if(lbl)lbl.textContent=L.lbl_days;}
+  // Section titles
+  const titles=document.querySelectorAll('.section-title');
+  titles.forEach(el=>{
+    const txt=el.textContent.trim();
+    if(txt.includes('Monate Reise')||txt.includes('Month Journey'))el.textContent=L.section_journey;
+    else if(txt.includes('gliche Aufgaben')||txt.includes('Daily'))el.textContent=L.section_daily;
+    else if(txt.includes('Notizen')||txt.includes('Notes'))el.textContent=L.section_notes;
+    else if(txt.includes('Dokumente')||txt.includes('Documents'))el.textContent=L.pdf_title;
+  });
+  // Notes placeholder
+  const na=document.getElementById('notes-area');if(na)na.placeholder=L.notes_placeholder;
+  // PDF page
+  const sl=document.querySelector('.storage-label');if(sl)sl.textContent=L.storage_label;
+  const si=document.getElementById('storage-info');if(si&&si.textContent.includes('Charg'))si.textContent=L.storage_loading;
+  const ut=document.querySelector('.upload-title');if(ut)ut.textContent=L.upload_title;
+  const us=document.querySelector('.upload-sub');if(us)us.textContent=L.upload_sub;
+  // Category buttons
+  document.querySelectorAll('.cat-btn').forEach(btn=>{
+    const cat=btn.dataset.cat;
+    const map={all:'cat_all',grammar:'cat_grammar',vocabulary:'cat_vocab',exercise:'cat_exercise',exam:'cat_exam',other:'cat_other'};
+    if(map[cat]&&L[map[cat]])btn.textContent=L[map[cat]];
+  });
+  // Logout buttons
+  const dl=document.getElementById('desk-logout');if(dl)dl.textContent=L.logout;
+  const ml=document.getElementById('mob-logout');if(ml)ml.textContent=L.logout_mob;
+  // Reset button
+  const rb=document.querySelector('.reset-btn');if(rb)rb.textContent=L.reset_btn;
+}
+
+// Init lang
+(()=>{const saved=localStorage.getItem('app_lang')||'fr';currentLang=saved;document.getElementById('lang-'+saved).classList.add('active');document.getElementById('lang-'+('fr'===saved?'en':'fr')).classList.remove('active');applyLang();})();
+</script>
+</body>
+</html>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
