@@ -1254,8 +1254,8 @@ async function startAuthenticatedApp(user){
   }
   showAppShell();
   switchPage(activeAppPage||'tracker');
-  initNotifications();
-  setTimeout(startPresenceHeartbeat, 1000);
+  setTimeout(startPresenceHeartbeat, 2000);
+  setTimeout(initNotifications, 3000);
 }
 
 async function bootstrapAuth(){
@@ -3019,10 +3019,11 @@ async function startPresenceHeartbeat(){
   if(!currentUser) return;
   const sendBeat = async () => {
     try{
-      await _supa.from('user_presence').upsert({
+      const {error} = await _supa.from('user_presence').upsert({
         email: currentUser.email,
         last_seen: new Date().toISOString()
       }, { onConflict: 'email' });
+      // Silently ignore lock conflicts and missing table
     }catch(e){}
   };
   sendBeat();
@@ -3038,7 +3039,11 @@ async function fetchPresence(){
   if(!isAdmin()) return;
   try{
     const {data,error} = await _supa.from('user_presence').select('email,last_seen');
-    if(error) throw error;
+    if(error){
+      const msg = error.message||'';
+      if(msg.includes('does not exist')||msg.includes('42P01')||msg.includes('lock')||msg.includes('stole')) return;
+      throw error;
+    }
     _userPresence = {};
     (data||[]).forEach(row=>{
       _userPresence[row.email] = new Date(row.last_seen).getTime();
@@ -3076,14 +3081,21 @@ async function populateNotifTargets(){
 async function loadNotifications(){
   try{
     let query = _supa.from('notifications').select('*').order('created_at',{ascending:false}).limit(50);
-    if(!isAdmin()){
+    if(!isAdmin() && currentUser?.email){
       query = query.or(`target.eq.all,target.eq.${currentUser.email}`);
     }
     const {data,error} = await query;
-    if(error) throw error;
+    // Silently ignore if table doesn't exist yet (42P01)
+    if(error){
+      const msg = error.message||'';
+      if(msg.includes('does not exist')||msg.includes('42P01')||msg.includes('relation')||msg.includes('lock')||msg.includes('stole')) return;
+      throw error;
+    }
     _notifications = data || [];
   }catch(e){
     _notifications = [];
+    // Silent fail - table may not be created yet
+    return;
   }
   renderNotifBadge();
   renderNotifList();
@@ -3453,6 +3465,21 @@ async function adminLoadUsers(){
 
 // ===== ADMIN DASHBOARD PAGE =====
 
+async function supaRetry(fn, retries=3, delayMs=600){
+  for(let i=0;i<retries;i++){
+    try{ return await fn(); }
+    catch(e){
+      const msg = e?.message||'';
+      const isLock = msg.includes('lock') || msg.includes('stole') || msg.includes('57014');
+      if(isLock && i < retries-1){
+        await new Promise(r=>setTimeout(r, delayMs*(i+1)));
+        continue;
+      }
+      throw e;
+    }
+  }
+}
+
 async function loadAdminPage(){
   if(!isAdmin()) return;
   document.getElementById('admin-stat-total').textContent = '—';
@@ -3462,10 +3489,13 @@ async function loadAdminPage(){
   document.getElementById('admin-users-list-full').innerHTML = '<div class="admin-empty">Loading...</div>';
   document.getElementById('admin-chart-bars').innerHTML = '<div class="admin-empty" style="width:100%">Loading chart...</div>';
 
-  // Step 1: users list
+  // Step 1: users list (with retry)
   try {
-    const { data, error } = await _supa.rpc('list_users_with_roles');
-    if(error) throw error;
+    const data = await supaRetry(async()=>{
+      const {data,error} = await _supa.rpc('list_users_with_roles');
+      if(error) throw error;
+      return data;
+    });
     _adminAllUsers = data || [];
     renderAdminStats();
     renderAdminChart();
@@ -3475,13 +3505,13 @@ async function loadAdminPage(){
       `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||e}<br><small>Make sure the Supabase SQL functions are created.</small></div>`;
   }
 
-  // Step 2: presence (after small delay to avoid lock conflict)
-  await new Promise(r => setTimeout(r, 300));
+  // Step 2: presence
+  await new Promise(r=>setTimeout(r,800));
   await fetchPresence();
   renderAdminUsersList();
 
   // Step 3: documents
-  await new Promise(r => setTimeout(r, 300));
+  await new Promise(r=>setTimeout(r,800));
   await adminLoadDocs();
 }
 
@@ -3493,8 +3523,11 @@ async function adminLoadDocs(){
   const el = document.getElementById('admin-docs-list');
   if(el) el.innerHTML = '<div class="admin-empty">Loading...</div>';
   try{
-    const {data,error} = await _supa.from('pdf_files').select('*').order('added_at_ts',{ascending:false});
-    if(error) throw error;
+    const data = await supaRetry(async()=>{
+      const {data,error} = await _supa.from('pdf_files').select('*').order('added_at_ts',{ascending:false});
+      if(error) throw error;
+      return data;
+    });
     _adminAllDocs = data || [];
     renderAdminDocs();
   }catch(e){
