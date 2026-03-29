@@ -353,6 +353,24 @@ h1 span{color:var(--gold)}
 .profile-msg.success{background:rgba(61,186,110,0.15);border:1px solid rgba(61,186,110,0.3);color:var(--green);display:block}
 .profile-msg.error{background:rgba(204,31,31,0.12);border:1px solid rgba(204,31,31,0.3);color:#ff6b6b;display:block}
 .profile-divider{height:1px;background:var(--border);margin:18px 0}
+
+/* STREAK COUNTER */
+.streak-counter{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(232,184,75,0.04);transition:border-color 0.3s,background 0.3s;min-width:100px}
+.streak-counter.at-risk{border-color:rgba(204,31,31,0.5);background:rgba(204,31,31,0.06)}
+.streak-counter.complete{border-color:rgba(61,186,110,0.4);background:rgba(61,186,110,0.05)}
+.streak-fire{font-size:1.4rem;line-height:1;filter:grayscale(0)}
+.streak-counter.at-risk .streak-fire{filter:grayscale(1);opacity:0.5}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,8vw,4rem);color:var(--gold);line-height:1}
+.streak-counter.at-risk .streak-num{color:var(--red)}
+.streak-unit{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
+.streak-bar-wrap{display:flex;align-items:center;gap:6px;width:100%;margin-top:4px}
+.streak-bar-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.streak-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease}
+.streak-counter.complete .streak-bar-fill{background:var(--green)}
+.streak-counter.at-risk .streak-bar-fill{background:var(--red)}
+.streak-bar-label{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);white-space:nowrap}
+.streak-warning{font-size:0.6rem;color:var(--red);letter-spacing:0.04em;display:none;text-align:center}
+.streak-counter.at-risk .streak-warning{display:block}
 </style>
 </head>
 <body>
@@ -473,7 +491,20 @@ h1 span{color:var(--gold)}
           <div class="arc-pct"><span id="arc-pct">0</span>%</div>
         </div>
       </div>
-      <div class="big-stat"><div class="num" id="stat-streak">0</div><div class="label">🔥 Streak</div></div>
+      <div class="big-stat">
+        <div class="streak-counter" id="streak-counter">
+          <div class="streak-fire" id="streak-fire">🔥</div>
+          <div class="streak-num" id="stat-streak">0</div>
+          <div class="streak-unit" id="streak-unit-label">Tage</div>
+          <div class="streak-bar-wrap">
+            <div class="streak-bar-track">
+              <div class="streak-bar-fill" id="streak-bar-fill" style="width:0%"></div>
+            </div>
+            <div class="streak-bar-label" id="streak-tasks-label">0/4</div>
+          </div>
+          <div class="streak-warning" id="streak-warning">⚠ Erledige deine Aufgaben!</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -850,10 +881,39 @@ function resetDailyIfNewDay(){
   const today=getToday();
   if(state.lastActiveDay!==today){
     const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
-    if(state.lastActiveDay===yesterday.toDateString())state.streak=(state.streak||0)+1;
-    else if(state.lastActiveDay&&state.lastActiveDay!==today)state.streak=0;
+    const wasYesterday=state.lastActiveDay===yesterday.toDateString();
+    // Only increment streak if yesterday's tasks were all completed
+    const allTaskIds=['anki','grammar','listen','speak'];
+    const prevAllDone=wasYesterday&&allTaskIds.every(id=>state.dailyDone[id]);
+    if(prevAllDone){state.streak=(state.streak||0)+1;}
+    else if(state.lastActiveDay&&state.lastActiveDay!==today){state.streak=0;}
     state.dailyDone={};state.lastActiveDay=today;save();
   }
+}
+
+// Schedule a midnight reset — if tasks not done by end of day, streak resets
+let _midnightTimer=null;
+function scheduleMidnightReset(){
+  clearTimeout(_midnightTimer);
+  const now=new Date();
+  const msUntilMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,2).getTime()-now.getTime();
+  _midnightTimer=setTimeout(()=>{
+    // At midnight: if not all tasks done, reset streak
+    const allTaskIds=['anki','grammar','listen','speak'];
+    const allDone=allTaskIds.every(id=>state.dailyDone[id]);
+    if(!allDone){
+      state.streak=0;
+      save();
+      showToast('💔 Streak zurückgesetzt – vergiss deine Aufgaben nicht!');
+    }
+    // Reset daily tasks for the new day
+    state.dailyDone={};
+    state.lastActiveDay=getToday();
+    save();
+    render();
+    updateStreakWidget();
+    scheduleMidnightReset(); // schedule next midnight
+  },msUntilMidnight);
 }
 function computeProgress(){return Math.round(Object.keys(state.completedWeeks).filter(k=>state.completedWeeks[k]).length/20*100);}
 
@@ -889,6 +949,31 @@ function renderDaily(){
     grid.appendChild(card);
   });
 }
+function updateStreakWidget(){
+  const allTaskIds=['anki','grammar','listen','speak'];
+  const doneTasks=allTaskIds.filter(id=>state.dailyDone[id]).length;
+  const total=allTaskIds.length;
+  const allDone=doneTasks===total;
+  const pct=Math.round(doneTasks/total*100);
+
+  const counter=document.getElementById('streak-counter');
+  const bar=document.getElementById('streak-bar-fill');
+  const barLabel=document.getElementById('streak-tasks-label');
+  const warning=document.getElementById('streak-warning');
+  if(!counter)return;
+
+  counter.classList.toggle('complete',allDone);
+  counter.classList.toggle('at-risk',!allDone&&(state.streak>0||doneTasks>0));
+  if(bar)bar.style.width=pct+'%';
+  if(barLabel)barLabel.textContent=doneTasks+'/'+total;
+
+  // update warning text with i18n if available
+  if(warning&&typeof t==='function'){
+    const warnKey='streak_warning';
+    const msg=(typeof i18n!=='undefined'&&i18n[currentLang]&&i18n[currentLang][warnKey])||'⚠ Complete your tasks!';
+    warning.textContent=msg;
+  }
+}
 function updateStats(){
   const wd=Object.keys(state.completedWeeks).filter(k=>state.completedWeeks[k]).length,pct=computeProgress(),td=Object.keys(state.dailyDone).filter(k=>state.dailyDone[k]).length;
   document.getElementById('stat-weeks').textContent=wd;
@@ -899,9 +984,18 @@ function updateStats(){
   document.getElementById('stat-days-left').textContent=Math.max(0,140-wd*7);
   document.getElementById('arc-pct').textContent=pct;
   document.getElementById('arc-circle').style.strokeDashoffset=2*Math.PI*65*(1-pct/100);
+  updateStreakWidget();
 }
 function toggleWeek(w){state.completedWeeks[w]=!state.completedWeeks[w];showToast(state.completedWeeks[w]?t('toast_week_done').replace('{week}',w):t('toast_week_reset').replace('{week}',w));save();render();}
-function toggleTask(id){state.dailyDone[id]=!state.dailyDone[id];save();renderDaily();updateStats();if(Object.values(state.dailyDone).every(Boolean))showToast(t('toast_all_tasks_done'));}
+function toggleTask(id){
+  state.dailyDone[id]=!state.dailyDone[id];
+  save();renderDaily();updateStats();
+  const allTaskIds=['anki','grammar','listen','speak'];
+  const allDone=allTaskIds.every(i=>state.dailyDone[i]);
+  if(allDone){
+    showToast('🔥 '+t('toast_all_tasks_done')+' Streak gesichert!');
+  }
+}
 function resetAll(){if(!confirm(t('confirm_reset')))return;state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null};save();document.getElementById('notes-area').value='';render();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
@@ -1254,6 +1348,7 @@ async function initApp(){
     bindNavigationControls();
     document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
     document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
+  scheduleMidnightReset();
     document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
   }
 
@@ -1394,6 +1489,8 @@ const i18n={
     pdf_load_error:'Fehler beim Laden.',
     loading:'Lädt...',
     week_label:'Woche',
+    streak_days:'Tage',
+    streak_warning:'⚠ Erledige deine Aufgaben!',
     confirm_logout:'Abmelden?',
     confirm_reset:'Alles zurücksetzen?',
     confirm_delete_pdf:'PDF löschen?',
@@ -1497,6 +1594,8 @@ const i18n={
     pdf_load_error:'Failed to load the PDF.',
     loading:'Loading...',
     week_label:'Week',
+    streak_days:'Days',
+    streak_warning:'⚠ Complete your tasks!',
     confirm_logout:'Log out?',
     confirm_reset:'Reset all progress?',
     confirm_delete_pdf:'Delete PDF?',
@@ -1591,6 +1690,8 @@ function applyLang(){
 
   const sw=document.getElementById('stat-weeks');if(sw&&sw.nextElementSibling)sw.nextElementSibling.textContent=L.lbl_weeks;
   const st=document.getElementById('stat-streak');if(st&&st.nextElementSibling)st.nextElementSibling.textContent=L.lbl_streak;
+  const sul=document.getElementById('streak-unit-label');if(sul)sul.textContent=L.streak_days||'Tage';
+  updateStreakWidget();
   const sv=document.getElementById('stat-vocab');if(sv&&sv.nextElementSibling)sv.nextElementSibling.textContent=L.lbl_vocab;
   const sh=document.getElementById('stat-hours');if(sh&&sh.nextElementSibling)sh.nextElementSibling.textContent=L.lbl_hours;
   const stasks=document.getElementById('stat-tasks');if(stasks&&stasks.nextElementSibling)stasks.nextElementSibling.textContent=L.lbl_today;
