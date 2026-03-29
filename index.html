@@ -228,6 +228,12 @@ h1 span{color:var(--gold)}
 .pdf-empty .empty-icon{font-size:3rem;margin-bottom:12px;opacity:0.4}
 .pdf-empty p{font-size:0.8rem}
 
+
+.docs-sync-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-8px 0 18px;flex-wrap:wrap}
+.docs-account{font-size:0.72rem;color:var(--muted);word-break:break-all}
+.pdf-refresh-btn{padding:7px 12px;border:1px solid var(--border);border-radius:18px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
+.pdf-refresh-btn:hover,.pdf-refresh-btn:active{border-color:var(--gold);color:var(--gold)}
+
 /* PDF VIEWER */
 .pdf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column}
 .pdf-modal.open{display:flex}
@@ -272,11 +278,11 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(5){animation-delay:0.2s}
 
 /* DESKTOP NAV */
-.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;align-items:center}
-.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s}
+.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
 .desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
 .desk-nav-item:hover{color:var(--white)}
-.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
 
 /* RESPONSIVE */
 @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
@@ -410,8 +416,8 @@ h1 span{color:var(--gold)}
 
 <!-- DESKTOP NAV -->
 <nav class="desktop-nav" id="desktop-nav">
-  <div class="desk-nav-item active" data-page="tracker">📊 Tracker</div>
-  <div class="desk-nav-item" data-page="pdf">📁 Dokumente</div>
+  <button type="button" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Open Tracker">📊 Tracker</button>
+  <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents">📁 Dokumente</button>
   <div class="desk-nav-right">
     <button class="profile-icon-btn" id="desk-profile-btn" style="display:none" onclick="openProfileModal()" title="Profile">?</button>
   </div>
@@ -487,6 +493,10 @@ h1 span{color:var(--gold)}
       <span class="storage-label">💾 Local</span>
       <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
       <span class="storage-info" id="storage-info">Chargement...</span>
+    </div>
+    <div class="docs-sync-row">
+      <span class="docs-account" id="docs-account">—</span>
+      <button class="pdf-refresh-btn" type="button" onclick="refreshDocs()" id="docs-refresh-btn">↻ Sync</button>
     </div>
     <div class="pdf-upload-zone" id="upload-zone">
       <input type="file" id="pdf-input" accept=".pdf,application/pdf" multiple>
@@ -747,6 +757,7 @@ function showUserBadge(user){
   document.getElementById('profile-display-name').textContent=initial;
   document.getElementById('profile-display-email').textContent=email;
   document.getElementById('profile-email-input').value=email;
+  updateDocsAccountHint();
 }
 
 // ===== DATA =====
@@ -878,8 +889,21 @@ let pdfs=[],currentFilter='all',editingId=null,pdfDoc=null,currentPage=1,totalPa
 
 function storagePath(id){return currentUser.id+'/'+id+'.pdf';}
 
+function updateDocsAccountHint(){
+  const el=document.getElementById('docs-account');
+  if(!el)return;
+  const email=currentUser?.email||'—';
+  el.textContent=`${t('docs_for_account')} ${email}`;
+}
+
+async function refreshDocs(){
+  await loadPdfs();
+  showToast(t('toast_docs_refreshed'));
+}
+
 async function loadPdfs(){
   if(!currentUser)return;
+  updateDocsAccountHint();
   document.getElementById('pdf-grid').innerHTML='<div class="pdf-empty" style="grid-column:1/-1"><div class="spinner" style="margin:0 auto"></div></div>';
   try{
     const {data,error}=await _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
@@ -892,7 +916,7 @@ async function loadPdfs(){
     showToast(t('pdf_list_error'));
   }
   updateStorageBar();
-  if(pdfs.length)renderPdfGrid();
+  renderPdfGrid();
 }
 
 function updateStorageBar(){
@@ -932,7 +956,9 @@ async function uploadPdf(file){
     }
 
     const idx=pdfs.findIndex(p=>p.id===id);if(idx!==-1)pdfs[idx]={...dbMeta,uploading:false};
-    renderPdfGrid();updateStorageBar();showToast(t('toast_upload_success'));openRenameModal(id);
+    await loadPdfs();
+    showToast(t('toast_upload_success'));
+    openRenameModal(id);
   }catch(e){
     pdfs=pdfs.filter(p=>p.id!==id);
     renderPdfGrid();updateStorageBar();
@@ -944,7 +970,8 @@ function renderPdfGrid(){
   const grid=document.getElementById('pdf-grid');
   const filtered=currentFilter==='all'?pdfs:pdfs.filter(p=>p.category===currentFilter);
   if(filtered.length===0){
-    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat')}</p></div>`;
+    const email=currentUser?.email||'—';
+    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat')}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
     return;
   }
   const cats={
@@ -1034,7 +1061,8 @@ async function deletePdf(id){
     const {error:dbError}=await _supa.from('pdf_files').delete().eq('id',id).eq('user_id',currentUser.id);
     if(dbError)throw dbError;
     pdfs=pdfs.filter(p=>String(p.id)!==String(id));
-    renderPdfGrid();updateStorageBar();showToast(t('toast_deleted'));
+    await loadPdfs();
+    showToast(t('toast_deleted'));
   }catch(e){showToast(t('toast_delete_error')+' '+((e&&e.message)?e.message:''));}
 }
 
@@ -1051,7 +1079,9 @@ async function confirmRename(){
   try{
     const {error}=await _supa.from('pdf_files').update({name:p.name,category:p.category}).eq('id',p.id).eq('user_id',currentUser.id);
     if(error)throw error;
-    renderPdfGrid();closeRenameModal();showToast(t('toast_saved'));
+    await loadPdfs();
+    closeRenameModal();
+    showToast(t('toast_saved'));
   }catch(e){showToast(t('toast_save_error')+' '+((e&&e.message)?e.message:''));}
 }
 
@@ -1067,6 +1097,25 @@ function switchPage(page){
   document.querySelectorAll('.desk-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   if(page==='pdf')loadPdfs();
   window.scrollTo(0,0);
+}
+
+function bindNavigationControls(){
+  document.querySelectorAll('.desk-nav-item[data-page], .nav-item[data-page]').forEach(item=>{
+    if(item.dataset.navBound==='1')return;
+    item.dataset.navBound='1';
+    item.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      switchPage(item.dataset.page);
+    });
+    item.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        switchPage(item.dataset.page);
+      }
+    });
+    item.style.cursor='pointer';
+  });
 }
 
 // ===== INIT =====
@@ -1094,10 +1143,7 @@ async function initApp(){
       renderPdfGrid();
       updateStorageBar();
     }));
-    document.querySelectorAll('.desk-nav-item[data-page], .nav-item[data-page]').forEach(item=>{
-      item.addEventListener('click',()=>switchPage(item.dataset.page));
-      item.style.cursor='pointer';
-    });
+    bindNavigationControls();
     document.getElementById('rename-modal').addEventListener('click',e=>{if(e.target===document.getElementById('rename-modal'))closeRenameModal();});
     document.getElementById('rename-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();if(e.key==='Escape')closeRenameModal();});
     document.getElementById('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleAuth();});
@@ -1106,6 +1152,8 @@ async function initApp(){
   updateTodayLabel();
   render();
   updateStorageBar();
+  updateDocsAccountHint();
+  loadPdfs().catch(()=>{});
 
   const stateLoad=loadState()
     .then(()=>{
@@ -1213,6 +1261,9 @@ const i18n={
     storage_loading:'Lädt...',
     storage_file_singular:'Datei',
     storage_file_plural:'Dateien',
+    docs_for_account:'Dokumente für:',
+    docs_refresh_btn:'↻ Synchronisieren',
+    toast_docs_refreshed:'↻ Dokumente synchronisiert',
     upload_title:'PDF hochladen',
     upload_sub:'Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei',
     cat_all:'Alle',
@@ -1309,6 +1360,9 @@ const i18n={
     storage_loading:'Loading...',
     storage_file_singular:'file',
     storage_file_plural:'files',
+    docs_for_account:'Documents for:',
+    docs_refresh_btn:'↻ Sync',
+    toast_docs_refreshed:'↻ Documents synced',
     upload_title:'Upload PDF',
     upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
     cat_all:'All',
@@ -1483,7 +1537,16 @@ function applyLang(){
       }
     }
   }catch(e){}
+  bindNavigationControls();
 })();
+
+document.addEventListener('DOMContentLoaded',()=>{
+  try{bindNavigationControls();}catch(e){}
+  const deskPdfBtn=document.querySelector('.desk-nav-item[data-page="pdf"]');
+  if(deskPdfBtn){deskPdfBtn.onclick=()=>switchPage('pdf');}
+  const deskTrackerBtn=document.querySelector('.desk-nav-item[data-page="tracker"]');
+  if(deskTrackerBtn){deskTrackerBtn.onclick=()=>switchPage('tracker');}
+});
 </script>
 </body>
 </html>
