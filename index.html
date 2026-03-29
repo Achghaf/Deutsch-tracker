@@ -396,6 +396,58 @@ h1 span{color:var(--gold)}
 .notif-toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.25s;display:block}
 .notif-toggle.on .notif-toggle-thumb{transform:translateX(18px)}
 
+
+/* ===== NEWS PAGE ===== */
+.news-page{padding:24px 16px 32px;max-width:900px;margin:0 auto}
+.news-header{margin-bottom:24px}
+.news-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.08em;color:var(--white);margin-bottom:4px}
+.news-header p{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.news-composer{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:22px}
+.news-compose-grid{display:grid;grid-template-columns:1.6fr 0.8fr;gap:10px;margin-bottom:10px}
+.news-field{display:flex;flex-direction:column;gap:6px}
+.news-field label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+.news-input,.news-select,.news-textarea{width:100%;background:#111;border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.news-input:focus,.news-select:focus,.news-textarea:focus{border-color:var(--gold)}
+.news-textarea{resize:vertical;min-height:96px;line-height:1.6}
+.news-textarea.body{min-height:180px}
+.news-compose-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.news-btn{padding:11px 16px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.news-btn:active{transform:scale(0.97)}
+.news-btn.primary{background:var(--gold);color:var(--black)}
+.news-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.news-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.news-feed-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.1em;color:var(--muted)}
+.news-filter-group{display:flex;gap:8px;flex-wrap:wrap}
+.news-filter-btn{padding:6px 12px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
+.news-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
+.news-list{display:flex;flex-direction:column;gap:14px}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.news-card-head{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.news-meta{display:flex;flex-direction:column;gap:8px;min-width:0}
+.news-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.news-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.news-badge.article{background:rgba(91,126,201,0.18);color:var(--m1)}
+.news-badge.news{background:rgba(204,31,31,0.16);color:#ff7c7c}
+.news-date{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted)}
+.news-title{font-size:1.05rem;font-weight:700;line-height:1.35;color:var(--white);word-break:break-word}
+.news-card-actions{display:flex;gap:8px;flex-shrink:0}
+.news-icon-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:0.72rem;padding:6px 10px;border-radius:6px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.news-icon-btn:hover{border-color:var(--gold);color:var(--gold)}
+.news-icon-btn.danger:hover{border-color:var(--red);color:#ff6b6b}
+.news-card-body{padding:16px}
+.news-summary{font-size:0.84rem;color:var(--gold);line-height:1.6;margin-bottom:10px}
+.news-body{font-size:0.92rem;color:var(--white);line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.news-empty{background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:36px 18px;text-align:center;color:var(--muted)}
+.news-empty .icon{font-size:2.2rem;margin-bottom:10px;opacity:0.6}
+.news-status{font-size:0.72rem;color:var(--muted);margin-top:8px;min-height:16px}
+.news-status.editing{color:var(--gold)}
+@media(max-width:767px){
+  .news-page{padding:20px 14px 32px}
+  .news-compose-grid{grid-template-columns:1fr}
+  .news-card-head{flex-direction:column}
+  .news-card-actions{width:100%;justify-content:flex-end}
+}
+
 /* ===== TRANSLATE PAGE ===== */
 .translate-page{padding:24px 16px 32px;max-width:700px;margin:0 auto}
 .translate-header{margin-bottom:24px}
@@ -529,6 +581,7 @@ h1 span{color:var(--gold)}
 <nav class="desktop-nav" id="desktop-nav">
   <button type="button" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Open Tracker">📊 Tracker</button>
   <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents">📁 Dokumente</button>
+  <button type="button" class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="Open News">📰 News</button>
   <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator">🌐 Übersetzer</button>
   <div class="desk-nav-right">
     <button class="profile-icon-btn" id="desk-profile-btn" style="display:none" onclick="openProfileModal()" title="Profile">?</button>
@@ -694,7 +747,62 @@ h1 span{color:var(--gold)}
 </div>
 
 
+
+<!-- NEWS PAGE -->
+<div class="page" id="page-news">
+  <div class="news-page">
+    <div class="news-header">
+      <h2 id="news-page-title">📰 Artikel & News</h2>
+      <p id="news-page-sub">Eigene Artikel und Updates veröffentlichen</p>
+    </div>
+
+    <div class="news-composer">
+      <div class="news-compose-grid">
+        <div class="news-field">
+          <label id="news-title-label">Titel</label>
+          <input type="text" id="news-title-input" class="news-input" placeholder="Titel deines Beitrags...">
+        </div>
+        <div class="news-field">
+          <label id="news-type-label">Typ</label>
+          <select id="news-type-select" class="news-select">
+            <option value="article">Artikel</option>
+            <option value="news">News</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="news-field" style="margin-bottom:10px">
+        <label id="news-summary-label">Kurzbeschreibung</label>
+        <textarea id="news-summary-input" class="news-textarea" placeholder="Kurze Zusammenfassung..."></textarea>
+      </div>
+
+      <div class="news-field">
+        <label id="news-body-label">Inhalt</label>
+        <textarea id="news-body-input" class="news-textarea body" placeholder="Schreibe hier deinen Artikel oder deine News..."></textarea>
+      </div>
+
+      <div class="news-compose-actions">
+        <button class="news-btn primary" id="news-submit-btn" onclick="submitNewsPost()">Veröffentlichen</button>
+        <button class="news-btn secondary" id="news-cancel-btn" onclick="cancelNewsEdit()" style="display:none">Abbrechen</button>
+      </div>
+      <div class="news-status" id="news-status"></div>
+    </div>
+
+    <div class="news-topbar">
+      <div class="news-feed-title" id="news-feed-title">Veröffentlichte Beiträge</div>
+      <div class="news-filter-group">
+        <button class="news-filter-btn active" data-filter="all" onclick="setNewsFilter('all', this)">Alle</button>
+        <button class="news-filter-btn" data-filter="article" onclick="setNewsFilter('article', this)">Artikel</button>
+        <button class="news-filter-btn" data-filter="news" onclick="setNewsFilter('news', this)">News</button>
+      </div>
+    </div>
+
+    <div class="news-list" id="news-list"></div>
+  </div>
+</div>
+
 <!-- TRANSLATE PAGE -->
+
 <div class="page" id="page-translate">
   <div class="translate-page">
     <div class="translate-header">
@@ -735,6 +843,7 @@ h1 span{color:var(--gold)}
 <nav class="bottom-nav">
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_tracker">Tracker</div></div>
   <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')"><div class="nav-icon">📁</div><div class="nav-label" data-i18n="nav_docs">Dokumente</div></div>
+  <div class="nav-item" data-page="news" onclick="switchPage('news')"><div class="nav-icon">📰</div><div class="nav-label" data-i18n="nav_news">News</div></div>
   <div class="nav-item" data-page="translate" onclick="switchPage('translate')"><div class="nav-icon">🌐</div><div class="nav-label" data-i18n="nav_translate">Übersetzer</div></div>
 </nav>
 
@@ -788,6 +897,7 @@ async function startAuthenticatedApp(user){
     }else{
       updateTodayLabel();
       render();
+      renderNewsPage();
       updateStorageBar();
     }
   }catch(err){
@@ -795,6 +905,7 @@ async function startAuthenticatedApp(user){
     try{
       updateTodayLabel();
       render();
+      renderNewsPage();
       updateStorageBar();
     }catch(_){ }
   }
@@ -976,7 +1087,7 @@ const DATA_I18N={
 function getData(){return DATA_I18N[currentLang]||DATA_I18N.de;}
 
 // ===== TRACKER STATE (Supabase) =====
-let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null};
+let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null,newsPosts:[],reminderNotif:false};
 let saveTimeout=null;
 let activeAppPage='tracker';
 
@@ -987,6 +1098,8 @@ async function loadState(){
     if(data?.data)state={...state,...data.data};
   }catch(e){}
   if(!state.startDate)state.startDate=new Date().toDateString();
+  if(!Array.isArray(state.newsPosts))state.newsPosts=[];
+  if(typeof state.reminderNotif!=='boolean')state.reminderNotif=!!state.reminderNotif;
 }
 function save(){
   if(!currentUser)return;
@@ -1124,7 +1237,7 @@ function toggleTask(id){
     showToast('🔥 '+t('toast_all_tasks_done')+' Streak gesichert!');
   }
 }
-function resetAll(){if(!confirm(t('confirm_reset')))return;state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null};save();document.getElementById('notes-area').value='';render();}
+function resetAll(){if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,newsPosts:Array.isArray(state.newsPosts)?state.newsPosts:[],reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
@@ -1418,6 +1531,7 @@ async function confirmRename(){
 // ===== NAVIGATION =====
 function switchPage(page){
   if(page==='translate') initTranslatePage();
+  if(page==='news') initNewsPage();
   const target=document.getElementById('page-'+page);
   if(!target)return;
   activeAppPage=page;
@@ -1453,7 +1567,7 @@ function bindNavigationControls(){
 async function initApp(){
   try{
     const savedPage=localStorage.getItem('active_app_page');
-    if(savedPage==='tracker'||savedPage==='pdf')activeAppPage=savedPage;
+    if(savedPage==='tracker'||savedPage==='pdf'||savedPage==='translate'||savedPage==='news')activeAppPage=savedPage;
   }catch(e){}
 
   const notesEl=document.getElementById('notes-area');
@@ -1488,6 +1602,7 @@ async function initApp(){
 
   updateTodayLabel();
   render();
+  renderNewsPage();
   updateStorageBar();
   updateDocsAccountHint();
   loadPdfs().catch(()=>{});
@@ -1498,12 +1613,14 @@ async function initApp(){
       notesEl.value=state.notes||'';
       updateTodayLabel();
       render();
+      renderNewsPage();
       updateStorageBar();
     })
     .catch(err=>{
       console.error('State load error:', err);
       updateTodayLabel();
       render();
+      renderNewsPage();
       updateStorageBar();
     });
 
@@ -1567,6 +1684,8 @@ const i18n={
     loader_connecting:'Verbindung...',
     nav_tracker:'Tracker',
     nav_docs:'Dokumente',
+    nav_news:'News',
+
     login_title_1:'Mein Ziel:',
     login_title_2:'Deutsch B1',
     login_sub:'5-Monats-Lernplan · Von Null zu B1',
@@ -1643,6 +1762,34 @@ const i18n={
     translate_speak:'Anhören',
     translate_history_label:'Verlauf',
     translate_history_clear:'Löschen',
+    news_page_title:'📰 Artikel & News',
+    news_page_sub:'Eigene Artikel und Updates veröffentlichen',
+    news_title_label:'Titel',
+    news_type_label:'Typ',
+    news_summary_label:'Kurzbeschreibung',
+    news_body_label:'Inhalt',
+    news_title_placeholder:'Titel deines Beitrags...',
+    news_summary_placeholder:'Kurze Zusammenfassung...',
+    news_body_placeholder:'Schreibe hier deinen Artikel oder deine News...',
+    news_publish_btn:'Veröffentlichen',
+    news_update_btn:'Aktualisieren',
+    news_cancel_btn:'Abbrechen',
+    news_feed_title:'Veröffentlichte Beiträge',
+    news_filter_all:'Alle',
+    news_filter_article:'Artikel',
+    news_filter_news:'News',
+    news_badge_article:'Artikel',
+    news_badge_news:'News',
+    news_edit_btn:'Bearbeiten',
+    news_delete_btn:'Löschen',
+    news_empty:'Noch keine Beiträge. Veröffentliche deinen ersten Artikel oder eine News.',
+    news_delete_confirm:'Diesen Beitrag löschen?',
+    news_toast_published:'📰 Beitrag veröffentlicht',
+    news_toast_updated:'✏️ Beitrag aktualisiert',
+    news_toast_deleted:'🗑 Beitrag gelöscht',
+    news_validation_title:'Bitte gib einen Titel ein',
+    news_validation_body:'Bitte schreibe den Inhalt deines Beitrags',
+    news_editing_hint:'Du bearbeitest gerade einen bestehenden Beitrag.',
     notif_title:'Streak in Gefahr!',
     notif_body_streak:'Du hast noch 2 Stunden, um deinen {streak}-Tage-Streak zu retten!',
     notif_body_no_streak:'Erledige deine täglichen Aufgaben vor Mitternacht!',
@@ -1694,6 +1841,8 @@ const i18n={
     loader_connecting:'Connecting...',
     nav_tracker:'Tracker',
     nav_docs:'Documents',
+    nav_news:'News',
+
     login_title_1:'My Goal:',
     login_title_2:'German B1',
     login_sub:'5-Month Study Plan · From Zero to B1',
@@ -1770,6 +1919,34 @@ const i18n={
     translate_speak:'Listen',
     translate_history_label:'History',
     translate_history_clear:'Clear',
+    news_page_title:'📰 Articles & News',
+    news_page_sub:'Publish your own articles and updates',
+    news_title_label:'Title',
+    news_type_label:'Type',
+    news_summary_label:'Summary',
+    news_body_label:'Content',
+    news_title_placeholder:'Post title...',
+    news_summary_placeholder:'Short summary...',
+    news_body_placeholder:'Write your article or news here...',
+    news_publish_btn:'Publish',
+    news_update_btn:'Update',
+    news_cancel_btn:'Cancel',
+    news_feed_title:'Published posts',
+    news_filter_all:'All',
+    news_filter_article:'Article',
+    news_filter_news:'News',
+    news_badge_article:'Article',
+    news_badge_news:'News',
+    news_edit_btn:'Edit',
+    news_delete_btn:'Delete',
+    news_empty:'No posts yet. Publish your first article or news update.',
+    news_delete_confirm:'Delete this post?',
+    news_toast_published:'📰 Post published',
+    news_toast_updated:'✏️ Post updated',
+    news_toast_deleted:'🗑 Post deleted',
+    news_validation_title:'Please enter a title',
+    news_validation_body:'Please write the content of your post',
+    news_editing_hint:'You are editing an existing post.',
     notif_title:'Streak at risk!',
     notif_body_streak:'You have 2 hours left to protect your {streak}-day streak!',
     notif_body_no_streak:'Complete your daily tasks before midnight!',
@@ -1831,6 +2008,7 @@ function setLang(lang){
   if(_appInited){
     updateTodayLabel();
     render();
+    renderNewsPage();
     renderPdfGrid();
     updateStorageBar();
     if(pdfDoc){renderPdfPage(currentPage);}
@@ -1901,6 +2079,32 @@ function applyLang(){
   const desktopNav=document.querySelectorAll('.desk-nav-item[data-page]');
   if(desktopNav[0])desktopNav[0].textContent='📊 '+L.nav_tracker;
   if(desktopNav[1])desktopNav[1].textContent='📁 '+L.nav_docs;
+  if(desktopNav[2])desktopNav[2].textContent='📰 '+(L.nav_news||'News');
+  if(desktopNav[3])desktopNav[3].textContent='🌐 '+(L.nav_translate||'Translator');
+
+
+  const newsPageTitle=document.getElementById('news-page-title');if(newsPageTitle)newsPageTitle.textContent=L.news_page_title||'📰 Articles & News';
+  const newsPageSub=document.getElementById('news-page-sub');if(newsPageSub)newsPageSub.textContent=L.news_page_sub||'Publish your own articles and updates';
+  const newsTitleLabel=document.getElementById('news-title-label');if(newsTitleLabel)newsTitleLabel.textContent=L.news_title_label||'Title';
+  const newsTypeLabel=document.getElementById('news-type-label');if(newsTypeLabel)newsTypeLabel.textContent=L.news_type_label||'Type';
+  const newsSummaryLabel=document.getElementById('news-summary-label');if(newsSummaryLabel)newsSummaryLabel.textContent=L.news_summary_label||'Summary';
+  const newsBodyLabel=document.getElementById('news-body-label');if(newsBodyLabel)newsBodyLabel.textContent=L.news_body_label||'Content';
+  const newsTitleInput=document.getElementById('news-title-input');if(newsTitleInput)newsTitleInput.placeholder=L.news_title_placeholder||'Post title...';
+  const newsSummaryInput=document.getElementById('news-summary-input');if(newsSummaryInput)newsSummaryInput.placeholder=L.news_summary_placeholder||'Short summary...';
+  const newsBodyInput=document.getElementById('news-body-input');if(newsBodyInput)newsBodyInput.placeholder=L.news_body_placeholder||'Write your article or news here...';
+  const newsFeedTitle=document.getElementById('news-feed-title');if(newsFeedTitle)newsFeedTitle.textContent=L.news_feed_title||'Published posts';
+  const newsCancelBtn=document.getElementById('news-cancel-btn');if(newsCancelBtn)newsCancelBtn.textContent=L.news_cancel_btn||'Cancel';
+  document.querySelectorAll('.news-filter-btn').forEach(btn=>{
+    const f=btn.dataset.filter;
+    const map={all:'news_filter_all',article:'news_filter_article',news:'news_filter_news'};
+    if(map[f]&&L[map[f]])btn.textContent=L[map[f]];
+  });
+  const newsTypeSelect=document.getElementById('news-type-select');
+  if(newsTypeSelect){
+    const opts=newsTypeSelect.options;
+    if(opts[0])opts[0].text=L.news_filter_article||'Article';
+    if(opts[1])opts[1].text=L.news_filter_news||'News';
+  }
 
   const rb=document.querySelector('.reset-btn');if(rb)rb.textContent=L.reset_btn;
   const ct=document.querySelector('.confirm-title');if(ct)ct.textContent=L.confirm_title;
@@ -1919,6 +2123,7 @@ function applyLang(){
   if(renameBtns[1])renameBtns[1].textContent=currentLang==='en'?'Save':'Speichern';
 
   if(document.getElementById('profile-modal').classList.contains('open'))applyProfileLang();
+  updateNewsComposerUi();
   // Translate page i18n
   const tpt=document.getElementById('translate-page-title');if(tpt)tpt.textContent=L.translate_page_title||'🌐 Translator';
   const tps=document.getElementById('translate-page-sub');if(tps)tps.textContent=L.translate_page_sub||'German → Arabic & English';
@@ -1927,7 +2132,9 @@ function applyLang(){
   const thc=document.getElementById('translate-history-clear-btn');if(thc)thc.textContent=L.translate_history_clear||'Clear';
   const tsp=document.getElementById('translate-speak-btn');if(tsp)tsp.querySelector('.btn-label').textContent='🔊 '+(L.translate_speak||'Listen');
   const tinp=document.getElementById('translate-input');if(tinp)tinp.placeholder=L.translate_empty||'Enter a German word or sentence...';
+  const nnav=document.querySelector('.nav-item[data-page="news"] .nav-label');if(nnav)nnav.textContent=L.nav_news||'News';
   const tnav=document.querySelector('.nav-item[data-page="translate"] .nav-label');if(tnav)tnav.textContent=L.nav_translate||'Translator';
+  const ndnav=document.querySelector('.desk-nav-item[data-page="news"]');if(ndnav)ndnav.textContent='📰 '+(L.nav_news||'News');
   const tdnav=document.querySelector('.desk-nav-item[data-page="translate"]');if(tdnav)tdnav.textContent='🌐 '+(L.nav_translate||'Translator');
 }
 
@@ -1968,6 +2175,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   try{bindNavigationControls();}catch(e){}
   const deskPdfBtn=document.querySelector('.desk-nav-item[data-page="pdf"]');
   if(deskPdfBtn){deskPdfBtn.onclick=()=>switchPage('pdf');}
+  const deskNewsBtn=document.querySelector('.desk-nav-item[data-page="news"]');
+  if(deskNewsBtn){deskNewsBtn.onclick=()=>switchPage('news');}
   const deskTrackerBtn=document.querySelector('.desk-nav-item[data-page="tracker"]');
   if(deskTrackerBtn){deskTrackerBtn.onclick=()=>switchPage('tracker');}
 });
@@ -2067,8 +2276,189 @@ function cancelStreakReminder(){
   if(_notifTimer){ clearTimeout(_notifTimer); _notifTimer = null; }
 }
 
+
+// ===== NEWS / POSTS =====
+let newsFilter = 'all';
+let editingNewsId = null;
+
+function ensureNewsState(){
+  if(!Array.isArray(state.newsPosts)) state.newsPosts = [];
+}
+
+function getNewsBadgeLabel(type){
+  return type === 'news' ? t('news_badge_news') : t('news_badge_article');
+}
+
+function formatNewsDate(ts){
+  try{
+    return new Date(ts).toLocaleString(getLocale(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }catch(e){
+    return '';
+  }
+}
+
+function clearNewsForm(){
+  const title=document.getElementById('news-title-input');
+  const type=document.getElementById('news-type-select');
+  const summary=document.getElementById('news-summary-input');
+  const body=document.getElementById('news-body-input');
+  const status=document.getElementById('news-status');
+  if(title)title.value='';
+  if(type)type.value='article';
+  if(summary)summary.value='';
+  if(body)body.value='';
+  if(status){status.textContent='';status.className='news-status';}
+  editingNewsId=null;
+  updateNewsComposerUi();
+}
+
+function updateNewsComposerUi(){
+  const submitBtn=document.getElementById('news-submit-btn');
+  const cancelBtn=document.getElementById('news-cancel-btn');
+  const status=document.getElementById('news-status');
+  if(submitBtn)submitBtn.textContent = editingNewsId ? t('news_update_btn') : t('news_publish_btn');
+  if(cancelBtn)cancelBtn.style.display = editingNewsId ? 'inline-flex' : 'none';
+  if(status && editingNewsId){
+    status.textContent = t('news_editing_hint');
+    status.className = 'news-status editing';
+  }else if(status){
+    status.textContent = '';
+    status.className = 'news-status';
+  }
+}
+
+function renderNewsPage(){
+  ensureNewsState();
+  updateNewsComposerUi();
+  const list=document.getElementById('news-list');
+  if(!list) return;
+  const items = [...state.newsPosts]
+    .sort((a,b)=>(b.updatedAtTs||b.createdAtTs||0)-(a.updatedAtTs||a.createdAtTs||0))
+    .filter(item => newsFilter==='all' ? true : item.type===newsFilter);
+
+  if(items.length===0){
+    list.innerHTML = `<div class="news-empty"><div class="icon">📰</div><p>${t('news_empty')}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(item => `
+    <article class="news-card">
+      <div class="news-card-head">
+        <div class="news-meta">
+          <div class="news-badges">
+            <span class="news-badge ${item.type==='news'?'news':'article'}">${getNewsBadgeLabel(item.type)}</span>
+            <span class="news-date">${formatNewsDate(item.updatedAtTs || item.createdAtTs)}</span>
+          </div>
+          <div class="news-title">${escapeHtml(item.title || '')}</div>
+        </div>
+        <div class="news-card-actions">
+          <button class="news-icon-btn" onclick="editNewsPost('${item.id}')">${t('news_edit_btn')}</button>
+          <button class="news-icon-btn danger" onclick="deleteNewsPost('${item.id}')">${t('news_delete_btn')}</button>
+        </div>
+      </div>
+      <div class="news-card-body">
+        ${item.summary ? `<div class="news-summary">${escapeHtml(item.summary)}</div>` : ''}
+        <div class="news-body">${escapeHtml(item.body || '')}</div>
+      </div>
+    </article>
+  `).join('');
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;')
+    .replace(/\n/g,'<br>');
+}
+
+function setNewsFilter(filter, btn){
+  newsFilter = filter;
+  document.querySelectorAll('.news-filter-btn').forEach(el => el.classList.toggle('active', el.dataset.filter===filter));
+  renderNewsPage();
+}
+
+function submitNewsPost(){
+  ensureNewsState();
+  const title=(document.getElementById('news-title-input')?.value||'').trim();
+  const type=(document.getElementById('news-type-select')?.value||'article').trim();
+  const summary=(document.getElementById('news-summary-input')?.value||'').trim();
+  const body=(document.getElementById('news-body-input')?.value||'').trim();
+
+  if(!title){
+    showToast(t('news_validation_title'));
+    document.getElementById('news-title-input')?.focus();
+    return;
+  }
+  if(!body){
+    showToast(t('news_validation_body'));
+    document.getElementById('news-body-input')?.focus();
+    return;
+  }
+
+  const now = Date.now();
+  if(editingNewsId){
+    const idx = state.newsPosts.findIndex(item => item.id === editingNewsId);
+    if(idx !== -1){
+      state.newsPosts[idx] = {
+        ...state.newsPosts[idx],
+        title, type, summary, body,
+        updatedAtTs: now
+      };
+      showToast(t('news_toast_updated'));
+    }
+  }else{
+    state.newsPosts.unshift({
+      id: 'post_'+now+'_'+Math.random().toString(36).slice(2,8),
+      title, type, summary, body,
+      createdAtTs: now,
+      updatedAtTs: now
+    });
+    showToast(t('news_toast_published'));
+  }
+
+  save();
+  clearNewsForm();
+  renderNewsPage();
+}
+
+function editNewsPost(id){
+  ensureNewsState();
+  const item = state.newsPosts.find(post => post.id === id);
+  if(!item) return;
+  editingNewsId = id;
+  document.getElementById('news-title-input').value = item.title || '';
+  document.getElementById('news-type-select').value = item.type || 'article';
+  document.getElementById('news-summary-input').value = item.summary || '';
+  document.getElementById('news-body-input').value = item.body || '';
+  updateNewsComposerUi();
+  switchPage('news');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cancelNewsEdit(){
+  clearNewsForm();
+}
+
+function deleteNewsPost(id){
+  ensureNewsState();
+  if(!confirm(t('news_delete_confirm'))) return;
+  state.newsPosts = state.newsPosts.filter(item => item.id !== id);
+  if(editingNewsId === id) clearNewsForm();
+  save();
+  renderNewsPage();
+  showToast(t('news_toast_deleted'));
+}
+
+function initNewsPage(){
+  renderNewsPage();
+}
+
 // ===== TRANSLATOR =====
 let translateHistory = [];
+let _translatePageBound = false;
 
 function loadTranslateHistory(){
   try{ translateHistory = JSON.parse(localStorage.getItem('translate_history')||'[]'); }
@@ -2076,6 +2466,20 @@ function loadTranslateHistory(){
   renderTranslateHistory();
 }
 function saveTranslateHistory(){ try{ localStorage.setItem('translate_history', JSON.stringify(translateHistory.slice(0,50))); }catch(e){} }
+
+function escapeHtml(str){
+  return String(str || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function encInline(str){ return encodeURIComponent(String(str || '')); }
+function uniqueHistory(items){
+  const seen = new Set();
+  return items.filter(item => {
+    const key = `${item.de}__${item.ar}__${item.en}`;
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 function clearTranslateInput(){
   document.getElementById('translate-input').value='';
@@ -2117,30 +2521,32 @@ function copyText(text, btnEl){
 
 function renderResultCards(de, ar, en, phonetic){
   const results = document.getElementById('translate-results');
+  const arInline = encInline(ar);
+  const enInline = encInline(en);
   results.innerHTML = `
     <div class="translate-card">
       <div class="translate-card-header">
         <div class="translate-card-lang"><span class="translate-card-flag">🇸🇦</span> ${t('lang_arabic')||'Arabic'}</div>
         <div style="display:flex;gap:6px;align-items:center">
-          <button class="translate-card-copy" onclick="speakResult('${ar.replace(/'/g,"\'")}','ar-SA')">🔊</button>
-          <button class="translate-card-copy" id="copy-ar" onclick="copyText('${ar.replace(/'/g,"\'")}', this)">${t('copy_btn')||'Copy'}</button>
+          <button class="translate-card-copy" onclick="speakResult(decodeURIComponent('${arInline}'),'ar-SA')">🔊</button>
+          <button class="translate-card-copy" id="copy-ar" onclick="copyText(decodeURIComponent('${arInline}'), this)">${t('copy_btn')||'Copy'}</button>
         </div>
       </div>
       <div class="translate-card-body">
-        <div class="translate-result-text" dir="rtl" style="font-size:1.1rem;text-align:right">${ar}</div>
+        <div class="translate-result-text" dir="rtl" style="font-size:1.1rem;text-align:right">${escapeHtml(ar)}</div>
       </div>
     </div>
     <div class="translate-card">
       <div class="translate-card-header">
         <div class="translate-card-lang"><span class="translate-card-flag">🇬🇧</span> ${t('lang_english')||'English'}</div>
         <div style="display:flex;gap:6px;align-items:center">
-          <button class="translate-card-copy" onclick="speakResult('${en.replace(/'/g,"\'")}','en-GB')">🔊</button>
-          <button class="translate-card-copy" id="copy-en" onclick="copyText('${en.replace(/'/g,"\'")}', this)">${t('copy_btn')||'Copy'}</button>
+          <button class="translate-card-copy" onclick="speakResult(decodeURIComponent('${enInline}'),'en-GB')">🔊</button>
+          <button class="translate-card-copy" id="copy-en" onclick="copyText(decodeURIComponent('${enInline}'), this)">${t('copy_btn')||'Copy'}</button>
         </div>
       </div>
       <div class="translate-card-body">
-        <div class="translate-result-text">${en}</div>
-        ${phonetic ? `<div class="translate-phonetic">/${phonetic}/</div>` : ''}
+        <div class="translate-result-text">${escapeHtml(en)}</div>
+        ${phonetic ? `<div class="translate-phonetic">/${escapeHtml(phonetic)}/</div>` : ''}
       </div>
     </div>
   `;
@@ -2148,7 +2554,6 @@ function renderResultCards(de, ar, en, phonetic){
 
 function renderTranslateHistory(){
   const list = document.getElementById('translate-history-list');
-  const section = document.getElementById('translate-history-section');
   if(!list) return;
   if(translateHistory.length === 0){
     list.innerHTML = `<div class="translate-empty"><div class="translate-empty-icon">📖</div><p>${t('translate_no_history')||'Your translations will appear here'}</p></div>`;
@@ -2157,8 +2562,8 @@ function renderTranslateHistory(){
   list.innerHTML = translateHistory.map((h,i) => `
     <div class="translate-history-item" onclick="restoreHistory(${i})">
       <div>
-        <div class="translate-history-de">${h.de}</div>
-        <div class="translate-history-sub">${h.en||''}</div>
+        <div class="translate-history-de">${escapeHtml(h.de)}</div>
+        <div class="translate-history-sub">${escapeHtml(h.en||'')}</div>
       </div>
       <div class="translate-history-arrow">→</div>
     </div>
@@ -2173,6 +2578,22 @@ function restoreHistory(i){
   window.scrollTo(0,0);
 }
 
+async function translateViaMyMemory(text, targetLang){
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}`;
+  const response = await fetch(url, { method:'GET' });
+  if(!response.ok) throw new Error('Translation request failed');
+  const data = await response.json();
+  const translated = data?.responseData?.translatedText;
+  if(!translated) throw new Error('Empty translation result');
+  return translated;
+}
+
+function inferPhonetic(text){
+  const trimmed = text.trim();
+  if(!trimmed || /\s/.test(trimmed)) return '';
+  return '';
+}
+
 async function doTranslate(){
   const input = document.getElementById('translate-input').value.trim();
   if(!input){ showToast(t('translate_empty')||'Enter a German word or sentence'); return; }
@@ -2181,52 +2602,28 @@ async function doTranslate(){
   btn.disabled = true;
   btn.classList.add('loading');
 
-  // Show shimmer loading state
   document.getElementById('translate-results').innerHTML = `
     <div class="translate-card">
-      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇸🇦</span> Arabic</div></div>
+      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇸🇦</span> ${t('lang_arabic')||'Arabic'}</div></div>
       <div class="translate-card-body"><div class="translate-result-text loading-shimmer"></div></div>
     </div>
     <div class="translate-card">
-      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇬🇧</span> English</div></div>
+      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇬🇧</span> ${t('lang_english')||'English'}</div></div>
       <div class="translate-card-body"><div class="translate-result-text loading-shimmer"></div></div>
     </div>
   `;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: `Translate the following German text to both Arabic and English. Return ONLY a JSON object with no extra text, no markdown, no explanation. Format exactly:
-{"ar":"Arabic translation here","en":"English translation here","phonetic":"IPA phonetic of the German word (only if it's a single word, otherwise empty string)"}
+    const [ar, en] = await Promise.all([
+      translateViaMyMemory(input, 'ar'),
+      translateViaMyMemory(input, 'en')
+    ]);
 
-German text: "${input}"`
-        }]
-      })
-    });
+    const phonetic = inferPhonetic(input);
+    renderResultCards(input, ar, en, phonetic);
 
-    const data = await response.json();
-    const raw = data.content?.map(c=>c.text||'').join('').trim();
-
-    let parsed;
-    try {
-      parsed = JSON.parse(raw.replace(/^```json\n?|```$/g,'').trim());
-    } catch(e) {
-      throw new Error('Could not parse translation response');
-    }
-
-    const { ar, en, phonetic } = parsed;
-    if(!ar || !en) throw new Error('Incomplete translation');
-
-    renderResultCards(input, ar, en, phonetic||'');
-
-    // Save to history
-    translateHistory.unshift({ de: input, ar, en, phonetic: phonetic||'', date: new Date().toLocaleDateString() });
+    translateHistory.unshift({ de: input, ar, en, phonetic, date: new Date().toLocaleDateString() });
+    translateHistory = uniqueHistory(translateHistory).slice(0, 50);
     saveTranslateHistory();
     renderTranslateHistory();
 
@@ -2237,19 +2634,24 @@ German text: "${input}"`
           <div class="translate-result-text" style="color:#ff6b6b">⚠ ${t('translate_error')||'Translation failed. Please try again.'}</div>
         </div>
       </div>`;
+    console.error('Translator error:', e);
   }
 
   btn.disabled = false;
   btn.classList.remove('loading');
 }
 
-// Allow Enter key (Ctrl+Enter or Cmd+Enter) to translate
 function initTranslatePage(){
   loadTranslateHistory();
+  if(_translatePageBound) return;
+  _translatePageBound = true;
   const inp = document.getElementById('translate-input');
   if(inp){
     inp.addEventListener('keydown', e => {
-      if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ e.preventDefault(); doTranslate(); }
+      if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+        e.preventDefault();
+        doTranslate();
+      }
     });
   }
 }
