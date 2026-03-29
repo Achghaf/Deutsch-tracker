@@ -85,10 +85,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
-.nav-icon{font-size:1.3rem;line-height:1}
+.nav-icon{font-size:1.3rem;line-height:1;color:var(--muted);transition:color 0.2s}
+.nav-item.active .nav-icon{color:var(--gold)}
 .nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
-.nav-item.active .nav-icon{filter:drop-shadow(0 0 6px rgba(232,184,75,0.5))}
 
 /* HEADER */
 header{padding:36px 16px 24px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
@@ -317,12 +317,15 @@ h1 span{color:var(--gold)}
 @media(max-width:399px){.overall-inner{grid-template-columns:1fr 1fr}.big-stat:nth-child(2){grid-column:span 2;order:-1}.month-sublabel{display:none}.arc-container{width:120px;height:75px}.arc-container svg{width:120px;height:120px;margin-top:-48px}}
 
 /* LANGUAGE SWITCHER */
-.lang-switcher{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0;background:#111;border:1px solid var(--border);border-radius:20px;overflow:hidden;z-index:1101;box-shadow:0 2px 12px rgba(0,0,0,0.5)}
-.lang-btn{padding:5px 12px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px}
-.lang-btn.active{background:var(--gold);color:var(--black);font-weight:600}
-.lang-btn:first-child{border-radius:20px 0 0 20px}
-.lang-btn:last-child{border-radius:0 20px 20px 0}
-@media(min-width:768px){.lang-switcher{bottom:16px;left:auto;right:24px;transform:none}}
+.lang-fab{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 10px);left:16px;z-index:1201;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.lang-fab-btn{width:38px;height:38px;border-radius:50%;background:#111;border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.5);transition:border-color 0.2s}
+.lang-fab-btn:hover{border-color:var(--gold)}
+.lang-fab-menu{display:none;flex-direction:column;gap:4px;background:#111;border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 4px 20px rgba(0,0,0,0.6)}
+.lang-fab-menu.open{display:flex}
+.lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
+.lang-fab-option:hover{background:rgba(255,255,255,0.06);color:var(--white)}
+.lang-fab-option.active{background:rgba(232,184,75,0.15);color:var(--gold);font-weight:600}
+@media(min-width:768px){.lang-fab{bottom:16px}}
 
 /* PROFILE ICON BUTTON */
 .profile-icon-btn{width:32px;height:32px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;font-weight:700;color:var(--black);transition:all 0.2s;flex-shrink:0}
@@ -579,10 +582,10 @@ h1 span{color:var(--gold)}
 
 <!-- DESKTOP NAV -->
 <nav class="desktop-nav" id="desktop-nav">
-  <button type="button" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Open Tracker">📊 Tracker</button>
-  <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents">📁 Dokumente</button>
-  <button type="button" class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="Open News">📰 News</button>
-  <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator">🌐 Übersetzer</button>
+  <button type="button" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Open Tracker"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg> Tracker</button>
+  <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg> Dokumente</button>
+  <button type="button" class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="Open News"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News</button>
+  <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer</button>
   <div class="desk-nav-right">
     <button class="profile-icon-btn" id="desk-profile-btn" style="display:none" onclick="openProfileModal()" title="Profile">?</button>
   </div>
@@ -841,16 +844,32 @@ h1 span{color:var(--gold)}
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')"><div class="nav-icon">📊</div><div class="nav-label" data-i18n="nav_tracker">Tracker</div></div>
-  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')"><div class="nav-icon">📁</div><div class="nav-label" data-i18n="nav_docs">Dokumente</div></div>
-  <div class="nav-item" data-page="news" onclick="switchPage('news')"><div class="nav-icon">📰</div><div class="nav-label" data-i18n="nav_news">News</div></div>
-  <div class="nav-item" data-page="translate" onclick="switchPage('translate')"><div class="nav-icon">🌐</div><div class="nav-label" data-i18n="nav_translate">Übersetzer</div></div>
+  <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></div>
+    <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
+  </div>
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+  </div>
+  <div class="nav-item" data-page="news" onclick="switchPage('news')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
+    <div class="nav-label" data-i18n="nav_news">News</div>
+  </div>
+  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
+  </div>
 </nav>
 
 <!-- LANGUAGE SWITCHER -->
-<div class="lang-switcher" id="lang-switcher">
-  <button class="lang-btn active" onclick="setLang('de')" id="lang-de">🇩🇪 DE</button>
-  <button class="lang-btn" onclick="setLang('en')" id="lang-en">🇬🇧 EN</button>
+<div class="lang-fab" id="lang-fab">
+  <div class="lang-fab-menu" id="lang-fab-menu">
+    <button class="lang-fab-option active" id="lang-de" onclick="setLang('de')">🇩🇪 Deutsch</button>
+    <button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
+    <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
+  </div>
+  <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐</button>
 </div>
 
 <!-- Supabase -->
@@ -2007,18 +2026,191 @@ const i18n={
     toast_only_pdf:'⚠️ Only PDF files are allowed',
     toast_file_too_big:'⚠️ File is too large (max 50 MB)',
     pdf_tap_open:'Tap to open'
+  },
+  ar:{
+    app_title:'هدفي: الألمانية B1',
+    loader_connecting:'جارٍ الاتصال...',
+    nav_tracker:'المتتبع',
+    nav_docs:'الوثائق',
+    nav_news:'الأخبار',
+    login_title_1:'هدفي:',
+    login_title_2:'الألمانية B1',
+    login_sub:'خطة دراسة 5 أشهر · من الصفر إلى B1',
+    tab_login:'تسجيل الدخول',
+    tab_register:'إنشاء حساب',
+    label_email:'البريد الإلكتروني',
+    label_pwd:'كلمة المرور',
+    label_confirm:'تأكيد كلمة المرور',
+    placeholder_email:'example@gmail.com',
+    placeholder_pwd:'••••••••',
+    btn_login:'تسجيل الدخول',
+    btn_register:'إنشاء حساب',
+    logout:'تسجيل الخروج',
+    logout_mob:'↩',
+    reset_btn:'↺ إعادة تعيين',
+    h1_1:'هدفي:',
+    h1_2:'الألمانية B1',
+    h1_sub:'خطة دراسة 5 أشهر · من الصفر إلى B1',
+    badge:'🎯 مستوى B1',
+    progress_label:'التقدم',
+    lbl_weeks:'أسابيع',
+    lbl_streak:'🔥 سلسلة',
+    lbl_vocab:'المفردات',
+    lbl_hours:'ساعات',
+    lbl_today:'اليوم',
+    lbl_days:'أيام متبقية',
+    section_journey:'رحلة 5 أشهر',
+    section_daily:'المهام اليومية',
+    section_notes:'ملاحظات',
+    notes_placeholder:'اكتب أفكارك بالألمانية...',
+    pdf_title:'📁 وثائقي',
+    storage_label:'💾 محلي',
+    storage_loading:'جارٍ التحميل...',
+    storage_file_singular:'ملف',
+    storage_file_plural:'ملفات',
+    docs_for_account:'الوثائق لـ:',
+    docs_refresh_btn:'↻ مزامنة',
+    toast_docs_refreshed:'↻ تمت المزامنة',
+    pdf_search_placeholder:'البحث في الوثائق...',
+    pdf_empty_search:'لا توجد وثائق مطابقة.',
+    pdf_vertical_hint:'تمرير عمودي',
+    upload_title:'رفع PDF',
+    upload_sub:'مخزن محلياً · متاح بدون إنترنت · بحد أقصى 200 ميجا',
+    cat_all:'الكل',
+    cat_grammar:'📘 قواعد',
+    cat_vocab:'📚 مفردات',
+    cat_exercise:'✏️ تمارين',
+    cat_exam:'📝 امتحان',
+    cat_other:'📄 أخرى',
+    pdf_empty_all:'لا توجد وثائق بعد. ارفع أول ملف PDF!',
+    pdf_empty_cat:'لا توجد وثائق في هذه الفئة.',
+    pdf_view_btn:'👁 فتح',
+    pdf_edit_btn:'✏️ تعديل',
+    pdf_delete_btn:'🗑 حذف',
+    pdf_page:'صفحة',
+    pdf_missing:'الملف غير موجود.',
+    pdf_open_external:'📥 فتح PDF',
+    pdf_load_error:'فشل تحميل الملف.',
+    loading:'جارٍ التحميل...',
+    week_label:'أسبوع',
+    streak_days:'أيام',
+    streak_warning:'⚠ أكمل مهامك!',
+    nav_translate:'المترجم',
+    lang_arabic:'العربية',
+    lang_english:'الإنجليزية',
+    copy_btn:'نسخ',
+    copy_done:'تم النسخ!',
+    translate_empty:'أدخل كلمة أو جملة بالألمانية',
+    translate_error:'فشل الترجمة. حاول مرة أخرى.',
+    translate_no_history:'ستظهر ترجماتك هنا',
+    translate_page_title:'🌐 المترجم',
+    translate_page_sub:'ألماني → عربي وإنجليزي',
+    translate_btn_label:'ترجمة',
+    translate_speak:'استماع',
+    translate_history_label:'السجل',
+    translate_history_clear:'مسح',
+    news_page_title:'📰 مقالات وأخبار',
+    news_page_sub:'انشر مقالاتك وتحديثاتك',
+    news_title_label:'العنوان',
+    news_type_label:'النوع',
+    news_summary_label:'ملخص',
+    news_body_label:'المحتوى',
+    news_title_placeholder:'عنوان المنشور...',
+    news_summary_placeholder:'ملخص قصير...',
+    news_body_placeholder:'اكتب مقالتك أو خبرك هنا...',
+    news_publish_btn:'نشر',
+    news_update_btn:'تحديث',
+    news_cancel_btn:'إلغاء',
+    news_feed_title:'المنشورات',
+    news_filter_all:'الكل',
+    news_filter_article:'مقال',
+    news_filter_news:'خبر',
+    news_badge_article:'مقال',
+    news_badge_news:'خبر',
+    news_edit_btn:'تعديل',
+    news_delete_btn:'حذف',
+    news_empty:'لا توجد منشورات بعد. انشر أول مقالة أو خبر.',
+    news_delete_confirm:'حذف هذا المنشور؟',
+    news_toast_published:'📰 تم النشر',
+    news_toast_updated:'✏️ تم التحديث',
+    news_toast_deleted:'🗑 تم الحذف',
+    news_validation_title:'الرجاء إدخال عنوان',
+    news_validation_body:'الرجاء كتابة محتوى المنشور',
+    news_editing_hint:'أنت تعدل منشوراً موجوداً.',
+    notif_title:'سلسلتك في خطر!',
+    notif_body_streak:'لديك ساعتان لحماية سلسلة {streak} يوم!',
+    notif_body_no_streak:'أكمل مهامك اليومية قبل منتصف الليل!',
+    notif_unsupported:'⚠ الإشعارات غير مدعومة في هذا المتصفح',
+    notif_blocked:'🚫 الإشعارات محظورة — فعّلها من إعدادات المتصفح',
+    notif_active:'✓ ستتلقى تذكيراً عند الساعة 22:00 إذا لم تكتمل المهام',
+    lbl_reminder:'🔔 تذكير السلسلة',
+    lbl_reminder_sub:'تذكيري قبل منتصف الليل بساعتين إذا لم تكتمل المهام',
+    confirm_logout:'تسجيل الخروج؟',
+    confirm_reset:'إعادة تعيين كل التقدم؟',
+    confirm_delete_pdf:'حذف PDF؟',
+    lbl_new_pwd:'كلمة مرور جديدة',
+    lbl_confirm_pwd:'تأكيد كلمة المرور',
+    profile_save:'💾 حفظ التغييرات',
+    profile_logout:'↩ تسجيل الخروج',
+    profile_no_change:'أدخل كلمة مرور جديدة للتحديث.',
+    profile_pwd_mismatch:'كلمتا المرور غير متطابقتين.',
+    profile_pwd_short:'كلمة المرور قصيرة جداً (6 أحرف على الأقل).',
+    profile_saved:'✓ تم تحديث كلمة المرور!',
+    confirm_title:'تأكيد بريدك الإلكتروني',
+    confirm_text:'أرسلنا لك بريداً للتأكيد. انقر على الرابط لتفعيل حسابك.',
+    confirm_btn:'العودة إلى تسجيل الدخول',
+    confirm_success:'✓ تم تأكيد بريدك! يمكنك تسجيل الدخول الآن.',
+    error_fill_all:'الرجاء ملء جميع الحقول.',
+    error_pwd_match:'كلمتا المرور غير متطابقتين.',
+    error_pwd_short:'كلمة المرور قصيرة جداً (6 أحرف على الأقل).',
+    error_too_many:'تم إرسال عدد كبير من رسائل التأكيد. حاول لاحقاً.',
+    error_email_provider_restricted:'تسليم البريد الافتراضي محدود. استخدم SMTP مخصصاً.',
+    error_invalid_login:'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+    error_user_exists:'هذا البريد الإلكتروني مستخدم بالفعل.',
+    error_not_confirmed:'تحقق من بريدك الإلكتروني لتأكيد حسابك.',
+    toast_week_done:'✓ الأسبوع {week} مكتمل!',
+    toast_week_reset:'تم إعادة تعيين الأسبوع {week}',
+    toast_all_tasks_done:'🔥 جميع المهام مكتملة اليوم!',
+    toast_deleted:'🗑 تم الحذف',
+    toast_delete_error:'⚠️ فشل الحذف',
+    toast_saved:'✓ تم الحفظ',
+    toast_save_error:'⚠️ فشل الحفظ',
+    toast_upload_success:'✓ تم حفظ PDF!',
+    toast_upload_error_prefix:'⚠️ فشل الرفع:',
+    pdf_list_error:'تعذر تحميل الوثائق.',
+    generic_error:'خطأ غير معروف',
+    toast_only_pdf:'⚠️ ملفات PDF فقط مسموحة',
+    toast_file_too_big:'⚠️ الملف كبير جداً (حد أقصى 50 ميجا)',
+    pdf_tap_open:'اضغط للفتح'
   }
 };
 
 function t(key){return(i18n[currentLang]||i18n.de)[key]||key;}
 
+function toggleLangMenu(){
+  const menu = document.getElementById('lang-fab-menu');
+  if(menu) menu.classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const fab = document.getElementById('lang-fab');
+  if(fab && !fab.contains(e.target)){
+    const menu = document.getElementById('lang-fab-menu');
+    if(menu) menu.classList.remove('open');
+  }
+});
+
 function setLang(lang){
-  currentLang=lang==='en'?'en':'de';
-  localStorage.setItem('app_lang',currentLang);
-  document.documentElement.lang=currentLang;
-  document.title=t('app_title');
-  document.getElementById('lang-de').classList.toggle('active',currentLang==='de');
-  document.getElementById('lang-en').classList.toggle('active',currentLang==='en');
+  currentLang = ['de','en','ar'].includes(lang) ? lang : 'de';
+  localStorage.setItem('app_lang', currentLang);
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.title = t('app_title');
+  ['de','en','ar'].forEach(l => {
+    const el = document.getElementById('lang-'+l);
+    if(el) el.classList.toggle('active', currentLang === l);
+  });
+  const menu = document.getElementById('lang-fab-menu');
+  if(menu) menu.classList.remove('open');
   applyLang();
   if(_appInited){
     updateTodayLabel();
@@ -2569,12 +2761,13 @@ function renderTranslateHistory(){
     return;
   }
   list.innerHTML = translateHistory.map((h,i) => `
-    <div class="translate-history-item" onclick="restoreHistory(${i})">
-      <div>
-        <div class="translate-history-de">${escapeHtml(h.de)}</div>
-        <div class="translate-history-sub">${escapeHtml(h.en||'')}</div>
+    <div class="translate-history-item" onclick="restoreHistory(${i})" style="flex-direction:column;align-items:stretch;gap:6px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="translate-history-de" style="font-size:0.9rem;font-weight:600">🇩🇪 ${escapeHtml(h.de)}</div>
+        <div style="font-size:0.65rem;color:var(--muted);white-space:nowrap">${h.date||''}</div>
       </div>
-      <div class="translate-history-arrow">→</div>
+      ${h.en ? `<div style="font-size:0.78rem;color:#aaa">🇬🇧 ${escapeHtml(h.en)}</div>` : ''}
+      ${h.ar ? `<div style="font-size:0.78rem;color:#aaa;direction:rtl;text-align:right">🇸🇦 ${escapeHtml(h.ar)}</div>` : ''}
     </div>
   `).join('');
 }
