@@ -967,6 +967,18 @@ h1 span{color:var(--gold)}
         <div class="admin-empty">Loading users...</div>
       </div>
     </div>
+
+    <!-- ALL DOCUMENTS -->
+    <div class="admin-section-title" style="margin-top:28px">📄 All User Documents</div>
+    <div class="admin-users-wrap">
+      <div class="admin-users-toolbar">
+        <input class="admin-search" id="admin-doc-search" placeholder="🔍 Search by filename..." oninput="adminFilterDocs()">
+        <button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ Refresh</button>
+      </div>
+      <div id="admin-docs-list">
+        <div class="admin-empty">Loading documents...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1442,7 +1454,7 @@ function toggleTask(id){
     showToast('🔥 '+t('toast_all_tasks_done')+' Streak gesichert!');
   }
 }
-function resetAll(){if(!isAdmin()){showToast('⛔ Admin only');return;}if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,newsPosts:Array.isArray(state.newsPosts)?state.newsPosts:[],reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
+function resetAll(){if(!isAdmin()){showToast('⛔ Admin only');return;}if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
@@ -1470,7 +1482,10 @@ async function loadPdfs(){
   updateDocsAccountHint();
   document.getElementById('pdf-grid').innerHTML='<div class="pdf-empty" style="grid-column:1/-1"><div class="spinner" style="margin:0 auto"></div></div>';
   try{
-    const {data,error}=await _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
+    const query = isAdmin()
+      ? _supa.from('pdf_files').select('*').order('added_at_ts',{ascending:false})
+      : _supa.from('pdf_files').select('*').eq('user_id',currentUser.id).order('added_at_ts',{ascending:false});
+    const {data,error}=await query;
     if(error)throw error;
     pdfs=data||[];
   }catch(e){
@@ -1565,9 +1580,9 @@ function renderPdfGrid(){
       <div class="pdf-card-body">
         <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||t('cat_other')}</div>
         <div class="pdf-card-name" title="${p.name}">${p.name}</div>
-        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||''}</span></div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||''}</span>${isAdmin()&&p.user_id!==currentUser?.id?`<span style="color:var(--gold);font-size:0.58rem">👤 other user</span>`:''}</div>
       </div>
-      ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">${t('pdf_view_btn')}</button><button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">${t('pdf_edit_btn')}</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">${t('pdf_delete_btn')}</button></div>`}
+      ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">${t('pdf_view_btn')}</button>${isAdmin()||p.user_id===currentUser?.id?`<button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">${t('pdf_edit_btn')}</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">${t('pdf_delete_btn')}</button>`:``}</div>`}
     </div>`).join('');
   if(shouldRenderDocThumbnails()){
     filtered.filter(p=>!p.uploading).forEach(p=>generateThumbnail(p));
@@ -2676,10 +2691,7 @@ function cancelStreakReminder(){
 // ===== NEWS / POSTS =====
 let newsFilter = 'all';
 let editingNewsId = null;
-
-function ensureNewsState(){
-  if(!Array.isArray(state.newsPosts)) state.newsPosts = [];
-}
+let _newsPosts = []; // Supabase-backed global news posts
 
 function getNewsBadgeLabel(type){
   return type === 'news' ? t('news_badge_news') : t('news_badge_article');
@@ -2687,10 +2699,9 @@ function getNewsBadgeLabel(type){
 
 function formatNewsDate(ts){
   try{
-    return new Date(ts).toLocaleString(getLocale(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  }catch(e){
-    return '';
-  }
+    const d = typeof ts === 'string' ? new Date(ts) : new Date(ts);
+    return d.toLocaleString(getLocale(), { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }catch(e){ return ''; }
 }
 
 function clearNewsForm(){
@@ -2709,9 +2720,12 @@ function clearNewsForm(){
 }
 
 function updateNewsComposerUi(){
+  const composer=document.querySelector('.news-composer');
   const submitBtn=document.getElementById('news-submit-btn');
   const cancelBtn=document.getElementById('news-cancel-btn');
   const status=document.getElementById('news-status');
+  // Only admins see the composer
+  if(composer) composer.style.display = isAdmin() ? '' : 'none';
   if(submitBtn)submitBtn.textContent = editingNewsId ? t('news_update_btn') : t('news_publish_btn');
   if(cancelBtn)cancelBtn.style.display = editingNewsId ? 'inline-flex' : 'none';
   if(status && editingNewsId){
@@ -2723,14 +2737,27 @@ function updateNewsComposerUi(){
   }
 }
 
+async function loadNewsPosts(){
+  const list=document.getElementById('news-list');
+  if(list) list.innerHTML = '<div class="news-empty"><div class="spinner" style="margin:0 auto;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite"></div></div>';
+  try{
+    const {data,error} = await _supa.from('news_posts').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    _newsPosts = data || [];
+  }catch(e){
+    _newsPosts = [];
+    if(list) list.innerHTML = `<div class="news-empty"><div class="icon">⚠️</div><p>Could not load posts: ${e.message||'error'}</p></div>`;
+    return;
+  }
+  renderNewsPage();
+}
+
 function renderNewsPage(){
-  ensureNewsState();
   updateNewsComposerUi();
   if(typeof applyRoleUI==='function') setTimeout(applyRoleUI,0);
   const list=document.getElementById('news-list');
   if(!list) return;
-  const items = [...state.newsPosts]
-    .sort((a,b)=>(b.updatedAtTs||b.createdAtTs||0)-(a.updatedAtTs||a.createdAtTs||0))
+  const items = [..._newsPosts]
     .filter(item => newsFilter==='all' ? true : item.type===newsFilter);
 
   if(items.length===0){
@@ -2744,14 +2771,15 @@ function renderNewsPage(){
         <div class="news-meta">
           <div class="news-badges">
             <span class="news-badge ${item.type==='news'?'news':'article'}">${getNewsBadgeLabel(item.type)}</span>
-            <span class="news-date">${formatNewsDate(item.updatedAtTs || item.createdAtTs)}</span>
+            <span class="news-date">${formatNewsDate(item.updated_at || item.created_at)}</span>
           </div>
           <div class="news-title">${escapeHtml(item.title || '')}</div>
+          ${item.author_email ? `<div class="news-date" style="margin-top:4px;color:var(--muted)">by ${escapeHtml(item.author_email)}</div>` : ''}
         </div>
-        <div class="news-card-actions">
+        ${isAdmin() ? `<div class="news-card-actions">
           <button class="news-icon-btn" onclick="editNewsPost('${item.id}')">${t('news_edit_btn')}</button>
           <button class="news-icon-btn danger" onclick="deleteNewsPost('${item.id}')">${t('news_delete_btn')}</button>
-        </div>
+        </div>` : ''}
       </div>
       <div class="news-card-body">
         ${item.summary ? `<div class="news-summary">${escapeHtml(item.summary)}</div>` : ''}
@@ -2777,55 +2805,49 @@ function setNewsFilter(filter, btn){
   renderNewsPage();
 }
 
-function submitNewsPost(){
+async function submitNewsPost(){
   if(!isAdmin()){showToast('⛔ Admin only');return;}
-  ensureNewsState();
   const title=(document.getElementById('news-title-input')?.value||'').trim();
   const type=(document.getElementById('news-type-select')?.value||'article').trim();
   const summary=(document.getElementById('news-summary-input')?.value||'').trim();
   const body=(document.getElementById('news-body-input')?.value||'').trim();
 
-  if(!title){
-    showToast(t('news_validation_title'));
-    document.getElementById('news-title-input')?.focus();
-    return;
-  }
-  if(!body){
-    showToast(t('news_validation_body'));
-    document.getElementById('news-body-input')?.focus();
-    return;
-  }
+  if(!title){ showToast(t('news_validation_title')); document.getElementById('news-title-input')?.focus(); return; }
+  if(!body){ showToast(t('news_validation_body')); document.getElementById('news-body-input')?.focus(); return; }
 
-  const now = Date.now();
-  if(editingNewsId){
-    const idx = state.newsPosts.findIndex(item => item.id === editingNewsId);
-    if(idx !== -1){
-      state.newsPosts[idx] = {
-        ...state.newsPosts[idx],
-        title, type, summary, body,
-        updatedAtTs: now
-      };
+  const btn=document.getElementById('news-submit-btn');
+  if(btn){btn.disabled=true;btn.textContent='...';}
+
+  try{
+    if(editingNewsId){
+      const {error}=await _supa.from('news_posts').update({
+        title, type, summary, body, updated_at: new Date().toISOString()
+      }).eq('id', editingNewsId);
+      if(error) throw error;
       showToast(t('news_toast_updated'));
+    }else{
+      const id='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+      const {error}=await _supa.from('news_posts').insert({
+        id, title, type, summary, body,
+        author_email: currentUser?.email || '',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+      if(error) throw error;
+      showToast(t('news_toast_published'));
     }
-  }else{
-    state.newsPosts.unshift({
-      id: 'post_'+now+'_'+Math.random().toString(36).slice(2,8),
-      title, type, summary, body,
-      createdAtTs: now,
-      updatedAtTs: now
-    });
-    showToast(t('news_toast_published'));
+    clearNewsForm();
+    await loadNewsPosts();
+  }catch(e){
+    showToast('Error: '+(e.message||'Could not save post'));
+  }finally{
+    if(btn) btn.disabled=false;
   }
-
-  save();
-  clearNewsForm();
-  renderNewsPage();
 }
 
 function editNewsPost(id){
   if(!isAdmin()){showToast('⛔ Admin only');return;}
-  ensureNewsState();
-  const item = state.newsPosts.find(post => post.id === id);
+  const item = _newsPosts.find(post => post.id === id);
   if(!item) return;
   editingNewsId = id;
   document.getElementById('news-title-input').value = item.title || '';
@@ -2841,19 +2863,22 @@ function cancelNewsEdit(){
   clearNewsForm();
 }
 
-function deleteNewsPost(id){
+async function deleteNewsPost(id){
   if(!isAdmin()){showToast('⛔ Admin only');return;}
-  ensureNewsState();
   if(!confirm(t('news_delete_confirm'))) return;
-  state.newsPosts = state.newsPosts.filter(item => item.id !== id);
-  if(editingNewsId === id) clearNewsForm();
-  save();
-  renderNewsPage();
-  showToast(t('news_toast_deleted'));
+  try{
+    const {error}=await _supa.from('news_posts').delete().eq('id',id);
+    if(error) throw error;
+    if(editingNewsId===id) clearNewsForm();
+    showToast(t('news_toast_deleted'));
+    await loadNewsPosts();
+  }catch(e){
+    showToast('Error: '+(e.message||'Could not delete'));
+  }
 }
 
 function initNewsPage(){
-  renderNewsPage();
+  loadNewsPosts();
 }
 
 // ===== TRANSLATOR =====
@@ -3131,6 +3156,59 @@ async function loadAdminPage(){
     document.getElementById('admin-users-list-full').innerHTML =
       `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||e}<br><small>Make sure the Supabase SQL functions are created.</small></div>`;
   }
+  adminLoadDocs();
+}
+
+let _adminAllDocs = [];
+let _adminDocSearch = '';
+
+async function adminLoadDocs(){
+  if(!isAdmin()) return;
+  const el = document.getElementById('admin-docs-list');
+  if(el) el.innerHTML = '<div class="admin-empty">Loading...</div>';
+  try{
+    const {data,error} = await _supa.from('pdf_files').select('*').order('added_at_ts',{ascending:false});
+    if(error) throw error;
+    _adminAllDocs = data || [];
+    renderAdminDocs();
+  }catch(e){
+    if(el) el.innerHTML = `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||'Could not load documents'}</div>`;
+  }
+}
+
+function adminFilterDocs(){
+  _adminDocSearch = (document.getElementById('admin-doc-search')?.value||'').trim().toLowerCase();
+  renderAdminDocs();
+}
+
+async function adminDeleteDoc(id, storagePath){
+  if(!confirm('Delete this document?')) return;
+  try{
+    await _supa.storage.from('pdfs').remove([storagePath]);
+    await _supa.from('pdf_files').delete().eq('id',id);
+    showToast('Document deleted');
+    adminLoadDocs();
+  }catch(e){
+    showToast('Error: '+(e.message||'Could not delete'));
+  }
+}
+
+function renderAdminDocs(){
+  const el = document.getElementById('admin-docs-list');
+  if(!el) return;
+  const fmt=b=>b>1024*1024?(b/1024/1024).toFixed(1)+' MB':Math.round(b/1024)+' KB';
+  let docs = _adminAllDocs;
+  if(_adminDocSearch) docs = docs.filter(d=>(d.name||'').toLowerCase().includes(_adminDocSearch));
+  if(!docs.length){ el.innerHTML='<div class="admin-empty">No documents found.</div>'; return; }
+  el.innerHTML = docs.map(d=>`
+    <div class="admin-user-row" style="flex-wrap:wrap;gap:8px">
+      <div style="font-size:1.4rem;flex-shrink:0">📄</div>
+      <div class="admin-user-info" style="min-width:0;flex:1">
+        <div class="admin-user-email" style="font-weight:600">${escapeHtml(d.name||'Untitled')}</div>
+        <div class="admin-user-date">${d.user_id||'?'} · ${fmt(d.size||0)} · ${d.added_at||''}</div>
+      </div>
+      <button onclick="adminDeleteDoc('${d.id}','${d.storage_path}')" style="padding:5px 12px;background:transparent;border:1px solid var(--red);border-radius:5px;color:#ff6b6b;font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;flex-shrink:0">🗑 Delete</button>
+    </div>`).join('');
 }
 
 function renderAdminStats(){
