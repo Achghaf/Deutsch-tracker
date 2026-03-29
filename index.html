@@ -2587,20 +2587,30 @@ function restoreHistory(i){
   window.scrollTo(0,0);
 }
 
-async function translateViaMyMemory(text, targetLang){
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}`;
-  const response = await fetch(url, { method:'GET' });
-  if(!response.ok) throw new Error('Translation request failed');
-  const data = await response.json();
-  const translated = data?.responseData?.translatedText;
-  if(!translated) throw new Error('Empty translation result');
-  return translated;
-}
+async function translateViaClaudeAPI(text){
+  const prompt = `You are a translation assistant. Translate the following German text into both Arabic and English.
+Respond ONLY with a valid JSON object in this exact format, no extra text, no markdown:
+{"ar":"<arabic translation>","en":"<english translation>","phonetic":"<english phonetic if single word, else empty string>"}
 
-function inferPhonetic(text){
-  const trimmed = text.trim();
-  if(!trimmed || /\s/.test(trimmed)) return '';
-  return '';
+German text: ${text}`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if(!response.ok) throw new Error('Translation request failed: ' + response.status);
+  const data = await response.json();
+  const raw = (data?.content || []).map(b => b.type === 'text' ? b.text : '').join('').trim();
+  const clean = raw.replace(/```json|```/g, '').trim();
+  const parsed = JSON.parse(clean);
+  if(!parsed.ar || !parsed.en) throw new Error('Incomplete translation result');
+  return parsed;
 }
 
 async function doTranslate(){
@@ -2623,15 +2633,12 @@ async function doTranslate(){
   `;
 
   try {
-    const [ar, en] = await Promise.all([
-      translateViaMyMemory(input, 'ar'),
-      translateViaMyMemory(input, 'en')
-    ]);
+    const result = await translateViaClaudeAPI(input);
+    const { ar, en, phonetic } = result;
 
-    const phonetic = inferPhonetic(input);
-    renderResultCards(input, ar, en, phonetic);
+    renderResultCards(input, ar, en, phonetic || '');
 
-    translateHistory.unshift({ de: input, ar, en, phonetic, date: new Date().toLocaleDateString() });
+    translateHistory.unshift({ de: input, ar, en, phonetic: phonetic || '', date: new Date().toLocaleDateString() });
     translateHistory = uniqueHistory(translateHistory).slice(0, 50);
     saveTranslateHistory();
     renderTranslateHistory();
