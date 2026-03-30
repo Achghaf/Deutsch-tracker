@@ -4011,73 +4011,226 @@ async function adminChangeRole(email, newRole, selectEl){
   </div>
 </div>
 <script>
-// ===== AI CONFIG — DeepSeek R1 via OpenRouter (free tier) =====
-const _AI_KEY   = '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';
-const _AI_MODEL = 'deepseek/deepseek-r1:free';
-const _AI_URL   = 'https://openrouter.ai/api/v1/chat/completions';
+// ===== HAND-CRAFTED QUESTION BANK =====
+// 180 questions: A1/A2/B1 × grammar/vocabulary/reading, 20 each
 
-async function callAI(systemPrompt, userPrompt) {
-  const res = await fetch(_AI_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + _AI_KEY,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': location.href,
-      'X-Title': 'Deutsch B1'
-    },
-    body: JSON.stringify({
-      model: _AI_MODEL,
-      max_tokens: 2000,
-      temperature: 0.3,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user',   content: userPrompt   }
-      ]
-    })
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error('AI error ' + res.status + ': ' + err);
+const QUESTION_BANK = {
+  A1: {
+    grammar: [
+      {q:"Welcher Artikel passt? ___ Mann ist nett.", options:["Der","Die","Das","Den"], correct:0, explanation:"'Mann' ist maskulin → der Mann."},
+      {q:"Ergänze: Ich ___ aus Deutschland.", options:["bin","bist","ist","sind"], correct:0, explanation:"Ich + sein → ich bin."},
+      {q:"Was ist die richtige Form? Sie (haben) ___ ein Buch.", options:["hat","haben","habe","hast"], correct:0, explanation:"Sie (3. Person Singular) → hat."},
+      {q:"Welcher Artikel? ___ Kind spielt.", options:["Das","Der","Die","Den"], correct:0, explanation:"'Kind' ist neutral → das Kind."},
+      {q:"Ergänze: Du ___ sehr schön.", options:["bist","bin","ist","sind"], correct:0, explanation:"Du + sein → du bist."},
+      {q:"Wähle die richtige Form: Er ___ Hunger.", options:["hat","haben","habe","hast"], correct:0, explanation:"Er (3. Person Singular) → hat."},
+      {q:"Welcher Artikel? ___ Frau liest.", options:["Die","Der","Das","Den"], correct:0, explanation:"'Frau' ist feminin → die Frau."},
+      {q:"Ergänze: Wir ___ Freunde.", options:["sind","bin","bist","ist"], correct:0, explanation:"Wir + sein → wir sind."},
+      {q:"Was ist Plural von 'das Auto'?", options:["die Autos","die Auto","der Autos","das Autos"], correct:0, explanation:"Auto → Autos (Plural mit -s, Artikel immer die)."},
+      {q:"Welche Verneinung ist korrekt? Ich habe ___ Hund.", options:["keinen","kein","keine","nicht"], correct:0, explanation:"'Hund' ist maskulin im Akkusativ → keinen Hund."},
+      {q:"Richtige Wortstellung? ___ du Deutsch?", options:["Sprichst","Spreche","Spricht","Sprechen"], correct:0, explanation:"Frage mit du → Sprichst du?"},
+      {q:"Ergänze: Das Buch ist ___.", options:["interessant","interessante","interessanter","interessantes"], correct:0, explanation:"Nach 'sein' wird das Adjektiv nicht gebeugt."},
+      {q:"Welcher Artikel im Akkusativ? Ich sehe ___ Mann.", options:["den","der","die","das"], correct:0, explanation:"Maskulin im Akkusativ → den."},
+      {q:"Was ist korrekt? Wir ___ jeden Tag.", options:["lernen","lerne","lernst","lernt"], correct:0, explanation:"Wir + lernen → wir lernen."},
+      {q:"Wie sagt man Verneinung? Er kommt ___.", options:["nicht","kein","keine","keinen"], correct:0, explanation:"Bei Verben verwendet man 'nicht'."},
+      {q:"Welches Possessivpronomen? ___ Name ist Max. (ich)", options:["Mein","Dein","Sein","Ihr"], correct:0, explanation:"Ich → mein (maskulin)."},
+      {q:"Korrekte Form: Die Kinder ___ laut.", options:["sind","ist","bin","bist"], correct:0, explanation:"Die Kinder (Plural) + sein → sind."},
+      {q:"Welcher Artikel? ___ Apfel ist rot.", options:["Der","Die","Das","Den"], correct:0, explanation:"'Apfel' ist maskulin → der Apfel."},
+      {q:"Ergänze: Ich ___ gern Musik.", options:["höre","hört","hören","hörst"], correct:0, explanation:"Ich + hören → ich höre."},
+      {q:"Plural von 'die Frau'?", options:["die Frauen","die Fraus","die Frau","der Frauen"], correct:0, explanation:"Frau → Frauen (Plural mit -en)."}
+    ],
+    vocabulary: [
+      {q:"Was bedeutet 'Hund'?", options:["dog","cat","bird","fish"], correct:0, explanation:"Hund = dog auf Englisch."},
+      {q:"Wie sagt man 'hello' auf Deutsch?", options:["Hallo","Tschüss","Danke","Bitte"], correct:0, explanation:"'Hallo' ist die deutsche Begrüßung."},
+      {q:"Was ist 'Brot' auf Englisch?", options:["bread","butter","milk","water"], correct:0, explanation:"Brot = bread."},
+      {q:"Welche Zahl ist 'fünfzehn'?", options:["15","50","5","51"], correct:0, explanation:"fünfzehn = 15."},
+      {q:"Was bedeutet 'rot'?", options:["red","blue","green","yellow"], correct:0, explanation:"rot = red."},
+      {q:"Wie heißt Montag auf Englisch?", options:["Monday","Tuesday","Sunday","Friday"], correct:0, explanation:"Montag = Monday."},
+      {q:"Was ist 'Wasser' auf Englisch?", options:["water","wine","juice","milk"], correct:0, explanation:"Wasser = water."},
+      {q:"Was bedeutet 'groß'?", options:["big/tall","small","old","new"], correct:0, explanation:"groß = big oder tall."},
+      {q:"Wie sagt man 'thank you' auf Deutsch?", options:["Danke","Bitte","Entschuldigung","Hallo"], correct:0, explanation:"Danke = thank you."},
+      {q:"Was ist 'Haus' auf Englisch?", options:["house","car","school","street"], correct:0, explanation:"Haus = house."},
+      {q:"Was bedeutet 'kalt'?", options:["cold","hot","warm","cool"], correct:0, explanation:"kalt = cold."},
+      {q:"Welcher Monat ist 'März'?", options:["March","May","June","February"], correct:0, explanation:"März = March."},
+      {q:"Was ist 'Schule' auf Englisch?", options:["school","church","hospital","library"], correct:0, explanation:"Schule = school."},
+      {q:"Was bedeutet 'schnell'?", options:["fast","slow","far","near"], correct:0, explanation:"schnell = fast."},
+      {q:"Wie sagt man 'yes' auf Deutsch?", options:["Ja","Nein","Vielleicht","Natürlich"], correct:0, explanation:"Ja = yes."},
+      {q:"Was ist 'Katze' auf Englisch?", options:["cat","dog","mouse","bird"], correct:0, explanation:"Katze = cat."},
+      {q:"Was bedeutet 'alt'?", options:["old","new","young","big"], correct:0, explanation:"alt = old."},
+      {q:"Wie sagt man 'good morning' auf Deutsch?", options:["Guten Morgen","Guten Abend","Gute Nacht","Guten Tag"], correct:0, explanation:"Guten Morgen = good morning."},
+      {q:"Was ist 'Milch' auf Englisch?", options:["milk","water","juice","tea"], correct:0, explanation:"Milch = milk."},
+      {q:"Was bedeutet 'klein'?", options:["small","big","tall","long"], correct:0, explanation:"klein = small."}
+    ],
+    reading: [
+      {q:"'Ich heiße Anna.' Was erfahren wir?", options:["Ihren Namen","Ihr Alter","Ihre Stadt","Ihren Beruf"], correct:0, explanation:"'Ich heiße' = mein Name ist → wir erfahren den Namen."},
+      {q:"'Das Wetter ist heute schön.' Wie ist das Wetter?", options:["schön","schlecht","kalt","regnerisch"], correct:0, explanation:"Das Adjektiv 'schön' beschreibt das Wetter."},
+      {q:"'Der Zug kommt um 9 Uhr.' Wann kommt der Zug?", options:["um 9 Uhr","um 6 Uhr","um 12 Uhr","um 3 Uhr"], correct:0, explanation:"'um 9 Uhr' gibt die Uhrzeit an."},
+      {q:"'Maria kauft Brot und Milch.' Was kauft sie?", options:["Brot und Milch","Brot und Käse","Milch und Käse","Brot und Butter"], correct:0, explanation:"Der Satz nennt genau: Brot und Milch."},
+      {q:"'Peter ist Arzt.' Was ist Peters Beruf?", options:["Arzt","Lehrer","Koch","Fahrer"], correct:0, explanation:"'ist Arzt' = Beruf ist Arzt."},
+      {q:"'Das Kind schläft.' Was macht das Kind?", options:["schlafen","spielen","essen","lesen"], correct:0, explanation:"'schläft' = to sleep (3. Person Singular)."},
+      {q:"'Der Supermarkt ist um 8 Uhr geöffnet.' Wann öffnet er?", options:["um 8 Uhr","um 9 Uhr","um 10 Uhr","um 7 Uhr"], correct:0, explanation:"'um 8 Uhr geöffnet' = opens at 8."},
+      {q:"'Ich trinke Kaffee.' Was trinke ich?", options:["Kaffee","Tee","Wasser","Saft"], correct:0, explanation:"'Ich trinke Kaffee' = I drink coffee."},
+      {q:"'Die Katze sitzt auf dem Sofa.' Wo ist die Katze?", options:["auf dem Sofa","unter dem Tisch","im Garten","vor der Tür"], correct:0, explanation:"'auf dem Sofa' = on the sofa."},
+      {q:"'Es ist sehr heiß heute.' Wie ist das Wetter?", options:["heiß","kalt","windig","regnerisch"], correct:0, explanation:"'heiß' = hot."},
+      {q:"'Wir essen um 12 Uhr Mittag.' Wann essen sie?", options:["um 12 Uhr","um 13 Uhr","um 11 Uhr","um 14 Uhr"], correct:0, explanation:"um 12 Uhr = at 12 o'clock."},
+      {q:"'Meine Mutter heißt Lisa.' Wer heißt Lisa?", options:["die Mutter","die Schwester","die Freundin","die Tochter"], correct:0, explanation:"'Meine Mutter heißt Lisa' = the mother's name is Lisa."},
+      {q:"'Das Buch kostet fünf Euro.' Was kostet es?", options:["5 Euro","10 Euro","15 Euro","2 Euro"], correct:0, explanation:"'fünf Euro' = five euros."},
+      {q:"'Ich gehe heute ins Kino.' Wohin geht er/sie?", options:["ins Kino","in die Schule","in den Park","ins Restaurant"], correct:0, explanation:"'ins Kino gehen' = to go to the cinema."},
+      {q:"'Tom hat zwei Schwestern.' Wie viele Schwestern hat Tom?", options:["zwei","eine","drei","keine"], correct:0, explanation:"'zwei Schwestern' = two sisters."},
+      {q:"'Die Bibliothek ist links.' Wo ist die Bibliothek?", options:["links","rechts","geradeaus","hinten"], correct:0, explanation:"'links' = left."},
+      {q:"'Es regnet.' Wie ist das Wetter?", options:["Es regnet.","Es scheint die Sonne.","Es ist windig.","Es ist kalt."], correct:0, explanation:"'Es regnet' = it is raining."},
+      {q:"'Ich lerne Deutsch seit drei Monaten.' Wie lange lerne ich?", options:["drei Monate","drei Jahre","drei Wochen","drei Tage"], correct:0, explanation:"'seit drei Monaten' = for three months."},
+      {q:"'Das Restaurant ist zu.' Was bedeutet 'zu'?", options:["geschlossen","geöffnet","voll","leer"], correct:0, explanation:"'zu' = closed in this context."},
+      {q:"'Anna arbeitet als Lehrerin.' Was ist Annas Beruf?", options:["Lehrerin","Ärztin","Köchin","Verkäuferin"], correct:0, explanation:"'arbeitet als Lehrerin' = works as a teacher."}
+    ]
+  },
+  A2: {
+    grammar: [
+      {q:"Welche Form ist korrekt? Gestern ___ ich ins Kino gegangen.", options:["bin","habe","war","hatte"], correct:0, explanation:"'gehen' bildet Perfekt mit 'sein' → bin gegangen."},
+      {q:"Ergänze mit Dativ: Ich helfe ___ Frau.", options:["der","die","das","den"], correct:0, explanation:"'helfen' verlangt Dativ, feminin Dativ → der."},
+      {q:"Welche Konjunktion passt? Ich lerne Deutsch, ___ ich nach Deutschland fahren möchte.", options:["weil","aber","und","oder"], correct:0, explanation:"'weil' gibt den Grund an, Verb ans Ende."},
+      {q:"Richtige Präposition: Ich fahre ___ Bus.", options:["mit dem","in den","auf dem","von dem"], correct:0, explanation:"Transportmittel: mit dem Bus."},
+      {q:"Ergänze: Das ist das Buch, ___ ich gelesen habe.", options:["das","die","der","den"], correct:0, explanation:"Relativpronomen für neutrales Nomen im Akkusativ → das."},
+      {q:"Welche Form? Sie hat das Buch ___.", options:["gelesen","liest","las","lesen"], correct:0, explanation:"Perfekt mit haben → Partizip II: gelesen."},
+      {q:"Korrekte Steigerung: Heute ist es ___ als gestern.", options:["kälter","kälterer","am kältesten","kalt"], correct:0, explanation:"Komparativ von 'kalt' → kälter."},
+      {q:"Präposition: Das Buch liegt ___ dem Tisch.", options:["auf","in","an","bei"], correct:0, explanation:"'auf dem Tisch' = on the table (Lage → Dativ)."},
+      {q:"Welches Modalverb? Du ___ lauter sprechen.", options:["sollst","musst","kannst","darfst"], correct:0, explanation:"'sollst' = you should (Aufforderung)."},
+      {q:"Perfekt von 'schreiben': Er hat einen Brief ___.", options:["geschrieben","schreiben","schrieb","schreibt"], correct:0, explanation:"Perfekt Partizip II von schreiben → geschrieben."},
+      {q:"Richtige Wortstellung: ___ kommt er nach Hause?", options:["Wann","Was","Wer","Wie"], correct:0, explanation:"Nach Uhrzeit/Zeit fragt man mit 'wann'."},
+      {q:"Dativ Plural: Ich gebe ___ Kindern Geschenke.", options:["den","die","der","das"], correct:0, explanation:"Dativ Plural → den (alle Genera)."},
+      {q:"Welche Form? Wenn ich Zeit ___, komme ich.", options:["hätte","habe","hatte","haben"], correct:0, explanation:"Konjunktiv II von haben → hätte (Hypothese)."},
+      {q:"Akkusativ: Er kauft ___ neuen Computer.", options:["einen","ein","eine","einem"], correct:0, explanation:"Computer ist maskulin, Akkusativ → einen."},
+      {q:"Korrekte Negation: Ich ___ morgen arbeiten.", options:["muss nicht","nicht muss","muss kein","kein muss"], correct:0, explanation:"Modalverb + Negation: muss nicht."},
+      {q:"Reflexivpronomen: Ich ___ sehr gefreut.", options:["habe mich","habe mir","bin mich","bin mir"], correct:0, explanation:"sich freuen → habe mich gefreut (Perfekt)."},
+      {q:"Genitiv: Das ist das Auto ___ Mannes.", options:["des","dem","den","der"], correct:0, explanation:"Genitiv maskulin → des Mannes."},
+      {q:"Trennbares Verb: Er ___ um 7 Uhr ___. (aufstehen)", options:["steht / auf","aufsteht / —","steh / auf","steht auf / —"], correct:0, explanation:"Trennbares Verb: Präfix ans Ende → steht...auf."},
+      {q:"Komparativ: Dieses Buch ist ___ interessant als jenes.", options:["interessanter","mehr interessant","am interessantesten","interessantest"], correct:0, explanation:"Komparativ: -er anhängen → interessanter."},
+      {q:"Welche Präposition? Das Bild hängt ___ der Wand.", options:["an","auf","in","vor"], correct:0, explanation:"Bilder hängen an der Wand (Lage → Dativ)."}
+    ],
+    vocabulary: [
+      {q:"Was bedeutet 'Krankenhaus'?", options:["hospital","pharmacy","clinic","school"], correct:0, explanation:"Krankenhaus = hospital."},
+      {q:"Was ist das Gegenteil von 'kaufen'?", options:["verkaufen","bezahlen","kosten","handeln"], correct:0, explanation:"Das Gegenteil von kaufen ist verkaufen."},
+      {q:"Was bedeutet 'Entschuldigung'?", options:["excuse me / sorry","thank you","please","goodbye"], correct:0, explanation:"Entschuldigung = excuse me oder sorry."},
+      {q:"Was ist 'Bahnhof' auf Englisch?", options:["train station","bus stop","airport","harbour"], correct:0, explanation:"Bahnhof = train station."},
+      {q:"Was bedeutet 'eigentlich'?", options:["actually","probably","always","never"], correct:0, explanation:"eigentlich = actually."},
+      {q:"Was ist das Gegenteil von 'früh'?", options:["spät","langsam","kurz","wenig"], correct:0, explanation:"Das Gegenteil von früh ist spät."},
+      {q:"Was bedeutet 'ungefähr'?", options:["approximately","exactly","always","never"], correct:0, explanation:"ungefähr = approximately."},
+      {q:"Was ist 'Rathaus' auf Englisch?", options:["town hall","court house","school","office"], correct:0, explanation:"Rathaus = town hall."},
+      {q:"Was bedeutet 'Ferien'?", options:["holidays / vacation","weekdays","weekends","work"], correct:0, explanation:"Ferien = holidays or vacation."},
+      {q:"Was ist das Gegenteil von 'anfangen'?", options:["aufhören","weitermachen","beginnen","starten"], correct:0, explanation:"Das Gegenteil von anfangen ist aufhören."},
+      {q:"Was bedeutet 'trotzdem'?", options:["nevertheless","therefore","however","although"], correct:0, explanation:"trotzdem = nevertheless / anyway."},
+      {q:"Was ist 'Schlüssel' auf Englisch?", options:["key","lock","door","handle"], correct:0, explanation:"Schlüssel = key."},
+      {q:"Was bedeutet 'pünktlich'?", options:["on time","too late","too early","always"], correct:0, explanation:"pünktlich = on time / punctual."},
+      {q:"Was ist das Gegenteil von 'laut'?", options:["leise","ruhig","still","leiser"], correct:0, explanation:"Das Gegenteil von laut ist leise."},
+      {q:"Was bedeutet 'Zeitung'?", options:["newspaper","book","magazine","letter"], correct:0, explanation:"Zeitung = newspaper."},
+      {q:"Was ist 'Urlaub' auf Englisch?", options:["holiday / vacation","work","school","weekend"], correct:0, explanation:"Urlaub = holiday or vacation."},
+      {q:"Was bedeutet 'sofort'?", options:["immediately","later","soon","never"], correct:0, explanation:"sofort = immediately / right away."},
+      {q:"Was ist 'Brücke' auf Englisch?", options:["bridge","road","river","tunnel"], correct:0, explanation:"Brücke = bridge."},
+      {q:"Was bedeutet 'deshalb'?", options:["therefore","however","but","although"], correct:0, explanation:"deshalb = therefore / that's why."},
+      {q:"Was ist das Gegenteil von 'vergessen'?", options:["erinnern","denken","wissen","kennen"], correct:0, explanation:"Das Gegenteil von vergessen ist sich erinnern."}
+    ],
+    reading: [
+      {q:"'Der Zug hat Verspätung wegen des schlechten Wetters.' Warum hat der Zug Verspätung?", options:["wegen des Wetters","wegen eines Unfalls","wegen Bauarbeiten","wegen der Ferien"], correct:0, explanation:"'wegen des schlechten Wetters' = because of bad weather."},
+      {q:"'Obwohl es regnet, gehen sie spazieren.' Was machen sie trotz des Regens?", options:["spazieren gehen","zu Hause bleiben","ins Kino gehen","einkaufen"], correct:0, explanation:"'Obwohl' = although → sie gehen trotzdem spazieren."},
+      {q:"'Das Geschäft öffnet montags bis freitags von 9 bis 18 Uhr.' Wann ist es geöffnet?", options:["Mo–Fr 9–18 Uhr","Mo–Sa 9–18 Uhr","täglich 9–18 Uhr","Mo–Fr 8–17 Uhr"], correct:0, explanation:"'montags bis freitags von 9 bis 18 Uhr' = Mo–Fr 9 to 18."},
+      {q:"'Anna hat ihr Buch vergessen, deshalb kann sie nicht lernen.' Warum kann sie nicht lernen?", options:["Sie hat ihr Buch vergessen.","Sie ist krank.","Sie hat keine Zeit.","Das Buch ist langweilig."], correct:0, explanation:"'deshalb' verknüpft Ursache und Folge."},
+      {q:"'Bitte rufen Sie mich morgen zwischen 10 und 12 Uhr an.' Wann soll man anrufen?", options:["zwischen 10 und 12 Uhr","vor 10 Uhr","nach 12 Uhr","heute Abend"], correct:0, explanation:"'zwischen 10 und 12 Uhr' = between 10 and 12."},
+      {q:"'Die Wohnung hat drei Zimmer, eine Küche und ein Bad.' Wie viele Zimmer hat die Wohnung?", options:["drei","vier","fünf","zwei"], correct:0, explanation:"'drei Zimmer' = three rooms (Küche und Bad zählen extra)."},
+      {q:"'Er arbeitet seit fünf Jahren als Ingenieur.' Was ist sein Beruf?", options:["Ingenieur","Arzt","Lehrer","Manager"], correct:0, explanation:"'arbeitet als Ingenieur' = works as an engineer."},
+      {q:"'Wenn das Wetter schön ist, fahren wir ans Meer.' Was ist die Bedingung?", options:["gutes Wetter","freier Tag","kein Geld","keine Zeit"], correct:0, explanation:"'Wenn...schön ist' = if the weather is nice."},
+      {q:"'Das Konzert beginnt um 20 Uhr und dauert zwei Stunden.' Wann endet es?", options:["um 22 Uhr","um 21 Uhr","um 23 Uhr","um 20:30 Uhr"], correct:0, explanation:"20 Uhr + 2 Stunden = 22 Uhr."},
+      {q:"'Sie hat die Prüfung nicht bestanden, weil sie nicht gelernt hat.' Was war das Problem?", options:["Sie hat nicht gelernt.","Sie war krank.","Die Prüfung war zu schwer.","Sie hatte kein Buch."], correct:0, explanation:"'weil sie nicht gelernt hat' = because she didn't study."},
+      {q:"'Ich suche eine Wohnung mit Balkon in der Nähe des Zentrums.' Was ist wichtig?", options:["Balkon und zentrale Lage","Garten und Garage","große Küche","günstiger Preis"], correct:0, explanation:"Die Anzeige nennt: Balkon und Nähe zum Zentrum."},
+      {q:"'Morgen ist Markt. Man kann dort frisches Gemüse und Obst kaufen.' Was kann man kaufen?", options:["Gemüse und Obst","Fleisch und Fisch","Brot und Käse","Kleidung und Schuhe"], correct:0, explanation:"'frisches Gemüse und Obst' sind explizit genannt."},
+      {q:"'Er hat angerufen, aber niemand hat abgenommen.' Was ist passiert?", options:["Niemand hat das Telefon beantwortet.","Das Telefon war kaputt.","Er hatte die falsche Nummer.","Das Netz war weg."], correct:0, explanation:"'niemand hat abgenommen' = nobody answered."},
+      {q:"'Die Bibliothek ist am Wochenende geschlossen.' Wann kann man nicht hin?", options:["am Wochenende","abends","früh morgens","an Feiertagen"], correct:0, explanation:"'am Wochenende geschlossen' = closed on weekends."},
+      {q:"'Er spricht drei Sprachen: Deutsch, Englisch und Arabisch.' Wie viele Sprachen spricht er?", options:["drei","zwei","vier","fünf"], correct:0, explanation:"Drei Sprachen werden aufgezählt."},
+      {q:"'Kinder unter 12 Jahren zahlen die Hälfte.' Was zahlen 10-jährige Kinder?", options:["die Hälfte des Preises","nichts","den vollen Preis","ein Drittel"], correct:0, explanation:"'unter 12 Jahren → die Hälfte'."},
+      {q:"'Das Hotel liegt direkt am Strand.' Wo liegt das Hotel?", options:["am Strand","im Stadtzentrum","am Bahnhof","im Wald"], correct:0, explanation:"'direkt am Strand' = right on the beach."},
+      {q:"'Wegen Krankheit bleibt das Büro heute geschlossen.' Warum ist das Büro zu?", options:["wegen Krankheit","wegen Ferien","wegen Umbau","wegen Feiertag"], correct:0, explanation:"'wegen Krankheit' = due to illness."},
+      {q:"'Sie lernt Deutsch, um in Deutschland studieren zu können.' Warum lernt sie Deutsch?", options:["um in Deutschland zu studieren","um Freunde zu finden","um zu reisen","um zu arbeiten"], correct:0, explanation:"'um...zu' drückt den Zweck aus."},
+      {q:"'Der Kurs findet dienstags und donnerstags statt.' An welchen Tagen?", options:["Dienstag und Donnerstag","Montag und Mittwoch","Mittwoch und Freitag","Montag und Freitag"], correct:0, explanation:"'dienstags und donnerstags' = Tuesdays and Thursdays."}
+    ]
+  },
+  B1: {
+    grammar: [
+      {q:"Passiv: Das Buch ___ vom Lehrer empfohlen.", options:["wird","ist","hat","sein"], correct:0, explanation:"Passiv Präsens: wird + Partizip II."},
+      {q:"Konjunktiv II: Wenn ich reich wäre, ___ ich eine Weltreise machen.", options:["würde","werde","bin","wäre"], correct:0, explanation:"Konjunktiv II Folgesatz: würde + Infinitiv."},
+      {q:"Infinitivkonstruktion: Sie versucht, täglich ___ zu üben.", options:["Klavier","Klaviers","dem Klavier","das Klavier"], correct:0, explanation:"'Klavier üben' = üben ohne Artikel. Oder: das Klavierspielen. Hier: Klavier üben → Klavier."},
+      {q:"Welche Form? Er ___ schon gegessen haben, bevor sie ankam.", options:["soll","muss","darf","kann"], correct:0, explanation:"'soll...haben' = epistemic modality (it is said that he...)."},
+      {q:"Relativsatz: Das ist der Mann, ___ ich das Buch gegeben habe.", options:["dem","der","den","dessen"], correct:0, explanation:"'geben' + Dativ: dem Mann (maskulin Dativ) → dem."},
+      {q:"Indirekte Rede: Er sagte, er ___ krank.", options:["sei","ist","war","wäre"], correct:0, explanation:"Indirekte Rede: Konjunktiv I von 'sein' → sei."},
+      {q:"Zweiteilige Konjunktion: ___ ich Hunger habe, ___ ich nicht.", options:["Obwohl / esse","Weil / esse","Wenn / esse","Als / aß"], correct:0, explanation:"'Obwohl' drückt einen Gegensatz aus."},
+      {q:"Nominalisierung: Das ___ des Projekts war schwierig.", options:["Durchführen","Durchführung","Durchführe","Durchgeführt"], correct:0, explanation:"Nominalisierung von Verben: die Durchführung."},
+      {q:"Passiv Perfekt: Das Haus ___ gebaut worden.", options:["ist","hat","wird","wurde"], correct:0, explanation:"Passiv Perfekt: ist + Partizip II + worden."},
+      {q:"Konzessivsatz: ___ er müde war, arbeitete er weiter.", options:["Obwohl","Weil","Wenn","Da"], correct:0, explanation:"'obwohl' = although → konzessiv."},
+      {q:"Genitiv: Trotz ___ schlechten Wetters gingen sie spazieren.", options:["des","dem","den","der"], correct:0, explanation:"'trotz' + Genitiv; Wetter ist neutral → des."},
+      {q:"Futur II: Bis morgen ___ er die Arbeit fertig ___ haben.", options:["wird / gemacht","hat / gemacht","wird / machen","ist / gemacht"], correct:0, explanation:"Futur II: wird + Partizip II + haben."},
+      {q:"Welche Verbform? Er ___ das Problem lösen können.", options:["hätte","würde","sollte","könnte"], correct:0, explanation:"Konjunktiv II von können → könnte."},
+      {q:"Zweiteilige Konjunktion: ___ ...___ er kommt, bleibt er länger.", options:["Wenn / auch","Sowohl / als auch","Entweder / oder","Weder / noch"], correct:0, explanation:"'Wenn...auch' = even if."},
+      {q:"Attribut: Das ist ein ___ gelöstes Problem.", options:["gut","gutes","gute","gutem"], correct:0, explanation:"Nach unbestimmtem Artikel, neutral, Nominativ → gutes."},
+      {q:"Kausalsatz: ___ der Zug Verspätung hatte, kamen wir zu spät.", options:["Da","Obwohl","Wenn","Als"], correct:0, explanation:"'Da' = since/because (kausal)."},
+      {q:"Infinitiv mit zu: Er bat mich, ___ zu kommen.", options:["früher","früh","frühzeitig","frühes"], correct:0, explanation:"Adjektiv als Adverb: früher (komparativ) = earlier."},
+      {q:"Welches Adjektiv? Das war eine ___ Entscheidung.", options:["schwierige","schwieriger","schwierigen","schwierigem"], correct:0, explanation:"Nach unbestimmtem Artikel, feminin, Nominativ → schwierige."},
+      {q:"Passiv mit Modalverb: Das Problem ___ gelöst werden.", options:["muss","ist","hat","wird"], correct:0, explanation:"Modalverb + Passiv: muss + Partizip II + werden."},
+      {q:"Temporalsatz: ___ sie ankam, hatte er schon gegessen.", options:["Als","Wenn","Während","Bevor"], correct:0, explanation:"'Als' = when (einmalig in der Vergangenheit)."}
+    ],
+    vocabulary: [
+      {q:"Was bedeutet 'die Beziehung'?", options:["relationship","position","question","decision"], correct:0, explanation:"Beziehung = relationship."},
+      {q:"Was ist das Synonym von 'beginnen'?", options:["anfangen","aufhören","beenden","abbrechen"], correct:0, explanation:"beginnen = anfangen (synonym)."},
+      {q:"Was bedeutet 'die Herausforderung'?", options:["challenge","experience","opportunity","danger"], correct:0, explanation:"Herausforderung = challenge."},
+      {q:"Was ist das Gegenteil von 'erfolgreich'?", options:["erfolglos","schlecht","schwach","arm"], correct:0, explanation:"Das Gegenteil von erfolgreich ist erfolglos."},
+      {q:"Was bedeutet 'nachhaltig'?", options:["sustainable","temporary","efficient","modern"], correct:0, explanation:"nachhaltig = sustainable."},
+      {q:"Was ist ein Synonym von 'wichtig'?", options:["bedeutsam","interessant","nützlich","bekannt"], correct:0, explanation:"wichtig ≈ bedeutsam (bedeutend)."},
+      {q:"Was bedeutet 'die Voraussetzung'?", options:["prerequisite / requirement","result","conclusion","suggestion"], correct:0, explanation:"Voraussetzung = prerequisite or requirement."},
+      {q:"Was ist das Gegenteil von 'zustimmen'?", options:["ablehnen","antworten","fragen","schweigen"], correct:0, explanation:"Das Gegenteil von zustimmen ist ablehnen."},
+      {q:"Was bedeutet 'aufgrund'?", options:["due to / because of","despite","without","against"], correct:0, explanation:"aufgrund = due to / because of."},
+      {q:"Was ist ein Synonym von 'erklären'?", options:["erläutern","fragen","antworten","zeigen"], correct:0, explanation:"erklären ≈ erläutern."},
+      {q:"Was bedeutet 'die Gelegenheit'?", options:["opportunity","problem","solution","question"], correct:0, explanation:"Gelegenheit = opportunity."},
+      {q:"Was ist das Gegenteil von 'öffentlich'?", options:["privat","persönlich","intern","geheim"], correct:0, explanation:"Das Gegenteil von öffentlich ist privat."},
+      {q:"Was bedeutet 'verursachen'?", options:["to cause","to prevent","to solve","to avoid"], correct:0, explanation:"verursachen = to cause."},
+      {q:"Was ist ein Synonym von 'schnell'?", options:["rasch","langsam","ruhig","spät"], correct:0, explanation:"schnell ≈ rasch."},
+      {q:"Was bedeutet 'die Auswirkung'?", options:["impact / effect","cause","reason","solution"], correct:0, explanation:"Auswirkung = impact or effect."},
+      {q:"Was ist das Gegenteil von 'zunehmen'?", options:["abnehmen","sinken","fallen","verlieren"], correct:0, explanation:"Das Gegenteil von zunehmen ist abnehmen."},
+      {q:"Was bedeutet 'im Gegensatz zu'?", options:["in contrast to","in addition to","because of","instead of"], correct:0, explanation:"im Gegensatz zu = in contrast to."},
+      {q:"Was ist ein Synonym von 'versuchen'?", options:["probieren","machen","wollen","können"], correct:0, explanation:"versuchen ≈ probieren."},
+      {q:"Was bedeutet 'die Maßnahme'?", options:["measure / action","law","rule","decision"], correct:0, explanation:"Maßnahme = measure or action taken."},
+      {q:"Was ist das Gegenteil von 'erlauben'?", options:["verbieten","fordern","verlangen","befehlen"], correct:0, explanation:"Das Gegenteil von erlauben ist verbieten."}
+    ],
+    reading: [
+      {q:"'Trotz steigender Preise kaufen viele Deutsche weiterhin Bio-Produkte.' Was zeigt das?", options:["Bio bleibt beliebt trotz höherer Kosten.","Bio wird billiger.","Niemand kauft mehr Bio.","Preise sinken."], correct:0, explanation:"'trotz steigender Preise...weiterhin' = despite higher prices, still buying."},
+      {q:"'Die Studie zeigt, dass regelmäßige Bewegung das Risiko von Herzerkrankungen um 30% senkt.' Was ist das Ergebnis?", options:["Sport reduziert Herzerkrankungen deutlich.","Sport hat keinen Effekt.","Herzerkrankungen steigen.","30% aller Menschen sind krank."], correct:0, explanation:"'senkt...um 30%' = reduces by 30%."},
+      {q:"'Aufgrund des demografischen Wandels wird die Rentenversicherung reformiert.' Was ist der Grund?", options:["demografischer Wandel","wirtschaftliche Krise","politische Entscheidung","technischer Fortschritt"], correct:0, explanation:"'aufgrund des demografischen Wandels' = due to demographic change."},
+      {q:"'Wer bis Freitag kündigt, erhält eine Abfindung.' Was ist die Bedingung?", options:["Kündigung bis Freitag","Kündigung bis Montag","Kündigung im Januar","sofortige Kündigung"], correct:0, explanation:"'Wer bis Freitag kündigt' = those who resign by Friday."},
+      {q:"'Obwohl die Wirtschaft wächst, steigt die Arbeitslosigkeit.' Was ist das Problem?", options:["Arbeitslosigkeit wächst trotz Wirtschaftswachstum.","Die Wirtschaft schrumpft.","Die Arbeitslosigkeit sinkt.","Alles ist positiv."], correct:0, explanation:"'Obwohl...wächst, steigt...' = contradiction."},
+      {q:"'Das Projekt wurde wegen Budgetproblemen auf nächstes Jahr verschoben.' Was passierte?", options:["Es wird später realisiert.","Es wurde abgesagt.","Es begann früher.","Das Budget wurde erhöht."], correct:0, explanation:"'verschoben' = postponed."},
+      {q:"'Je mehr man liest, desto besser wird man im Schreiben.' Was ist die Aussage?", options:["Lesen verbessert das Schreiben.","Schreiben ist unwichtig.","Lesen macht müde.","Schreiben ist schwieriger als Lesen."], correct:0, explanation:"'Je mehr...desto besser' = the more...the better."},
+      {q:"'Die Maßnahmen zur Reduzierung von CO₂ sind umstritten.' Was bedeutet 'umstritten'?", options:["controversial","effective","popular","new"], correct:0, explanation:"umstritten = controversial, disputed."},
+      {q:"'Angesichts der Klimakrise fordern Experten sofortige Maßnahmen.' Was fordern Experten?", options:["sofortiges Handeln","mehr Studien","weniger Regulierung","spätere Entscheidungen"], correct:0, explanation:"'sofortige Maßnahmen' = immediate measures."},
+      {q:"'Das Unternehmen hat seine Produktion ins Ausland verlagert, um Kosten zu senken.' Was war das Ziel?", options:["Kostenreduzierung","mehr Qualität","neue Märkte","bessere Mitarbeiter"], correct:0, explanation:"'um Kosten zu senken' = in order to reduce costs."},
+      {q:"'Nicht nur Kinder, sondern auch Erwachsene profitieren von Bewegung.' Was sagt der Text?", options:["Alle Altersgruppen profitieren.","Nur Kinder profitieren.","Erwachsene profitieren nicht.","Bewegung schadet."], correct:0, explanation:"'nicht nur...sondern auch' = not only...but also."},
+      {q:"'Immer mehr Menschen arbeiten im Homeoffice, was sowohl Vor- als auch Nachteile hat.' Was ist die Hauptaussage?", options:["Homeoffice hat Pros und Cons.","Homeoffice ist perfekt.","Homeoffice sollte verboten werden.","Homeoffice ist selten."], correct:0, explanation:"'sowohl...als auch' = both...and."},
+      {q:"'Die Stadt investiert in den Ausbau des öffentlichen Nahverkehrs.' Warum?", options:["Um Mobilität zu verbessern.","Um Autos zu fördern.","Um Geld zu sparen.","Um Parkplätze zu schaffen."], correct:0, explanation:"Investition in ÖPNV = improving public mobility."},
+      {q:"'Laut einer Umfrage sind 70% der Deutschen mit ihrem Leben zufrieden.' Was zeigt die Umfrage?", options:["Die meisten Deutschen sind zufrieden.","70% sind unzufrieden.","Alle sind glücklich.","Niemand ist zufrieden."], correct:0, explanation:"70% = die Mehrheit → die meisten."},
+      {q:"'Das Gesetz tritt am 1. Januar in Kraft.' Was passiert am 1. Januar?", options:["Das Gesetz wird gültig.","Das Gesetz wird abgeschafft.","Das Gesetz wird diskutiert.","Das Gesetz wird geschrieben."], correct:0, explanation:"'in Kraft treten' = to come into effect."},
+      {q:"'Sowohl die Regierung als auch die Opposition unterstützt das Projekt.' Was sagt der Text?", options:["Alle politischen Seiten sind dafür.","Nur die Regierung ist dafür.","Nur die Opposition ist dafür.","Niemand unterstützt es."], correct:0, explanation:"'sowohl...als auch' = both sides support it."},
+      {q:"'Das Angebot gilt nur solange der Vorrat reicht.' Was bedeutet das?", options:["Das Angebot ist begrenzt.","Das Angebot ist unbegrenzt.","Es gibt kein Angebot.","Das Angebot läuft ewig."], correct:0, explanation:"'solange der Vorrat reicht' = while supplies last."},
+      {q:"'Wegen anhaltender Trockenheit drohen Ernteausfälle.' Was ist die Folge der Trockenheit?", options:["Schlechtere Ernte","Bessere Ernte","Mehr Regen","Günstigere Preise"], correct:0, explanation:"'Ernteausfälle' = crop failures due to drought."},
+      {q:"'Die Konferenz brachte keine konkreten Ergebnisse.' Was bedeutet das?", options:["Es wurden keine klaren Beschlüsse gefasst.","Die Konferenz war sehr erfolgreich.","Viele Ergebnisse wurden erzielt.","Die Konferenz wurde abgesagt."], correct:0, explanation:"'keine konkreten Ergebnisse' = no concrete results."},
+      {q:"'Im Vergleich zum Vorjahr sind die Temperaturen gestiegen.' Was hat sich verändert?", options:["Es ist wärmer als letztes Jahr.","Es ist kälter als letztes Jahr.","Die Temperaturen sind gleich.","Das Wetter ist besser."], correct:0, explanation:"'gestiegen' = increased → wärmer."}
+    ]
   }
-  const data = await res.json();
-  // DeepSeek R1 sometimes wraps answer in <think>...</think> — strip it
-  let text = data.choices?.[0]?.message?.content || '';
-  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
-  return text;
-}
-
-// Robust JSON extractor — handles markdown fences, leading text, trailing text
-function extractJSON(raw, expectArray) {
-  // Strip markdown fences
-  let s = raw.replace(/```json/gi,'').replace(/```/g,'').trim();
-  // Try direct parse first
-  try { return JSON.parse(s); } catch(_) {}
-  // Try to find array or object with regex
-  const pattern = expectArray ? /\[[\s\S]*\]/ : /\{[\s\S]*\}/;
-  const m = s.match(pattern);
-  if (m) {
-    try { return JSON.parse(m[0]); } catch(_) {}
-  }
-  throw new Error('Could not parse AI response as JSON. Raw: ' + s.slice(0, 200));
-}
+};
 
 // ===== QUIZ / LEVEL PAGE INIT =====
-function initQuizPage() {
-  // Reset quiz area only if no active quiz
-  const area = document.getElementById('quiz-area');
-  if (area && area.innerHTML.trim() === '') {
-    area.innerHTML = '';
-  }
-}
+function initQuizPage() {}
 function initLevelPage() {
-  // Reset to start card if no active test
   const area = document.getElementById('level-area');
-  if (area && area.querySelector('.level-start-card')) return; // already showing start
+  if (area && area.querySelector('.level-start-card')) return;
   if (area && !area.querySelector('.quiz-card') && !area.querySelector('.level-result-card')) {
     area.innerHTML = `<div class="level-start-card">
       <div class="level-start-icon">🎯</div>
       <div class="level-start-title">Wie gut ist dein Deutsch?</div>
-      <div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
+      <div class="level-start-desc">Mach einen adaptiven Test mit 20 Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
       <button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
     </div>`;
   }
@@ -4088,53 +4241,46 @@ let _quizData = [];
 let _quizAnswered = 0;
 let _quizScore = 0;
 
-async function generateQuiz() {
+function getQuestions(level, topic, count) {
+  const levels = level === 'auto'
+    ? (typeof computeProgress === 'function'
+        ? (computeProgress() < 25 ? ['A1'] : computeProgress() < 55 ? ['A1','A2'] : ['A1','A2','B1'])
+        : ['A1','A2','B1'])
+    : [level];
+
+  let pool = [];
+  const topics = topic === 'mixed' ? ['grammar','vocabulary','reading'] : [topic];
+
+  levels.forEach(lvl => {
+    topics.forEach(tp => {
+      const qs = QUESTION_BANK[lvl]?.[tp] || [];
+      pool.push(...qs.map(q => ({ ...q, _level: lvl, _topic: tp })));
+    });
+  });
+
+  // Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
+
+function generateQuiz() {
   const difficulty = document.getElementById('quiz-difficulty').value;
   const topic = document.getElementById('quiz-topic').value;
   const count = parseInt(document.getElementById('quiz-count').value);
-  const btn = document.getElementById('quiz-gen-btn');
-  const label = document.getElementById('quiz-gen-label');
-  const spinner = document.getElementById('quiz-gen-spinner');
   const area = document.getElementById('quiz-area');
 
-  btn.disabled = true;
-  label.style.display = 'none';
-  spinner.style.display = 'block';
-  area.innerHTML = '';
+  _quizData = getQuestions(difficulty, topic, count);
+  _quizScore = 0;
+  _quizAnswered = 0;
 
-  // Determine actual difficulty
-  let level = difficulty;
-  if (difficulty === 'auto') {
-    const pct = typeof computeProgress === 'function' ? computeProgress() : 50;
-    level = pct < 25 ? 'A1' : pct < 55 ? 'A2' : 'B1';
+  if (_quizData.length === 0) {
+    area.innerHTML = `<div class="quiz-card" style="text-align:center;color:var(--muted)">Keine Fragen für diese Auswahl gefunden.</div>`;
+    return;
   }
-
-  const topicMap = { mixed: 'gemischten Themen (Grammatik, Vokabeln, Leseverständnis)', grammar: 'Grammatik', vocabulary: 'Vokabeln', reading: 'Leseverständnis' };
-  const topicLabel = topicMap[topic] || 'gemischten Themen';
-
-  const systemPrompt = `You are a German language teacher. Generate multiple-choice questions for level ${level}.
-OUTPUT ONLY a raw JSON array — no markdown, no explanation, no text before or after.
-Format: [{"q":"Question in German?","options":["A","B","C","D"],"correct":0,"explanation":"Brief explanation in German"}]
-"correct" is the 0-based index of the correct option.`;
-
-  const userPrompt = `Generate exactly ${count} questions about ${topicLabel} for level ${level}. Output ONLY the JSON array.`;
-
-  try {
-    const raw = await callAI(systemPrompt, userPrompt);
-    _quizData = extractJSON(raw, true);
-    if (!Array.isArray(_quizData)) throw new Error('Expected a JSON array');
-    _quizScore = 0;
-    _quizAnswered = 0;
-    renderQuiz();
-  } catch (e) {
-    area.innerHTML = `<div class="quiz-card" style="border-color:rgba(204,31,31,0.3);text-align:center;color:#ff6b6b;font-size:0.88rem">
-      ⚠ Fehler beim Generieren: ${e.message}<br><small style="color:#666;font-size:0.72rem">Bitte versuche es erneut.</small>
-    </div>`;
-  } finally {
-    btn.disabled = false;
-    label.style.display = '';
-    spinner.style.display = 'none';
-  }
+  renderQuiz();
 }
 
 function renderQuiz() {
@@ -4143,7 +4289,7 @@ function renderQuiz() {
 
   area.innerHTML = _quizData.map((q, i) => `
     <div class="quiz-card" id="quiz-card-${i}">
-      <div class="quiz-q-num">Frage ${i + 1} / ${_quizData.length}</div>
+      <div class="quiz-q-num">Frage ${i + 1} / ${_quizData.length}${q._level ? ' · ' + q._level : ''}</div>
       <div class="quiz-q-text">${q.q}</div>
       <div class="quiz-options">
         ${q.options.map((opt, j) => `
@@ -4159,7 +4305,6 @@ function answerQuiz(qIdx, optIdx) {
   const q = _quizData[qIdx];
   if (!q) return;
   const correct = q.correct;
-  // Disable all options for this question
   q.options.forEach((_, j) => {
     const btn = document.getElementById(`quiz-opt-${qIdx}-${j}`);
     if (!btn) return;
@@ -4167,13 +4312,10 @@ function answerQuiz(qIdx, optIdx) {
     if (j === correct) btn.classList.add('correct');
     else if (j === optIdx) btn.classList.add('wrong');
   });
-  // Show explanation
   const expEl = document.getElementById(`quiz-exp-${qIdx}`);
   if (expEl) expEl.style.display = 'block';
-  // Track score
   if (optIdx === correct) _quizScore++;
   _quizAnswered++;
-  // Show result when all answered
   if (_quizAnswered === _quizData.length) {
     setTimeout(showQuizResult, 400);
   }
@@ -4191,84 +4333,84 @@ function showQuizResult() {
       <div class="quiz-result-score">${_quizScore}/${_quizData.length}</div>
       <div class="quiz-result-label">${pct}% richtig</div>
       <div class="quiz-result-msg">${msg}</div>
-      <button class="quiz-gen-btn" style="margin:0 auto" onclick="generateQuiz()">✨ Neues Quiz</button>
+      <button class="quiz-gen-btn" style="margin:0 auto" onclick="generateQuiz()">🔄 Neues Quiz</button>
     </div>`;
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // ===== LEVEL TEST FEATURE =====
-let _levelQuestions = [];
 let _levelCurrent = 0;
 let _levelCurrentLevel = 'A2';
 let _levelHistory = [];
-const _LEVELS = ['A1', 'A2', 'B1', 'B2'];
+let _levelUsed = { A1: new Set(), A2: new Set(), B1: new Set() };
+const _LEVELS = ['A1', 'A2', 'B1'];
 
-async function startLevelTest() {
-  const area = document.getElementById('level-area');
-  area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0">
-    <div class="quiz-spinner" style="width:40px;height:40px;border-width:3px"></div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted)">ERSTE FRAGE WIRD GENERIERT…</div>
-  </div>`;
-  _levelQuestions = [];
+function startLevelTest() {
   _levelCurrent = 0;
   _levelCurrentLevel = 'A2';
   _levelHistory = [];
-  await fetchNextLevelQuestion();
+  _levelUsed = { A1: new Set(), A2: new Set(), B1: new Set() };
+  showNextLevelQuestion();
 }
 
-async function fetchNextLevelQuestion() {
+function getUnusedQuestion(level) {
+  const allTopics = ['grammar','vocabulary','reading'];
+  let pool = [];
+  allTopics.forEach(tp => {
+    (QUESTION_BANK[level]?.[tp] || []).forEach((q, i) => {
+      if (!_levelUsed[level].has(tp + '_' + i)) {
+        pool.push({ ...q, _key: tp + '_' + i, _level: level });
+      }
+    });
+  });
+  if (pool.length === 0) return null;
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  _levelUsed[level].add(pick._key);
+  return pick;
+}
+
+function showNextLevelQuestion() {
   const area = document.getElementById('level-area');
-  const questionNum = _levelCurrent + 1;
-
-  const systemPrompt = `You are a German language teacher. Generate ONE multiple-choice question for level ${_levelCurrentLevel}.
-OUTPUT ONLY a raw JSON object — no markdown, no explanation, no text before or after.
-Format: {"q":"Question in German?","options":["A","B","C","D"],"correct":0,"explanation":"Brief explanation in German"}`;
-  const userPrompt = `One question for level ${_levelCurrentLevel}, topic: mixed (grammar, vocabulary or reading). Output ONLY the JSON object.`;
-
-  try {
-    const raw = await callAI(systemPrompt, userPrompt);
-    const q = extractJSON(raw, false);
-    q.level = _levelCurrentLevel;
-    _levelQuestions.push(q);
-    renderLevelQuestion(questionNum);
-  } catch (e) {
-    area.innerHTML = `<div class="quiz-card" style="border-color:rgba(204,31,31,0.3);text-align:center;color:#ff6b6b;font-size:0.88rem">
-      ⚠ Fehler: ${e.message}<br>
-      <button class="level-restart-btn" style="margin-top:12px;width:auto;padding:8px 20px" onclick="startLevelTest()">Nochmal versuchen</button>
-    </div>`;
+  const q = getUnusedQuestion(_levelCurrentLevel);
+  if (!q) {
+    // No more questions at this level, try adjacent
+    const idx = _LEVELS.indexOf(_levelCurrentLevel);
+    const alt = idx > 0 ? _LEVELS[idx - 1] : null;
+    if (alt) { _levelCurrentLevel = alt; showNextLevelQuestion(); return; }
+    showLevelResult(); return;
   }
-}
 
-function renderLevelQuestion(questionNum) {
-  const area = document.getElementById('level-area');
-  const q = _levelQuestions[_levelCurrent];
-  if (!q) return;
+  const qNum = _levelCurrent + 1;
   area.innerHTML = `
     <div class="quiz-card">
       <div class="level-q-header">
-        <div class="level-q-stage">Frage ${questionNum} / 20</div>
+        <div class="level-q-stage">Frage ${qNum} / 20</div>
         <div class="level-q-current-level">${_levelCurrentLevel}</div>
       </div>
       <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden">
-        <div style="height:100%;width:${(questionNum/20)*100}%;background:var(--gold);border-radius:2px;transition:width 0.5s ease"></div>
+        <div style="height:100%;width:${(qNum/20)*100}%;background:var(--gold);border-radius:2px;transition:width 0.5s ease"></div>
       </div>
       <div class="quiz-q-text">${q.q}</div>
       <div class="quiz-options">
         ${q.options.map((opt, j) => `
-          <button class="quiz-option" id="level-opt-${j}" onclick="answerLevelQuestion(${j})">${opt}</button>
+          <button class="quiz-option" id="level-opt-${j}" onclick="answerLevelQuestion(${j}, this._q)" data-correct="${q.correct}" data-j="${j}">${opt}</button>
         `).join('')}
       </div>
       <div class="quiz-explanation" id="level-exp" style="display:none">${q.explanation || ''}</div>
     </div>`;
+
+  // Store current question on area element
+  area._currentQ = q;
 }
 
-async function answerLevelQuestion(optIdx) {
-  const q = _levelQuestions[_levelCurrent];
+function answerLevelQuestion(optIdx) {
+  const area = document.getElementById('level-area');
+  const q = area._currentQ;
   if (!q) return;
   const correct = q.correct;
   const isCorrect = optIdx === correct;
 
-  // Disable options and show result
+  // Disable all and show feedback
   q.options.forEach((_, j) => {
     const btn = document.getElementById(`level-opt-${j}`);
     if (!btn) return;
@@ -4279,91 +4421,65 @@ async function answerLevelQuestion(optIdx) {
   const expEl = document.getElementById('level-exp');
   if (expEl) expEl.style.display = 'block';
 
-  // Adaptive logic: adjust level
   _levelHistory.push({ level: _levelCurrentLevel, correct: isCorrect });
+
+  // Adaptive: correct → harder, wrong → easier
   const lvlIdx = _LEVELS.indexOf(_levelCurrentLevel);
-  if (isCorrect && lvlIdx < _LEVELS.length - 1) {
-    _levelCurrentLevel = _LEVELS[lvlIdx + 1];
-  } else if (!isCorrect && lvlIdx > 0) {
-    _levelCurrentLevel = _LEVELS[lvlIdx - 1];
-  }
+  if (isCorrect && lvlIdx < _LEVELS.length - 1) _levelCurrentLevel = _LEVELS[lvlIdx + 1];
+  else if (!isCorrect && lvlIdx > 0) _levelCurrentLevel = _LEVELS[lvlIdx - 1];
 
   _levelCurrent++;
 
   if (_levelCurrent >= 20) {
-    setTimeout(showLevelResult, 600);
+    setTimeout(showLevelResult, 800);
   } else {
-    // Show loading overlay then fetch next
-    setTimeout(async () => {
-      const area = document.getElementById('level-area');
-      if (area) area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0">
-        <div class="quiz-spinner" style="width:36px;height:36px;border-width:3px"></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;color:var(--muted)">NÄCHSTE FRAGE…</div>
-      </div>`;
-      await fetchNextLevelQuestion();
-    }, 900);
+    setTimeout(showNextLevelQuestion, 900);
   }
 }
 
 function showLevelResult() {
-  // Compute final level by weighted majority
   const scores = {};
   _LEVELS.forEach(l => scores[l] = { correct: 0, total: 0 });
   _levelHistory.forEach(h => {
-    scores[h.level].total++;
-    if (h.correct) scores[h.level].correct++;
+    if (scores[h.level]) { scores[h.level].total++; if (h.correct) scores[h.level].correct++; }
   });
 
-  // Find highest level with >= 60% correct
   let finalLevel = 'A1';
   for (let i = _LEVELS.length - 1; i >= 0; i--) {
     const l = _LEVELS[i];
     const s = scores[l];
-    if (s.total > 0 && (s.correct / s.total) >= 0.6) {
-      finalLevel = l;
-      break;
-    }
+    if (s.total > 0 && (s.correct / s.total) >= 0.6) { finalLevel = l; break; }
   }
 
   const levelDescriptions = {
-    A1: 'Anfänger – Du kannst einfache Sätze verstehen und grundlegende Kommunikation auf Deutsch führen.',
-    A2: 'Grundlagen – Du kannst alltägliche Ausdrücke und Sätze verstehen und dich in einfachen Situationen verständigen.',
-    B1: 'Mittelstufe – Du kannst die Hauptpunkte klarer Standardsprache zu vertrauten Themen verstehen.',
-    B2: 'Fortgeschritten – Du kannst komplexe Texte verstehen und dich spontan und fließend ausdrücken.'
+    A1: 'Anfänger – Du kannst einfache Sätze verstehen und grundlegende Kommunikation führen.',
+    A2: 'Grundlagen – Du kannst alltägliche Ausdrücke verstehen und dich in einfachen Situationen verständigen.',
+    B1: 'Mittelstufe – Du kannst die Hauptpunkte klarer Standardsprache zu vertrauten Themen verstehen.'
   };
-
-  const skillColors = ['var(--m1)', 'var(--m2)', 'var(--m3)', 'var(--m4)'];
-  const skillNames = ['Grammatik', 'Vokabeln', 'Leseverständnis', 'Hörverständnis'];
-  const skillPcts = _LEVELS.map(l => {
-    const s = scores[l];
-    return s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
-  });
-
-  const totalCorrect = _levelHistory.filter(h => h.correct).length;
-  const totalPct = Math.round((totalCorrect / 20) * 100);
-
   const adviceMap = {
     A1: 'Konzentriere dich auf Grundvokabular und einfache Satzstrukturen. Lerne täglich 10–15 neue Wörter.',
-    A2: 'Übe alltägliche Situationen: Einkaufen, Grüßen, sich vorstellen. Höre deutsche Podcasts für Anfänger.',
-    B1: 'Arbeite an Grammatik (Konjunktiv, Passiv) und erweitere deinen Wortschatz. Lese deutsche Artikel.',
-    B2: 'Vertiefe dein Verständnis durch Bücher, Filme und Gespräche mit Muttersprachlern.'
+    A2: 'Übe alltägliche Situationen. Höre deutsche Podcasts für Anfänger und erweitere deinen Wortschatz.',
+    B1: 'Arbeite an Grammatik (Konjunktiv, Passiv) und Wortschatz. Lese deutsche Artikel und schaue deutsche Serien.'
   };
+  const skillColors = { A1: 'var(--m1)', A2: 'var(--m2)', B1: 'var(--m3)' };
+  const totalCorrect = _levelHistory.filter(h => h.correct).length;
+  const totalPct = Math.round((totalCorrect / 20) * 100);
 
   const area = document.getElementById('level-area');
   area.innerHTML = `
     <div class="level-result-card">
       <div class="level-result-banner">
         <div class="level-result-badge">${finalLevel}</div>
-        <div class="level-result-name">${finalLevel === 'A1' ? 'Anfänger' : finalLevel === 'A2' ? 'Grundlagen' : finalLevel === 'B1' ? 'Mittelstufe' : 'Fortgeschritten'}</div>
+        <div class="level-result-name">${finalLevel === 'A1' ? 'Anfänger' : finalLevel === 'A2' ? 'Grundlagen' : 'Mittelstufe'}</div>
         <div class="level-result-desc">${levelDescriptions[finalLevel]}</div>
       </div>
       <div class="level-skills-grid">
-        ${_LEVELS.map((l, i) => {
+        ${_LEVELS.map(l => {
           const s = scores[l];
           const pct = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
           return `<div class="level-skill">
             <div class="level-skill-name">${l}</div>
-            <div class="level-skill-bar"><div class="level-skill-fill" style="width:${pct}%;background:${skillColors[i]}"></div></div>
+            <div class="level-skill-bar"><div class="level-skill-fill" style="width:${pct}%;background:${skillColors[l]}"></div></div>
             <div class="level-skill-pct">${pct}%</div>
           </div>`;
         }).join('')}
