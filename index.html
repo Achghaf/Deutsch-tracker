@@ -719,143 +719,227 @@ h1 span{color:var(--gold)}
     display:block;
 }
 
-
-/* ===== OFFLINE BANNER ===== */
-#offline-banner{position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--gold);color:var(--black);text-align:center;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.1em;padding:8px 16px;transform:translateY(-100%);transition:transform 0.3s ease;pointer-events:none}
-#offline-banner.visible{transform:translateY(0)}
-
-/* ===== WEEKLY XP BAR ===== */
-.weekly-xp-wrap{padding:16px 16px 0;max-width:1148px;margin:0 auto}
-.weekly-xp-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 18px}
-.weekly-xp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.weekly-xp-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--gold)}
-.weekly-xp-count{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)}
-.weekly-xp-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.weekly-xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:3px;transition:width 0.8s ease;width:0%}
-
-/* ===== DAILY QUOTE ===== */
-.quote-card{margin:16px 16px 0;max-width:1148px;padding:14px 18px;background:rgba(232,184,75,0.05);border:1px solid rgba(232,184,75,0.15);border-radius:6px;border-left:4px solid var(--gold)}
-.quote-de{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.04em;color:var(--white);line-height:1.3}
-.quote-tr{font-size:0.72rem;color:var(--muted);margin-top:4px}
-
-/* ===== LOGIN IMPROVEMENTS ===== */
-.login-flag-anim{height:6px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%);animation:flagPulse 2s ease-in-out infinite alternate}
-@keyframes flagPulse{from{opacity:0.7}to{opacity:1}}
-.login-box{animation:fadeInUp 0.4s ease both}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.forgot-link{display:block;text-align:right;font-size:0.7rem;color:var(--muted);margin-top:-8px;margin-bottom:10px;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:'DM Sans',sans-serif}
-.forgot-link:hover{color:var(--gold)}
-.google-btn{width:100%;padding:11px;background:#111;border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:border-color 0.2s}
-.google-btn:hover{border-color:#4285F4}
-.or-divider{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
-.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.pwd-strength{height:3px;border-radius:2px;margin-top:4px;transition:width 0.3s,background 0.3s;width:0%}
-.pwd-strength.weak{background:var(--red);width:33%}
-.pwd-strength.medium{background:var(--gold);width:66%}
-.pwd-strength.strong{background:var(--green);width:100%}
-
-/* ===== CONFETTI ===== */
-.confetti-piece{position:fixed;width:8px;height:8px;border-radius:1px;pointer-events:none;z-index:9998;animation:confettiFall linear forwards}
-@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* ===== VOCAB TRAINER ===== */
-.vocab-page{padding:24px 16px 40px;max-width:700px;margin:0 auto}
-.vocab-hero{padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.vocab-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
-.vocab-hero-title span{color:var(--gold)}
-.vocab-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
-.vocab-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.vocab-filter-btn{padding:6px 14px;background:transparent;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:0.75rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
-.vocab-filter-btn.active{background:var(--gold);border-color:var(--gold);color:var(--black);font-weight:600}
-.vocab-progress-wrap{margin-bottom:20px}
-.vocab-progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:6px}
-.vocab-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease}
-.vocab-progress-label{font-size:0.68rem;color:var(--muted);font-family:'DM Mono',monospace;text-align:right}
-.flashcard-scene{perspective:1000px;width:100%;max-width:420px;margin:0 auto 24px;height:200px;cursor:pointer}
-.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.5s ease}
-.flashcard.flipped{transform:rotateY(180deg)}
-.flashcard-front,.flashcard-back{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-.flashcard-back{transform:rotateY(180deg);border-color:rgba(232,184,75,0.3)}
-.fc-word{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;color:var(--white)}
-.fc-article{font-size:0.8rem;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:6px}
-.fc-tap{font-size:0.68rem;color:var(--muted);margin-top:10px;text-transform:uppercase;letter-spacing:0.1em}
-.fc-translation{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);letter-spacing:0.04em}
-.fc-example{font-size:0.8rem;color:var(--muted);margin-top:10px;line-height:1.5;font-style:italic}
-.fc-category{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:6px}
-.vocab-actions{display:flex;gap:12px;max-width:420px;margin:0 auto 20px}
-.vocab-action-btn{flex:1;padding:12px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
-.vocab-action-btn:active{transform:scale(0.96)}
-.vocab-btn-know{background:rgba(61,186,110,0.15);border:1px solid var(--green);color:var(--green)}
-.vocab-btn-review{background:rgba(204,31,31,0.12);border:1px solid var(--red);color:#ff6b6b}
-.vocab-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:0.88rem}
-.vocab-stats-row{display:flex;gap:10px;max-width:420px;margin:0 auto 20px}
-.vocab-stat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
-.vocab-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;line-height:1}
-.vocab-stat-label{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
-
-/* ===== LISTEN PAGE ===== */
-.listen-page{padding:24px 16px 40px;max-width:700px;margin:0 auto}
-.listen-hero{padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.listen-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
-.listen-hero-title span{color:var(--gold)}
-.listen-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
-.listen-speed{display:flex;gap:8px;margin-bottom:20px;align-items:center}
-.listen-speed-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
-.speed-btn{padding:5px 14px;background:transparent;border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:0.75rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
-.speed-btn.active{background:var(--gold);border-color:var(--gold);color:var(--black);font-weight:600}
-.listen-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
-.listen-sentence{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.04em;color:var(--white);line-height:1.4;margin-bottom:16px}
-.listen-play-btn{width:100%;padding:12px;background:rgba(232,184,75,0.1);border:1px solid var(--gold);border-radius:8px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.listen-play-btn:hover{background:rgba(232,184,75,0.18)}
-.listen-translation{font-size:0.85rem;color:var(--muted);margin-top:14px;line-height:1.5;filter:blur(6px);transition:filter 0.3s;cursor:pointer;text-align:center}
-.listen-translation.revealed{filter:blur(0)}
-.listen-translation-hint{font-size:0.62rem;color:var(--muted);text-align:center;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em}
-.listen-input-wrap{margin-bottom:16px}
-.listen-input{width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:11px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s}
-.listen-input:focus{border-color:var(--gold)}
-.listen-input.correct{border-color:var(--green);background:rgba(61,186,110,0.05)}
-.listen-input.wrong{border-color:var(--red);background:rgba(204,31,31,0.05)}
-.listen-check-btn{width:100%;padding:11px;background:var(--gold);color:var(--black);border:none;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;margin-bottom:10px}
-.listen-check-btn:active{transform:scale(0.98)}
-.listen-feedback{font-size:0.82rem;text-align:center;padding:8px;border-radius:6px;display:none;margin-bottom:12px}
-.listen-feedback.correct{display:block;color:var(--green);background:rgba(61,186,110,0.1)}
-.listen-feedback.wrong{display:block;color:#ff6b6b;background:rgba(204,31,31,0.1)}
-.listen-next-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:none}
-.listen-next-btn.visible{display:block}
-.listen-score-bar{display:flex;gap:10px;margin-bottom:20px}
-.listen-score-item{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
-.listen-score-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;line-height:1}
-.listen-score-label{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
-
-/* ===== QUIZ TIMER ===== */
-.quiz-timer-wrap{margin-bottom:8px}
-.quiz-timer-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
-.quiz-timer-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.9s linear}
-.quiz-timer-fill.urgent{background:var(--red)}
-.quiz-timer-label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:right;margin-top:3px}
-
-/* ===== TRANSLATE IMPROVEMENTS ===== */
-.translate-copy-btn{padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-size:0.75rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
-.translate-copy-btn:hover{border-color:var(--gold);color:var(--gold)}
-.translate-tts-btn{padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-size:0.75rem;cursor:pointer;transition:all 0.2s}
-.translate-tts-btn:hover{border-color:var(--gold);color:var(--gold)}
-.translate-addvocab-btn{padding:8px 14px;background:rgba(232,184,75,0.08);border:1px solid rgba(232,184,75,0.25);border-radius:5px;color:var(--gold);font-size:0.75rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
-.translate-addvocab-btn:hover{background:rgba(232,184,75,0.15)}
-.translate-result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-
+</style>
+<style>
+/* New animations and global styles */
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(20px);} 
+  to { opacity:1; transform: translateY(0);} 
+}
+@keyframes pulseStripes {
+  0%,100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+/* Animated flag stripes on login and page headers */
+.login-flag,
+.flag-stripe {
+  animation: pulseStripes 3s ease-in-out infinite;
+}
+/* Fade in login box when shown */
+.login-screen.visible .login-box {
+  animation: fadeIn 0.3s ease both;
+}
+/* Password strength indicator */
+.password-strength {
+  height:4px;
+  background:var(--border);
+  border-radius:2px;
+  overflow:hidden;
+  margin-top:4px;
+  display:none;
+}
+.password-strength-bar {
+  height:100%;
+  width:0%;
+  background:var(--red);
+  transition:width 0.3s ease, background-color 0.3s ease;
+}
+/* Google sign‑in button */
+.google-btn {
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  background:white;
+  color:black;
+  border:none;
+  border-radius:6px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  transition:background 0.2s;
+}
+.google-btn:hover {
+  background:#f5f0e8;
+}
+/* Offline banner */
+#offline-banner {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:2000;
+  padding:8px 16px;
+  background:rgba(232,184,75,0.95);
+  color:var(--black);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.9rem;
+  letter-spacing:0.08em;
+  text-align:center;
+}
+/* Vocabulary flashcard styles */
+#page-vocab .flashcard-container {
+  perspective:1000px;
+  margin:24px auto;
+  max-width:300px;
+  position:relative;
+}
+.flashcard {
+  width:100%;
+  height:200px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.6s ease;
+  cursor:pointer;
+}
+.flashcard.flip {
+  transform:rotateY(180deg);
+}
+.flashcard-face {
+  position:absolute;
+  width:100%;
+  height:100%;
+  backface-visibility:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.3rem;
+  line-height:1.4;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--card);
+}
+.flashcard-back {
+  transform:rotateY(180deg);
+  font-size:1rem;
+  font-family:'DM Sans',sans-serif;
+}
+/* Vocab controls */
+#page-vocab .vocab-controls {
+  display:flex;
+  gap:12px;
+  margin-top:16px;
+}
+#page-vocab .vocab-controls button {
+  flex:1;
+}
+/* Progress bar for vocab */
+.progress-bar {
+  height:6px;
+  background:var(--border);
+  border-radius:3px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.progress-bar-fill {
+  height:100%;
+  width:0%;
+  background:var(--gold);
+  transition:width 0.3s ease;
+}
+/* Listening practice styles */
+#page-listening .listening-container {
+  max-width:600px;
+  margin:24px auto;
+  padding:0 16px;
+}
+#page-listening .sentence {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem;
+  margin-bottom:8px;
+}
+#page-listening .translation {
+  font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;
+  color:var(--muted);
+  margin-bottom:16px;
+}
+#page-listening .translation.hidden {
+  filter:blur(4px);
+}
+#page-listening input {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--white);
+  margin-bottom:12px;
+}
+#page-listening .listening-controls {
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+#page-listening .listening-controls button {
+  flex:1;
+}
+/* Daily quote and XP bar */
+.daily-quote-box {
+  margin:12px 0;
+  padding:12px 16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  font-size:0.8rem;
+  line-height:1.4;
+}
+.daily-quote-box .quote-de {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;
+  color:var(--gold);
+}
+.xp-bar-container {
+  margin:12px 0;
+}
+.xp-bar-label {
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.xp-bar-track {
+  height:6px;
+  background:var(--border);
+  border-radius:3px;
+  overflow:hidden;
+}
+.xp-bar-fill {
+  height:100%;
+  width:0%;
+  background:var(--gold);
+  transition:width 0.3s ease;
+}
 </style>
 <link href="manifest.json" rel="manifest"/><link href="icon-192.png" rel="apple-touch-icon" sizes="192x192"/><link href="icon-512.png" rel="apple-touch-icon" sizes="512x512"/><link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/></head>
 <body>
 <!-- APP LOADER -->
-<div id="offline-banner">⚡ Offline — Verbindung getrennt</div>
 <div class="app-loader visible" id="app-loader">
 <div class="big-spinner"></div>
 <p id="loader-text">Verbindung...</p>
 </div>
+  <!-- Offline mode banner -->
+  <div id="offline-banner">⚠ Offline Modus – Änderungen werden lokal gespeichert</div>
 <!-- LOGIN SCREEN -->
 <div class="login-screen" id="login-screen">
 <div class="login-box">
-<div class="login-flag login-flag-anim"></div>
+<div class="login-flag"></div>
 <div class="login-body">
 <div class="login-title">Mein Ziel:<br/><span>Deutsch B1</span></div>
 <div class="login-sub">5-Monats-Lernplan · Von Null zu B1</div>
@@ -864,12 +948,17 @@ h1 span{color:var(--gold)}
 <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Registrieren</button>
 </div>
 <div class="login-field"><label>Email</label><input autocomplete="email" id="auth-email" maxlength="254" placeholder="example@gmail.com" required="" type="email"/></div>
-<div class="login-field" id="field-password"><label>Passwort</label><input autocomplete="current-password" id="auth-password" placeholder="••••••••" type="password" oninput="checkPasswordStrength(this.value)"/><div class="pwd-strength" id="pwd-strength"></div></div>
-<button class="forgot-link" id="forgot-link" onclick="handleForgotPassword()" style="display:none">Passwort vergessen?</button>
+<div class="login-field" id="field-password"><label>Passwort</label><input autocomplete="current-password" id="auth-password" placeholder="••••••••" type="password"/></div>
 <div class="login-field" id="field-confirm-password" style="display:none"><label>Passwort bestätigen</label><input autocomplete="new-password" id="auth-confirm-password" placeholder="••••••••" type="password"/></div>
+        <!-- Password strength indicator -->
+        <div class="password-strength" id="password-strength">
+          <div class="password-strength-bar" id="password-strength-bar"></div>
+        </div>
 <button class="login-btn" id="auth-btn" onclick="handleAuth()">Anmelden</button>
-<div class="or-divider">oder</div>
-<button class="google-btn" onclick="handleGoogleLogin()">🇬 Mit Google anmelden</button>
+        <!-- Forgot password link -->
+        <a href="#" id="forgot-password-link" style="font-size:0.72rem;color:var(--gold);display:block;margin-top:6px;margin-bottom:8px;text-align:right">Passwort vergessen?</a>
+        <!-- Google OAuth button -->
+        <button type="button" id="google-btn" class="google-btn"><span style="font-size:1rem">🔒</span> Mit Google anmelden</button>
 <div class="login-error" id="auth-error"></div>
 </div>
 </div>
@@ -937,8 +1026,8 @@ h1 span{color:var(--gold)}
 <button aria-label="Open Translator" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Übersetzer</button>
 <button aria-label="Quiz" class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg> Quiz</button>
 <button aria-label="Level" class="desk-nav-item" data-page="level" onclick="switchPage('level')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Niveau</button>
-<button aria-label="Vocab" class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="3" x2="21" y1="15" y2="15"></line><line x1="9" x2="9" y1="9" y2="21"></line></svg> Vokabeln</button>
-<button aria-label="Listen" class="desk-nav-item" data-page="listen" onclick="switchPage('listen')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> Hören</button>
+        <button aria-label="Vokabeln" class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" type="button">📚 Vokabeln</button>
+        <button aria-label="Hören" class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" type="button">🎧 Hören</button>
 <button aria-label="Admin" class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" style="display:none" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Admin</button>
 <div class="desk-nav-right">
 <!-- Notification Bell -->
@@ -974,6 +1063,7 @@ h1 span{color:var(--gold)}
 <div class="header-meta">
 <div class="level-badge">🎯 B1 NIVEAU</div>
 <div class="today-label" id="today-label"></div>
+        <div id="user-header-name" class="user-name-header" style="font-size:0.8rem;color:var(--gold);"></div>
 </div>
 
 <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
@@ -1008,24 +1098,15 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 </div>
-</div>
-
-<!-- DAILY QUOTE -->
-<div class="quote-card" id="daily-quote-card">
-  <div class="quote-de" id="daily-quote-de">„Wer fremde Sprachen nicht kennt, weiß nichts von seiner eigenen."</div>
-  <div class="quote-tr" id="daily-quote-tr">— J.W. von Goethe</div>
-</div>
-<!-- WEEKLY XP BAR -->
-<div class="weekly-xp-wrap">
-  <div class="weekly-xp-card">
-    <div class="weekly-xp-header">
-      <div class="weekly-xp-title">⚡ Wöchentliche XP</div>
-      <div class="weekly-xp-count" id="weekly-xp-count">0 / 500 XP</div>
+    <!-- Daily quote and weekly XP bar -->
+    <div class="daily-quote-box" id="daily-quote-box"></div>
+    <div class="xp-bar-container">
+      <div class="xp-bar-label">Wöchentliche XP</div>
+      <div class="xp-bar-track">
+        <div class="xp-bar-fill" id="xp-week-fill"></div>
+      </div>
     </div>
-    <div class="weekly-xp-bar"><div class="weekly-xp-fill" id="weekly-xp-fill"></div></div>
-  </div>
 </div>
-
 <div class="journey-section container">
 <div class="section-title">5-Monate Reise</div>
 <div class="journey-bar" id="journey-bar"></div>
@@ -1218,7 +1299,7 @@ h1 span{color:var(--gold)}
 <span class="btn-label">🔊 Anhören</span>
 </button>
 </div>
-<div class="translate-results" id="translate-results"><div class="translate-result-actions" id="translate-result-actions" style="display:none"><button class="translate-copy-btn" onclick="copyTranslation()">📋 Kopieren</button><button class="translate-tts-btn" onclick="speakTranslation()">🔊 Vorlesen</button><button class="translate-addvocab-btn" onclick="addTranslationToVocab()">📚 + Vokabeln</button></div>
+<div class="translate-results" id="translate-results">
 <!-- results injected here -->
 </div>
 <div class="translate-history" id="translate-history-section">
@@ -1230,86 +1311,6 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 </div>
-
-<!-- VOCAB TRAINER PAGE -->
-<div class="page" id="page-vocab">
-<div class="vocab-page">
-  <div class="vocab-hero">
-    <div class="vocab-hero-title">Vokabel<span>training</span></div>
-    <div class="vocab-hero-sub">Karteikarten mit Spaced Repetition</div>
-  </div>
-  <div class="vocab-stats-row">
-    <div class="vocab-stat"><div class="vocab-stat-val" id="vc-today" style="color:var(--gold)">0</div><div class="vocab-stat-label">Heute</div></div>
-    <div class="vocab-stat"><div class="vocab-stat-val" id="vc-know" style="color:var(--green)">0</div><div class="vocab-stat-label">Gewusst</div></div>
-    <div class="vocab-stat"><div class="vocab-stat-val" id="vc-review" style="color:var(--red)">0</div><div class="vocab-stat-label">Wiederholen</div></div>
-  </div>
-  <div class="vocab-progress-wrap">
-    <div class="vocab-progress-bar"><div class="vocab-progress-fill" id="vocab-progress-fill"></div></div>
-    <div class="vocab-progress-label" id="vocab-progress-label">0 / 0 Karten</div>
-  </div>
-  <div class="vocab-filters" id="vocab-filters">
-    <button class="vocab-filter-btn active" onclick="setVocabFilter('all')">Alle</button>
-    <button class="vocab-filter-btn" onclick="setVocabFilter('Nomen')">📦 Nomen</button>
-    <button class="vocab-filter-btn" onclick="setVocabFilter('Verben')">⚡ Verben</button>
-    <button class="vocab-filter-btn" onclick="setVocabFilter('Adjektive')">🎨 Adjektive</button>
-    <button class="vocab-filter-btn" onclick="setVocabFilter('Phrasen')">💬 Phrasen</button>
-  </div>
-  <div class="flashcard-scene" onclick="flipCard()" id="flashcard-scene">
-    <div class="flashcard" id="flashcard">
-      <div class="flashcard-front">
-        <div class="fc-article" id="fc-article">der</div>
-        <div class="fc-word" id="fc-word">Bahnhof</div>
-        <div class="fc-category" id="fc-cat">Nomen</div>
-        <div class="fc-tap">Tippen zum Umdrehen</div>
-      </div>
-      <div class="flashcard-back">
-        <div class="fc-translation" id="fc-translation">Train station</div>
-        <div class="fc-example" id="fc-example">„Ich treffe dich am Bahnhof um 8 Uhr."</div>
-      </div>
-    </div>
-  </div>
-  <div class="vocab-actions">
-    <button class="vocab-action-btn vocab-btn-review" onclick="vocabAnswer(false)">✗ Wiederholen</button>
-    <button class="vocab-action-btn vocab-btn-know" onclick="vocabAnswer(true)">✓ Gewusst</button>
-  </div>
-  <div class="vocab-empty" id="vocab-empty" style="display:none">
-    🎉 Alle Karten für heute erledigt! Komm morgen wieder.
-  </div>
-</div>
-</div>
-<!-- LISTENING PRACTICE PAGE -->
-<div class="page" id="page-listen">
-<div class="listen-page">
-  <div class="listen-hero">
-    <div class="listen-hero-title">Hör<span>übungen</span></div>
-    <div class="listen-hero-sub">Deutsch hören & tippen · Web Speech API</div>
-  </div>
-  <div class="listen-score-bar">
-    <div class="listen-score-item"><div class="listen-score-val" id="ls-correct" style="color:var(--green)">0</div><div class="listen-score-label">Richtig</div></div>
-    <div class="listen-score-item"><div class="listen-score-val" id="ls-wrong" style="color:var(--red)">0</div><div class="listen-score-label">Falsch</div></div>
-    <div class="listen-score-item"><div class="listen-score-val" id="ls-pct" style="color:var(--gold)">—</div><div class="listen-score-label">Genauigkeit</div></div>
-  </div>
-  <div class="listen-speed">
-    <span class="listen-speed-label">Tempo:</span>
-    <button class="speed-btn active" onclick="setListenSpeed(0.6,this)">🐢 Langsam</button>
-    <button class="speed-btn" onclick="setListenSpeed(1.0,this)">🚶 Normal</button>
-    <button class="speed-btn" onclick="setListenSpeed(1.4,this)">🚀 Schnell</button>
-  </div>
-  <div class="listen-card" id="listen-card">
-    <div class="listen-sentence" id="listen-sentence">Klicke auf Abspielen, um zu beginnen.</div>
-    <button class="listen-play-btn" onclick="playListenAudio()">🔊 Abspielen</button>
-    <div class="listen-translation" id="listen-translation" onclick="revealTranslation()">Die Übersetzung erscheint hier</div>
-    <div class="listen-translation-hint">Tippen zum Anzeigen</div>
-  </div>
-  <div class="listen-input-wrap">
-    <input class="listen-input" id="listen-input" placeholder="Was hast du gehört? Tippe auf Deutsch..." type="text" onkeydown="if(event.key==='Enter')checkListenAnswer()"/>
-  </div>
-  <button class="listen-check-btn" onclick="checkListenAnswer()">✓ Prüfen</button>
-  <div class="listen-feedback" id="listen-feedback"></div>
-  <button class="listen-next-btn" id="listen-next-btn" onclick="nextListenSentence()">Nächster Satz →</button>
-</div>
-</div>
-
 <!-- ADMIN PAGE -->
 <div class="page" id="page-admin">
 <div class="admin-page">
@@ -1402,17 +1403,17 @@ h1 span{color:var(--gold)}
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
 <div class="nav-label">Quiz</div>
 </div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">📚</div>
+    <div class="nav-label">Vokabeln</div>
+  </div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">🎧</div>
+    <div class="nav-label">Hören</div>
+  </div>
 <div class="nav-item" data-page="level" onclick="switchPage('level')">
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
 <div class="nav-label">Niveau</div>
-</div>
-<div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="9" x2="9" y1="9" y2="21"></line></svg></div>
-<div class="nav-label">Vokabeln</div>
-</div>
-<div class="nav-item" data-page="listen" onclick="switchPage('listen')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>
-<div class="nav-label">Hören</div>
 </div>
 <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
@@ -1478,6 +1479,70 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- Supabase -->
+<!-- Vocabulary Trainer Page -->
+<div class="page" id="page-vocab">
+  <header>
+    <div class="flag-stripe"></div>
+    <div class="header-inner">
+      <h1>📚 <span>Vokabeltrainer</span></h1>
+    </div>
+  </header>
+  <div style="padding:24px 16px;max-width:700px;margin:0 auto">
+    <div class="flashcard-container">
+      <div class="flashcard" id="vocab-card">
+        <div class="flashcard-face flashcard-front" id="vocab-front">Front</div>
+        <div class="flashcard-face flashcard-back" id="vocab-back">Back</div>
+      </div>
+    </div>
+    <div class="vocab-controls">
+      <button class="login-btn" id="vocab-known-btn">✓ Kenne ich</button>
+      <button class="login-btn" id="vocab-again-btn">✗ Nochmal</button>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="vocab-progress-bar"></div>
+    </div>
+    <select id="vocab-filter" style="margin-top:12px;width:100%;padding:8px;border-radius:6px;background:var(--card);color:var(--white);border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:0.8rem;">
+      <option value="all">Alle Kategorien</option>
+      <option value="noun">Nomen</option>
+      <option value="verb">Verben</option>
+      <option value="adjective">Adjektive</option>
+      <option value="phrase">Phrasen</option>
+    </select>
+  </div>
+</div>
+<!-- Listening Practice Page -->
+<div class="page" id="page-listening">
+  <header>
+    <div class="flag-stripe"></div>
+    <div class="header-inner">
+      <h1>🎧 <span>Hörverständnis</span></h1>
+    </div>
+  </header>
+  <div class="listening-container">
+    <div class="sentence" id="listening-sentence"></div>
+    <div class="translation hidden" id="listening-translation"></div>
+    <div class="listening-controls">
+      <button class="login-btn" id="listening-play-btn">▶ Audio</button>
+      <button class="login-btn" id="listening-show-btn">👁 Übersetzung</button>
+    </div>
+    <input id="listening-input" placeholder="Tippe, was du gehört hast..." type="text" />
+    <div class="listening-controls">
+      <button class="login-btn" id="listening-submit-btn">✓ Überprüfen</button>
+    </div>
+    <div class="xp-bar-container">
+      <div class="xp-bar-label">Richtige Antworten: <span id="listening-score">0</span></div>
+      <div class="xp-bar-track">
+        <div class="xp-bar-fill" id="listening-score-bar"></div>
+      </div>
+    </div>
+    <div class="listening-controls">
+      <button class="login-btn" id="listening-slow-btn">🐢 Langsam</button>
+      <button class="login-btn" id="listening-normal-btn">⚖ Normal</button>
+      <button class="login-btn" id="listening-fast-btn">🐇 Schnell</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -1504,7 +1569,7 @@ let _adminRoleFilter = 'all';
 
 function isAdmin(){ return currentRole === 'admin'; }
 
-const USER_PAGES = ['tracker','pdf','translate','news','quiz','level'];
+const USER_PAGES = ['tracker','pdf','translate','news','quiz','level','vocab','listening'];
 
 function applyRoleUI(){
   const admin = isAdmin();
@@ -1732,16 +1797,25 @@ _supa.auth.onAuthStateChange(async(event,session)=>{
 });
 
 function showUserBadge(user){
-  const email=user.email||'';const initial=email[0]?.toUpperCase()||'?';
+  // Determine display name from user metadata or email
+  const name = (user.user_metadata && (user.user_metadata.name || user.user_metadata.full_name)) || (user.email ? user.email.split('@')[0] : '');
+  const initial = name ? name[0].toUpperCase() : '?';
   // Update all profile avatar buttons
   ['mob-profile-btn','desk-profile-btn'].forEach(id=>{
     const el=document.getElementById(id);if(el){el.textContent=initial;el.style.display='flex';}
   });
   // Populate profile modal
-  document.getElementById('profile-avatar-big').textContent=initial;
-  document.getElementById('profile-display-name').textContent=initial;
-  document.getElementById('profile-display-email').textContent=email;
-  document.getElementById('profile-email-input').value=email;
+  const avatarBig=document.getElementById('profile-avatar-big');
+  if(avatarBig) avatarBig.textContent=initial;
+  const displayNameEl=document.getElementById('profile-display-name');
+  if(displayNameEl) displayNameEl.textContent=name||initial;
+  const displayEmail=document.getElementById('profile-display-email');
+  if(displayEmail) displayEmail.textContent=user.email||'';
+  const emailInput=document.getElementById('profile-email-input');
+  if(emailInput) emailInput.value=user.email||'';
+  // Update name in header
+  const headerNameEl=document.getElementById('user-header-name');
+  if(headerNameEl) headerNameEl.textContent = name || '';
   updateDocsAccountHint();
   applyRoleUI();
 }
@@ -1921,8 +1995,23 @@ function updateStats(){
   document.getElementById('arc-pct').textContent=pct;
   document.getElementById('arc-circle').style.strokeDashoffset=2*Math.PI*65*(1-pct/100);
   updateStreakWidget();
+  // Update weekly XP bar if available
+  try{ updateWeeklyXP(); }catch(e){}
+  // Update daily quote
+  try{ updateDailyQuote(); }catch(e){}
 }
-function toggleWeek(w){state.completedWeeks[w]=!state.completedWeeks[w];showToast(state.completedWeeks[w]?t('toast_week_done').replace('{week}',w):t('toast_week_reset').replace('{week}',w));save();render();}
+function toggleWeek(w){
+  state.completedWeeks[w] = !state.completedWeeks[w];
+  showToast(state.completedWeeks[w] ? t('toast_week_done').replace('{week}', w) : t('toast_week_reset').replace('{week}', w));
+  save();
+  render();
+  // Confetti burst when a week is completed
+  if(state.completedWeeks[w]){
+    try{
+      if(typeof confetti === 'function') confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
+    }catch(e){}
+  }
+}
 function toggleTask(id){
   state.dailyDone[id]=!state.dailyDone[id];
   save();renderDaily();updateStats();
@@ -1930,6 +2019,11 @@ function toggleTask(id){
   const allDone=allTaskIds.every(i=>state.dailyDone[i]);
   if(allDone){
     showToast('🔥 '+t('toast_all_tasks_done')+' Streak gesichert!');
+    try {
+      if(typeof confetti==='function') {
+        confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      }
+    } catch(e) {}
   }
 }
 function resetAll(){if(!isAdmin()){showToast('⛔ Admin only');return;}if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
@@ -2251,6 +2345,9 @@ function switchPage(page){
     if(page==='admin') loadAdminPage();
     if(page==='quiz') initQuizPage();
     if(page==='level') initLevelPage();
+      if(page==='vocab') initVocabPage();
+      if(page==='listening') initListeningPage();
+      if(page==='tracker') { updateDailyQuote(); updateWeeklyXP(); }
   }catch(err){
     console.error('Page init error for', page, err);
   }
@@ -4839,362 +4936,264 @@ function showLevelResult() {
     </div>
     <button class="level-restart-btn" onclick="startLevelTest()">🔄 Test wiederholen</button>`;
 }
-
-
-// ===== OFFLINE BANNER =====
-function initOfflineBanner(){
-  const banner = document.getElementById('offline-banner');
-  window.addEventListener('offline', () => banner.classList.add('visible'));
-  window.addEventListener('online', () => banner.classList.remove('visible'));
-  if (!navigator.onLine) banner.classList.add('visible');
-}
-initOfflineBanner();
-
-// ===== DAILY QUOTES =====
-const DAILY_QUOTES = [
-  {de:'„Wer fremde Sprachen nicht kennt, weiß nichts von seiner eigenen."', tr:'— J.W. von Goethe'},
-  {de:'„Grenzen existieren nur in den Seelen derer, die sie nicht weit genug träumen."', tr:'— Wernher von Braun'},
-  {de:'„Der Mensch ist so lange jung, wie er noch lernen, empfangen und wachsen kann."', tr:'— Emily Dickinson (übers.)'},
-  {de:'„Übung macht den Meister."', tr:'— Deutsches Sprichwort: Practice makes perfect.'},
-  {de:'„Der kluge Mann baut vor."', tr:'— Deutsches Sprichwort: A wise man prepares ahead.'},
-  {de:'„Ohne Fleiß kein Preis."', tr:'— Deutsches Sprichwort: No pain, no gain.'},
-  {de:'„Aller Anfang ist schwer."', tr:'— Deutsches Sprichwort: Every beginning is difficult.'},
-];
-function renderDailyQuote(){
-  const today = new Date().getDate();
-  const q = DAILY_QUOTES[today % DAILY_QUOTES.length];
-  const de = document.getElementById('daily-quote-de');
-  const tr = document.getElementById('daily-quote-tr');
-  if(de) de.textContent = q.de;
-  if(tr) tr.textContent = q.tr;
-}
-renderDailyQuote();
-
-// ===== WEEKLY XP =====
-function updateWeeklyXP(){
-  const xp = (Object.keys(state.completedWeeks||{}).filter(k=>state.completedWeeks[k]).length * 50)
-            + (Object.keys(state.dailyDone||{}).length * 25);
-  const goal = 500;
-  const pct = Math.min(100, Math.round(xp/goal*100));
-  const fill = document.getElementById('weekly-xp-fill');
-  const count = document.getElementById('weekly-xp-count');
-  if(fill) fill.style.width = pct + '%';
-  if(count) count.textContent = xp + ' / ' + goal + ' XP';
-}
-
-// ===== CONFETTI =====
-function launchConfetti(){
-  const colors = ['#e8b84b','#cc1f1f','#3dba6e','#3a82f7','#f5f0e8'];
-  for(let i=0;i<60;i++){
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.cssText = [
-      'left:' + Math.random()*100 + 'vw',
-      'top:-10px',
-      'background:' + colors[Math.floor(Math.random()*colors.length)],
-      'border-radius:' + (Math.random()>0.5?'50%':'2px'),
-      'animation-duration:' + (1.5+Math.random()*1.5) + 's',
-      'animation-delay:' + Math.random()*0.4 + 's',
-      'transform:rotate('+Math.random()*360+'deg)'
-    ].join(';');
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(), 3200);
-  }
-}
-
-// ===== LOGIN IMPROVEMENTS =====
-function checkPasswordStrength(val){
-  const bar = document.getElementById('pwd-strength');
-  if(!bar) return;
-  if(val.length === 0){bar.className='pwd-strength';return;}
-  const strong = val.length >= 10 && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val);
-  const medium = val.length >= 7 && (/[A-Z]/.test(val) || /[0-9]/.test(val));
-  bar.className = 'pwd-strength ' + (strong?'strong':medium?'medium':'weak');
-}
-const _origSwitchAuthTab = typeof switchAuthTab === 'function' ? switchAuthTab : null;
-function switchAuthTab(mode){
-  if(_origSwitchAuthTab) _origSwitchAuthTab(mode);
-  const forgot = document.getElementById('forgot-link');
-  const strength = document.getElementById('pwd-strength');
-  if(forgot) forgot.style.display = mode==='login' ? 'block' : 'none';
-  if(strength) strength.className = 'pwd-strength';
-}
-async function handleForgotPassword(){
-  const email = document.getElementById('auth-email').value.trim();
-  if(!email){showToast('⚠️ Bitte E-Mail eingeben');return;}
-  const {error} = await _supa.auth.resetPasswordForEmail(email);
-  if(error) showToast('Fehler: '+error.message);
-  else showToast('📧 Reset-Link gesendet!');
-}
-async function handleGoogleLogin(){
-  const {error} = await _supa.auth.signInWithOAuth({provider:'google'});
-  if(error) showToast('Google-Login fehlgeschlagen');
-}
-
-// ===== VOCAB TRAINER =====
-const VOCAB_BANK = [
-  {word:'Bahnhof', article:'der', translation:'Train station', example:'Ich treffe dich am Bahnhof.', category:'Nomen'},
-  {word:'Wohnung', article:'die', translation:'Apartment', example:'Ich suche eine neue Wohnung.', category:'Nomen'},
-  {word:'Krankenhaus', article:'das', translation:'Hospital', example:'Er liegt im Krankenhaus.', category:'Nomen'},
-  {word:'arbeiten', article:'', translation:'To work', example:'Ich arbeite von 9 bis 17 Uhr.', category:'Verben'},
-  {word:'kaufen', article:'', translation:'To buy', example:'Ich kaufe Brot beim Bäcker.', category:'Verben'},
-  {word:'verstehen', article:'', translation:'To understand', example:'Ich verstehe dich nicht.', category:'Verben'},
-  {word:'schnell', article:'', translation:'Fast / Quick', example:'Er fährt sehr schnell.', category:'Adjektive'},
-  {word:'freundlich', article:'', translation:'Friendly', example:'Die Lehrerin ist sehr freundlich.', category:'Adjektive'},
-  {word:'wichtig', article:'', translation:'Important', example:'Das ist eine wichtige Frage.', category:'Adjektive'},
-  {word:'Wie geht's?', article:'', translation:'How are you?', example:'— Wie geht's? — Gut, danke!', category:'Phrasen'},
-  {word:'Entschuldigung', article:'', translation:'Excuse me / Sorry', example:'Entschuldigung, wo ist der Bahnhof?', category:'Phrasen'},
-  {word:'Auf Wiedersehen', article:'', translation:'Goodbye', example:'Auf Wiedersehen und gute Fahrt!', category:'Phrasen'},
-  {word:'Schlüssel', article:'der', translation:'Key', example:'Hast du deinen Schlüssel?', category:'Nomen'},
-  {word:'Termin', article:'der', translation:'Appointment', example:'Ich habe morgen einen Termin.', category:'Nomen'},
-  {word:'lernen', article:'', translation:'To learn', example:'Ich lerne jeden Tag Deutsch.', category:'Verben'},
-  {word:'schreiben', article:'', translation:'To write', example:'Sie schreibt einen Brief.', category:'Verben'},
-  {word:'gefährlich', article:'', translation:'Dangerous', example:'Das ist sehr gefährlich.', category:'Adjektive'},
-  {word:'günstig', article:'', translation:'Affordable', example:'Dieser Laden ist sehr günstig.', category:'Adjektive'},
-  {word:'Vielen Dank', article:'', translation:'Thank you very much', example:'Vielen Dank für Ihre Hilfe!', category:'Phrasen'},
-  {word:'Bitte', article:'', translation:'Please / You're welcome', example:'Bitte helfen Sie mir.', category:'Phrasen'},
-];
-
-let vocabFilter = 'all';
-let vocabQueue = [];
-let vocabIndex = 0;
-let vocabKnow = 0, vocabReview = 0, vocabTotal = 0;
-let cardFlipped = false;
-
-function setVocabFilter(cat){
-  vocabFilter = cat;
-  document.querySelectorAll('.vocab-filter-btn').forEach(b=>{
-    b.classList.toggle('active', b.textContent.includes(cat) || (cat==='all' && b.textContent==='Alle'));
-  });
-  initVocabQueue();
-}
-function initVocabQueue(){
-  const pool = vocabFilter==='all' ? VOCAB_BANK : VOCAB_BANK.filter(w=>w.category===vocabFilter);
-  vocabQueue = [...pool].sort(()=>Math.random()-0.5);
-  vocabIndex = 0; vocabKnow = 0; vocabReview = 0; vocabTotal = pool.length;
-  cardFlipped = false;
-  updateVocabCard();
-}
-function updateVocabCard(){
-  const empty = document.getElementById('vocab-empty');
-  const scene = document.getElementById('flashcard-scene');
-  const actions = document.querySelector('.vocab-actions');
-  if(vocabIndex >= vocabQueue.length){
-    if(empty) empty.style.display='block';
-    if(scene) scene.style.display='none';
-    if(actions) actions.style.display='none';
-  } else {
-    if(empty) empty.style.display='none';
-    if(scene) scene.style.display='block';
-    if(actions) actions.style.display='flex';
-    const word = vocabQueue[vocabIndex];
-    document.getElementById('fc-article').textContent = word.article || '';
-    document.getElementById('fc-word').textContent = word.word;
-    document.getElementById('fc-cat').textContent = word.category;
-    document.getElementById('fc-translation').textContent = word.translation;
-    document.getElementById('fc-example').textContent = word.example;
-    const fc = document.getElementById('flashcard');
-    if(fc){ fc.classList.remove('flipped'); cardFlipped = false; }
-  }
-  const filled = vocabIndex;
-  const pct = vocabTotal > 0 ? Math.round(filled/vocabTotal*100) : 0;
-  const fill = document.getElementById('vocab-progress-fill');
-  if(fill) fill.style.width = pct + '%';
-  const lbl = document.getElementById('vocab-progress-label');
-  if(lbl) lbl.textContent = filled + ' / ' + vocabTotal + ' Karten';
-  const today = document.getElementById('vc-today');
-  const know = document.getElementById('vc-know');
-  const review = document.getElementById('vc-review');
-  if(today) today.textContent = filled;
-  if(know) know.textContent = vocabKnow;
-  if(review) review.textContent = vocabReview;
-}
-function flipCard(){
-  const fc = document.getElementById('flashcard');
-  if(!fc) return;
-  cardFlipped = !cardFlipped;
-  fc.classList.toggle('flipped', cardFlipped);
-}
-function vocabAnswer(known){
-  if(vocabIndex >= vocabQueue.length) return;
-  if(known){ vocabKnow++; } 
-  else {
-    // Spaced repetition: push card back
-    const word = vocabQueue[vocabIndex];
-    const delay = Math.min(3, vocabQueue.length - vocabIndex);
-    vocabQueue.splice(vocabIndex + delay, 0, {...word});
-    vocabReview++;
-  }
-  vocabIndex++;
-  cardFlipped = false;
-  updateVocabCard();
-}
-document.addEventListener('keydown', e => {
-  if(document.getElementById('page-vocab')?.classList.contains('active')){
-    if(e.code==='Space'){e.preventDefault();flipCard();}
-    if(e.code==='ArrowRight') vocabAnswer(true);
-    if(e.code==='ArrowLeft') vocabAnswer(false);
-  }
-  if(document.getElementById('page-quiz')?.classList.contains('active')){
-    if(e.code==='Enter'){
-      const focused = document.activeElement;
-      if(focused && focused.classList.contains('quiz-option')) focused.click();
-    }
-  }
-});
-
-// ===== LISTENING PRACTICE =====
-const LISTEN_SENTENCES = [
-  {de:'Guten Morgen! Wie geht es Ihnen heute?', tr:'Good morning! How are you today?'},
-  {de:'Ich möchte bitte ein Glas Wasser.', tr:'I would like a glass of water, please.'},
-  {de:'Wo ist die nächste U-Bahn-Station?', tr:'Where is the nearest subway station?'},
-  {de:'Das Wetter ist heute sehr schön.', tr:'The weather is very nice today.'},
-  {de:'Ich lerne seit drei Monaten Deutsch.', tr:'I have been learning German for three months.'},
-  {de:'Könnten Sie bitte langsamer sprechen?', tr:'Could you please speak more slowly?'},
-  {de:'Die Bibliothek schließt um achtzehn Uhr.', tr:'The library closes at six o'clock.'},
-  {de:'Ich brauche Hilfe mit meinen Hausaufgaben.', tr:'I need help with my homework.'},
-  {de:'Er hat gestern einen Film gesehen.', tr:'He watched a movie yesterday.'},
-  {de:'Wir treffen uns um zwölf Uhr mittags.', tr:'We are meeting at noon.'},
-];
-let listenIdx = 0, listenSpeed = 0.6, listenCorrect = 0, listenWrong = 0;
-let listenAnswered = false;
-
-function setListenSpeed(rate, btn){
-  listenSpeed = rate;
-  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-}
-function playListenAudio(){
-  if(!window.speechSynthesis){showToast('⚠️ TTS nicht verfügbar');return;}
-  window.speechSynthesis.cancel();
-  const sent = LISTEN_SENTENCES[listenIdx];
-  const utt = new SpeechSynthesisUtterance(sent.de);
-  utt.lang = 'de-DE'; utt.rate = listenSpeed;
-  window.speechSynthesis.speak(utt);
-}
-function revealTranslation(){
-  const el = document.getElementById('listen-translation');
-  if(el) el.classList.add('revealed');
-}
-function nextListenSentence(){
-  listenIdx = (listenIdx + 1) % LISTEN_SENTENCES.length;
-  listenAnswered = false;
-  const sent = LISTEN_SENTENCES[listenIdx];
-  document.getElementById('listen-sentence').textContent = sent.de;
-  const tr = document.getElementById('listen-translation');
-  if(tr){ tr.textContent = sent.tr; tr.classList.remove('revealed'); }
-  const inp = document.getElementById('listen-input');
-  if(inp){ inp.value=''; inp.className='listen-input'; }
-  const fb = document.getElementById('listen-feedback');
-  if(fb){ fb.className='listen-feedback'; }
-  const nb = document.getElementById('listen-next-btn');
-  if(nb) nb.classList.remove('visible');
-  updateListenScore();
-}
-function checkListenAnswer(){
-  if(listenAnswered) return;
-  const inp = document.getElementById('listen-input');
-  const fb = document.getElementById('listen-feedback');
-  const nb = document.getElementById('listen-next-btn');
-  if(!inp || !fb) return;
-  const userAnswer = inp.value.trim().toLowerCase().replace(/[.,!?]/g,'');
-  const correct = LISTEN_SENTENCES[listenIdx].de.toLowerCase().replace(/[.,!?]/g,'');
-  const isCorrect = userAnswer === correct || correct.includes(userAnswer) && userAnswer.length > 5;
-  listenAnswered = true;
-  revealTranslation();
-  if(isCorrect){
-    inp.classList.add('correct');
-    fb.className='listen-feedback correct';
-    fb.textContent='✓ Richtig! Sehr gut!';
-    listenCorrect++;
-  } else {
-    inp.classList.add('wrong');
-    fb.className='listen-feedback wrong';
-    fb.textContent='✗ Richtige Antwort: ' + LISTEN_SENTENCES[listenIdx].de;
-    listenWrong++;
-  }
-  if(nb) nb.classList.add('visible');
-  updateListenScore();
-}
-function updateListenScore(){
-  const total = listenCorrect + listenWrong;
-  const pct = total > 0 ? Math.round(listenCorrect/total*100) : 0;
-  const c = document.getElementById('ls-correct');
-  const w = document.getElementById('ls-wrong');
-  const p = document.getElementById('ls-pct');
-  if(c) c.textContent = listenCorrect;
-  if(w) w.textContent = listenWrong;
-  if(p) p.textContent = total > 0 ? pct + '%' : '—';
-}
-// Init first listen sentence
-(function(){
-  const sent = LISTEN_SENTENCES[0];
-  const el = document.getElementById('listen-sentence');
-  const tr = document.getElementById('listen-translation');
-  if(el) el.textContent = sent.de;
-  if(tr) tr.textContent = sent.tr;
-})();
-
-// ===== TRANSLATE IMPROVEMENTS =====
-function copyTranslation(){
-  const results = document.getElementById('translate-results');
-  if(!results) return;
-  const texts = [...results.querySelectorAll('.translate-result-text,.translate-word')].map(el=>el.textContent).join('\n');
-  navigator.clipboard.writeText(texts).then(()=>showToast('📋 Kopiert!')).catch(()=>showToast('Fehler beim Kopieren'));
-}
-function speakTranslation(){
-  const inp = document.getElementById('translate-input');
-  if(!inp || !inp.value.trim()){showToast('⚠️ Nichts zu sprechen');return;}
-  if(!window.speechSynthesis){showToast('⚠️ TTS nicht verfügbar');return;}
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(inp.value.trim());
-  utt.lang = 'de-DE'; utt.rate = 0.9;
-  window.speechSynthesis.speak(utt);
-}
-function addTranslationToVocab(){
-  const inp = document.getElementById('translate-input');
-  if(!inp || !inp.value.trim()){showToast('⚠️ Kein Wort vorhanden');return;}
-  const word = inp.value.trim();
-  const newCard = {word, article:'', translation:'(aus Übersetzer)', example:'', category:'Phrasen'};
-  VOCAB_BANK.unshift(newCard);
-  showToast('📚 Zu Vokabeln hinzugefügt!');
-}
-// Show/hide translate result actions after translation
-const _origDoTranslate = typeof doTranslate === 'function' ? doTranslate : null;
-if(_origDoTranslate){
-  window.doTranslate = async function(){
-    await _origDoTranslate();
-    const actions = document.getElementById('translate-result-actions');
-    if(actions) actions.style.display='flex';
-  };
-}
-
-// ===== WIRE CONFETTI TO WEEK/TASK COMPLETION =====
-const _origToggleWeek = typeof toggleWeek === 'function' ? toggleWeek : null;
-if(_origToggleWeek){
-  window.toggleWeek = function(w){
-    _origToggleWeek(w);
-    if(state.completedWeeks && state.completedWeeks[w]) launchConfetti();
-    updateWeeklyXP();
-  };
-}
-
-// ===== INIT VOCAB ON PAGE LOAD =====
-window.addEventListener('load', () => {
-  initVocabQueue();
-  updateWeeklyXP();
-});
-
-// ===== OVERRIDE switchPage TO INIT PAGES =====
-const _origSwitchPage = typeof switchPage === 'function' ? switchPage : null;
-if(_origSwitchPage){
-  window.switchPage = function(page){
-    _origSwitchPage(page);
-    if(page === 'vocab') initVocabQueue();
-    if(page === 'tracker') updateWeeklyXP();
-  };
-}
-
 </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+    /* Additional functionality for the improved app */
+    (function(){
+      // DOM ready
+      document.addEventListener('DOMContentLoaded', function(){
+        // Password strength monitor
+        const pwdInput=document.getElementById('auth-password');
+        const strengthBar=document.getElementById('password-strength-bar');
+        const strengthWrap=document.getElementById('password-strength');
+        if(pwdInput){
+          pwdInput.addEventListener('input',function(){
+            if(typeof authMode!=='undefined' && authMode==='register'){
+              const val=pwdInput.value||'';
+              strengthWrap.style.display='block';
+              const score=window.computeStrength(val);
+              strengthBar.style.width=Math.min(score,100)+'%';
+              if(score<40){strengthBar.style.background='var(--red)';}
+              else if(score<70){strengthBar.style.background='var(--gold)';}
+              else{strengthBar.style.background='var(--green)';}
+            }else{
+              strengthWrap.style.display='none';
+            }
+          });
+        }
+        // Forgot password link
+        const forgot=document.getElementById('forgot-password-link');
+        if(forgot){
+          forgot.addEventListener('click',async function(e){
+            e.preventDefault();
+            const email=(document.getElementById('auth-email').value||'').trim().toLowerCase();
+            if(!email){showToast('Bitte gib deine E-Mail ein.');return;}
+            try{
+              await _supa.auth.resetPasswordForEmail(email,{ redirectTo: getSignupRedirectUrl() });
+              showToast('E-Mail zum Zurücksetzen wurde gesendet.');
+            }catch(err){
+              showToast('Fehler beim Zurücksetzen: '+(err&&err.message?err.message:String(err)));
+            }
+          });
+        }
+        // Google OAuth button
+        const googleBtn=document.getElementById('google-btn');
+        if(googleBtn){
+          googleBtn.addEventListener('click',async function(e){
+            e.preventDefault();
+            try{
+              await _supa.auth.signInWithOAuth({provider:'google'});
+            }catch(err){
+              showToast('Google Login fehlgeschlagen');
+            }
+          });
+        }
+        // Offline detection
+        const offlineBanner=document.getElementById('offline-banner');
+        function updateOffline(){
+          if(navigator.onLine){
+            if(offlineBanner) offlineBanner.style.display='none';
+          }else{
+            if(offlineBanner) offlineBanner.style.display='block';
+          }
+        }
+        window.addEventListener('online',updateOffline);
+        window.addEventListener('offline',updateOffline);
+        updateOffline();
+      });
+      // Password strength function
+      window.computeStrength=function(pwd){
+        let score=0;
+        if(!pwd) return 0;
+        if(pwd.length>=8) score+=40; else if(pwd.length>=5) score+=20;
+        if(/[A-Z]/.test(pwd)) score+=20;
+        if(/[0-9]/.test(pwd)) score+=20;
+        if(/[^A-Za-z0-9]/.test(pwd)) score+=20;
+        return Math.min(score,100);
+      };
+      // Vocabulary trainer
+      let vocabData=[];
+      let vocabQueue=[];
+      let vocabCurrent=null;
+      window.initVocabPage=function(){
+        if(!currentUser){
+          // Wait for auth
+          vocabData=[];
+        }
+        if(vocabData.length===0){
+          (async()=>{
+            try{
+              const { data,error } = await _supa.from('vocabulary').select('*').eq('user_id', currentUser.id);
+              if(error) throw error;
+              vocabData=(data||[]).map(row=>({de:row.word,en:row.translation,example:row.example||'',cat:row.category||'other'}));
+            }catch(e){
+              vocabData=[
+                {de:'Haus',en:'house',example:'Das Haus ist groß.',cat:'noun'},
+                {de:'gehen',en:'to go',example:'Ich gehe zur Schule.',cat:'verb'},
+                {de:'schnell',en:'fast',example:'Der Zug ist schnell.',cat:'adjective'},
+                {de:'Vielen Dank',en:'thank you',example:'Vielen Dank für deine Hilfe.',cat:'phrase'}
+              ];
+            }
+            setupVocab();
+          })();
+        }else{
+          setupVocab();
+        }
+      };
+      function setupVocab(){
+        const filterSel=document.getElementById('vocab-filter');
+        const card=document.getElementById('vocab-card');
+        if(!filterSel) return;
+        function buildQueue(){
+          const cat=filterSel.value;
+          const cards=(cat==='all')?vocabData:vocabData.filter(x=>x.cat===cat);
+          vocabQueue=[...cards];
+          vocabCurrent=null;
+          updateVocab();
+        }
+        if(!filterSel.dataset.bound){
+          filterSel.dataset.bound='1';
+          filterSel.addEventListener('change',buildQueue);
+        }
+        buildQueue();
+        if(card){
+          card.onclick=function(){ card.classList.toggle('flip'); };
+        }
+        const knownBtn=document.getElementById('vocab-known-btn');
+        const againBtn=document.getElementById('vocab-again-btn');
+        if(knownBtn) knownBtn.onclick=function(){ window.markVocab(true); };
+        if(againBtn) againBtn.onclick=function(){ window.markVocab(false); };
+      }
+      function updateVocab(){
+        const front=document.getElementById('vocab-front');
+        const back=document.getElementById('vocab-back');
+        const bar=document.getElementById('vocab-progress-bar');
+        const card=document.getElementById('vocab-card');
+        if(!front||!bar) return;
+        if(vocabQueue.length===0){
+          front.textContent='🎉 Fertig!';
+          if(back) back.innerHTML='';
+          bar.style.width='100%';
+          return;
+        }
+        vocabCurrent=vocabQueue[0];
+        card.classList.remove('flip');
+        front.textContent=vocabCurrent.de;
+        if(back) back.innerHTML='<strong>'+vocabCurrent.en+'</strong><br/><em>'+vocabCurrent.example+'</em>';
+        const progress=((vocabData.length-vocabQueue.length)/Math.max(vocabData.length,1))*100;
+        bar.style.width=progress+'%';
+      }
+      window.markVocab=function(correct){
+        if(!vocabCurrent) return;
+        vocabQueue.shift();
+        if(!correct){
+          vocabQueue.splice(2,0,vocabCurrent);
+        }
+        updateVocab();
+      };
+      // Listening practice
+      let listeningData=[
+        {de:'Guten Morgen, wie geht es dir?',en:'Good morning, how are you?'},
+        {de:'Ich habe Hunger und möchte essen.',en:'I am hungry and would like to eat.'},
+        {de:'Wir fahren morgen nach Berlin.',en:'We are going to Berlin tomorrow.'},
+        {de:'Kannst du mir bitte helfen?',en:'Can you help me please?'}
+      ];
+      let listeningScore=0;
+      let listeningIndex=0;
+      let speechRate=1;
+      window.initListeningPage=function(){
+        listeningScore=0;
+        listeningIndex=0;
+        updateListeningScore();
+        showListeningSentence();
+        const playBtn=document.getElementById('listening-play-btn');
+        const showBtn=document.getElementById('listening-show-btn');
+        const submitBtn=document.getElementById('listening-submit-btn');
+        const slowBtn=document.getElementById('listening-slow-btn');
+        const normalBtn=document.getElementById('listening-normal-btn');
+        const fastBtn=document.getElementById('listening-fast-btn');
+        if(playBtn) playBtn.onclick=function(){ playAudio(); };
+        if(showBtn) showBtn.onclick=function(){ revealTranslation(); };
+        if(submitBtn) submitBtn.onclick=function(){ checkListeningAnswer(); };
+        if(slowBtn) slowBtn.onclick=function(){ speechRate=0.8; playAudio(); };
+        if(normalBtn) normalBtn.onclick=function(){ speechRate=1; playAudio(); };
+        if(fastBtn) fastBtn.onclick=function(){ speechRate=1.3; playAudio(); };
+        const input=document.getElementById('listening-input');
+        if(input) input.value='';
+      };
+      function showListeningSentence(){
+        if(listeningIndex>=listeningData.length) listeningIndex=0;
+        const item=listeningData[listeningIndex];
+        const sEl=document.getElementById('listening-sentence');
+        const tEl=document.getElementById('listening-translation');
+        if(sEl) sEl.textContent=item.de;
+        if(tEl){
+          tEl.textContent=item.en;
+          tEl.classList.add('hidden');
+        }
+        const input=document.getElementById('listening-input');
+        if(input) input.value='';
+      }
+      function playAudio(){
+        const item=listeningData[listeningIndex];
+        const utter=new SpeechSynthesisUtterance(item.de);
+        utter.lang='de-DE';
+        utter.rate=speechRate||1;
+        window.speechSynthesis.speak(utter);
+      }
+      function revealTranslation(){
+        const tEl=document.getElementById('listening-translation');
+        if(tEl) tEl.classList.remove('hidden');
+      }
+      function checkListeningAnswer(){
+        const input=document.getElementById('listening-input');
+        const userVal=(input&&input.value||'').trim().toLowerCase();
+        const item=listeningData[listeningIndex];
+        const correct=item.de.toLowerCase().replace(/[.,!?]/g,'');
+        if(userVal===correct){
+          listeningScore++;
+          showToast('✓ Richtig!');
+        }else{
+          showToast('✗ Falsch');
+        }
+        listeningIndex++;
+        updateListeningScore();
+        showListeningSentence();
+      }
+      function updateListeningScore(){
+        const pct=(listeningScore/listeningData.length)*100;
+        const scoreEl=document.getElementById('listening-score');
+        const barEl=document.getElementById('listening-score-bar');
+        if(scoreEl) scoreEl.textContent=listeningScore;
+        if(barEl) barEl.style.width=pct+'%';
+      }
+      // Daily quote and XP
+      const DAILY_QUOTES=[
+        {de:'Übung macht den Meister.',en:'Practice makes perfect.'},
+        {de:'Aller Anfang ist schwer.',en:'Every beginning is hard.'},
+        {de:'Geduld bringt Rosen.',en:'Patience brings roses.'},
+        {de:'Ohne Fleiß kein Preis.',en:'No pain, no gain.'}
+      ];
+      window.updateDailyQuote=function(){
+        const idx=(new Date().getDate()+new Date().getMonth())%DAILY_QUOTES.length;
+        const q=DAILY_QUOTES[idx];
+        const box=document.getElementById('daily-quote-box');
+        if(box){
+          box.innerHTML='<div class="quote-de">'+q.de+'</div><div class="quote-en">'+q.en+'</div>';
+        }
+      };
+      window.updateWeeklyXP=function(){
+        try{
+          const xp=(state&&state.weeklyXP)?state.weeklyXP:0;
+          const pct=Math.min((xp/500)*100,100);
+          const fill=document.getElementById('xp-week-fill');
+          const label=document.querySelector('.xp-bar-label');
+          if(fill) fill.style.width=pct+'%';
+          if(label) label.textContent='Wöchentliche XP: '+xp+'/500';
+        }catch(e){}
+      };
+    })();
+    </script>
 </body>
 </html>
