@@ -4219,17 +4219,115 @@ function getQuestions(level, topic, count) {
   return pool.slice(0, count);
 }
 
-function generateQuiz() {
+// ====== QUIZAPI.IO INTEGRATION ======
+// Replace 'YOUR_API_KEY' with your actual QuizAPI.io API key.
+// You can get a free API key by signing up for an account【124474803706671†L41-L45】.
+const QUIZ_API_KEY = 'YOUR_API_KEY';
+
+/**
+ * Map internal difficulty levels (A1/A2/B1 or 'auto') to QuizAPI.io difficulty parameters.
+ * For 'auto', this uses computeProgress() to infer the difficulty.
+ */
+function mapDifficultyToQuizAPI(level) {
+  let diffs = [];
+  if (level === 'auto') {
+    const p = typeof computeProgress === 'function' ? computeProgress() : 0;
+    if (p < 25) diffs.push('EASY');
+    else if (p < 55) diffs.push('MEDIUM');
+    else diffs.push('HARD');
+  } else {
+    if (level === 'A1') diffs.push('EASY');
+    else if (level === 'A2') diffs.push('MEDIUM');
+    else if (level === 'B1') diffs.push('HARD');
+  }
+  return diffs.join(',');
+}
+
+/**
+ * Fetch quiz questions from QuizAPI.io.
+ * Uses the Questions endpoint with optional topic mapping to tags and difficulty mapping.
+ * See the API docs for available parameters like `category`, `difficulty`, `tags`, `limit` and `random`【770445692521638†L114-L125】.
+ */
+async function fetchQuizQuestions(level, topic, count) {
+  // Do nothing if no API key is provided.
+  if (!QUIZ_API_KEY || QUIZ_API_KEY === 'YOUR_API_KEY') {
+    return [];
+  }
+  const diffs = mapDifficultyToQuizAPI(level);
+  const params = new URLSearchParams();
+  if (diffs) params.set('difficulty', diffs);
+  // Map our topic to QuizAPI tags; you can customise this mapping.
+  if (topic && topic !== 'mixed') {
+    params.set('tags', topic);
+  }
+  params.set('limit', count);
+  params.set('random', 'true');
+  const url = `https://quizapi.io/api/v1/questions?${params.toString()}`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${QUIZ_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    const json = await res.json();
+    if (!json || !json.data) return [];
+    // Transform API questions into internal format
+    return json.data.map(item => {
+      const answers = item.answers || [];
+      const options = answers.map(ans => ans.text);
+      // Find index of correct answer
+      let correctIdx = answers.findIndex(ans => ans.isCorrect);
+      if (correctIdx < 0) {
+        // fallback: assume first option is correct if not provided
+        correctIdx = 0;
+      }
+      return {
+        q: item.text,
+        options,
+        correct: correctIdx,
+        explanation: item.explanation || '',
+        _level: level
+      };
+    });
+  } catch (e) {
+    console.error('QuizAPI fetch error', e);
+    return [];
+  }
+}
+
+async function generateQuiz() {
   const difficulty = document.getElementById('quiz-difficulty').value;
   const topic = document.getElementById('quiz-topic').value;
   const count = parseInt(document.getElementById('quiz-count').value);
   const area = document.getElementById('quiz-area');
-
-  _quizData = getQuestions(difficulty, topic, count);
+  const btn = document.getElementById('quiz-gen-btn');
+  const label = document.getElementById('quiz-gen-label');
+  const spinner = document.getElementById('quiz-gen-spinner');
+  // Show loading spinner and disable button
+  if (btn) btn.disabled = true;
+  if (label) label.textContent = '⏳ Lade Quiz...';
+  if (spinner) spinner.style.display = 'inline-block';
   _quizScore = 0;
   _quizAnswered = 0;
-
-  if (_quizData.length === 0) {
+  // Try fetching AI-generated questions from QuizAPI.io
+  let questions = [];
+  try {
+    questions = await fetchQuizQuestions(difficulty, topic, count);
+  } catch (err) {
+    console.error(err);
+  }
+  if (questions && questions.length > 0) {
+    _quizData = questions;
+  } else {
+    // Fallback to local question bank if API returns no data
+    _quizData = getQuestions(difficulty, topic, count);
+  }
+  // Hide spinner and reset button
+  if (spinner) spinner.style.display = 'none';
+  if (label) label.textContent = '✨ Quiz starten';
+  if (btn) btn.disabled = false;
+  if (!_quizData || _quizData.length === 0) {
     area.innerHTML = `<div class="quiz-card" style="text-align:center;color:var(--muted)">Keine Fragen für diese Auswahl gefunden.</div>`;
     return;
   }
