@@ -1675,6 +1675,14 @@ async function bootstrapAuth(){
       const isSignupReturn=new URLSearchParams(window.location.search).get('type')==='signup';
       if(isSignupReturn)showConfirmScreen();
       else showLoginScreen();
+      // When no session is found, optionally allow a guest session for
+      // offline usage by appending ?guest=1 or #guest to the URL.  This
+      // sets up a dummy user object and bypasses the login screen.
+      const qp = new URLSearchParams(window.location.search);
+      if (qp.get('guest') === '1' || window.location.hash.includes('guest')) {
+        const guestUser = { id: 'guest', email: 'guest@local', user_metadata: { name: 'Gast' } };
+        startAuthenticatedApp(guestUser);
+      }
     }
   }catch(e){
     console.error('Auth bootstrap error:', e);
@@ -5013,33 +5021,108 @@ function showLevelResult() {
         return Math.min(score,100);
       };
       // Vocabulary trainer
+      // Holds vocabulary entries in the form {de, en, example, cat}.  Data
+      // will be loaded from Supabase when available, otherwise from a
+      // free API or a small fallback list.  A queue is used for
+      // spaced‑repetition logic and progress tracking.
       let vocabData=[];
       let vocabQueue=[];
       let vocabCurrent=null;
-      window.initVocabPage=function(){
-        if(!currentUser){
-          // Wait for auth
-          vocabData=[];
+
+      /**
+       * Fetch a set of random German words from a free API and
+       * translate them into English via MyMemory.  This helper makes
+       * individual translation calls for each word, so only a small
+       * number of words should be requested at a time.  If any
+       * network request fails the function resolves to an empty array.
+       *
+       * Note: these network calls run client side and require a
+       * working internet connection.  When offline or in case of
+       * network errors the caller should fall back to a static list.
+       *
+       * @param {number} count Number of words to fetch.
+       * @returns {Promise<Array<{de:string,en:string,example:string,cat:string}>>}
+       */
+      async function fetchRandomVocab(count=10){
+        try{
+          // Request random German words.  See
+          // https://random-words-api.kushcreates.com/ for docs.
+          const res=await fetch(`https://random-words-api.kushcreates.com/api?language=de&words=${count}`);
+          if(!res.ok) throw new Error(`HTTP ${res.status}`);
+          const words=await res.json();
+          const entries=[];
+          for(const item of words){
+            const word=(item.word||item.name||'').trim();
+            if(!word) continue;
+            let translation='';
+            try{
+              // Use MyMemory translation API via our existing translateOne
+              // helper to convert German words to English.  Passing
+              // targetLang 'en' triggers the API call defined below.
+              translation=await translateOne(word,'en');
+            }catch(e){
+              translation='';
+            }
+            entries.push({de:word,en:translation||'',example:'',cat:'other'});
+          }
+          return entries;
+        }catch(e){
+          console.error('fetchRandomVocab error',e);
+          return [];
         }
+      }
+
+      /**
+       * Initialise the vocabulary page.  If data has already been
+       * loaded this simply calls setupVocab(); otherwise it tries to
+       * fetch the user’s personal vocabulary from Supabase.  When
+       * Supabase is unavailable or returns no data a free API is
+       * consulted to populate vocabData; as a final fallback a
+       * predefined list of common words is used.  This function is
+       * asynchronous to allow awaiting API calls.
+       */
+      window.initVocabPage=async function(){
+        // When offline or not logged in currentUser may be null.  In
+        // that case we proceed straight to API and fallback logic.
         if(vocabData.length===0){
-          (async()=>{
+          // Try to fetch from Supabase first when a user is present.
+          let loaded=false;
+          if(currentUser){
             try{
               const { data,error } = await _supa.from('vocabulary').select('*').eq('user_id', currentUser.id);
               if(error) throw error;
-              vocabData=(data||[]).map(row=>({de:row.word,en:row.translation,example:row.example||'',cat:row.category||'other'}));
+              if(data && data.length>0){
+                vocabData=(data||[]).map(row=>({de:row.word,en:row.translation,example:row.example||'',cat:row.category||'other'}));
+                loaded=true;
+              }
             }catch(e){
-              vocabData=[
-                {de:'Haus',en:'house',example:'Das Haus ist groß.',cat:'noun'},
-                {de:'gehen',en:'to go',example:'Ich gehe zur Schule.',cat:'verb'},
-                {de:'schnell',en:'fast',example:'Der Zug ist schnell.',cat:'adjective'},
-                {de:'Vielen Dank',en:'thank you',example:'Vielen Dank für deine Hilfe.',cat:'phrase'}
-              ];
+              console.warn('Supabase vocabulary load failed:',e?.message||e);
             }
-            setupVocab();
-          })();
-        }else{
-          setupVocab();
+          }
+          // If Supabase returned nothing try the free API for fresh words.
+          if(!loaded){
+            try{
+              const apiWords=await fetchRandomVocab(8);
+              if(apiWords && apiWords.length>0){
+                vocabData=apiWords;
+                loaded=true;
+              }
+            }catch(e){
+              console.warn('Random vocab API failed:',e?.message||e);
+            }
+          }
+          // Final fallback: small predefined list so the page never
+          // appears empty.
+          if(!loaded){
+            vocabData=[
+              {de:'Haus',en:'house',example:'Das Haus ist groß.',cat:'noun'},
+              {de:'gehen',en:'to go',example:'Ich gehe zur Schule.',cat:'verb'},
+              {de:'schnell',en:'fast',example:'Der Zug ist schnell.',cat:'adjective'},
+              {de:'Vielen Dank',en:'thank you',example:'Vielen Dank für deine Hilfe.',cat:'phrase'}
+            ];
+          }
         }
+        setupVocab();
       };
       function setupVocab(){
         const filterSel=document.getElementById('vocab-filter');
@@ -5093,6 +5176,11 @@ function showLevelResult() {
         updateVocab();
       };
       // Listening practice
+      // The listening module presents a German sentence and hides its
+      // English translation until the user reveals it.  Users then type
+      // what they hear and receive immediate feedback.  This array
+      // holds the German/English pairs and will be populated via
+      // Supabase, a free AI translation API or a fallback list.
       let listeningData=[
         {de:'Guten Morgen, wie geht es dir?',en:'Good morning, how are you?'},
         {de:'Ich habe Hunger und möchte essen.',en:'I am hungry and would like to eat.'},
@@ -5102,9 +5190,101 @@ function showLevelResult() {
       let listeningScore=0;
       let listeningIndex=0;
       let speechRate=1;
-      window.initListeningPage=function(){
+
+      /**
+       * Fetch a handful of simple English sentences and translate
+       * them to German.  Uses MyMemory via translateGeneric.
+       * The resulting list items are objects with {de,en}.  When
+       * offline or on error the returned array is empty.
+       *
+       * @returns {Promise<Array<{de:string,en:string}>>}
+       */
+      async function fetchListeningData(){
+        const sentences=[
+          'I love learning new languages.',
+          'The weather is nice today.',
+          'Do you like reading books?',
+          'He will go to school tomorrow.',
+          'What time is it now?',
+          'Can you help me?'
+        ];
+        const pairs=[];
+        for(const en of sentences){
+          let de='';
+          try{
+            de=await translateGeneric(en,'en','de');
+          }catch(e){
+            de='';
+          }
+          // Only push pairs where translation succeeded
+          if(de){
+            pairs.push({de:de, en:en});
+          }
+        }
+        return pairs;
+      }
+
+      /**
+       * Generic translation helper for arbitrary language pairs using
+       * MyMemory.  It closely mirrors translateOne but allows the
+       * source language to vary.  See https://mymemory.translated.net/.
+       *
+       * @param {string} text Text to translate
+       * @param {string} from Source language code (e.g. 'en')
+       * @param {string} to Target language code (e.g. 'de')
+       */
+      async function translateGeneric(text, from, to){
+        const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(from)}|${encodeURIComponent(to)}&de=achghaf.translator@gmail.com`;
+        const r=await fetchWithTimeout(url,8000);
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
+        const d=await r.json();
+        const status=d?.responseStatus;
+        const tx=d?.responseData?.translatedText||'';
+        if(status===403||!tx) throw new Error(`API ${status}: ${d?.responseDetails||'empty'}`);
+        return tx;
+      }
+
+      /**
+       * Initialise the listening page.  This resets score and index,
+       * then tries to populate listeningData from Supabase or the
+       * AI translation API.  The function awaits translation
+       * completion before showing the first sentence.  Should an
+       * error occur it falls back to the predefined sample list.
+       */
+      window.initListeningPage=async function(){
         listeningScore=0;
         listeningIndex=0;
+        // Load custom sentences from Supabase if available
+        let loaded=false;
+        if(listeningData.length<=4){
+          // Only attempt to load from Supabase when not already
+          // populated by API or previous calls and when logged in.
+          if(currentUser){
+            try{
+              const {data,error}=await _supa.from('listening_sentences').select('*').eq('user_id', currentUser.id);
+              if(error) throw error;
+              if(data && data.length>0){
+                listeningData=(data||[]).map(row=>({de:row.sentence,en:row.translation}));
+                loaded=true;
+              }
+            }catch(e){
+              console.warn('Supabase listening load failed:',e?.message||e);
+            }
+          }
+          if(!loaded){
+            // Fetch simple sentences and translate them.  This may
+            // return fewer items than requested if translation fails.
+            try{
+              const pairs=await fetchListeningData();
+              if(pairs && pairs.length>0){
+                listeningData=pairs;
+                loaded=true;
+              }
+            }catch(e){
+              console.warn('Listening API load failed:',e?.message||e);
+            }
+          }
+        }
         updateListeningScore();
         showListeningSentence();
         const playBtn=document.getElementById('listening-play-btn');
