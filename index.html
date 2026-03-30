@@ -693,6 +693,45 @@ h1 span{color:var(--gold)}
 .level-advice-text{font-size:0.84rem;color:var(--muted);line-height:1.7}
 .level-restart-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
 .level-restart-btn:hover{border-color:var(--gold);color:var(--gold)}
+/* -----------------------------------------------------------------------------
+  Responsive and Fluid Layout Improvements
+
+  The original design was built with fixed column counts and hardcoded widths.
+  This caused the interface to feel cramped on smaller screens and wasted
+  space on larger displays. The rules below override earlier definitions using
+  CSS Grid's auto‑fitting capability. By setting repeat(auto-fit, minmax(...)),
+  elements automatically wrap based on the available viewport width. This makes
+  the UI fluid without relying on external libraries ("sin magic UI").
+*/
+
+@media (max-width: 767px) {
+  /* On very small screens stack or wrap items so they remain legible */
+  .stats-row,
+  .daily-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .overall-inner {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .months-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet breakpoints: allow more columns but still flexible */
+  .overall-inner {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  .stats-row,
+  .daily-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .months-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4271,42 +4310,16 @@ function generateQuiz() {
   const topic = document.getElementById('quiz-topic').value;
   const count = parseInt(document.getElementById('quiz-count').value);
   const area = document.getElementById('quiz-area');
-  // show loading message while fetching or generating questions
-  area.innerHTML = `<div class="quiz-card" style="text-align:center;color:var(--muted)">🚧 Quiz wird generiert, bitte warten...</div>`;
+
+  _quizData = getQuestions(difficulty, topic, count);
   _quizScore = 0;
   _quizAnswered = 0;
-  (async()=>{
-    // Attempt to fetch questions from an AI-powered endpoint via Supabase Edge Function
-    let data = [];
-    try{
-      // Only call if supabase functions client is available
-      if(_supa && _supa.functions && _supa.functions.invoke){
-        const { data:funcData, error } = await _supa.functions.invoke('generate-quiz-questions', {
-          body: { level: difficulty, topic, count }
-        });
-        if(!error && funcData && Array.isArray(funcData.questions)){
-          data = funcData.questions.map(q => ({
-            q: q.question || q.q,
-            options: q.options || q.choices || [],
-            correct: typeof q.correct === 'number' ? q.correct : (q.options||q.choices||[]).indexOf(q.correct_answer),
-            explanation: q.explanation || ''
-          }));
-        }
-      }
-    }catch(err){
-      console.error('AI quiz generation failed:', err);
-    }
-    // Fallback to built-in static questions if AI returned nothing
-    if(!data || data.length === 0){
-      data = getQuestions(difficulty, topic, count);
-    }
-    _quizData = data;
-    if(!_quizData || _quizData.length === 0){
-      area.innerHTML = `<div class="quiz-card" style="text-align:center;color:var(--muted)">Keine Fragen für diese Auswahl gefunden.</div>`;
-      return;
-    }
-    renderQuiz();
-  })();
+
+  if (_quizData.length === 0) {
+    area.innerHTML = `<div class="quiz-card" style="text-align:center;color:var(--muted)">Keine Fragen für diese Auswahl gefunden.</div>`;
+    return;
+  }
+  renderQuiz();
 }
 
 function renderQuiz() {
