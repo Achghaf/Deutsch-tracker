@@ -694,45 +694,6 @@ h1 span{color:var(--gold)}
 .level-advice-text{font-size:0.84rem;color:var(--muted);line-height:1.7}
 .level-restart-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
 .level-restart-btn:hover{border-color:var(--gold);color:var(--gold)}
-/* -----------------------------------------------------------------------------
-  Responsive and Fluid Layout Improvements
-
-  The original design was built with fixed column counts and hardcoded widths.
-  This caused the interface to feel cramped on smaller screens and wasted
-  space on larger displays. The rules below override earlier definitions using
-  CSS Grid's auto‑fitting capability. By setting repeat(auto-fit, minmax(...)),
-  elements automatically wrap based on the available viewport width. This makes
-  the UI fluid without relying on external libraries ("sin magic UI").
-*/
-
-@media (max-width: 767px) {
-  /* On very small screens stack or wrap items so they remain legible */
-  .stats-row,
-  .daily-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-  .overall-inner {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-  .months-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  /* Tablet breakpoints: allow more columns but still flexible */
-  .overall-inner {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-  .stats-row,
-  .daily-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-  .months-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-
 </style>
 <link href="manifest.json" rel="manifest"/><link href="icon-192.png" rel="apple-touch-icon" sizes="192x192"/><link href="icon-512.png" rel="apple-touch-icon" sizes="512x512"/><link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/></head>
 <body>
@@ -817,13 +778,13 @@ h1 span{color:var(--gold)}
 </div>
 <!-- DESKTOP NAV -->
 <nav class="desktop-nav" id="desktop-nav">
-<a aria-label="Open Tracker" class="desk-nav-item active" data-page="tracker" href="tracker.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg> Tracker</a>
-<a aria-label="Open Documents" class="desk-nav-item" data-page="pdf" href="pdf.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg> Dokumente</a>
-<a aria-label="Open News" class="desk-nav-item" data-page="news" href="news.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg> News</a>
-<a aria-label="Open Translator" class="desk-nav-item" data-page="translate" href="translate.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Übersetzer</a>
-<a aria-label="Quiz" class="desk-nav-item" data-page="quiz" href="quiz.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg> Quiz</a>
-<a aria-label="Level" class="desk-nav-item" data-page="level" href="level.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Niveau</a>
-<a aria-label="Admin" class="desk-nav-item" data-page="admin" href="admin.html" id="desk-admin-nav" style="display:none"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Admin</a>
+<button aria-label="Open Tracker" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg> Tracker</button>
+<button aria-label="Open Documents" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg> Dokumente</button>
+<button aria-label="Open News" class="desk-nav-item" data-page="news" onclick="switchPage('news')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg> News</button>
+<button aria-label="Open Translator" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Übersetzer</button>
+<button aria-label="Quiz" class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg> Quiz</button>
+<button aria-label="Level" class="desk-nav-item" data-page="level" onclick="switchPage('level')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Niveau</button>
+<button aria-label="Admin" class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" style="display:none" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Admin</button>
 <div class="desk-nav-right">
 <!-- Notification Bell -->
 <div style="position:relative">
@@ -914,6 +875,40 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- PDF PAGE -->
+<div class="page" id="page-pdf">
+<div class="pdf-page">
+<div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
+<div class="storage-bar">
+<span class="storage-label">💾 Local</span>
+<div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
+<span class="storage-info" id="storage-info">Chargement...</span>
+</div>
+<div class="docs-sync-row">
+<span class="docs-account" id="docs-account">—</span>
+<button class="pdf-refresh-btn" id="docs-refresh-btn" onclick="refreshDocs()" type="button">↻ Sync</button>
+</div>
+<div class="docs-toolbar">
+<div class="docs-search-wrap">
+<input autocomplete="off" class="docs-search-input" id="docs-search" placeholder="Dokument suchen..." type="search"/>
+</div>
+</div>
+<div class="pdf-upload-zone" id="upload-zone">
+<input accept=".pdf,application/pdf" id="pdf-input" multiple="" type="file"/>
+<div class="upload-icon">📄</div>
+<div class="upload-title">PDF hochladen</div>
+<div class="upload-sub">Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei</div>
+</div>
+<div class="pdf-categories">
+<button class="cat-btn active" data-cat="all">Alle</button>
+<button class="cat-btn" data-cat="grammar">📘 Grammatik</button>
+<button class="cat-btn" data-cat="vocabulary">📚 Vokabeln</button>
+<button class="cat-btn" data-cat="exercise">✏️ Übungen</button>
+<button class="cat-btn" data-cat="exam">📝 Prüfung</button>
+<button class="cat-btn" data-cat="other">📄 Sonstiges</button>
+</div>
+<div class="pdf-grid" id="pdf-grid"></div>
+</div>
+</div>
 <!-- PROFILE MODAL -->
 <div class="profile-modal" id="profile-modal" onclick="handleProfileOverlayClick(event)">
 <div class="profile-sheet" id="profile-sheet">
@@ -980,16 +975,192 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- NEWS PAGE -->
+<div class="page" id="page-news">
+<div class="news-page">
+<div class="news-header">
+<h2 id="news-page-title">📰 Artikel &amp; News</h2>
+<p id="news-page-sub">Eigene Artikel und Updates veröffentlichen</p>
+</div>
+<div class="news-composer">
+<div class="news-compose-grid">
+<div class="news-field">
+<label id="news-title-label">Titel</label>
+<input class="news-input" id="news-title-input" placeholder="Titel deines Beitrags..." type="text"/>
+</div>
+<div class="news-field">
+<label id="news-type-label">Typ</label>
+<select class="news-select" id="news-type-select">
+<option value="article">Artikel</option>
+<option value="news">News</option>
+</select>
+</div>
+</div>
+<div class="news-field" style="margin-bottom:10px">
+<label id="news-summary-label">Kurzbeschreibung</label>
+<textarea class="news-textarea" id="news-summary-input" placeholder="Kurze Zusammenfassung..."></textarea>
+</div>
+<div class="news-field">
+<label id="news-body-label">Inhalt</label>
+<textarea class="news-textarea body" id="news-body-input" placeholder="Schreibe hier deinen Artikel oder deine News..."></textarea>
+</div>
+<div class="news-compose-actions">
+<button class="news-btn primary" id="news-submit-btn" onclick="submitNewsPost()"><div class="btn-spinner"></div><span class="btn-label">Veröffentlichen</span></button>
+<button class="news-btn secondary" id="news-cancel-btn" onclick="cancelNewsEdit()" style="display:none">Abbrechen</button>
+</div>
+<div class="news-status" id="news-status"></div>
+</div>
+<div class="news-topbar">
+<div class="news-feed-title" id="news-feed-title">Veröffentlichte Beiträge</div>
+<div class="news-filter-group">
+<button class="news-filter-btn active" data-filter="all" onclick="setNewsFilter('all', this)">Alle</button>
+<button class="news-filter-btn" data-filter="article" onclick="setNewsFilter('article', this)">Artikel</button>
+<button class="news-filter-btn" data-filter="news" onclick="setNewsFilter('news', this)">News</button>
+</div>
+</div>
+<div class="news-list" id="news-list"></div>
+</div>
+</div>
 <!-- TRANSLATE PAGE -->
+<div class="page" id="page-translate">
+<div class="translate-page">
+<div class="translate-header">
+<h2 id="translate-page-title">🌐 Übersetzer</h2>
+<p id="translate-page-sub">Deutsch → Arabisch &amp; Englisch</p>
+</div>
+<div class="translate-input-wrap">
+<textarea class="translate-textarea" id="translate-input" placeholder="Deutsches Wort oder Satz eingeben..." rows="4"></textarea>
+<button class="translate-clear-btn" id="translate-clear" onclick="clearTranslateInput()" title="Clear">✕</button>
+</div>
+<div class="translate-actions">
+<button class="translate-btn primary" id="translate-btn" onclick="doTranslate()">
+<div class="btn-spinner"></div>
+<span class="btn-label" id="translate-btn-label">Übersetzen</span>
+</button>
+<button class="translate-btn secondary" id="translate-speak-btn" onclick="speakInput()" title="Pronounce">
+<span class="btn-label">🔊 Anhören</span>
+</button>
+</div>
+<div class="translate-results" id="translate-results">
+<!-- results injected here -->
+</div>
+<div class="translate-history" id="translate-history-section">
+<div class="translate-history-title">
+<span id="translate-history-label">Verlauf</span>
+<button class="translate-history-clear" id="translate-history-clear-btn" onclick="clearTranslateHistory()">Löschen</button>
+</div>
+<div class="translate-history-list" id="translate-history-list"></div>
+</div>
+</div>
+</div>
 <!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+<div class="admin-page">
+<div class="admin-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
+<div class="admin-hero-title">👑 Admin <span>Dashboard</span></div>
+<div class="admin-hero-sub">User management &amp; signup stats</div>
+</div>
+<!-- PENDING REQUESTS -->
+<div class="admin-section-title">23f3 Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
+<div class="admin-users-wrap" style="margin-bottom:28px">
+<div id="admin-pending-list"><div class="admin-empty">Loading requests...</div></div>
+</div>
+<!-- STAT CARDS -->
+<div class="admin-stats-grid">
+<div class="admin-stat-card gold">
+<div class="admin-stat-num" id="admin-stat-total">—</div>
+<div class="admin-stat-label">Total Users</div>
+<div class="admin-stat-sub" id="admin-stat-total-sub">Loading...</div>
+</div>
+<div class="admin-stat-card green">
+<div class="admin-stat-num" id="admin-stat-today">—</div>
+<div class="admin-stat-label">New Today</div>
+<div class="admin-stat-sub" id="admin-stat-today-sub">Loading...</div>
+</div>
+<div class="admin-stat-card blue">
+<div class="admin-stat-num" id="admin-stat-week">—</div>
+<div class="admin-stat-label">This Week</div>
+<div class="admin-stat-sub" id="admin-stat-week-sub">Loading...</div>
+</div>
+<div class="admin-stat-card red">
+<div class="admin-stat-num" id="admin-stat-admins">—</div>
+<div class="admin-stat-label">Admins</div>
+<div class="admin-stat-sub" id="admin-stat-admins-sub">Loading...</div>
+</div>
+</div>
+<!-- SIGNUPS CHART -->
+<div class="admin-section-title">Signups — Last 7 Days</div>
+<div class="admin-chart-wrap">
+<div class="admin-chart-bars" id="admin-chart-bars">
+<div class="admin-empty" style="width:100%">Loading chart...</div>
+</div>
+</div>
+<!-- USERS TABLE -->
+<div class="admin-section-title">All Users</div>
+<div class="admin-users-wrap">
+<div class="admin-users-toolbar">
+<input class="admin-search" id="admin-user-search" oninput="adminFilterUsers()" placeholder="🔍 Search by email..."/>
+<button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)">All</button>
+<button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">👑 Admin</button>
+<button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)">👤 Users</button>
+<button class="admin-refresh-btn" onclick="loadAdminPage()">↻ Refresh</button>
+</div>
+<div id="admin-users-list-full">
+<div class="admin-empty">Loading users...</div>
+</div>
+</div>
+<!-- ALL DOCUMENTS -->
+<div class="admin-section-title" style="margin-top:28px">📄 All User Documents</div>
+<div class="admin-users-wrap">
+<div class="admin-users-toolbar">
+<input class="admin-search" id="admin-doc-search" oninput="adminFilterDocs()" placeholder="🔍 Search by filename..."/>
+<button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ Refresh</button>
+</div>
+<div id="admin-docs-list">
+<div class="admin-empty">Loading documents...</div>
+</div>
+</div>
+</div>
+</div>
 <!-- BOTTOM NAV -->
-<nav class="bottom-nav"><a class="nav-item active" data-page="tracker" href="tracker.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg></div><div class="nav-label">Tracker</div></a><a class="nav-item" data-page="pdf" href="pdf.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg></div><div class="nav-label">Dokumente</div></a><a class="nav-item" data-page="news" href="news.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg></div><div class="nav-label">News</div></a><a class="nav-item" data-page="translate" href="translate.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><div class="nav-label">Übersetzer</div></a><a class="nav-item" data-page="quiz" href="quiz.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div><div class="nav-label">Quiz</div></a><a class="nav-item" data-page="level" href="level.html"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><div class="nav-label">Niveau</div></a><a class="nav-item" data-page="admin" href="admin.html" id="mob-admin-nav" style="display:none"><div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><div class="nav-label">Admin</div></a><div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
+<nav class="bottom-nav">
+<div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg></div>
+<div class="nav-label" data-i18n="nav_tracker">Tracker</div>
+</div>
+<div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg></div>
+<div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+</div>
+<div class="nav-item" data-page="news" onclick="switchPage('news')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg></div>
+<div class="nav-label" data-i18n="nav_news">News</div>
+</div>
+<div class="nav-item" data-page="translate" onclick="switchPage('translate')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+<div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
+</div>
+<div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
+<div class="nav-label">Quiz</div>
+</div>
+<div class="nav-item" data-page="level" onclick="switchPage('level')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+<div class="nav-label">Niveau</div>
+</div>
+<div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+<div class="nav-label">Admin</div>
+</div>
+<!-- Mobile notification bell -->
+<div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
 <div class="nav-icon" style="position:relative;display:inline-flex">
 <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
 <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
 </div>
 <div class="nav-label">Alerts</div>
-</div></nav>
+</div>
+</nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
 <div class="notif-panel-head" style="padding:14px 18px">
@@ -1044,7 +1215,7 @@ h1 span{color:var(--gold)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>activeAppPage='tracker';</script><script>
+<script>
 // PDF.js
 if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -3732,7 +3903,66 @@ async function adminChangeRole(email, newRole, selectEl){
 
 </script>
 <!-- QUIZ PAGE -->
+<div class="page" id="page-quiz">
+<div class="quiz-page">
+<div class="quiz-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+<div class="quiz-hero-title">🧠 KI-<span>Quiz</span></div>
+<div class="quiz-hero-sub">KI-generierte Fragen basierend auf deinem Fortschritt</div>
+</div>
+<div class="quiz-config">
+<div>
+<div class="quiz-config-label">Schwierigkeit</div>
+<select class="quiz-select" id="quiz-difficulty">
+<option value="auto">🤖 Auto (aus Fortschritt)</option>
+<option value="A1">A1 – Anfänger</option>
+<option value="A2">A2 – Grundlagen</option>
+<option value="B1">B1 – Mittelstufe</option>
+</select>
+</div>
+<div>
+<div class="quiz-config-label">Thema</div>
+<select class="quiz-select" id="quiz-topic">
+<option value="mixed">🎲 Gemischt</option>
+<option value="grammar">📘 Grammatik</option>
+<option value="vocabulary">📚 Vokabeln</option>
+<option value="reading">📖 Leseverständnis</option>
+</select>
+</div>
+<div>
+<div class="quiz-config-label">Fragen</div>
+<select class="quiz-select" id="quiz-count">
+<option value="5">5 Fragen</option>
+<option selected="" value="10">10 Fragen</option>
+<option value="15">15 Fragen</option>
+</select>
+</div>
+<button class="quiz-gen-btn" id="quiz-gen-btn" onclick="generateQuiz()">
+<span id="quiz-gen-label">✨ Quiz starten</span>
+<div class="quiz-spinner" id="quiz-gen-spinner" style="display:none;width:18px;height:18px;border-width:2px"></div>
+</button>
+</div>
+<div id="quiz-area"></div>
+</div>
+</div>
 <!-- LEVEL PAGE -->
+<div class="page" id="page-level">
+<div class="level-page">
+<div class="level-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+<div class="level-hero-title">📊 Niveau-<span>Test</span></div>
+<div class="level-hero-sub">Erkenne dein aktuelles Deutsch-Niveau</div>
+</div>
+<div id="level-area">
+<div class="level-start-card">
+<div class="level-start-icon">🎯</div>
+<div class="level-start-title">Wie gut ist dein Deutsch?</div>
+<div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
+<button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
+</div>
+</div>
+</div>
+</div>
 <script>
 // ===== HAND-CRAFTED QUESTION BANK =====
 // 180 questions: A1/A2/B1 × grammar/vocabulary/reading, 20 each
