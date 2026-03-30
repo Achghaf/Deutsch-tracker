@@ -14,7 +14,6 @@
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <title>Mein Ziel: Deutsch B1</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://js.puter.com/v2/"></script>
 <style>
 :root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -2029,6 +2028,8 @@ function switchPage(page){
     if(page==='news') initNewsPage();
     if(page==='pdf') loadPdfs();
     if(page==='admin') loadAdminPage();
+    if(page==='quiz') initQuizPage();
+    if(page==='level') initLevelPage();
   }catch(err){
     console.error('Page init error for', page, err);
   }
@@ -4010,23 +4011,76 @@ async function adminChangeRole(email, newRole, selectEl){
   </div>
 </div>
 <script>
-// ===== AI CONFIG — powered by Puter.js (free, no API key needed) =====
-// Puter.js uses a "user-pays" model: each user signs in with their free Puter account.
-// No API key, no backend, no billing required on your end.
+// ===== AI CONFIG — DeepSeek R1 via OpenRouter (free tier) =====
+const _AI_KEY   = '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';
+const _AI_MODEL = 'deepseek/deepseek-r1:free';
+const _AI_URL   = 'https://openrouter.ai/api/v1/chat/completions';
 
 async function callAI(systemPrompt, userPrompt) {
-  // Puter.js must be loaded — wait for it if needed
-  if (typeof puter === 'undefined') {
-    throw new Error('Puter.js not loaded. Please refresh the page.');
-  }
-  const fullPrompt = systemPrompt + '\n\nUser: ' + userPrompt;
-  const response = await puter.ai.chat(fullPrompt, {
-    model: 'gpt-4o-mini',
-    max_tokens: 2000
+  const res = await fetch(_AI_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + _AI_KEY,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': location.href,
+      'X-Title': 'Deutsch B1'
+    },
+    body: JSON.stringify({
+      model: _AI_MODEL,
+      max_tokens: 2000,
+      temperature: 0.3,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user',   content: userPrompt   }
+      ]
+    })
   });
-  // puter.ai.chat returns either a string or an object with message.content
-  if (typeof response === 'string') return response;
-  return response?.message?.content || response?.content || String(response);
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('AI error ' + res.status + ': ' + err);
+  }
+  const data = await res.json();
+  // DeepSeek R1 sometimes wraps answer in <think>...</think> — strip it
+  let text = data.choices?.[0]?.message?.content || '';
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  return text;
+}
+
+// Robust JSON extractor — handles markdown fences, leading text, trailing text
+function extractJSON(raw, expectArray) {
+  // Strip markdown fences
+  let s = raw.replace(/```json/gi,'').replace(/```/g,'').trim();
+  // Try direct parse first
+  try { return JSON.parse(s); } catch(_) {}
+  // Try to find array or object with regex
+  const pattern = expectArray ? /\[[\s\S]*\]/ : /\{[\s\S]*\}/;
+  const m = s.match(pattern);
+  if (m) {
+    try { return JSON.parse(m[0]); } catch(_) {}
+  }
+  throw new Error('Could not parse AI response as JSON. Raw: ' + s.slice(0, 200));
+}
+
+// ===== QUIZ / LEVEL PAGE INIT =====
+function initQuizPage() {
+  // Reset quiz area only if no active quiz
+  const area = document.getElementById('quiz-area');
+  if (area && area.innerHTML.trim() === '') {
+    area.innerHTML = '';
+  }
+}
+function initLevelPage() {
+  // Reset to start card if no active test
+  const area = document.getElementById('level-area');
+  if (area && area.querySelector('.level-start-card')) return; // already showing start
+  if (area && !area.querySelector('.quiz-card') && !area.querySelector('.level-result-card')) {
+    area.innerHTML = `<div class="level-start-card">
+      <div class="level-start-icon">🎯</div>
+      <div class="level-start-title">Wie gut ist dein Deutsch?</div>
+      <div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
+      <button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
+    </div>`;
+  }
 }
 
 // ===== QUIZ FEATURE =====
@@ -4058,19 +4112,17 @@ async function generateQuiz() {
   const topicMap = { mixed: 'gemischten Themen (Grammatik, Vokabeln, Leseverständnis)', grammar: 'Grammatik', vocabulary: 'Vokabeln', reading: 'Leseverständnis' };
   const topicLabel = topicMap[topic] || 'gemischten Themen';
 
-  const systemPrompt = `Du bist ein Deutsch-Sprachlehrer. Erstelle Multiple-Choice-Fragen auf Deutsch für Niveau ${level}. 
-Antworte NUR mit validem JSON ohne Markdown-Backticks oder Erklärungen.
-JSON-Format:
-[{"q":"Frage?","options":["A","B","C","D"],"correct":0,"explanation":"Kurze Erklärung auf Deutsch"}]
-'correct' ist der 0-basierte Index der richtigen Antwort.`;
+  const systemPrompt = `You are a German language teacher. Generate multiple-choice questions for level ${level}.
+OUTPUT ONLY a raw JSON array — no markdown, no explanation, no text before or after.
+Format: [{"q":"Question in German?","options":["A","B","C","D"],"correct":0,"explanation":"Brief explanation in German"}]
+"correct" is the 0-based index of the correct option.`;
 
-  const userPrompt = `Erstelle genau ${count} Fragen zum Thema ${topicLabel} für Niveau ${level}. Nur JSON zurückgeben.`;
+  const userPrompt = `Generate exactly ${count} questions about ${topicLabel} for level ${level}. Output ONLY the JSON array.`;
 
   try {
     const raw = await callAI(systemPrompt, userPrompt);
-    // Strip possible markdown fences
-    const clean = raw.replace(/```json|```/g, '').trim();
-    _quizData = JSON.parse(clean);
+    _quizData = extractJSON(raw, true);
+    if (!Array.isArray(_quizData)) throw new Error('Expected a JSON array');
     _quizScore = 0;
     _quizAnswered = 0;
     renderQuiz();
@@ -4168,15 +4220,14 @@ async function fetchNextLevelQuestion() {
   const area = document.getElementById('level-area');
   const questionNum = _levelCurrent + 1;
 
-  const systemPrompt = `Du bist ein Deutsch-Sprachlehrer für Niveautests. Erstelle eine einzelne Multiple-Choice-Frage für Niveau ${_levelCurrentLevel}.
-Antworte NUR mit validem JSON ohne Markdown-Backticks.
-Format: {"q":"Frage?","options":["A","B","C","D"],"correct":0,"explanation":"Kurze Erklärung"}`;
-  const userPrompt = `Eine Multiple-Choice-Frage für Niveau ${_levelCurrentLevel}. Thema: gemischt (Grammatik, Vokabeln oder Leseverständnis). Nur JSON.`;
+  const systemPrompt = `You are a German language teacher. Generate ONE multiple-choice question for level ${_levelCurrentLevel}.
+OUTPUT ONLY a raw JSON object — no markdown, no explanation, no text before or after.
+Format: {"q":"Question in German?","options":["A","B","C","D"],"correct":0,"explanation":"Brief explanation in German"}`;
+  const userPrompt = `One question for level ${_levelCurrentLevel}, topic: mixed (grammar, vocabulary or reading). Output ONLY the JSON object.`;
 
   try {
     const raw = await callAI(systemPrompt, userPrompt);
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const q = JSON.parse(clean);
+    const q = extractJSON(raw, false);
     q.level = _levelCurrentLevel;
     _levelQuestions.push(q);
     renderLevelQuestion(questionNum);
