@@ -1,4 +1,4 @@
-# 🇩🇪 Mein Ziel: Deutsch B1
+# 🇩🇪 Mein Ziel: Deutsch B1 
 
 A mobile-first progressive web app (PWA) for tracking and accelerating your journey to German B1 level. Built as a single HTML file with Supabase for auth and data, and OpenRouter AI for intelligent quiz and level-testing features.
 
