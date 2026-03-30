@@ -14,6 +14,7 @@
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <title>Mein Ziel: Deutsch B1</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
 <style>
 :root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -712,26 +713,25 @@ h1 span{color:var(--gold)}
       <div class="login-sub">5-Monats-Lernplan · Von Null zu B1</div>
       <div class="login-tabs">
         <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Anmelden</button>
-        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Zugang anfragen</button>
+        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Registrieren</button>
       </div>
-      <div class="login-field" id="field-name" style="display:none"><label>Vollständiger Name</label><input type="text" id="auth-name" placeholder="Dein Name" autocomplete="name" maxlength="100"></div>
       <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="example@gmail.com" autocomplete="email" maxlength="254" required></div>
       <div class="login-field" id="field-password"><label>Passwort</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
-      <div class="login-field" id="field-reason" style="display:none"><label>Warum möchtest du teilnehmen?</label><input type="text" id="auth-reason" placeholder="Optional..." maxlength="200"></div>
+      <div class="login-field" id="field-confirm-password" style="display:none"><label>Passwort bestätigen</label><input type="password" id="auth-confirm-password" placeholder="••••••••" autocomplete="new-password"></div>
       <button class="login-btn" id="auth-btn" onclick="handleAuth()">Anmelden</button>
       <div class="login-error" id="auth-error"></div>
     </div>
   </div>
 </div>
 
-<!-- REQUEST SENT SCREEN -->
+<!-- REGISTRATION SUCCESS SCREEN -->
 <div class="confirm-screen" id="request-screen">
   <div class="confirm-box">
     <div class="login-flag"></div>
     <div class="confirm-body">
-      <div class="confirm-title" style="color:var(--green)">✓ Anfrage gesendet</div>
-      <div class="confirm-text">Deine Anfrage wurde erfolgreich eingereicht. Der Admin wird sie prüfen und dir eine Einladungs-E-Mail senden, sobald sie genehmigt wurde.</div>
-      <button class="confirm-btn" onclick="hideRequestScreen()">Zurück zur Anmeldung</button>
+      <div class="confirm-title" style="color:var(--green)">✓ Konto erstellt</div>
+      <div class="confirm-text">Dein Konto wurde erfolgreich erstellt. Du kannst dich jetzt direkt anmelden.</div>
+      <button class="confirm-btn" onclick="hideRequestScreen()">Zur Anmeldung</button>
     </div>
   </div>
 </div>
@@ -1406,10 +1406,11 @@ function switchAuthTab(mode){
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
   document.getElementById('tab-register').classList.toggle('active',mode==='register');
   const isReg = mode==='register';
-  document.getElementById('field-name').style.display=isReg?'block':'none';
-  document.getElementById('field-password').style.display=isReg?'none':'block';
-  document.getElementById('field-reason').style.display=isReg?'block':'none';
-  document.getElementById('auth-btn').textContent=isReg?'Anfrage senden':'Anmelden';
+  document.getElementById('field-password').style.display='block';
+  document.getElementById('field-confirm-password').style.display=isReg?'block':'none';
+  document.getElementById('auth-password').placeholder=isReg?'Passwort wählen (min. 6 Zeichen)':'••••••••';
+  document.getElementById('auth-password').autocomplete=isReg?'new-password':'current-password';
+  document.getElementById('auth-btn').textContent=isReg?'Konto erstellen':'Anmelden';
   document.getElementById('auth-error').classList.remove('visible');
 }
 
@@ -1432,27 +1433,35 @@ async function handleAuth(){
   const btn=document.getElementById('auth-btn');
 
   if(authMode==='register'){
-    // Submit access request — no password needed
-    const name=document.getElementById('auth-name').value.trim();
-    const reason=document.getElementById('auth-reason').value.trim();
+    const pwd=document.getElementById('auth-password').value;
+    const confirmPwd=document.getElementById('auth-confirm-password').value;
     if(!email){showAuthError('Bitte gib deine E-Mail ein.');return;}
+    if(!pwd||pwd.length<6){showAuthError('Passwort muss mindestens 6 Zeichen haben.');return;}
+    if(pwd!==confirmPwd){showAuthError('Passwörter stimmen nicht überein.');return;}
     btn.disabled=true;btn.textContent='...';
     document.getElementById('auth-error').classList.remove('visible');
     try{
-      // Check if already requested
-      const {data:existing}=await _supa.from('pending_users').select('id,status').eq('email',email).maybeSingle();
-      if(existing){
-        if(existing.status==='pending') throw new Error('Eine Anfrage mit dieser E-Mail wurde bereits gestellt.');
-        if(existing.status==='rejected') throw new Error('Diese Anfrage wurde abgelehnt. Bitte kontaktiere den Admin.');
-        if(existing.status==='approved') throw new Error('Diese E-Mail wurde bereits genehmigt. Du kannst dich anmelden.');
-      }
-      const {error}=await _supa.from('pending_users').insert({email,full_name:name||null,reason:reason||null});
+      const {data,error}=await _supa.auth.signUp({
+        email,
+        password:pwd,
+        options:{ data:{ role:'user' } }
+      });
       if(error) throw error;
-      btn.disabled=false;btn.textContent='Anfrage senden';
+      btn.disabled=false;btn.textContent='Konto erstellen';
+      // If session is returned immediately (email confirm disabled), log in directly
+      if(data?.session){
+        // onAuthStateChange will handle the rest
+        return;
+      }
       showRequestScreen();
     }catch(e){
-      btn.disabled=false;btn.textContent='Anfrage senden';
-      showAuthError((e&&e.message)?e.message:String(e));
+      btn.disabled=false;btn.textContent='Konto erstellen';
+      const msg=(e&&e.message)?e.message:String(e);
+      if(/already registered/i.test(msg)||/already exists/i.test(msg)){
+        showAuthError('Diese E-Mail ist bereits registriert. Bitte melde dich an.');
+      } else {
+        showAuthError(msg);
+      }
     }
     return;
   }
@@ -2183,7 +2192,7 @@ const i18n={
     login_title_2:'Deutsch B1',
     login_sub:'5-Monats-Lernplan · Von Null zu B1',
     tab_login:'Anmelden',
-    tab_register:'Konto erstellen',
+    tab_register:'Registrieren',
     label_email:'E‑Mail',
     label_pwd:'Passwort',
     label_confirm:'Passwort bestätigen',
@@ -2340,7 +2349,7 @@ const i18n={
     login_title_2:'German B1',
     login_sub:'5-Month Study Plan · From Zero to B1',
     tab_login:'Log in',
-    tab_register:'Create account',
+    tab_register:'Register',
     label_email:'Email',
     label_pwd:'Password',
     label_confirm:'Confirm password',
@@ -2496,7 +2505,7 @@ const i18n={
     login_title_2:'الألمانية B1',
     login_sub:'خطة دراسة 5 أشهر · من الصفر إلى B1',
     tab_login:'تسجيل الدخول',
-    tab_register:'إنشاء حساب',
+    tab_register:'تسجيل',
     label_email:'البريد الإلكتروني',
     label_pwd:'كلمة المرور',
     label_confirm:'تأكيد كلمة المرور',
@@ -4001,35 +4010,23 @@ async function adminChangeRole(email, newRole, selectEl){
   </div>
 </div>
 <script>
-// ===== OPENROUTER AI CONFIG =====
-const OPENROUTER_API_KEY = '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';
-const OPENROUTER_MODEL = 'mistralai/mistral-7b-instruct:free';
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+// ===== AI CONFIG — powered by Puter.js (free, no API key needed) =====
+// Puter.js uses a "user-pays" model: each user signs in with their free Puter account.
+// No API key, no backend, no billing required on your end.
 
-async function callOpenRouter(systemPrompt, userPrompt) {
-  const res = await fetch(OPENROUTER_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': location.href,
-      'X-Title': 'Deutsch B1 App'
-    },
-    body: JSON.stringify({
-      model: OPENROUTER_MODEL,
-      max_tokens: 2000,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ]
-    })
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+async function callAI(systemPrompt, userPrompt) {
+  // Puter.js must be loaded — wait for it if needed
+  if (typeof puter === 'undefined') {
+    throw new Error('Puter.js not loaded. Please refresh the page.');
   }
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+  const fullPrompt = systemPrompt + '\n\nUser: ' + userPrompt;
+  const response = await puter.ai.chat(fullPrompt, {
+    model: 'gpt-4o-mini',
+    max_tokens: 2000
+  });
+  // puter.ai.chat returns either a string or an object with message.content
+  if (typeof response === 'string') return response;
+  return response?.message?.content || response?.content || String(response);
 }
 
 // ===== QUIZ FEATURE =====
@@ -4070,7 +4067,7 @@ JSON-Format:
   const userPrompt = `Erstelle genau ${count} Fragen zum Thema ${topicLabel} für Niveau ${level}. Nur JSON zurückgeben.`;
 
   try {
-    const raw = await callOpenRouter(systemPrompt, userPrompt);
+    const raw = await callAI(systemPrompt, userPrompt);
     // Strip possible markdown fences
     const clean = raw.replace(/```json|```/g, '').trim();
     _quizData = JSON.parse(clean);
@@ -4177,7 +4174,7 @@ Format: {"q":"Frage?","options":["A","B","C","D"],"correct":0,"explanation":"Kur
   const userPrompt = `Eine Multiple-Choice-Frage für Niveau ${_levelCurrentLevel}. Thema: gemischt (Grammatik, Vokabeln oder Leseverständnis). Nur JSON.`;
 
   try {
-    const raw = await callOpenRouter(systemPrompt, userPrompt);
+    const raw = await callAI(systemPrompt, userPrompt);
     const clean = raw.replace(/```json|```/g, '').trim();
     const q = JSON.parse(clean);
     q.level = _levelCurrentLevel;
