@@ -821,7 +821,7 @@ h1 span{color:var(--gold)}
 <a aria-label="Open Documents" class="desk-nav-item" data-page="pdf" href="pdf.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg></a>
 <a aria-label="Open News" class="desk-nav-item" data-page="news" href="news.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg></a>
 <a aria-label="Open Translator" class="desk-nav-item" data-page="translate" href="translate.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></a>
-<a aria-label="Quiz" class="desk-nav-item" data-page="quiz" href="quiz.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></a>
+<a aria-label="Quiz" class="desk-nav-item active" data-page="quiz" href="quiz.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></a>
 <a aria-label="Level" class="desk-nav-item" data-page="level" href="level.html"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></a>
 <a aria-label="Admin" class="desk-nav-item" data-page="admin" href="admin.html" id="desk-admin-nav" style="display:none"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></a>
 <div class="desk-nav-right">
@@ -846,73 +846,7 @@ h1 span{color:var(--gold)}
 </div>
 </nav>
 <!-- TRACKER PAGE -->
-<div class="page active" id="page-tracker">
-<header>
-<div class="flag-stripe"></div>
-<div class="header-inner">
-<div>
-<h1>Mein Ziel:<br/><span>Deutsch B1</span></h1>
-<p style="font-size:0.72rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
-</div>
-<div class="header-actions">
-<div class="header-meta">
-<div class="level-badge">🎯 B1 NIVEAU</div>
-<div class="today-label" id="today-label"></div>
-</div>
-<button class="profile-icon-btn" id="mob-profile-btn" onclick="openProfileModal()" style="display:none">?</button>
-<button class="reset-btn" onclick="resetAll()">↺ Reset</button>
-</div>
-</div>
-</header>
-<div class="overall-section">
-<div class="overall-inner">
-<div class="big-stat"><div class="num" id="stat-weeks">0</div><div class="label">Wochen</div></div>
-<div class="big-stat main-progress-wrap">
-<div class="main-progress-label">Fortschritt</div>
-<div class="arc-container">
-<svg viewbox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-<circle cx="80" cy="80" fill="none" r="65" stroke="#2a2a2a" stroke-width="12"></circle>
-<circle cx="80" cy="80" fill="none" id="arc-circle" r="65" stroke="var(--gold)" stroke-dasharray="408.41" stroke-dashoffset="408.41" stroke-linecap="round" stroke-width="12" style="transition:stroke-dashoffset 0.8s ease" transform="rotate(-90 80 80)"></circle>
-</svg>
-<div class="arc-pct"><span id="arc-pct">0</span>%</div>
-</div>
-</div>
-<div class="big-stat">
-<div class="streak-counter" id="streak-counter">
-<div class="streak-fire" id="streak-fire">🔥</div>
-<div class="streak-num" id="stat-streak">0</div>
-<div class="streak-unit" id="streak-unit-label">Tage</div>
-<div class="streak-bar-wrap">
-<div class="streak-bar-track">
-<div class="streak-bar-fill" id="streak-bar-fill" style="width:0%"></div>
-</div>
-<div class="streak-bar-label" id="streak-tasks-label">0/4</div>
-</div>
-<div class="streak-warning" id="streak-warning">⚠ Erledige deine Aufgaben!</div>
-</div>
-</div>
-</div>
-</div>
-<div class="journey-section container">
-<div class="section-title">5-Monate Reise</div>
-<div class="journey-bar" id="journey-bar"></div>
-</div>
-<div class="stats-row">
-<div class="stat-pill"><div class="stat-pill-icon">📚</div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">⏱</div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">✅</div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">🗓</div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
-</div>
-<div class="daily-section">
-<div class="section-title">Tägliche Aufgaben</div>
-<div class="daily-grid" id="daily-grid"></div>
-</div>
-<div class="months-grid" id="months-grid"></div>
-<div class="notes-section">
-<div class="section-title">Notizen</div>
-<div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
-</div>
-</div>
+
 <!-- PDF PAGE -->
 
 <!-- PROFILE MODAL -->
@@ -987,7 +921,7 @@ h1 span{color:var(--gold)}
 <!-- ADMIN PAGE -->
 
 <!-- BOTTOM NAV -->
-<nav class="bottom-nav"><a href="tracker.html"><div class="nav-item active" data-page="tracker">
+<nav class="bottom-nav"><a href="tracker.html"><div class="nav-item" data-page="tracker">
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg></div>
 <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
 </div></a><a href="pdf.html"><div class="nav-item" data-page="pdf">
@@ -999,7 +933,7 @@ h1 span{color:var(--gold)}
 </div></a><a href="translate.html"><div class="nav-item" data-page="translate">
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
 <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
-</div></a><a href="quiz.html"><div class="nav-item" data-page="quiz">
+</div></a><a href="quiz.html"><div class="nav-item active" data-page="quiz">
 <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
 <div class="nav-label">Quiz</div>
 </div></a><a href="level.html"><div class="nav-item" data-page="level">
@@ -1069,7 +1003,7 @@ h1 span{color:var(--gold)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>activeAppPage='tracker';</script><script>
+<script>activeAppPage='quiz';</script><script>
 // PDF.js
 if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -1372,7 +1306,7 @@ function getData(){return DATA_I18N[currentLang]||DATA_I18N.de;}
 // ===== TRACKER STATE (Supabase) =====
 let state={completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:null,lastActiveDay:null,newsPosts:[],reminderNotif:false};
 let saveTimeout=null;
-let activeAppPage='tracker';
+let activeAppPage='quiz';
 
 async function loadState(){
   if(!currentUser)return;
@@ -3757,7 +3691,48 @@ async function adminChangeRole(email, newRole, selectEl){
 
 </script>
 <!-- QUIZ PAGE -->
-
+<div class="page" id="page-quiz">
+<div class="quiz-page">
+<div class="quiz-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+<div class="quiz-hero-title">🧠 KI-<span>Quiz</span></div>
+<div class="quiz-hero-sub">KI-generierte Fragen basierend auf deinem Fortschritt</div>
+</div>
+<div class="quiz-config">
+<div>
+<div class="quiz-config-label">Schwierigkeit</div>
+<select class="quiz-select" id="quiz-difficulty">
+<option value="auto">🤖 Auto (aus Fortschritt)</option>
+<option value="A1">A1 – Anfänger</option>
+<option value="A2">A2 – Grundlagen</option>
+<option value="B1">B1 – Mittelstufe</option>
+</select>
+</div>
+<div>
+<div class="quiz-config-label">Thema</div>
+<select class="quiz-select" id="quiz-topic">
+<option value="mixed">🎲 Gemischt</option>
+<option value="grammar">📘 Grammatik</option>
+<option value="vocabulary">📚 Vokabeln</option>
+<option value="reading">📖 Leseverständnis</option>
+</select>
+</div>
+<div>
+<div class="quiz-config-label">Fragen</div>
+<select class="quiz-select" id="quiz-count">
+<option value="5">5 Fragen</option>
+<option selected="" value="10">10 Fragen</option>
+<option value="15">15 Fragen</option>
+</select>
+</div>
+<button class="quiz-gen-btn" id="quiz-gen-btn" onclick="generateQuiz()">
+<span id="quiz-gen-label">✨ Quiz starten</span>
+<div class="quiz-spinner" id="quiz-gen-spinner" style="display:none;width:18px;height:18px;border-width:2px"></div>
+</button>
+</div>
+<div id="quiz-area"></div>
+</div>
+</div>
 <!-- LEVEL PAGE -->
 
 <script>
