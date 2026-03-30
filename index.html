@@ -607,6 +607,92 @@ h1 span{color:var(--gold)}
 .admin-new-badge{display:inline-block;font-size:0.55rem;background:rgba(61,186,110,0.15);color:var(--green);border:1px solid rgba(61,186,110,0.3);border-radius:20px;padding:1px 6px;margin-left:6px;vertical-align:middle}
 
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.pending-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(42,42,42,0.6);transition:background 0.15s}
+.pending-row:last-child{border-bottom:none}
+.pending-row:hover{background:rgba(255,255,255,0.02)}
+.pending-info{flex:1;min-width:0}
+.pending-email{font-size:0.82rem;color:var(--white);font-weight:500}
+.pending-name{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.pending-reason{font-size:0.68rem;color:var(--muted);font-style:italic;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pending-date{font-size:0.62rem;color:#444;font-family:"DM Mono",monospace;white-space:nowrap;flex-shrink:0}
+.pending-actions{display:flex;gap:6px;flex-shrink:0}
+.pending-approve-btn{padding:6px 14px;background:rgba(61,186,110,0.15);border:1px solid rgba(61,186,110,0.4);color:var(--green);border-radius:5px;font-family:"DM Sans",sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s;font-weight:600}
+.pending-approve-btn:hover{background:rgba(61,186,110,0.25)}
+.pending-approve-btn:disabled{opacity:0.4;cursor:default}
+.pending-reject-btn{padding:6px 14px;background:rgba(204,31,31,0.1);border:1px solid rgba(204,31,31,0.3);color:var(--red);border-radius:5px;font-family:"DM Sans",sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s}
+.pending-reject-btn:hover{background:rgba(204,31,31,0.2)}
+.pending-reject-btn:disabled{opacity:0.4;cursor:default}
+
+/* ===== QUIZ PAGE ===== */
+.quiz-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
+.quiz-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.quiz-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
+.quiz-hero-title span{color:var(--gold)}
+.quiz-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+.quiz-config{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.quiz-config-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.quiz-select{background:#111;border:1px solid var(--border);border-radius:5px;padding:8px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;cursor:pointer}
+.quiz-select:focus{border-color:var(--gold)}
+.quiz-gen-btn{padding:10px 24px;background:var(--gold);color:var(--black);border:none;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px}
+.quiz-gen-btn:disabled{opacity:0.5;cursor:default}
+.quiz-gen-btn:active:not(:disabled){transform:scale(0.97)}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:16px;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.quiz-q-num{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;font-family:'DM Mono',monospace}
+.quiz-q-text{font-size:1rem;color:var(--white);font-weight:500;margin-bottom:16px;line-height:1.5}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{padding:11px 14px;background:#111;border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.2s;text-align:left;width:100%}
+.quiz-option:hover:not(:disabled){border-color:var(--gold);background:rgba(232,184,75,0.06)}
+.quiz-option.correct{border-color:var(--green);background:rgba(61,186,110,0.12);color:var(--green)}
+.quiz-option.wrong{border-color:var(--red);background:rgba(204,31,31,0.1);color:#ff6b6b}
+.quiz-option:disabled{cursor:default}
+.quiz-explanation{margin-top:12px;padding:10px 14px;background:rgba(232,184,75,0.07);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:0.82rem;color:var(--muted);line-height:1.5;display:none}
+.quiz-explanation.visible{display:block}
+.quiz-progress-wrap{margin-bottom:20px}
+.quiz-progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.quiz-progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.4s ease}
+.quiz-progress-label{font-size:0.68rem;color:var(--muted);font-family:'DM Mono',monospace;text-align:right}
+.quiz-result{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:32px;text-align:center;margin-bottom:20px}
+.quiz-result-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--gold);line-height:1}
+.quiz-result-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin:6px 0 16px}
+.quiz-result-msg{font-size:0.9rem;color:var(--white);margin-bottom:20px;line-height:1.5}
+.quiz-retry-btn{padding:10px 24px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s}
+.quiz-retry-btn:hover{background:rgba(232,184,75,0.1)}
+.quiz-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;color:var(--muted);font-size:0.85rem}
+.quiz-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+.quiz-error{background:rgba(204,31,31,0.1);border:1px solid rgba(204,31,31,0.3);border-radius:8px;padding:16px;color:#ff6b6b;font-size:0.85rem;margin-bottom:16px}
+
+/* ===== LEVEL PAGE ===== */
+.level-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
+.level-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.level-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
+.level-hero-title span{color:var(--gold)}
+.level-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+.level-start-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px;text-align:center;margin-bottom:20px}
+.level-start-icon{font-size:3rem;margin-bottom:12px}
+.level-start-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.05em;color:var(--white);margin-bottom:8px}
+.level-start-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.level-start-btn{padding:12px 32px;background:var(--gold);color:var(--black);border:none;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s}
+.level-start-btn:active{transform:scale(0.97)}
+.level-q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.level-q-stage{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-family:'DM Mono',monospace}
+.level-q-current-level{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;color:var(--gold)}
+.level-result-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.level-result-banner{padding:28px 24px;text-align:center;background:linear-gradient(135deg,rgba(232,184,75,0.15),rgba(91,126,201,0.1))}
+.level-result-badge{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--gold);letter-spacing:0.05em;line-height:1}
+.level-result-name{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;margin:4px 0 12px}
+.level-result-desc{font-size:0.88rem;color:var(--white);line-height:1.6;max-width:400px;margin:0 auto}
+.level-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.level-skill{background:var(--card);padding:16px;text-align:center}
+.level-skill-name{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.level-skill-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.level-skill-fill{height:100%;border-radius:2px;transition:width 0.8s ease}
+.level-skill-pct{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--white)}
+.level-advice{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.level-advice-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.08em;color:var(--gold);margin-bottom:12px}
+.level-advice-text{font-size:0.84rem;color:var(--muted);line-height:1.7}
+.level-restart-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.level-restart-btn:hover{border-color:var(--gold);color:var(--gold)}
 </style>
 </head>
 <body>
@@ -626,13 +712,26 @@ h1 span{color:var(--gold)}
       <div class="login-sub">5-Monats-Lernplan · Von Null zu B1</div>
       <div class="login-tabs">
         <button class="login-tab active" id="tab-login" onclick="switchAuthTab('login')">Anmelden</button>
-        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Konto erstellen</button>
+        <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Zugang anfragen</button>
       </div>
+      <div class="login-field" id="field-name" style="display:none"><label>Vollständiger Name</label><input type="text" id="auth-name" placeholder="Dein Name" autocomplete="name" maxlength="100"></div>
       <div class="login-field"><label>Email</label><input type="email" id="auth-email" placeholder="example@gmail.com" autocomplete="email" maxlength="254" required></div>
-      <div class="login-field"><label>Passwort</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
-      <div class="login-field" id="field-confirm" style="display:none"><label>Passwort bestätigen</label><input type="password" id="auth-confirm" placeholder="••••••••" autocomplete="new-password"></div>
+      <div class="login-field" id="field-password"><label>Passwort</label><input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="login-field" id="field-reason" style="display:none"><label>Warum möchtest du teilnehmen?</label><input type="text" id="auth-reason" placeholder="Optional..." maxlength="200"></div>
       <button class="login-btn" id="auth-btn" onclick="handleAuth()">Anmelden</button>
       <div class="login-error" id="auth-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- REQUEST SENT SCREEN -->
+<div class="confirm-screen" id="request-screen">
+  <div class="confirm-box">
+    <div class="login-flag"></div>
+    <div class="confirm-body">
+      <div class="confirm-title" style="color:var(--green)">✓ Anfrage gesendet</div>
+      <div class="confirm-text">Deine Anfrage wurde erfolgreich eingereicht. Der Admin wird sie prüfen und dir eine Einladungs-E-Mail senden, sobald sie genehmigt wurde.</div>
+      <button class="confirm-btn" onclick="hideRequestScreen()">Zurück zur Anmeldung</button>
     </div>
   </div>
 </div>
@@ -691,6 +790,8 @@ h1 span{color:var(--gold)}
   <button type="button" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Open Documents"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg> Dokumente</button>
   <button type="button" class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="Open News"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News</button>
   <button type="button" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Open Translator"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer</button>
+  <button type="button" class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Quiz</button>
+  <button type="button" class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Level"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau</button>
   <button type="button" class="desk-nav-item" data-page="admin" id="desk-admin-nav" style="display:none" onclick="switchPage('admin')" aria-label="Admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin</button>
   <div class="desk-nav-right">
     <!-- Notification Bell -->
@@ -995,6 +1096,12 @@ h1 span{color:var(--gold)}
       <div class="admin-hero-sub">User management &amp; signup stats</div>
     </div>
 
+    <!-- PENDING REQUESTS -->
+    <div class="admin-section-title">23f3 Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
+    <div class="admin-users-wrap" style="margin-bottom:28px">
+      <div id="admin-pending-list"><div class="admin-empty">Loading requests...</div></div>
+    </div>
+
     <!-- STAT CARDS -->
     <div class="admin-stats-grid">
       <div class="admin-stat-card gold">
@@ -1074,12 +1181,20 @@ h1 span{color:var(--gold)}
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
     <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
+  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div class="nav-label">Quiz</div>
+  </div>
+  <div class="nav-item" data-page="level" onclick="switchPage('level')">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div class="nav-label">Niveau</div>
+  </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" style="display:none" onclick="switchPage('admin')">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
     <div class="nav-label">Admin</div>
   </div>
   <!-- Mobile notification bell -->
-  <div class="nav-item" onclick="toggleNotifPanel()" style="position:relative">
+  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative;display:inline-flex">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
@@ -1169,7 +1284,7 @@ let _adminRoleFilter = 'all';
 
 function isAdmin(){ return currentRole === 'admin'; }
 
-const USER_PAGES = ['tracker','pdf','translate','news'];
+const USER_PAGES = ['tracker','pdf','translate','news','quiz','level'];
 
 function applyRoleUI(){
   const admin = isAdmin();
@@ -1220,10 +1335,13 @@ function setOverlayState(target){
   document.getElementById('app-loader').classList.toggle('visible',target==='loader');
   document.getElementById('login-screen').classList.toggle('visible',target==='login');
   document.getElementById('confirm-screen').classList.toggle('visible',target==='confirm');
+  document.getElementById('request-screen').classList.toggle('visible',target==='request');
 }
 function showLoader(){setOverlayState('loader');}
 function showLoginScreen(){setOverlayState('login');}
 function showConfirmScreen(){setOverlayState('confirm');}
+function showRequestScreen(){setOverlayState('request');}
+function hideRequestScreen(){showLoginScreen();}
 function showAppShell(){setOverlayState('app');}
 
 async function startAuthenticatedApp(user){
@@ -1287,9 +1405,11 @@ function switchAuthTab(mode){
   authMode=mode;
   document.getElementById('tab-login').classList.toggle('active',mode==='login');
   document.getElementById('tab-register').classList.toggle('active',mode==='register');
-  document.getElementById('field-confirm').style.display=mode==='register'?'block':'none';
-  // Update the authentication button text based on the selected mode and current language
-  document.getElementById('auth-btn').textContent=mode==='login'?t('btn_login'):t('btn_register');
+  const isReg = mode==='register';
+  document.getElementById('field-name').style.display=isReg?'block':'none';
+  document.getElementById('field-password').style.display=isReg?'none':'block';
+  document.getElementById('field-reason').style.display=isReg?'block':'none';
+  document.getElementById('auth-btn').textContent=isReg?'Anfrage senden':'Anmelden';
   document.getElementById('auth-error').classList.remove('visible');
 }
 
@@ -1309,54 +1429,53 @@ function getSignupRedirectUrl(){
 
 async function handleAuth(){
   const email=document.getElementById('auth-email').value.trim().toLowerCase();
-  const pwd=document.getElementById('auth-password').value;
-  const confirm=document.getElementById('auth-confirm').value;
   const btn=document.getElementById('auth-btn');
-  if(!email||!pwd){showAuthError(t('error_fill_all'));return;}
-  if(authMode==='register'&&pwd!==confirm){showAuthError(t('error_pwd_match'));return;}
-  if(pwd.length<6){showAuthError(t('error_pwd_short'));return;}
 
+  if(authMode==='register'){
+    // Submit access request — no password needed
+    const name=document.getElementById('auth-name').value.trim();
+    const reason=document.getElementById('auth-reason').value.trim();
+    if(!email){showAuthError('Bitte gib deine E-Mail ein.');return;}
+    btn.disabled=true;btn.textContent='...';
+    document.getElementById('auth-error').classList.remove('visible');
+    try{
+      // Check if already requested
+      const {data:existing}=await _supa.from('pending_users').select('id,status').eq('email',email).maybeSingle();
+      if(existing){
+        if(existing.status==='pending') throw new Error('Eine Anfrage mit dieser E-Mail wurde bereits gestellt.');
+        if(existing.status==='rejected') throw new Error('Diese Anfrage wurde abgelehnt. Bitte kontaktiere den Admin.');
+        if(existing.status==='approved') throw new Error('Diese E-Mail wurde bereits genehmigt. Du kannst dich anmelden.');
+      }
+      const {error}=await _supa.from('pending_users').insert({email,full_name:name||null,reason:reason||null});
+      if(error) throw error;
+      btn.disabled=false;btn.textContent='Anfrage senden';
+      showRequestScreen();
+    }catch(e){
+      btn.disabled=false;btn.textContent='Anfrage senden';
+      showAuthError((e&&e.message)?e.message:String(e));
+    }
+    return;
+  }
+
+  // LOGIN mode
+  const pwd=document.getElementById('auth-password').value;
+  if(!email||!pwd){showAuthError(t('error_fill_all'));return;}
+  if(pwd.length<6){showAuthError(t('error_pwd_short'));return;}
   btn.disabled=true;btn.textContent='...';
   document.getElementById('auth-error').classList.remove('visible');
   try{
-    if(authMode==='login'){
-      // Attempt to sign in with provided credentials
-      const { error } = await _supa.auth.signInWithPassword({ email, password: pwd });
-      if(error) throw error;
-      // If login succeeds, button state will reset via auth state change handler
-    } else {
-      // Register a new user and force the confirmation email back to this page.
-      const { error } = await _supa.auth.signUp({
-        email,
-        password: pwd,
-        options: {
-          emailRedirectTo: getSignupRedirectUrl(),
-          data: { role: email === 'achrafbensaid01@gmail.com' ? 'admin' : 'user' }
-        }
-      });
-      if(error) throw error;
-      showConfirmScreen();
-      // Reset button state for next time
-      btn.disabled = false;
-      // Reset the button text using the current language
-      btn.textContent = t('btn_register');
-    }
+    const { error } = await _supa.auth.signInWithPassword({ email, password: pwd });
+    if(error) throw error;
   } catch(e){
-    // Reset button state on error
     btn.disabled = false;
-    // Use translated button label based on the current mode
-    btn.textContent = authMode === 'login' ? t('btn_login') : t('btn_register');
+    btn.textContent = 'Anmelden';
     const msgs = {
       'Invalid login credentials': t('error_invalid_login'),
-      'User already registered': t('error_user_exists'),
       'Email not confirmed': t('error_not_confirmed'),
     };
-    // Map common server-side rate-limit / too-many requests messages
     const serverMsg = (e && e.message) ? e.message : '';
     if(/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)){
       showAuthError(t('error_too_many'));
-    } else if(/pre-authorized addresses/i.test(serverMsg) || /not part of the project's team/i.test(serverMsg)){
-      showAuthError(t('error_email_provider_restricted'));
     } else {
       showAuthError(msgs[serverMsg] || serverMsg || String(e));
     }
@@ -3127,6 +3246,13 @@ function renderNotifList(){
   document.querySelectorAll('#notif-list,#mob-notif-list').forEach(el=>{ if(el) el.innerHTML=html; });
 }
 
+function mobToggleNotif(e){
+  if(e){ e.stopPropagation(); e.preventDefault(); }
+  _notifPanelOpen = !_notifPanelOpen;
+  const mp = document.getElementById('mob-notif-panel');
+  if(mp){ mp.style.display = _notifPanelOpen ? 'flex' : 'none'; }
+  if(_notifPanelOpen) loadNotifications();
+}
 function toggleNotifPanel(){
   _notifPanelOpen = !_notifPanelOpen;
   // desktop
@@ -3142,9 +3268,15 @@ function toggleNotifPanel(){
 document.addEventListener('click', e=>{
   if(!_notifPanelOpen) return;
   const dp = document.getElementById('notif-panel');
-  const btn = document.getElementById('desk-notif-btn');
+  const deskBtn = document.getElementById('desk-notif-btn');
+  const mobBtn = document.getElementById('mob-notif-btn');
   const mp = document.getElementById('mob-notif-panel');
-  if(dp && !dp.contains(e.target) && btn && !btn.contains(e.target) && mp && !mp.contains(e.target)){
+  const clickedOutside =
+    (!dp || !dp.contains(e.target)) &&
+    (!deskBtn || !deskBtn.contains(e.target)) &&
+    (!mobBtn || !mobBtn.contains(e.target)) &&
+    (!mp || !mp.contains(e.target));
+  if(clickedOutside){
     _notifPanelOpen = false;
     if(dp) dp.classList.remove('open');
     if(mp) mp.style.display = 'none';
@@ -3481,6 +3613,7 @@ async function supaRetry(fn, retries=3, delayMs=600){
 }
 
 async function loadAdminPage(){
+  loadPendingRequests();
   if(!isAdmin()) return;
   document.getElementById('admin-stat-total').textContent = '—';
   document.getElementById('admin-stat-today').textContent = '—';
@@ -3678,6 +3811,102 @@ function adminFilterUsers(){
   if(!_adminAllUsers || !_adminAllUsers.length) return;
   renderAdminUsersList();
 }
+// ===== PENDING REQUESTS =====
+async function loadPendingRequests(){
+  const list = document.getElementById('admin-pending-list');
+  const badge = document.getElementById('pending-count-badge');
+  if(!list) return;
+  list.innerHTML = '<div class="admin-empty">Laden...</div>';
+  try{
+    const {data, error} = await _supa.from('pending_users').select('*').eq('status','pending').order('created_at',{ascending:false});
+    if(error) throw error;
+    const count = data ? data.length : 0;
+    if(badge){
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+    if(!data || count === 0){
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+      return;
+    }
+    list.innerHTML = data.map(r => {
+      const date = r.created_at ? new Date(r.created_at).toLocaleDateString('en',{day:'numeric',month:'short',year:'numeric'}) : '—';
+      return `<div class="pending-row" id="prow-${r.id}">
+        <div class="pending-info">
+          <div class="pending-email">${r.email}</div>
+          ${r.full_name ? `<div class="pending-name">👤 ${r.full_name}</div>` : ''}
+          ${r.reason ? `<div class="pending-reason">💬 "${r.reason}"</div>` : ''}
+        </div>
+        <div class="pending-date">${date}</div>
+        <div class="pending-actions">
+          <button class="pending-approve-btn" onclick="approvePendingRequest('${r.id}','${r.email}',this)">✓ Genehmigen</button>
+          <button class="pending-reject-btn" onclick="rejectPendingRequest('${r.id}',this)">✗ Ablehnen</button>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    list.innerHTML = `<div class="admin-empty" style="color:var(--red)">Fehler: ${e.message||String(e)}</div>`;
+  }
+}
+
+async function approvePendingRequest(id, email, btn){
+  if(!isAdmin()) return;
+  const row = document.getElementById('prow-'+id);
+  if(btn){ btn.disabled=true; btn.textContent='...'; }
+  const rejectBtn = row ? row.querySelector('.pending-reject-btn') : null;
+  if(rejectBtn) rejectBtn.disabled=true;
+  try{
+    // 1. Invite the user — they get an email to set their password
+    const {error:invErr} = await _supa.auth.admin.inviteUserByEmail(email);
+    if(invErr) throw invErr;
+    // 2. Mark as approved
+    const {error:upErr} = await _supa.from('pending_users').update({status:'approved'}).eq('id',id);
+    if(upErr) throw upErr;
+    if(row) row.remove();
+    showToast('✓ Einladung gesendet an ' + email);
+    // Update badge count
+    const badge = document.getElementById('pending-count-badge');
+    if(badge){
+      const n = parseInt(badge.textContent||'0') - 1;
+      badge.textContent = n;
+      badge.style.display = n > 0 ? 'inline-block' : 'none';
+    }
+    const list = document.getElementById('admin-pending-list');
+    if(list && !list.querySelector('.pending-row')){
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+    }
+  }catch(e){
+    showToast('✗ Fehler: ' + (e?.message||String(e)));
+    if(btn){ btn.disabled=false; btn.textContent='✓ Genehmigen'; }
+    if(rejectBtn) rejectBtn.disabled=false;
+  }
+}
+
+async function rejectPendingRequest(id, btn){
+  if(!isAdmin()) return;
+  if(!confirm('Anfrage wirklich ablehnen?')) return;
+  const row = document.getElementById('prow-'+id);
+  if(btn){ btn.disabled=true; btn.textContent='...'; }
+  try{
+    const {error} = await _supa.from('pending_users').update({status:'rejected'}).eq('id',id);
+    if(error) throw error;
+    if(row) row.remove();
+    showToast('Anfrage abgelehnt.');
+    const badge = document.getElementById('pending-count-badge');
+    if(badge){
+      const n = parseInt(badge.textContent||'0') - 1;
+      badge.textContent = n;
+      badge.style.display = n > 0 ? 'inline-block' : 'none';
+    }
+    const list = document.getElementById('admin-pending-list');
+    if(list && !list.querySelector('.pending-row')){
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+    }
+  }catch(e){
+    showToast('✗ Fehler: ' + (e?.message||String(e)));
+    if(btn){ btn.disabled=false; btn.textContent='✗ Ablehnen'; }
+  }
+}
 
 function adminSetFilter(role, btn){
   _adminRoleFilter = role;
@@ -3704,6 +3933,400 @@ async function adminChangeRole(email, newRole, selectEl){
   }
 }
 
+</script>
+
+<!-- QUIZ PAGE -->
+<div class="page" id="page-quiz">
+  <div class="quiz-page">
+    <div class="quiz-hero">
+      <div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+      <div class="quiz-hero-title">🧠 KI-<span>Quiz</span></div>
+      <div class="quiz-hero-sub">KI-generierte Fragen basierend auf deinem Fortschritt</div>
+    </div>
+    <div class="quiz-config">
+      <div>
+        <div class="quiz-config-label">Schwierigkeit</div>
+        <select class="quiz-select" id="quiz-difficulty">
+          <option value="auto">🤖 Auto (aus Fortschritt)</option>
+          <option value="A1">A1 – Anfänger</option>
+          <option value="A2">A2 – Grundlagen</option>
+          <option value="B1">B1 – Mittelstufe</option>
+        </select>
+      </div>
+      <div>
+        <div class="quiz-config-label">Thema</div>
+        <select class="quiz-select" id="quiz-topic">
+          <option value="mixed">🎲 Gemischt</option>
+          <option value="grammar">📘 Grammatik</option>
+          <option value="vocabulary">📚 Vokabeln</option>
+          <option value="reading">📖 Leseverständnis</option>
+        </select>
+      </div>
+      <div>
+        <div class="quiz-config-label">Fragen</div>
+        <select class="quiz-select" id="quiz-count">
+          <option value="5">5 Fragen</option>
+          <option value="10" selected>10 Fragen</option>
+          <option value="15">15 Fragen</option>
+        </select>
+      </div>
+      <button class="quiz-gen-btn" id="quiz-gen-btn" onclick="generateQuiz()">
+        <span id="quiz-gen-label">✨ Quiz starten</span>
+        <div class="quiz-spinner" id="quiz-gen-spinner" style="display:none;width:18px;height:18px;border-width:2px"></div>
+      </button>
+    </div>
+    <div id="quiz-area"></div>
+  </div>
+</div>
+
+<!-- LEVEL PAGE -->
+<div class="page" id="page-level">
+  <div class="level-page">
+    <div class="level-hero">
+      <div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+      <div class="level-hero-title">📊 Niveau-<span>Test</span></div>
+      <div class="level-hero-sub">Erkenne dein aktuelles Deutsch-Niveau</div>
+    </div>
+    <div id="level-area">
+      <div class="level-start-card">
+        <div class="level-start-icon">🎯</div>
+        <div class="level-start-title">Wie gut ist dein Deutsch?</div>
+        <div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
+        <button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// ===== OPENROUTER AI CONFIG =====
+const OPENROUTER_API_KEY = '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';
+const OPENROUTER_MODEL = 'google/gemma-3-27b-it:free';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+async function callOpenRouter(systemPrompt, userPrompt) {
+  const res = await fetch(OPENROUTER_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': location.href,
+      'X-Title': 'Deutsch B1 App'
+    },
+    body: JSON.stringify({
+      model: OPENROUTER_MODEL,
+      max_tokens: 2000,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+  }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+// ===== QUIZ FEATURE =====
+let _quizData = [];
+let _quizAnswered = 0;
+let _quizScore = 0;
+
+async function generateQuiz() {
+  const difficulty = document.getElementById('quiz-difficulty').value;
+  const topic = document.getElementById('quiz-topic').value;
+  const count = parseInt(document.getElementById('quiz-count').value);
+  const btn = document.getElementById('quiz-gen-btn');
+  const label = document.getElementById('quiz-gen-label');
+  const spinner = document.getElementById('quiz-gen-spinner');
+  const area = document.getElementById('quiz-area');
+
+  btn.disabled = true;
+  label.style.display = 'none';
+  spinner.style.display = 'block';
+  area.innerHTML = '';
+
+  // Determine actual difficulty
+  let level = difficulty;
+  if (difficulty === 'auto') {
+    const pct = typeof computeProgress === 'function' ? computeProgress() : 50;
+    level = pct < 25 ? 'A1' : pct < 55 ? 'A2' : 'B1';
+  }
+
+  const topicMap = { mixed: 'gemischten Themen (Grammatik, Vokabeln, Leseverständnis)', grammar: 'Grammatik', vocabulary: 'Vokabeln', reading: 'Leseverständnis' };
+  const topicLabel = topicMap[topic] || 'gemischten Themen';
+
+  const systemPrompt = `Du bist ein Deutsch-Sprachlehrer. Erstelle Multiple-Choice-Fragen auf Deutsch für Niveau ${level}. 
+Antworte NUR mit validem JSON ohne Markdown-Backticks oder Erklärungen.
+JSON-Format:
+[{"q":"Frage?","options":["A","B","C","D"],"correct":0,"explanation":"Kurze Erklärung auf Deutsch"}]
+'correct' ist der 0-basierte Index der richtigen Antwort.`;
+
+  const userPrompt = `Erstelle genau ${count} Fragen zum Thema ${topicLabel} für Niveau ${level}. Nur JSON zurückgeben.`;
+
+  try {
+    const raw = await callOpenRouter(systemPrompt, userPrompt);
+    // Strip possible markdown fences
+    const clean = raw.replace(/```json|```/g, '').trim();
+    _quizData = JSON.parse(clean);
+    _quizScore = 0;
+    _quizAnswered = 0;
+    renderQuiz();
+  } catch (e) {
+    area.innerHTML = `<div class="quiz-card" style="border-color:rgba(204,31,31,0.3);text-align:center;color:#ff6b6b;font-size:0.88rem">
+      ⚠ Fehler beim Generieren: ${e.message}<br><small style="color:#666;font-size:0.72rem">Bitte versuche es erneut.</small>
+    </div>`;
+  } finally {
+    btn.disabled = false;
+    label.style.display = '';
+    spinner.style.display = 'none';
+  }
+}
+
+function renderQuiz() {
+  const area = document.getElementById('quiz-area');
+  if (!_quizData || _quizData.length === 0) return;
+
+  area.innerHTML = _quizData.map((q, i) => `
+    <div class="quiz-card" id="quiz-card-${i}">
+      <div class="quiz-q-num">Frage ${i + 1} / ${_quizData.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((opt, j) => `
+          <button class="quiz-option" id="quiz-opt-${i}-${j}" onclick="answerQuiz(${i},${j})">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-explanation" id="quiz-exp-${i}">${q.explanation || ''}</div>
+    </div>
+  `).join('') + `<div id="quiz-result-area"></div>`;
+}
+
+function answerQuiz(qIdx, optIdx) {
+  const q = _quizData[qIdx];
+  if (!q) return;
+  const correct = q.correct;
+  // Disable all options for this question
+  q.options.forEach((_, j) => {
+    const btn = document.getElementById(`quiz-opt-${qIdx}-${j}`);
+    if (!btn) return;
+    btn.disabled = true;
+    if (j === correct) btn.classList.add('correct');
+    else if (j === optIdx) btn.classList.add('wrong');
+  });
+  // Show explanation
+  const expEl = document.getElementById(`quiz-exp-${qIdx}`);
+  if (expEl) expEl.style.display = 'block';
+  // Track score
+  if (optIdx === correct) _quizScore++;
+  _quizAnswered++;
+  // Show result when all answered
+  if (_quizAnswered === _quizData.length) {
+    setTimeout(showQuizResult, 400);
+  }
+}
+
+function showQuizResult() {
+  const pct = Math.round((_quizScore / _quizData.length) * 100);
+  const msg = pct >= 80 ? '🏆 Ausgezeichnet! Du beherrschst das Material sehr gut.' :
+              pct >= 60 ? '👍 Gut gemacht! Mit etwas mehr Übung wirst du noch besser.' :
+              pct >= 40 ? '📚 Nicht schlecht. Übe weiter und du wirst dich verbessern!' :
+              '💪 Weitermachen! Wiederhole das Material und versuche es nochmal.';
+  const el = document.getElementById('quiz-result-area');
+  if (el) el.innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-result-score">${_quizScore}/${_quizData.length}</div>
+      <div class="quiz-result-label">${pct}% richtig</div>
+      <div class="quiz-result-msg">${msg}</div>
+      <button class="quiz-gen-btn" style="margin:0 auto" onclick="generateQuiz()">✨ Neues Quiz</button>
+    </div>`;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ===== LEVEL TEST FEATURE =====
+let _levelQuestions = [];
+let _levelCurrent = 0;
+let _levelCurrentLevel = 'A2';
+let _levelHistory = [];
+const _LEVELS = ['A1', 'A2', 'B1', 'B2'];
+
+async function startLevelTest() {
+  const area = document.getElementById('level-area');
+  area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0">
+    <div class="quiz-spinner" style="width:40px;height:40px;border-width:3px"></div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted)">ERSTE FRAGE WIRD GENERIERT…</div>
+  </div>`;
+  _levelQuestions = [];
+  _levelCurrent = 0;
+  _levelCurrentLevel = 'A2';
+  _levelHistory = [];
+  await fetchNextLevelQuestion();
+}
+
+async function fetchNextLevelQuestion() {
+  const area = document.getElementById('level-area');
+  const questionNum = _levelCurrent + 1;
+
+  const systemPrompt = `Du bist ein Deutsch-Sprachlehrer für Niveautests. Erstelle eine einzelne Multiple-Choice-Frage für Niveau ${_levelCurrentLevel}.
+Antworte NUR mit validem JSON ohne Markdown-Backticks.
+Format: {"q":"Frage?","options":["A","B","C","D"],"correct":0,"explanation":"Kurze Erklärung"}`;
+  const userPrompt = `Eine Multiple-Choice-Frage für Niveau ${_levelCurrentLevel}. Thema: gemischt (Grammatik, Vokabeln oder Leseverständnis). Nur JSON.`;
+
+  try {
+    const raw = await callOpenRouter(systemPrompt, userPrompt);
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const q = JSON.parse(clean);
+    q.level = _levelCurrentLevel;
+    _levelQuestions.push(q);
+    renderLevelQuestion(questionNum);
+  } catch (e) {
+    area.innerHTML = `<div class="quiz-card" style="border-color:rgba(204,31,31,0.3);text-align:center;color:#ff6b6b;font-size:0.88rem">
+      ⚠ Fehler: ${e.message}<br>
+      <button class="level-restart-btn" style="margin-top:12px;width:auto;padding:8px 20px" onclick="startLevelTest()">Nochmal versuchen</button>
+    </div>`;
+  }
+}
+
+function renderLevelQuestion(questionNum) {
+  const area = document.getElementById('level-area');
+  const q = _levelQuestions[_levelCurrent];
+  if (!q) return;
+  area.innerHTML = `
+    <div class="quiz-card">
+      <div class="level-q-header">
+        <div class="level-q-stage">Frage ${questionNum} / 20</div>
+        <div class="level-q-current-level">${_levelCurrentLevel}</div>
+      </div>
+      <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden">
+        <div style="height:100%;width:${(questionNum/20)*100}%;background:var(--gold);border-radius:2px;transition:width 0.5s ease"></div>
+      </div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((opt, j) => `
+          <button class="quiz-option" id="level-opt-${j}" onclick="answerLevelQuestion(${j})">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-explanation" id="level-exp" style="display:none">${q.explanation || ''}</div>
+    </div>`;
+}
+
+async function answerLevelQuestion(optIdx) {
+  const q = _levelQuestions[_levelCurrent];
+  if (!q) return;
+  const correct = q.correct;
+  const isCorrect = optIdx === correct;
+
+  // Disable options and show result
+  q.options.forEach((_, j) => {
+    const btn = document.getElementById(`level-opt-${j}`);
+    if (!btn) return;
+    btn.disabled = true;
+    if (j === correct) btn.classList.add('correct');
+    else if (j === optIdx) btn.classList.add('wrong');
+  });
+  const expEl = document.getElementById('level-exp');
+  if (expEl) expEl.style.display = 'block';
+
+  // Adaptive logic: adjust level
+  _levelHistory.push({ level: _levelCurrentLevel, correct: isCorrect });
+  const lvlIdx = _LEVELS.indexOf(_levelCurrentLevel);
+  if (isCorrect && lvlIdx < _LEVELS.length - 1) {
+    _levelCurrentLevel = _LEVELS[lvlIdx + 1];
+  } else if (!isCorrect && lvlIdx > 0) {
+    _levelCurrentLevel = _LEVELS[lvlIdx - 1];
+  }
+
+  _levelCurrent++;
+
+  if (_levelCurrent >= 20) {
+    setTimeout(showLevelResult, 600);
+  } else {
+    // Show loading overlay then fetch next
+    setTimeout(async () => {
+      const area = document.getElementById('level-area');
+      if (area) area.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0">
+        <div class="quiz-spinner" style="width:36px;height:36px;border-width:3px"></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;color:var(--muted)">NÄCHSTE FRAGE…</div>
+      </div>`;
+      await fetchNextLevelQuestion();
+    }, 900);
+  }
+}
+
+function showLevelResult() {
+  // Compute final level by weighted majority
+  const scores = {};
+  _LEVELS.forEach(l => scores[l] = { correct: 0, total: 0 });
+  _levelHistory.forEach(h => {
+    scores[h.level].total++;
+    if (h.correct) scores[h.level].correct++;
+  });
+
+  // Find highest level with >= 60% correct
+  let finalLevel = 'A1';
+  for (let i = _LEVELS.length - 1; i >= 0; i--) {
+    const l = _LEVELS[i];
+    const s = scores[l];
+    if (s.total > 0 && (s.correct / s.total) >= 0.6) {
+      finalLevel = l;
+      break;
+    }
+  }
+
+  const levelDescriptions = {
+    A1: 'Anfänger – Du kannst einfache Sätze verstehen und grundlegende Kommunikation auf Deutsch führen.',
+    A2: 'Grundlagen – Du kannst alltägliche Ausdrücke und Sätze verstehen und dich in einfachen Situationen verständigen.',
+    B1: 'Mittelstufe – Du kannst die Hauptpunkte klarer Standardsprache zu vertrauten Themen verstehen.',
+    B2: 'Fortgeschritten – Du kannst komplexe Texte verstehen und dich spontan und fließend ausdrücken.'
+  };
+
+  const skillColors = ['var(--m1)', 'var(--m2)', 'var(--m3)', 'var(--m4)'];
+  const skillNames = ['Grammatik', 'Vokabeln', 'Leseverständnis', 'Hörverständnis'];
+  const skillPcts = _LEVELS.map(l => {
+    const s = scores[l];
+    return s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+  });
+
+  const totalCorrect = _levelHistory.filter(h => h.correct).length;
+  const totalPct = Math.round((totalCorrect / 20) * 100);
+
+  const adviceMap = {
+    A1: 'Konzentriere dich auf Grundvokabular und einfache Satzstrukturen. Lerne täglich 10–15 neue Wörter.',
+    A2: 'Übe alltägliche Situationen: Einkaufen, Grüßen, sich vorstellen. Höre deutsche Podcasts für Anfänger.',
+    B1: 'Arbeite an Grammatik (Konjunktiv, Passiv) und erweitere deinen Wortschatz. Lese deutsche Artikel.',
+    B2: 'Vertiefe dein Verständnis durch Bücher, Filme und Gespräche mit Muttersprachlern.'
+  };
+
+  const area = document.getElementById('level-area');
+  area.innerHTML = `
+    <div class="level-result-card">
+      <div class="level-result-banner">
+        <div class="level-result-badge">${finalLevel}</div>
+        <div class="level-result-name">${finalLevel === 'A1' ? 'Anfänger' : finalLevel === 'A2' ? 'Grundlagen' : finalLevel === 'B1' ? 'Mittelstufe' : 'Fortgeschritten'}</div>
+        <div class="level-result-desc">${levelDescriptions[finalLevel]}</div>
+      </div>
+      <div class="level-skills-grid">
+        ${_LEVELS.map((l, i) => {
+          const s = scores[l];
+          const pct = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+          return `<div class="level-skill">
+            <div class="level-skill-name">${l}</div>
+            <div class="level-skill-bar"><div class="level-skill-fill" style="width:${pct}%;background:${skillColors[i]}"></div></div>
+            <div class="level-skill-pct">${pct}%</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="level-advice">
+      <div class="level-advice-title">💡 Empfehlungen für dich</div>
+      <div class="level-advice-text">${adviceMap[finalLevel]}</div>
+    </div>
+    <div style="text-align:center;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">
+      ${totalCorrect} / 20 richtig (${totalPct}%)
+    </div>
+    <button class="level-restart-btn" onclick="startLevelTest()">🔄 Test wiederholen</button>`;
+}
 </script>
 </body>
 </html>
