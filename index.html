@@ -3597,12 +3597,12 @@ async function adminLoadUsers(){
 
 // ===== ADMIN DASHBOARD PAGE =====
 
-async function supaRetry(fn, retries=3, delayMs=600){
+async function supaRetry(fn, retries=5, delayMs=1000){
   for(let i=0;i<retries;i++){
     try{ return await fn(); }
     catch(e){
       const msg = e?.message||'';
-      const isLock = msg.includes('lock') || msg.includes('stole') || msg.includes('57014');
+      const isLock = msg.includes('lock') || msg.includes('stole') || msg.includes('57014') || msg.includes('timeout');
       if(isLock && i < retries-1){
         await new Promise(r=>setTimeout(r, delayMs*(i+1)));
         continue;
@@ -3613,7 +3613,6 @@ async function supaRetry(fn, retries=3, delayMs=600){
 }
 
 async function loadAdminPage(){
-  loadPendingRequests();
   if(!isAdmin()) return;
   document.getElementById('admin-stat-total').textContent = '—';
   document.getElementById('admin-stat-today').textContent = '—';
@@ -3622,7 +3621,11 @@ async function loadAdminPage(){
   document.getElementById('admin-users-list-full').innerHTML = '<div class="admin-empty">Loading...</div>';
   document.getElementById('admin-chart-bars').innerHTML = '<div class="admin-empty" style="width:100%">Loading chart...</div>';
 
-  // Step 1: users list (with retry)
+  // Step 1: pending requests (isolated, first)
+  await loadPendingRequests();
+
+  // Step 2: users list — wait after pending to avoid lock contention
+  await new Promise(r=>setTimeout(r,1200));
   try {
     const data = await supaRetry(async()=>{
       const {data,error} = await _supa.rpc('list_users_with_roles');
@@ -3638,13 +3641,13 @@ async function loadAdminPage(){
       `<div class="admin-empty" style="color:#ff6b6b">Error: ${e?.message||e}<br><small>Make sure the Supabase SQL functions are created.</small></div>`;
   }
 
-  // Step 2: presence
-  await new Promise(r=>setTimeout(r,800));
+  // Step 3: presence
+  await new Promise(r=>setTimeout(r,1200));
   await fetchPresence();
   renderAdminUsersList();
 
-  // Step 3: documents
-  await new Promise(r=>setTimeout(r,800));
+  // Step 4: documents
+  await new Promise(r=>setTimeout(r,1200));
   await adminLoadDocs();
 }
 
@@ -4000,7 +4003,7 @@ async function adminChangeRole(email, newRole, selectEl){
 <script>
 // ===== OPENROUTER AI CONFIG =====
 const OPENROUTER_API_KEY = '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';
-const OPENROUTER_MODEL = 'google/gemma-3-27b-it:free';
+const OPENROUTER_MODEL = 'mistralai/mistral-7b-instruct:free';
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 async function callOpenRouter(systemPrompt, userPrompt) {
