@@ -4296,6 +4296,24 @@ async function fetchQuizQuestions(level, topic, count) {
   }
 }
 
+/**
+ * Randomize the order of answer options for each question.
+ * Shuffles the options array and updates the correct index accordingly.
+ */
+function randomizeQuizOptions(data) {
+  return data.map(q => {
+    const arr = q.options.map((opt, idx) => ({ opt, idx }));
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    const newCorrect = arr.findIndex(item => item.idx === q.correct);
+    q.options = arr.map(item => item.opt);
+    q.correct = newCorrect;
+    return q;
+  });
+}
+
 async function generateQuiz() {
   const difficulty = document.getElementById('quiz-difficulty').value;
   const topic = document.getElementById('quiz-topic').value;
@@ -4322,6 +4340,10 @@ async function generateQuiz() {
   } else {
     // Fallback to local question bank if API returns no data
     _quizData = getQuestions(difficulty, topic, count);
+  }
+  // Randomize answer order for each question
+  if (_quizData && _quizData.length > 0) {
+    _quizData = randomizeQuizOptions(_quizData);
   }
   // Hide spinner and reset button
   if (spinner) spinner.style.display = 'none';
