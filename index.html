@@ -928,6 +928,17 @@ h1 span{color:var(--gold)}
   background:var(--gold);
   transition:width 0.3s ease;
 }
+/* ====== New features ====== */
+/* Quiz timer bar */
+.quiz-timer{height:4px;background:var(--border);border-radius:2px;margin-bottom:8px;overflow:hidden;}
+.quiz-timer-fill{height:100%;width:100%;background:var(--red);transition:width 1s linear;}
+/* Analysis / stats section */
+.analysis-section{padding:12px 0;margin-top:20px;border-top:1px solid var(--border);}
+.analysis-section .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;}
+.analysis-section .quiz-history-item{display:flex;justify-content:space-between;font-size:0.85rem;color:var(--white);padding:4px 0;border-bottom:1px solid var(--border);}
+.analysis-section .chart-container{width:100%;height:200px;margin-bottom:12px;}
+.analysis-section .suggestions{font-size:0.85rem;color:var(--muted);margin-top:8px;}
+.analysis-section .suggest-item{margin-bottom:6px;}
 </style>
 <link href="manifest.json" rel="manifest"/><link href="icon-192.png" rel="apple-touch-icon" sizes="192x192"/><link href="icon-512.png" rel="apple-touch-icon" sizes="512x512"/><link href="icon-192.png" rel="icon" sizes="192x192" type="image/png"/></head>
 <body>
@@ -1129,6 +1140,14 @@ h1 span{color:var(--gold)}
 <div class="section-title">Notizen</div>
 <div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
 </div>
+
+    <!-- Analysis and suggestions section -->
+    <div class="analysis-section" id="analysis-section">
+      <div class="section-title" data-i18n="stats_section_title">Statistiken</div>
+      <div id="quiz-history" class="quiz-history"></div>
+      <div class="section-title" data-i18n="suggest_section_title">Empfehlungen</div>
+      <div id="suggestions" class="suggestions"></div>
+    </div>
 </div>
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
@@ -1534,6 +1553,9 @@ h1 span{color:var(--gold)}
     <div class="listening-controls">
       <button class="login-btn" id="listening-submit-btn">✓ Überprüfen</button>
     </div>
+    <div class="listening-controls">
+      <button class="login-btn" id="listening-speak-btn" data-i18n="speaking_btn">🎤 Sprechen</button>
+    </div>
     <div class="xp-bar-container">
       <div class="xp-bar-label"><span id="listening-score-label">Richtige Antworten:</span> <span id="listening-score">0</span></div>
       <div class="xp-bar-track">
@@ -1560,7 +1582,15 @@ const SUPABASE_URL = 'https://crgqqzpkppmlhjyawumk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 // =====================================================
 
-const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Initialize Supabase with session persistence and auto-refresh enabled.
+const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    // Persist the user session in local storage so that refreshes keep the user logged in.
+    persistSession: true,
+    // Automatically refresh the access token when it expires.
+    autoRefreshToken: true,
+  },
+});
 let currentUser = null;
 let currentRole = 'user'; // 'admin' | 'user'
 let newsFilter = 'all';
@@ -1699,6 +1729,15 @@ async function bootstrapAuth(){
       await startAuthenticatedApp(session.user);
     }else{
       const isSignupReturn=new URLSearchParams(window.location.search).get('type')==='signup';
+      // Check if a persisted user is stored locally (for offline persistence). If so, skip login.
+      const persistedStr = localStorage.getItem('persist_user');
+      if(persistedStr){
+        try{
+          const persistedUser = JSON.parse(persistedStr);
+          await startAuthenticatedApp(persistedUser);
+          return;
+        }catch(_){ /* ignore parse errors */ }
+      }
       if(isSignupReturn)showConfirmScreen();
       else showLoginScreen();
       // When no session is found, optionally allow a guest session for
@@ -1820,8 +1859,12 @@ async function logout(){
 
 _supa.auth.onAuthStateChange(async(event,session)=>{
   if(session?.user){
+    // Persist the logged-in user to localStorage so refreshes keep them signed in.
+    try{ localStorage.setItem('persist_user', JSON.stringify(session.user)); } catch(_){ }
     await startAuthenticatedApp(session.user);
   }else{
+    // Remove any persisted user on logout or session expiration.
+    try{ localStorage.removeItem('persist_user'); } catch(_){ }
     currentUser=null;
     _appInited=false;
     if(document.getElementById('confirm-screen').classList.contains('visible'))return;
@@ -2358,6 +2401,8 @@ async function confirmRename(){
 // ===== NAVIGATION =====
 function switchPage(page){
   // Role guard: users can only access allowed pages
+  // Ensure any running quiz timer is cleared when navigating
+  if(typeof resetQuizTimer === 'function') resetQuizTimer();
   if(!isAdmin() && !USER_PAGES.includes(page)){
     showToast('⛔ Access restricted');
     return;
@@ -2479,6 +2524,12 @@ async function initApp(){
 
   await Promise.race([stateLoad, wait(6000)]);
   applyRoleUI();
+
+  // Initialise quiz history and suggestions UI once state and role are ready
+  try{
+    if(typeof updateQuizHistoryUI === 'function') updateQuizHistoryUI();
+    if(typeof suggestNextTasks === 'function') suggestNextTasks();
+  }catch(e){ console.warn('Init analytics error', e); }
 }
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
@@ -2707,6 +2758,11 @@ const i18n={
     vocab_filter_adjective:'Adjektive',
     vocab_filter_phrase:'Phrasen',
     vocab_finished:'🎉 Fertig!',
+    speaking_title:'🎤 Sprechübung',
+    speaking_btn:'🎤 Sprechen',
+    stats_section_title:'Statistiken',
+    suggest_section_title:'Empfehlungen',
+    speech_not_supported:'Spracherkennung wird nicht unterstützt.',
     listening_title:'🎧 Hörverständnis',
     listening_audio_btn:'▶ Audio',
     listening_show_btn:'👁 Übersetzung',
@@ -2886,6 +2942,11 @@ const i18n={
     vocab_filter_adjective:'Adjectives',
     vocab_filter_phrase:'Phrases',
     vocab_finished:'🎉 Finished!',
+    speaking_title:'🎤 Speaking Practice',
+    speaking_btn:'🎤 Speak',
+    stats_section_title:'Statistics',
+    suggest_section_title:'Suggestions',
+    speech_not_supported:'Speech recognition is not supported.',
     listening_title:'🎧 Listening Practice',
     listening_audio_btn:'▶ Play Audio',
     listening_show_btn:'👁 Show translation',
@@ -3075,6 +3136,11 @@ const i18n={
     vocab_filter_adjective:'الصفات',
     vocab_filter_phrase:'العبارات',
     vocab_finished:'🎉 انتهى!',
+    speaking_title:'🎤 تمرين النطق',
+    speaking_btn:'🎤 تحدث',
+    stats_section_title:'إحصائيات',
+    suggest_section_title:'اقتراحات',
+    speech_not_supported:'التعرف على الكلام غير مدعوم.',
     listening_title:'🎧 تمرين الاستماع',
     listening_audio_btn:'▶ تشغيل الصوت',
     listening_show_btn:'👁 عرض الترجمة',
@@ -4863,6 +4929,147 @@ let _quizData = [];
 let _quizAnswered = 0;
 let _quizScore = 0;
 
+// ====== Quiz Timer and Scoreboard ======
+// Maximum time per question in seconds
+const QUIZ_MAX_TIME = 30;
+// Current timer ID and remaining time
+let quizTimerId = null;
+let quizTimeLeft = 0;
+// Track current quiz topic and difficulty for reporting
+let currentQuizTopic = '';
+let currentQuizDifficulty = '';
+
+/**
+ * Start the countdown timer for the given question index.  This creates
+ * a one-second interval that updates the corresponding timer bar.
+ * When time reaches zero, the question is automatically marked wrong.
+ */
+function startQuizTimer(qIdx){
+  resetQuizTimer();
+  quizTimeLeft = QUIZ_MAX_TIME;
+  const timerEl = document.getElementById('quiz-timer-' + qIdx);
+  if(!timerEl) return;
+  // Ensure the bar is full at start
+  timerEl.style.width = '100%';
+  timerEl.style.background = 'var(--red)';
+  quizTimerId = setInterval(() => {
+    quizTimeLeft--;
+    const pct = Math.max((quizTimeLeft / QUIZ_MAX_TIME) * 100, 0);
+    timerEl.style.width = pct + '%';
+    if(quizTimeLeft <= 0){
+      // Time out: mark as wrong (-1 index)
+      resetQuizTimer();
+      answerQuiz(qIdx, -1);
+    }
+  }, 1000);
+}
+
+/**
+ * Clear any existing quiz timer interval.
+ */
+function resetQuizTimer(){
+  if(quizTimerId){
+    clearInterval(quizTimerId);
+    quizTimerId = null;
+  }
+}
+
+/**
+ * Save quiz result to state and award XP.  Keeps a history of the
+ * most recent 50 quiz attempts.  XP is calculated as 10 times the
+ * number of correct answers.  After updating state the history UI
+ * and suggestions are refreshed.
+ */
+function saveQuizResult(score,total,pct,topic,level){
+  if(!state.quizHistory) state.quizHistory = [];
+  state.quizHistory.unshift({score:score,total:total,pct:pct,topic:topic,level:level,date:new Date().toISOString()});
+  // Limit history to 50 entries
+  if(state.quizHistory.length > 50) state.quizHistory = state.quizHistory.slice(0,50);
+  // Award XP: 10 per correct answer
+  const xpEarned = score * 10;
+  addXP(xpEarned);
+  save();
+  updateQuizHistoryUI();
+  suggestNextTasks();
+}
+
+/**
+ * Render the quiz history list in the tracker analytics section.  Shows
+ * up to the 5 most recent quiz results with date and score.
+ */
+function updateQuizHistoryUI(){
+  const container = document.getElementById('quiz-history');
+  if(!container) return;
+  const history = (state && state.quizHistory) || [];
+  if(!history || history.length === 0){
+    const emptyMsg = currentLang === 'ar' ? 'لا بيانات للاختبارات' : (currentLang === 'en' ? 'No quiz data' : 'Keine Quizdaten');
+    container.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;text-align:center">'+emptyMsg+'</div>';
+    return;
+  }
+  const items = history.slice(0,5).map(item => {
+    const d = new Date(item.date);
+    const locale = currentLang === 'ar' ? 'ar' : (currentLang === 'en' ? 'en' : 'de');
+    const dateStr = d.toLocaleDateString(locale,{day:'numeric',month:'short'});
+    return `<div class="quiz-history-item"><span>${dateStr}</span><span>${item.score}/${item.total} (${item.pct}%)</span></div>`;
+  });
+  container.innerHTML = items.join('');
+}
+
+/**
+ * Suggest next tasks based on daily completion and quiz history.  If tasks
+ * remain incomplete, the suggestions will encourage the user to complete
+ * them.  If recent quiz performance is low, an additional quiz is
+ * recommended.  Otherwise a generic congratulation message is shown.
+ */
+function suggestNextTasks(){
+  const el = document.getElementById('suggestions');
+  if(!el) return;
+  const suggestions = [];
+  const tasks = state.dailyDone || {};
+  // Suggest completing daily tasks that are not done yet
+  if(!tasks['anki']) suggestions.push('📚 '+(currentLang==='ar'?'تمرن على المفردات':'Vokabeln lernen'));
+  if(!tasks['grammar']) suggestions.push('📖 '+(currentLang==='ar'?'راجع القواعد أو موضوعاً':'Grammatik oder ein Thema üben'));
+  if(!tasks['listen']) suggestions.push('🎧 '+(currentLang==='ar'?'قم بتمرين الاستماع':'Hörübung machen'));
+  if(!tasks['speak']) suggestions.push('🗣 '+(currentLang==='ar'?'تمرن على التحدث أو الكتابة':'Sprech- oder Schreibübung durchführen'));
+  // If recent quiz performance is poor
+  if(state.quizHistory && state.quizHistory.length > 0){
+    const last = state.quizHistory[0];
+    if(last.pct < 60) suggestions.push('🧠 '+(currentLang==='ar'?'جرب اختباراً آخر لتحسين الأداء':'Mache ein weiteres Quiz, um deine Schwächen zu verbessern'));
+  }
+  if(suggestions.length === 0){
+    suggestions.push('🎉 '+(currentLang==='ar'?'عمل رائع! استمر.':'Tolle Arbeit! Alle Aufgaben erledigt.'));
+  }
+  el.innerHTML = suggestions.map(s => `<div class="suggest-item">${s}</div>`).join('');
+}
+
+/**
+ * Increment the weekly XP total and update the XP bar.  If no weekly XP is
+ * stored yet, initialize it to zero.  This helper also persists the state
+ * and shows a toast to notify the user of XP gained.  Different messages
+ * are shown depending on the current UI language.
+ * @param {number} xp - The amount of XP to add.
+ */
+function addXP(xp){
+  if(!xp || isNaN(xp)) return;
+  if(!state.weeklyXP) state.weeklyXP = 0;
+  state.weeklyXP += xp;
+  // Cap weekly XP at 500 (weekly goal)
+  if(state.weeklyXP > 500) state.weeklyXP = 500;
+  // Persist and update UI
+  try{ updateWeeklyXP(); }catch(e){}
+  save();
+  // Show a toast message about XP earned
+  let msg;
+  if(currentLang === 'ar'){
+    msg = '+' + xp + ' نقطة خبرة';
+  } else if(currentLang === 'en'){
+    msg = '+' + xp + ' XP earned!';
+  } else {
+    msg = '+' + xp + ' XP gesammelt!';
+  }
+  showToast(msg);
+}
+
 function getQuestions(level, topic, count) {
   const levels = level === 'auto'
     ? (typeof computeProgress === 'function'
@@ -4986,12 +5193,17 @@ function randomizeQuizOptions(data) {
 async function generateQuiz() {
   const difficulty = document.getElementById('quiz-difficulty').value;
   const topic = document.getElementById('quiz-topic').value;
+  // Save current quiz selection for reporting
+  currentQuizDifficulty = difficulty;
+  currentQuizTopic = topic;
   const count = parseInt(document.getElementById('quiz-count').value);
   const area = document.getElementById('quiz-area');
   const btn = document.getElementById('quiz-gen-btn');
   const label = document.getElementById('quiz-gen-label');
   const spinner = document.getElementById('quiz-gen-spinner');
   // Show loading spinner and disable button
+  // Ensure any previous timer is cleared
+  resetQuizTimer();
   if (btn) btn.disabled = true;
   if (label) label.textContent = '⏳ Lade Quiz...';
   if (spinner) spinner.style.display = 'inline-block';
@@ -5023,6 +5235,8 @@ async function generateQuiz() {
     return;
   }
   renderQuiz();
+  // Start timer for first question
+  startQuizTimer(0);
 }
 
 function renderQuiz() {
@@ -5032,6 +5246,7 @@ function renderQuiz() {
   area.innerHTML = _quizData.map((q, i) => `
     <div class="quiz-card" id="quiz-card-${i}">
       <div class="quiz-q-num">Frage ${i + 1} / ${_quizData.length}${q._level ? ' · ' + q._level : ''}</div>
+      <div class="quiz-timer"><div class="quiz-timer-fill" id="quiz-timer-${i}"></div></div>
       <div class="quiz-q-text">${q.q}</div>
       <div class="quiz-options">
         ${q.options.map((opt, j) => `
@@ -5044,6 +5259,8 @@ function renderQuiz() {
 }
 
 function answerQuiz(qIdx, optIdx) {
+  // Stop existing timer when answering
+  resetQuizTimer();
   const q = _quizData[qIdx];
   if (!q) return;
   const correct = q.correct;
@@ -5060,6 +5277,9 @@ function answerQuiz(qIdx, optIdx) {
   _quizAnswered++;
   if (_quizAnswered === _quizData.length) {
     setTimeout(showQuizResult, 400);
+  } else {
+    // Start timer for next question
+    startQuizTimer(_quizAnswered);
   }
 }
 
@@ -5078,6 +5298,11 @@ function showQuizResult() {
       <button class="quiz-gen-btn" style="margin:0 auto" onclick="generateQuiz()">🔄 Neues Quiz</button>
     </div>`;
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Save result for analytics and award XP
+  try{
+    saveQuizResult(_quizScore, _quizData.length, pct, currentQuizTopic, currentQuizDifficulty);
+  }catch(e){ console.warn('saveQuizResult error', e); }
 }
 
 // ===== LEVEL TEST FEATURE =====
@@ -5612,6 +5837,8 @@ function showLevelResult() {
         if(slowBtn) slowBtn.onclick=function(){ speechRate=0.8; playAudio(); };
         if(normalBtn) normalBtn.onclick=function(){ speechRate=1; playAudio(); };
         if(fastBtn) fastBtn.onclick=function(){ speechRate=1.3; playAudio(); };
+        const speakBtn=document.getElementById('listening-speak-btn');
+        if(speakBtn) speakBtn.onclick=function(){ startSpeakingPractice(); };
         const input=document.getElementById('listening-input');
         if(input) input.value='';
       };
@@ -5646,9 +5873,9 @@ function showLevelResult() {
         const correct=item.de.toLowerCase().replace(/[.,!?]/g,'');
         if(userVal===correct){
           listeningScore++;
-          showToast('✓ Richtig!');
+          showToast(t('toast_correct_answer') || '✓ Correct!');
         }else{
-          showToast('✗ Falsch');
+          showToast(t('toast_wrong_answer') || '✗ Wrong');
         }
         listeningIndex++;
         updateListeningScore();
@@ -5661,6 +5888,46 @@ function showLevelResult() {
         if(scoreEl) scoreEl.textContent=listeningScore;
         if(barEl) barEl.style.width=pct+'%';
       }
+
+  /**
+   * Start speech recognition for speaking practice.  Uses the Web Speech API
+   * to capture the user's spoken sentence and compares it to the current
+   * listening item.  If SpeechRecognition is not available, shows a toast.
+   */
+  function startSpeakingPractice(){
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SpeechRecognition){
+      showToast(t('speech_not_supported') || 'Speech recognition not supported.');
+      return;
+    }
+    const item = listeningData[listeningIndex];
+    const target = item.de.toLowerCase().replace(/[.,!?]/g,'').trim();
+    try{
+      const recog = new SpeechRecognition();
+      recog.lang = 'de-DE';
+      recog.interimResults = false;
+      recog.maxAlternatives = 1;
+      recog.onresult = function(e){
+        const transcript = (e.results[0][0].transcript || '').toLowerCase().trim();
+        if(transcript === target){
+          listeningScore++;
+          showToast(t('toast_correct_answer') || '✓ Correct!');
+        } else {
+          showToast(t('toast_wrong_answer') || '✗ Wrong');
+        }
+        listeningIndex++;
+        updateListeningScore();
+        showListeningSentence();
+      };
+      recog.onerror = function(ev){
+        console.warn('Speech recognition error', ev.error);
+        showToast('🎤 '+ev.error);
+      };
+      recog.start();
+    }catch(err){
+      showToast('🎤 '+(err?.message||'Error'));
+    }
+  }
       // Daily quote and XP
       const DAILY_QUOTES=[
         {de:'Übung macht den Meister.',en:'Practice makes perfect.'},
@@ -5686,6 +5953,7 @@ function showLevelResult() {
           if(label) label.textContent='Wöchentliche XP: '+xp+'/500';
         }catch(e){}
       };
+
     })();
     </script>
 </body>
