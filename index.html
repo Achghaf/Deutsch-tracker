@@ -602,6 +602,8 @@ h1 span{color:var(--gold)}
 .admin-role-badge{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px;font-weight:600;flex-shrink:0}
 .admin-role-badge.admin{background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.3)}
 .admin-role-badge.user{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
+/* Pending role badge styling */
+.admin-role-badge.pending{background:rgba(232,184,75,0.12);color:var(--gold);border:1px solid rgba(232,184,75,0.3)}
 .admin-role-select{background:#111;border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;outline:none}
 .admin-role-select:focus{border-color:var(--gold)}
 .admin-empty{text-align:center;padding:40px 16px;color:var(--muted);font-size:0.82rem}
@@ -969,7 +971,8 @@ h1 span{color:var(--gold)}
 <div class="login-flag"></div>
 <div class="confirm-body">
 <div class="confirm-title" style="color:var(--green)">✓ Konto erstellt</div>
-<div class="confirm-text">Dein Konto wurde erfolgreich erstellt. Du kannst dich jetzt direkt anmelden.</div>
+<!-- Inform the user that their new account is pending admin approval -->
+<div class="confirm-text">Dein Konto wurde erfolgreich erstellt. Ein Admin muss deinen Zugang noch freischalten. Du kannst dich anmelden, aber bestimmte Funktionen sind möglicherweise eingeschränkt.</div>
 <button class="confirm-btn" onclick="hideRequestScreen()">Zur Anmeldung</button>
 </div>
 </div>
@@ -1362,6 +1365,8 @@ h1 span{color:var(--gold)}
 <button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)">All</button>
 <button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">👑 Admin</button>
 <button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)">👤 Users</button>
+        <!-- New filter for pending users -->
+        <button class="admin-filter-btn" data-role="pending" onclick="adminSetFilter('pending',this)">🕒 Pending</button>
 <button class="admin-refresh-btn" onclick="loadAdminPage()">↻ Refresh</button>
 </div>
 <div id="admin-users-list-full">
@@ -1484,7 +1489,7 @@ h1 span{color:var(--gold)}
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
-      <h1>📚 <span>Vokabeltrainer</span></h1>
+      <h1>📚 <span id="vocab-title">Vokabeltrainer</span></h1>
     </div>
   </header>
   <div style="padding:24px 16px;max-width:700px;margin:0 auto">
@@ -1515,7 +1520,7 @@ h1 span{color:var(--gold)}
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
-      <h1>🎧 <span>Hörverständnis</span></h1>
+      <h1>🎧 <span id="listening-title">Hörverständnis</span></h1>
     </div>
   </header>
   <div class="listening-container">
@@ -1530,7 +1535,7 @@ h1 span{color:var(--gold)}
       <button class="login-btn" id="listening-submit-btn">✓ Überprüfen</button>
     </div>
     <div class="xp-bar-container">
-      <div class="xp-bar-label">Richtige Antworten: <span id="listening-score">0</span></div>
+      <div class="xp-bar-label"><span id="listening-score-label">Richtige Antworten:</span> <span id="listening-score">0</span></div>
       <div class="xp-bar-track">
         <div class="xp-bar-fill" id="listening-score-bar"></div>
       </div>
@@ -1590,10 +1595,24 @@ function applyRoleUI(){
     const nameEl = document.getElementById('profile-display-name');
     if(nameEl) nameEl.insertAdjacentElement('afterend', roleBadge);
   }
-  roleBadge.textContent = admin ? '\u{1F451} Admin' : '\u{1F464} User';
-  roleBadge.style.background = admin ? 'rgba(232,184,75,0.15)' : 'rgba(255,255,255,0.07)';
-  roleBadge.style.color = admin ? 'var(--gold)' : 'var(--muted)';
-  roleBadge.style.border = admin ? '1px solid rgba(232,184,75,0.3)' : '1px solid var(--border)';
+  // Display badge label and styles depending on the current role
+  if(currentRole === 'admin'){
+    roleBadge.textContent = '\u{1F451} Admin';
+    roleBadge.style.background = 'rgba(232,184,75,0.15)';
+    roleBadge.style.color = 'var(--gold)';
+    roleBadge.style.border = '1px solid rgba(232,184,75,0.3)';
+  }else if(currentRole === 'pending'){
+    roleBadge.textContent = '\u{23F3} Pending';
+    // Use a subtle gold tint to indicate awaiting approval
+    roleBadge.style.background = 'rgba(232,184,75,0.12)';
+    roleBadge.style.color = 'var(--gold)';
+    roleBadge.style.border = '1px solid rgba(232,184,75,0.3)';
+  }else{
+    roleBadge.textContent = '\u{1F464} User';
+    roleBadge.style.background = 'rgba(255,255,255,0.07)';
+    roleBadge.style.color = 'var(--muted)';
+    roleBadge.style.border = '1px solid var(--border)';
+  }
   // Edit/delete buttons in news posts
   document.querySelectorAll('.news-icon-btn').forEach(b => b.style.display = admin ? '' : 'none');
   // Admin panel in profile
@@ -1634,7 +1653,14 @@ async function startAuthenticatedApp(user){
   // Role resolution: hardcoded admin email + user_metadata fallback
   const ADMIN_EMAIL = 'achrafbensaid01@gmail.com';
   const meta = user.user_metadata || {};
-  currentRole = (user.email === ADMIN_EMAIL || meta.role === 'admin') ? 'admin' : 'user';
+  // Determine the role from user metadata. The default role is 'user'.
+  if(user.email === ADMIN_EMAIL || meta.role === 'admin'){
+    currentRole = 'admin';
+  }else if(meta.role === 'pending'){
+    currentRole = 'pending';
+  }else{
+    currentRole = 'user';
+  }
   showUserBadge(currentUser);
   try{
     if(!_appInited){
@@ -1737,7 +1763,8 @@ async function handleAuth(){
       const {data,error}=await _supa.auth.signUp({
         email,
         password:pwd,
-        options:{ data:{ role:'user' } }
+        // Set new accounts to a "pending" role so an admin can approve them later
+        options:{ data:{ role:'pending' } }
       });
       if(error) throw error;
       btn.disabled=false;btn.textContent='Konto erstellen';
@@ -2588,11 +2615,11 @@ const i18n={
     lang_english:'Englisch',
     copy_btn:'Kopieren',
     copy_done:'Kopiert!',
-    translate_empty:'Gib ein deutsches Wort oder einen Satz ein',
+    translate_empty:'Gib ein deutsches, englisches oder arabisches Wort oder einen Satz ein',
     translate_error:'Übersetzung fehlgeschlagen. Bitte erneut versuchen.',
     translate_no_history:'Deine Übersetzungen erscheinen hier',
     translate_page_title:'🌐 Übersetzer',
-    translate_page_sub:'Deutsch → Arabisch & Englisch',
+    translate_page_sub:'Deutsch, Englisch & Arabisch',
     translate_btn_label:'Übersetzen',
     translate_speak:'Anhören',
     translate_history_label:'Verlauf',
@@ -2659,6 +2686,8 @@ const i18n={
     toast_week_done:'✓ Woche {week} abgeschlossen!',
     toast_week_reset:'Woche {week} zurückgesetzt',
     toast_all_tasks_done:'🔥 Alle Aufgaben heute erledigt!',
+    toast_correct_answer:'✓ Richtig!',
+    toast_wrong_answer:'✗ Falsch',
     toast_deleted:'🗑 Gelöscht',
     toast_delete_error:'⚠️ Fehler beim Löschen',
     toast_saved:'✓ Gespeichert',
@@ -2669,6 +2698,24 @@ const i18n={
     generic_error:'Unbekannter Fehler',
     toast_only_pdf:'⚠️ Nur PDF-Dateien erlaubt',
     toast_file_too_big:'⚠️ Datei zu groß (max 50 MB)',
+    vocab_title:'📚 Vokabeltrainer',
+    vocab_known_btn:'✓ Kenne ich',
+    vocab_again_btn:'✗ Nochmal',
+    vocab_filter_all:'Alle Kategorien',
+    vocab_filter_noun:'Nomen',
+    vocab_filter_verb:'Verben',
+    vocab_filter_adjective:'Adjektive',
+    vocab_filter_phrase:'Phrasen',
+    vocab_finished:'🎉 Fertig!',
+    listening_title:'🎧 Hörverständnis',
+    listening_audio_btn:'▶ Audio',
+    listening_show_btn:'👁 Übersetzung',
+    listening_input_ph:'Tippe, was du gehört hast...',
+    listening_submit_btn:'✓ Überprüfen',
+    listening_score_label:'Richtige Antworten:',
+    listening_speed_slow:'🐢 Langsam',
+    listening_speed_normal:'⚖ Normal',
+    listening_speed_fast:'🐇 Schnell',
     pdf_tap_open:'Tippen zum Öffnen'
   },
   en:{
@@ -2709,7 +2756,8 @@ const i18n={
     section_notes:'Notes',
     notes_placeholder:'Write your thoughts in German...',
     pdf_title:'📁 My Documents',
-    storage_label:'💾 Cloud',
+    // Use "Local" instead of "Cloud" since files are stored offline for the user.
+    storage_label:'💾 Local',
     storage_loading:'Loading...',
     storage_file_singular:'file',
     storage_file_plural:'files',
@@ -2720,7 +2768,8 @@ const i18n={
     pdf_empty_search:'No documents match your search.',
     pdf_vertical_hint:'scroll vertically',
     upload_title:'Upload PDF',
-    upload_sub:'Stored in cloud · Accessible anywhere · Max 200 MB per file',
+    // Clarify that files are stored locally and available offline
+    upload_sub:'Stored locally · Available offline · Max 200 MB per file',
     cat_all:'All',
     cat_grammar:'📘 Grammar',
     cat_vocab:'📚 Vocabulary',
@@ -2745,11 +2794,11 @@ const i18n={
     lang_english:'English',
     copy_btn:'Copy',
     copy_done:'Copied!',
-    translate_empty:'Enter a German word or sentence',
+    translate_empty:'Enter a word or sentence in German, English or Arabic',
     translate_error:'Translation failed. Please try again.',
     translate_no_history:'Your translations will appear here',
     translate_page_title:'🌐 Translator',
-    translate_page_sub:'German → Arabic & English',
+    translate_page_sub:'German, English & Arabic',
     translate_btn_label:'Translate',
     translate_speak:'Listen',
     translate_history_label:'History',
@@ -2816,6 +2865,8 @@ const i18n={
     toast_week_done:'✓ Week {week} completed!',
     toast_week_reset:'Week {week} reset',
     toast_all_tasks_done:'🔥 All tasks completed today!',
+    toast_correct_answer:'✓ Correct!',
+    toast_wrong_answer:'✗ Wrong',
     toast_deleted:'🗑 Deleted',
     toast_delete_error:'⚠️ Delete failed',
     toast_saved:'✓ Saved',
@@ -2826,6 +2877,24 @@ const i18n={
     generic_error:'Unknown error',
     toast_only_pdf:'⚠️ Only PDF files are allowed',
     toast_file_too_big:'⚠️ File is too large (max 50 MB)',
+    vocab_title:'📚 Vocabulary Trainer',
+    vocab_known_btn:'✓ Know it',
+    vocab_again_btn:'✗ Again',
+    vocab_filter_all:'All categories',
+    vocab_filter_noun:'Nouns',
+    vocab_filter_verb:'Verbs',
+    vocab_filter_adjective:'Adjectives',
+    vocab_filter_phrase:'Phrases',
+    vocab_finished:'🎉 Finished!',
+    listening_title:'🎧 Listening Practice',
+    listening_audio_btn:'▶ Play Audio',
+    listening_show_btn:'👁 Show translation',
+    listening_input_ph:'Type what you heard...',
+    listening_submit_btn:'✓ Check',
+    listening_score_label:'Correct answers:',
+    listening_speed_slow:'🐢 Slow',
+    listening_speed_normal:'⚖ Normal',
+    listening_speed_fast:'🐇 Fast',
     pdf_tap_open:'Tap to open'
   },
   ar:{
@@ -2855,7 +2924,8 @@ const i18n={
     badge:'🎯 مستوى B1',
     progress_label:'التقدم',
     lbl_weeks:'أسابيع',
-    lbl_streak:'🔥 سلسلة',
+    // Use a more descriptive term for the daily streak of achievements
+    lbl_streak:'🔥 سلسلة الإنجازات',
     lbl_vocab:'المفردات',
     lbl_hours:'ساعات',
     lbl_today:'اليوم',
@@ -2874,16 +2944,19 @@ const i18n={
     toast_docs_refreshed:'↻ تمت المزامنة',
     pdf_search_placeholder:'البحث في الوثائق...',
     pdf_empty_search:'لا توجد وثائق مطابقة.',
-    pdf_vertical_hint:'تمرير عمودي',
+    // Use an imperative verb for scrolling guidance
+    pdf_vertical_hint:'مرر عموديًا',
     upload_title:'رفع PDF',
-    upload_sub:'مخزن محلياً · متاح بدون إنترنت · بحد أقصى 200 ميجا',
+    // Clarify local storage and offline availability
+    upload_sub:'مخزن محليًا · متاح دون اتصال · الحد الأقصى 200 ميجا لكل ملف',
     cat_all:'الكل',
     cat_grammar:'📘 قواعد',
     cat_vocab:'📚 مفردات',
     cat_exercise:'✏️ تمارين',
     cat_exam:'📝 امتحان',
     cat_other:'📄 أخرى',
-    pdf_empty_all:'لا توجد وثائق بعد. ارفع أول ملف PDF!',
+    // Encourage the user to upload their first file now
+    pdf_empty_all:'لا توجد وثائق بعد. ارفع أول ملف PDF الآن!',
     pdf_empty_cat:'لا توجد وثائق في هذه الفئة.',
     pdf_view_btn:'👁 فتح',
     pdf_edit_btn:'✏️ تعديل',
@@ -2901,11 +2974,11 @@ const i18n={
     lang_english:'الإنجليزية',
     copy_btn:'نسخ',
     copy_done:'تم النسخ!',
-    translate_empty:'أدخل كلمة أو جملة بالألمانية',
+    translate_empty:'أدخل كلمة أو جملة بالألمانية أو الإنجليزية أو العربية',
     translate_error:'فشل الترجمة. حاول مرة أخرى.',
     translate_no_history:'ستظهر ترجماتك هنا',
     translate_page_title:'🌐 المترجم',
-    translate_page_sub:'ألماني → عربي وإنجليزي',
+    translate_page_sub:'الترجمة بين الألمانية والإنجليزية والعربية',
     translate_btn_label:'ترجمة',
     translate_speak:'استماع',
     translate_history_label:'السجل',
@@ -2931,24 +3004,32 @@ const i18n={
     news_edit_btn:'تعديل',
     news_delete_btn:'حذف',
     news_empty:'لا توجد منشورات بعد. انشر أول مقالة أو خبر.',
-    news_delete_confirm:'حذف هذا المنشور؟',
+    // Ask the question more explicitly
+    news_delete_confirm:'هل تريد حذف هذا المنشور؟',
     news_toast_published:'📰 تم النشر',
     news_toast_updated:'✏️ تم التحديث',
     news_toast_deleted:'🗑 تم الحذف',
     news_validation_title:'الرجاء إدخال عنوان',
     news_validation_body:'الرجاء كتابة محتوى المنشور',
     news_editing_hint:'أنت تعدل منشوراً موجوداً.',
-    notif_title:'سلسلتك في خطر!',
-    notif_body_streak:'لديك ساعتان لحماية سلسلة {streak} يوم!',
+    // Clarify that the streak refers to achievements
+    notif_title:'سلسلة الإنجازات في خطر!',
+    // Improve grammar and make it clear the streak spans a number of days
+    notif_body_streak:'لديك ساعتان لحماية سلسلة الإنجازات التي تمتد لـ {streak} يومًا!',
     notif_body_no_streak:'أكمل مهامك اليومية قبل منتصف الليل!',
     notif_unsupported:'⚠ الإشعارات غير مدعومة في هذا المتصفح',
     notif_blocked:'🚫 الإشعارات محظورة — فعّلها من إعدادات المتصفح',
     notif_active:'✓ ستتلقى تذكيراً عند الساعة 22:00 إذا لم تكتمل المهام',
-    lbl_reminder:'🔔 تذكير السلسلة',
-    lbl_reminder_sub:'تذكيري قبل منتصف الليل بساعتين إذا لم تكتمل المهام',
-    confirm_logout:'تسجيل الخروج؟',
-    confirm_reset:'إعادة تعيين كل التقدم؟',
-    confirm_delete_pdf:'حذف PDF؟',
+    // Clarify that this reminder is about the daily streak
+    lbl_reminder:'🔔 تذكير السلسلة اليومية',
+    // Use the imperative form for clarity and naturalness
+    lbl_reminder_sub:'ذكرني قبل منتصف الليل بساعتين إذا لم أتم المهام',
+    // Ask confirmation in full form
+    confirm_logout:'هل تريد تسجيل الخروج؟',
+    // Use a full confirmation phrase
+    confirm_reset:'هل تريد إعادة تعيين جميع التقدم؟',
+    // Specify that a file is being deleted
+    confirm_delete_pdf:'هل تريد حذف ملف PDF؟',
     lbl_new_pwd:'كلمة مرور جديدة',
     lbl_confirm_pwd:'تأكيد كلمة المرور',
     profile_save:'💾 حفظ التغييرات',
@@ -2960,7 +3041,8 @@ const i18n={
     confirm_title:'تأكيد بريدك الإلكتروني',
     confirm_text:'أرسلنا لك بريداً للتأكيد. انقر على الرابط لتفعيل حسابك.',
     confirm_btn:'العودة إلى تسجيل الدخول',
-    confirm_success:'✓ تم تأكيد بريدك! يمكنك تسجيل الدخول الآن.',
+    // Clarify that the email itself was confirmed
+    confirm_success:'✓ تم تأكيد بريدك الإلكتروني! يمكنك تسجيل الدخول الآن.',
     error_fill_all:'الرجاء ملء جميع الحقول.',
     error_pwd_match:'كلمتا المرور غير متطابقتين.',
     error_pwd_short:'كلمة المرور قصيرة جداً (6 أحرف على الأقل).',
@@ -2972,6 +3054,8 @@ const i18n={
     toast_week_done:'✓ الأسبوع {week} مكتمل!',
     toast_week_reset:'تم إعادة تعيين الأسبوع {week}',
     toast_all_tasks_done:'🔥 جميع المهام مكتملة اليوم!',
+    toast_correct_answer:'✓ صحيح!',
+    toast_wrong_answer:'✗ خطأ',
     toast_deleted:'🗑 تم الحذف',
     toast_delete_error:'⚠️ فشل الحذف',
     toast_saved:'✓ تم الحفظ',
@@ -2982,6 +3066,24 @@ const i18n={
     generic_error:'خطأ غير معروف',
     toast_only_pdf:'⚠️ ملفات PDF فقط مسموحة',
     toast_file_too_big:'⚠️ الملف كبير جداً (حد أقصى 50 ميجا)',
+    vocab_title:'📚 مدرب المفردات',
+    vocab_known_btn:'✓ أعرفها',
+    vocab_again_btn:'✗ أعد المحاولة',
+    vocab_filter_all:'كل الفئات',
+    vocab_filter_noun:'الأسماء',
+    vocab_filter_verb:'الأفعال',
+    vocab_filter_adjective:'الصفات',
+    vocab_filter_phrase:'العبارات',
+    vocab_finished:'🎉 انتهى!',
+    listening_title:'🎧 تمرين الاستماع',
+    listening_audio_btn:'▶ تشغيل الصوت',
+    listening_show_btn:'👁 عرض الترجمة',
+    listening_input_ph:'اكتب ما سمعت...',
+    listening_submit_btn:'✓ تحقق',
+    listening_score_label:'الإجابات الصحيحة:',
+    listening_speed_slow:'🐢 بطيء',
+    listening_speed_normal:'⚖ عادي',
+    listening_speed_fast:'🐇 سريع',
     pdf_tap_open:'اضغط للفتح'
   }
 };
@@ -3134,16 +3236,77 @@ function applyLang(){
   updateNewsComposerUi();
   // Translate page i18n
   const tpt=document.getElementById('translate-page-title');if(tpt)tpt.textContent=L.translate_page_title||'🌐 Translator';
-  const tps=document.getElementById('translate-page-sub');if(tps)tps.textContent=L.translate_page_sub||'German → Arabic & English';
+  const tps=document.getElementById('translate-page-sub');if(tps)tps.textContent=L.translate_page_sub||'Translate between German, English & Arabic';
   const tbl=document.getElementById('translate-btn-label');if(tbl)tbl.textContent=L.translate_btn_label||'Translate';
   const thl=document.getElementById('translate-history-label');if(thl)thl.textContent=L.translate_history_label||'History';
   const thc=document.getElementById('translate-history-clear-btn');if(thc)thc.textContent=L.translate_history_clear||'Clear';
   const tsp=document.getElementById('translate-speak-btn');if(tsp)tsp.querySelector('.btn-label').textContent='🔊 '+(L.translate_speak||'Listen');
-  const tinp=document.getElementById('translate-input');if(tinp)tinp.placeholder=L.translate_empty||'Enter a German word or sentence...';
+  const tinp=document.getElementById('translate-input');if(tinp)tinp.placeholder=L.translate_empty||'Enter a word or sentence in German, English or Arabic...';
   const nnav=document.querySelector('.nav-item[data-page="news"] .nav-label');if(nnav)nnav.textContent=L.nav_news||'News';
   const tnav=document.querySelector('.nav-item[data-page="translate"] .nav-label');if(tnav)tnav.textContent=L.nav_translate||'Translator';
   const ndnav=document.querySelector('.desk-nav-item[data-page="news"]');if(ndnav)ndnav.textContent='📰 '+(L.nav_news||'News');
   const tdnav=document.querySelector('.desk-nav-item[data-page="translate"]');if(tdnav)tdnav.textContent='🌐 '+(L.nav_translate||'Translator');
+
+  // Vocabulary Trainer page i18n
+  const vocabTitleEl=document.getElementById('vocab-title');
+  if(vocabTitleEl){
+    vocabTitleEl.textContent=L.vocab_title||'📚 Vocabulary Trainer';
+  }
+  const vocabKnownBtn=document.getElementById('vocab-known-btn');
+  if(vocabKnownBtn){
+    vocabKnownBtn.textContent=L.vocab_known_btn||'✓ Know it';
+  }
+  const vocabAgainBtn=document.getElementById('vocab-again-btn');
+  if(vocabAgainBtn){
+    vocabAgainBtn.textContent=L.vocab_again_btn||'✗ Again';
+  }
+  const vocabFilter=document.getElementById('vocab-filter');
+  if(vocabFilter){
+    const opts=vocabFilter.options;
+    if(opts[0]) opts[0].text=L.vocab_filter_all||'All categories';
+    if(opts[1]) opts[1].text=L.vocab_filter_noun||'Nouns';
+    if(opts[2]) opts[2].text=L.vocab_filter_verb||'Verbs';
+    if(opts[3]) opts[3].text=L.vocab_filter_adjective||'Adjectives';
+    if(opts[4]) opts[4].text=L.vocab_filter_phrase||'Phrases';
+  }
+
+  // Listening Practice page i18n
+  const listeningTitleEl=document.getElementById('listening-title');
+  if(listeningTitleEl){
+    listeningTitleEl.textContent=L.listening_title||'🎧 Listening Practice';
+  }
+  const playBtn=document.getElementById('listening-play-btn');
+  if(playBtn){
+    playBtn.textContent=L.listening_audio_btn||'▶ Audio';
+  }
+  const showBtn=document.getElementById('listening-show-btn');
+  if(showBtn){
+    showBtn.textContent=L.listening_show_btn||'👁 Show translation';
+  }
+  const listeningInput=document.getElementById('listening-input');
+  if(listeningInput){
+    listeningInput.placeholder=L.listening_input_ph||'Type what you heard...';
+  }
+  const submitBtn=document.getElementById('listening-submit-btn');
+  if(submitBtn){
+    submitBtn.textContent=L.listening_submit_btn||'✓ Check';
+  }
+  const slowBtn=document.getElementById('listening-slow-btn');
+  if(slowBtn){
+    slowBtn.textContent=L.listening_speed_slow||'🐢 Slow';
+  }
+  const normalBtn=document.getElementById('listening-normal-btn');
+  if(normalBtn){
+    normalBtn.textContent=L.listening_speed_normal||'⚖ Normal';
+  }
+  const fastBtn=document.getElementById('listening-fast-btn');
+  if(fastBtn){
+    fastBtn.textContent=L.listening_speed_fast||'🐇 Fast';
+  }
+  const scoreLabel=document.getElementById('listening-score-label');
+  if(scoreLabel){
+    scoreLabel.textContent=L.listening_score_label||'Correct answers:';
+  }
 }
 
 (() => {
@@ -3780,6 +3943,78 @@ function renderResultCards(de, ar, en, phonetic){
   `;
 }
 
+// ---- Dynamic translation helpers ----
+// Language metadata used for dynamic translation cards. Flags use emoji and
+// names are in English; t() is called lazily on render to allow later
+// localization. Arabic text uses right‑to‑left direction.
+const langInfo = {
+  de: { flag: '🇩🇪', get name(){ return t('lang_german') || 'German'; }, dir: 'ltr' },
+  en: { flag: '🇬🇧', get name(){ return t('lang_english') || 'English'; }, dir: 'ltr' },
+  ar: { flag: '🇸🇦', get name(){ return t('lang_arabic') || 'Arabic'; }, dir: 'rtl' }
+};
+
+/**
+ * Detect the source language of a given string using simple heuristics.
+ * - Arabic: if any Arabic script characters are present
+ * - German: if any umlaut/ß characters or common German words appear more
+ *   frequently than common English words
+ * - English: fallback when above conditions are not met
+ *
+ * @param {string} text Input text to analyse
+ * @returns {string} ISO language code ('de','en','ar')
+ */
+function detectLanguage(text){
+  if(/[\u0600-\u06FF]/.test(text)) return 'ar';
+  if(/[äöüßÄÖÜ]/.test(text)) return 'de';
+  const lower = (' ' + text.toLowerCase() + ' ');
+  const germanWords = [' der ', ' die ', ' das ', ' und ', ' ist '];
+  let germanScore = 0;
+  germanWords.forEach(w => { germanScore += (lower.split(w).length - 1); });
+  const englishWords = [' the ', ' and ', ' is ', ' of ', ' to '];
+  let englishScore = 0;
+  englishWords.forEach(w => { englishScore += (lower.split(w).length - 1); });
+  if(germanScore > englishScore) return 'de';
+  return 'en';
+}
+
+/**
+ * Render translation result cards dynamically based on the detected source
+ * language.  Only target languages (the other two of de/en/ar) are
+ * displayed.  Each card includes copy and speak buttons similar to the
+ * original implementation.
+ *
+ * @param {string} srcLang The detected source language
+ * @param {object} results Object mapping language codes ('de','en','ar') to
+ *                         translated text (including the original text at srcLang)
+ */
+function renderResultCardsDynamic(srcLang, results){
+  const container = document.getElementById('translate-results');
+  if(!container) return;
+  const langs = ['de','en','ar'];
+  const cards = [];
+  langs.forEach(lang => {
+    if(lang === srcLang) return;
+    const info = langInfo[lang] || { flag:'', name: lang.toUpperCase(), dir:'ltr' };
+    const txt = results[lang] || '—';
+    const enc = encInline(txt);
+    const voice = lang === 'ar' ? 'ar-SA' : (lang === 'de' ? 'de-DE' : 'en-GB');
+    const dirAttr = lang === 'ar' ? 'dir="rtl" style="text-align:right"' : '';
+    cards.push(`<div class="translate-card">
+      <div class="translate-card-header">
+        <div class="translate-card-lang"><span class="translate-card-flag">${info.flag}</span> ${info.name}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="translate-card-copy" onclick="speakResult(decodeURIComponent('${enc}'),'${voice}')">🔊</button>
+          <button class="translate-card-copy" onclick="copyText(decodeURIComponent('${enc}'), this)">${t('copy_btn')||'Copy'}</button>
+        </div>
+      </div>
+      <div class="translate-card-body">
+        <div class="translate-result-text" ${dirAttr}>${escapeHtml(txt)}</div>
+      </div>
+    </div>`);
+  });
+  container.innerHTML = cards.join('');
+}
+
 function renderTranslateHistory(){
   const list = document.getElementById('translate-history-list');
   if(!list) return;
@@ -3787,24 +4022,47 @@ function renderTranslateHistory(){
     list.innerHTML = `<div class="translate-empty"><div class="translate-empty-icon">📖</div><p>${t('translate_no_history')||'Your translations will appear here'}</p></div>`;
     return;
   }
-  list.innerHTML = translateHistory.map((h,i) => `
-    <div class="translate-history-item" onclick="restoreHistory(${i})" style="flex-direction:column;align-items:stretch;gap:6px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <div class="translate-history-de" style="font-size:0.9rem;font-weight:600">🇩🇪 ${escapeHtml(h.de)}</div>
-        <div style="font-size:0.65rem;color:var(--muted);white-space:nowrap">${h.date||''}</div>
+  list.innerHTML = translateHistory.map((h,i) => {
+    const src = h.src || 'de';
+    const srcFlag = (langInfo[src] && langInfo[src].flag) || '🌐';
+    const srcText = h[src] || '';
+    // Build secondary lines for target translations
+    const targets = [];
+    ['de','en','ar'].forEach(lang => {
+      if(lang === src) return;
+      const txt = h[lang];
+      if(!txt) return;
+      const flag = (langInfo[lang] && langInfo[lang].flag) || '';
+      const dirAttr = lang === 'ar' ? 'direction:rtl;text-align:right' : '';
+      targets.push(`<div style="font-size:0.78rem;color:#aaa;${dirAttr}">${flag} ${escapeHtml(txt)}</div>`);
+    });
+    return `
+      <div class="translate-history-item" onclick="restoreHistory(${i})" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div class="translate-history-de" style="font-size:0.9rem;font-weight:600">${srcFlag} ${escapeHtml(srcText)}</div>
+          <div style="font-size:0.65rem;color:var(--muted);white-space:nowrap">${h.date||''}</div>
+        </div>
+        ${targets.join('')}
       </div>
-      ${h.en ? `<div style="font-size:0.78rem;color:#aaa">🇬🇧 ${escapeHtml(h.en)}</div>` : ''}
-      ${h.ar ? `<div style="font-size:0.78rem;color:#aaa;direction:rtl;text-align:right">🇸🇦 ${escapeHtml(h.ar)}</div>` : ''}
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function restoreHistory(i){
   const h = translateHistory[i];
   if(!h) return;
-  document.getElementById('translate-input').value = h.de;
-  renderResultCards(h.de, h.ar, h.en, h.phonetic||'');
-  window.scrollTo(0,0);
+  // Determine the source language stored in history (fallback to 'de')
+  const srcLang = h.src || 'de';
+  // Put the original text in the input area according to its source language
+  const inputEl = document.getElementById('translate-input');
+  if(inputEl){
+    inputEl.value = h[srcLang] || '';
+  }
+  // Render translation cards dynamically using stored results
+  // `h` already contains keys for 'de','en','ar' so pass as results
+  renderResultCardsDynamic(srcLang, h);
+  // Scroll to top
+  window.scrollTo(0, 0);
 }
 
 async function fetchWithTimeout(url, ms=8000){
@@ -3820,7 +4078,42 @@ async function fetchWithTimeout(url, ms=8000){
   }
 }
 
+/**
+ * Translate a German text into a target language using a two‑stage approach.
+ * First it attempts to use Google Translate’s unofficial public endpoint, then
+ * falls back to the MyMemory API if Google fails or returns an empty result.
+ *
+ * Google’s endpoint doesn’t require an API key and generally provides
+ * higher‑quality translations for major language pairs.  The query uses
+ * `client=gtx` which is commonly used by browser extensions and the result
+ * is a nested array.  See the discussion in the py‑googletrans project where
+ * the endpoint `https://translate.googleapis.com/translate_a/single?client=gtx` is
+ * described along with sample parameters【670556233022063†L525-L566】.
+ *
+ * @param {string} text The German word or sentence to translate
+ * @param {string} targetLang Target ISO language code (e.g. 'en' or 'ar')
+ * @returns {Promise<string>} The translated text
+ */
 async function translateOne(text, targetLang){
+  // Attempt using Google Translate unofficial endpoint first.
+  try{
+    // Build URL for Google translate.  `sl` is source language, `tl` target.
+    const gUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=de&tl=${encodeURIComponent(targetLang)}&q=${encodeURIComponent(text)}`;
+    const gRes = await fetchWithTimeout(gUrl, 8000);
+    if(gRes.ok){
+      const gJson = await gRes.json();
+      // Extract the translation from the nested array: data[0][0][0]
+      if(Array.isArray(gJson) && Array.isArray(gJson[0]) && Array.isArray(gJson[0][0])){
+        const gTrans = gJson[0][0][0];
+        if(gTrans && typeof gTrans === 'string' && gTrans.trim().length > 0){
+          return gTrans;
+        }
+      }
+    }
+  }catch(ignored){
+    // Ignore any errors; we will fall back to MyMemory
+  }
+  // Fallback to MyMemory API if Google fails
   const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}&de=achghaf.translator@gmail.com`;
   const r = await fetchWithTimeout(url, 8000);
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -3833,47 +4126,43 @@ async function translateOne(text, targetLang){
 
 async function doTranslate(){
   const input = document.getElementById('translate-input').value.trim();
-  if(!input){ showToast(t('translate_empty')||'Enter a German word or sentence'); return; }
-
-  const btn = document.getElementById('translate-btn');
-
-  document.getElementById('translate-results').innerHTML = `
-    <div class="translate-card">
-      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇸🇦</span> ${t('lang_arabic')||'Arabic'}</div></div>
-      <div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div>
-    </div>
-    <div class="translate-card">
-      <div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">🇬🇧</span> ${t('lang_english')||'English'}</div></div>
-      <div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div>
-    </div>
-  `;
-
-  let arErr = '', enErr = '';
-  let ar = '', en = '';
-
-  try { ar = await translateOne(input, 'ar'); } catch(e){ arErr = e.message; }
-  try { en = await translateOne(input, 'en'); } catch(e){ enErr = e.message; }
-
-  if(!ar && !en){
-    document.getElementById('translate-results').innerHTML = `
-      <div class="translate-card" style="border-color:rgba(204,31,31,0.3)">
-        <div class="translate-card-body">
-          <div class="translate-result-text" style="color:#ff6b6b;font-size:0.85rem">
-            ⚠ Translation failed.<br>
-            <span style="font-size:0.72rem;color:#888;font-family:monospace">AR: ${arErr}<br>EN: ${enErr}</span>
-          </div>
-        </div>
-      </div>`;
+  if(!input){
+    showToast(t('translate_empty') || 'Enter text to translate');
     return;
   }
-
-  renderResultCards(input, ar || '—', en || '—', '');
-  translateHistory.unshift({ de: input, ar: ar||'', en: en||'', phonetic:'', date: new Date().toLocaleDateString() });
+  // Detect source language using heuristics (ar, de or en)
+  const srcLang = detectLanguage(input);
+  // Determine target languages (the other two of de/en/ar)
+  const langs = ['de','en','ar'];
+  const targets = langs.filter(l => l !== srcLang);
+  const resultsContainer = document.getElementById('translate-results');
+  // Show loading skeletons for each target language
+  resultsContainer.innerHTML = targets.map(lang => {
+    const info = langInfo[lang] || { flag:'', name: lang.toUpperCase() };
+    return `<div class="translate-card"><div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">${info.flag}</span> ${info.name}</div></div><div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div></div>`;
+  }).join('');
+  // Perform translations in parallel
+  const results = { de:'', en:'', ar:'' };
+  results[srcLang] = input;
+  await Promise.all(targets.map(async lang => {
+    try{
+      results[lang] = await translateGeneric(input, srcLang, lang);
+    }catch(e){
+      results[lang] = '';
+    }
+  }));
+  // If none of the translations succeeded, show an error card
+  if(targets.every(lang => !results[lang])){
+    resultsContainer.innerHTML = `<div class="translate-card" style="border-color:rgba(204,31,31,0.3)"><div class="translate-card-body"><div class="translate-result-text" style="color:#ff6b6b;font-size:0.85rem">⚠ Translation failed.</div></div></div>`;
+    return;
+  }
+  // Render dynamic result cards
+  renderResultCardsDynamic(srcLang, results);
+  // Save to history with explicit source language
+  translateHistory.unshift({ de: results.de || '', en: results.en || '', ar: results.ar || '', phonetic:'', date: new Date().toLocaleDateString(), src: srcLang });
   translateHistory = uniqueHistory(translateHistory).slice(0, 5);
   saveTranslateHistory();
   renderTranslateHistory();
-
-  const btnAfter = document.getElementById('translate-btn');
 }
 
 function initTranslatePage(){
@@ -4143,8 +4432,11 @@ function renderAdminUsersList(){
         <div class="admin-user-email">${u.email||'—'}${isNew ? '<span class="admin-new-badge">NEW</span>' : ''}</div>
         <div class="admin-user-date">Joined ${dateStr} · <span style="color:${dotClass==='online'?'var(--green)':dotClass==='away'?'var(--gold)':'var(--muted)'}">${dotTitle}</span></div>
       </div>
-      <span class="admin-role-badge ${role}">${role === 'admin' ? '👑 admin' : '👤 user'}</span>
+      <span class="admin-role-badge ${role}">
+        ${role === 'admin' ? '👑 admin' : role === 'pending' ? '🕒 pending' : '👤 user'}
+      </span>
       <select class="admin-role-select" onchange="adminChangeRole('${u.email}', this.value, this)">
+        <option value="pending" ${role==='pending'?'selected':''}>Pending</option>
         <option value="user" ${role==='user'?'selected':''}>User</option>
         <option value="admin" ${role==='admin'?'selected':''}>Admin</option>
       </select>
@@ -5155,7 +5447,8 @@ function showLevelResult() {
         const card=document.getElementById('vocab-card');
         if(!front||!bar) return;
         if(vocabQueue.length===0){
-          front.textContent='🎉 Fertig!';
+          // When all cards are finished display a localized finished message
+          front.textContent = (typeof t==='function' ? t('vocab_finished') : null) || '🎉 Finished!';
           if(back) back.innerHTML='';
           bar.style.width='100%';
           return;
@@ -5234,6 +5527,26 @@ function showLevelResult() {
        * @param {string} to Target language code (e.g. 'de')
        */
       async function translateGeneric(text, from, to){
+        // First try Google translate for arbitrary language pairs.  The
+        // endpoint returns a nested array; see discussion in py‑googletrans
+        // project【670556233022063†L525-L566】.  We prefix dt=t to request a
+        // translation and supply sl (source) and tl (target) language codes.
+        try{
+          const gUrl=`https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&q=${encodeURIComponent(text)}`;
+          const gRes=await fetchWithTimeout(gUrl,8000);
+          if(gRes.ok){
+            const gJson=await gRes.json();
+            if(Array.isArray(gJson) && Array.isArray(gJson[0]) && Array.isArray(gJson[0][0])){
+              const gTrans=gJson[0][0][0];
+              if(gTrans && typeof gTrans==='string' && gTrans.trim().length>0){
+                return gTrans;
+              }
+            }
+          }
+        }catch(ignored){
+          // Ignore and fall back to MyMemory
+        }
+        // Fall back to MyMemory if Google translation fails
         const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(from)}|${encodeURIComponent(to)}&de=achghaf.translator@gmail.com`;
         const r=await fetchWithTimeout(url,8000);
         if(!r.ok) throw new Error(`HTTP ${r.status}`);
