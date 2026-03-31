@@ -83,44 +83,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block}
 
-/* BOTTOM NAV — single menu button */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding-bottom:env(safe-area-inset-bottom);padding-left:20px;padding-right:20px;z-index:1202}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
 .nav-icon{font-size:1.3rem;line-height:1;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-icon{color:var(--gold)}
 .nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
-/* ACTIVE PAGE INDICATOR */
-.nav-current{display:flex;align-items:center;gap:10px;flex:1}
-.nav-current-icon{font-size:1.4rem;color:var(--gold)}
-.nav-current-label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--gold)}
-/* HAMBURGER BUTTON */
-.nav-menu-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 10px;background:none;border:none;-webkit-tap-highlight-color:transparent}
-.nav-menu-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
-.nav-menu-btn.open .nav-menu-label{color:var(--gold)}
-.ham{display:flex;flex-direction:column;gap:5px;width:22px}
-.ham span{display:block;height:2px;background:var(--muted);border-radius:2px;transition:all 0.3s cubic-bezier(0.22,1,0.36,1);transform-origin:center}
-.nav-menu-btn.open .ham span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--gold)}
-.nav-menu-btn.open .ham span:nth-child(2){opacity:0;transform:scaleX(0)}
-.nav-menu-btn.open .ham span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--gold)}
-/* NAV DRAWER OVERLAY */
-.nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.nav-drawer-overlay.open{opacity:1;pointer-events:auto}
-/* NAV DRAWER */
-.nav-drawer{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));left:0;right:0;background:#0f0f0f;border-top:1px solid var(--border);border-radius:20px 20px 0 0;z-index:1400;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);max-height:82vh;overflow-y:auto;padding-bottom:8px}
-.nav-drawer.open{transform:translateY(0)}
-.nav-drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px}
-.nav-drawer-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:0 20px 12px}
-.nav-drawer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}
-.nav-drawer-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;-webkit-tap-highlight-color:transparent;width:100%;appearance:none;-webkit-appearance:none}
-.nav-drawer-item:active{transform:scale(0.96)}
-.nav-drawer-item.active{border-color:var(--gold);background:rgba(232,184,75,0.07)}
-.nav-drawer-item.active .nav-drawer-item-label{color:var(--gold)}
-.nav-drawer-item-icon{font-size:1.4rem;flex-shrink:0;line-height:1}
-.nav-drawer-item-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.06em;color:var(--white);line-height:1.2;display:block}
-.nav-drawer-item-sub{font-size:0.62rem;color:var(--muted);margin-top:2px;display:block}
-.nav-drawer-active-dot{display:none;width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto}
-.nav-drawer-item.active .nav-drawer-active-dot{display:block}
 
 /* HEADER */
 header{padding:36px 16px 24px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
@@ -759,36 +728,38 @@ h1 span{color:var(--gold)}
   from { opacity:0; transform: translateY(20px);} 
   to { opacity:1; transform: translateY(0);} 
 }
-@keyframes flagScan {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(400%); }
+@keyframes pulseStripes {
+  0%,100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
 }
-@keyframes flagReveal {
-  from { transform: scaleX(0); transform-origin: left; }
-  to   { transform: scaleX(1); transform-origin: left; }
+/* Additional enhancements for nav items with subtle sliding motion */
+.nav-item {
+  transition: transform 0.3s ease, margin 0.3s ease, color 0.3s ease;
+  margin: 0 2px;
+}
+.nav-item:hover {
+  transform: translateY(-4px);
+  margin-left: 6px;
+  margin-right: 6px;
+}
+/* Fade in and slide up login box on show */
+.login-box {
+  animation: fadeInUp 0.5s ease both;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 /* Animated flag stripes on login and page headers */
 .login-flag,
 .flag-stripe {
-  position: relative;
-  overflow: hidden;
-  animation: flagReveal 0.6s cubic-bezier(0.22,1,0.36,1) both;
-}
-.login-flag::after,
-.flag-stripe::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255,255,255,0.45) 50%,
-    transparent 70%
-  );
-  width: 40%;
-  animation: flagScan 2.8s ease-in-out infinite;
-  animation-delay: 0.6s;
-  pointer-events: none;
+  animation: pulseStripes 3s ease-in-out infinite;
 }
 /* Fade in login box when shown */
 .login-screen.visible .login-box {
@@ -1260,6 +1231,11 @@ h1 span{color:var(--gold)}
 <label id="lbl-email">Email</label>
 <input id="profile-email-input" maxlength="254" readonly="" type="email"/>
 </div>
+        <!-- Additional bio field for user profile -->
+        <div class="profile-field">
+          <label id="lbl-bio">Bio</label>
+          <textarea id="profile-bio" placeholder="Erzähle uns etwas über dich..." rows="3" style="width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;resize:vertical;"></textarea>
+        </div>
 <div class="profile-divider"></div>
 <div class="profile-field">
 <label id="lbl-new-pwd">New password</label>
@@ -1283,6 +1259,8 @@ h1 span{color:var(--gold)}
 <div class="profile-reminder-status" id="notif-status"></div>
 <div class="profile-actions">
 <button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()">💾 Save changes</button>
+        <!-- Add an option to change the avatar/profile picture -->
+        <button class="profile-btn" onclick="alert('Funktion zum Ändern des Profilbilds folgt bald!')">🖼️ Profilbild ändern</button>
 <div class="profile-divider"></div>
 <button class="profile-btn danger" onclick="logout()">↩ Log out</button>
 </div>
@@ -1459,86 +1437,56 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- BOTTOM NAV -->
-<!-- Drawer overlay -->
-<div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="closeNavDrawer()"></div>
-
-<!-- Drawer panel -->
-<div class="nav-drawer" id="nav-drawer">
-  <div class="nav-drawer-handle"></div>
-  <div class="nav-drawer-title">Navigation</div>
-  <div class="nav-drawer-grid">
-    <button class="nav-drawer-item active" data-page="tracker" onclick="drawerNav('tracker')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></span>
-      <span><span class="nav-drawer-item-label">Tracker</span><span class="nav-drawer-item-sub">Fortschritt</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="pdf" onclick="drawerNav('pdf')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg></span>
-      <span><span class="nav-drawer-item-label">Dokumente</span><span class="nav-drawer-item-sub">PDFs</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="news" onclick="drawerNav('news')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></span>
-      <span><span class="nav-drawer-item-label">News</span><span class="nav-drawer-item-sub">Artikel</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="translate" onclick="drawerNav('translate')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-      <span><span class="nav-drawer-item-label">Übersetzer</span><span class="nav-drawer-item-sub">DE / AR / EN</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="quiz" onclick="drawerNav('quiz')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg></span>
-      <span><span class="nav-drawer-item-label">Quiz</span><span class="nav-drawer-item-sub">KI-Fragen</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="vocab" onclick="drawerNav('vocab')">
-      <span class="nav-drawer-item-icon">📚</span>
-      <span><span class="nav-drawer-item-label">Vokabeln</span><span class="nav-drawer-item-sub">Flashcards</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="listening" onclick="drawerNav('listening')">
-      <span class="nav-drawer-item-icon">🎧</span>
-      <span><span class="nav-drawer-item-label">Hören</span><span class="nav-drawer-item-sub">Übungen</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="level" onclick="drawerNav('level')">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
-      <span><span class="nav-drawer-item-label">Niveau</span><span class="nav-drawer-item-sub">Level Test</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-    <button class="nav-drawer-item" data-page="admin" id="mob-admin-nav" onclick="drawerNav('admin')" style="display:none">
-      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-      <span><span class="nav-drawer-item-label">Admin</span><span class="nav-drawer-item-sub">Dashboard</span></span>
-      <span class="nav-drawer-active-dot"></span>
-    </button>
-  </div>
-</div>
-
-<!-- Bottom nav bar: current page + notifications + menu -->
 <nav class="bottom-nav">
-  <!-- current page indicator -->
-  <div class="nav-current" id="nav-current-indicator">
-    <span class="nav-current-icon" id="nav-current-icon"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></span>
-    <span class="nav-current-label" id="nav-current-label">Tracker</span>
+<div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg></div>
+<div class="nav-label" data-i18n="nav_tracker">Tracker</div>
+</div>
+<div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg></div>
+<div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+</div>
+<div class="nav-item" data-page="news" onclick="switchPage('news')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg></div>
+<div class="nav-label" data-i18n="nav_news">News</div>
+</div>
+<div class="nav-item" data-page="translate" onclick="switchPage('translate')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+<div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
+</div>
+<div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
+<div class="nav-label">Quiz</div>
+</div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">📚</div>
+    <div class="nav-label">Vokabeln</div>
   </div>
-
-  <!-- notification bell -->
-  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative;flex:0 0 auto;padding:0 4px">
-    <div class="nav-icon" style="position:relative;display:inline-flex">
-      <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
-    </div>
-    <div class="nav-label">Alerts</div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">🎧</div>
+    <div class="nav-label">Hören</div>
   </div>
-
-  <!-- hamburger menu button -->
-  <button class="nav-menu-btn" id="nav-menu-btn" onclick="toggleNavDrawer()" aria-label="Menu">
-    <div class="ham">
-      <span></span><span></span><span></span>
+<div class="nav-item" data-page="level" onclick="switchPage('level')">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+<div class="nav-label">Niveau</div>
+</div>
+<div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
+<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+<div class="nav-label">Admin</div>
+</div>
+    <!-- Profile nav item for mobile -->
+    <div class="nav-item" onclick="openProfileModal()" title="Profil">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Profil</div>
     </div>
-    <span class="nav-menu-label">Menu</span>
-  </button>
+<!-- Mobile notification bell -->
+<div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
+<div class="nav-icon" style="position:relative;display:inline-flex">
+<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+<span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
+</div>
+<div class="nav-label">Alerts</div>
+</div>
 </nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
@@ -2521,7 +2469,6 @@ function switchPage(page){
   }
 
   window.scrollTo(0,0);
-  updateNavCurrentIndicator(page);
 }
 
 function bindNavigationControls(){
@@ -2620,75 +2567,6 @@ async function initApp(){
     if(typeof suggestNextTasks === 'function') suggestNextTasks();
   }catch(e){ console.warn('Init analytics error', e); }
 }
-
-
-// ===== NAV DRAWER =====
-var _drawerOpen = false;
-
-// Page metadata for the current indicator
-var PAGE_META = {
-  tracker:   { label: 'Tracker',    icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>' },
-  pdf:       { label: 'Dokumente',  icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg>' },
-  news:      { label: 'News',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>' },
-  translate: { label: 'Übersetzer', icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
-  quiz:      { label: 'Quiz',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>' },
-  vocab:     { label: 'Vokabeln',   icon: '📚' },
-  listening: { label: 'Hören',      icon: '🎧' },
-  level:     { label: 'Niveau',     icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
-  admin:     { label: 'Admin',      icon: '👑' },
-};
-
-function updateNavCurrentIndicator(page){
-  var meta = PAGE_META[page] || { label: page, icon: '●' };
-  var iconEl = document.getElementById('nav-current-icon');
-  var labelEl = document.getElementById('nav-current-label');
-  if(iconEl) iconEl.innerHTML = meta.icon;
-  if(labelEl) labelEl.textContent = meta.label;
-  // update active state in drawer
-  document.querySelectorAll('.nav-drawer-item[data-page]').forEach(function(el){
-    el.classList.toggle('active', el.dataset.page === page);
-  });
-}
-
-function openNavDrawer(){
-  _drawerOpen = true;
-  document.getElementById('nav-drawer').classList.add('open');
-  document.getElementById('nav-drawer-overlay').classList.add('open');
-  document.getElementById('nav-menu-btn').classList.add('open');
-}
-
-function closeNavDrawer(){
-  _drawerOpen = false;
-  document.getElementById('nav-drawer').classList.remove('open');
-  document.getElementById('nav-drawer-overlay').classList.remove('open');
-  document.getElementById('nav-menu-btn').classList.remove('open');
-}
-
-function toggleNavDrawer(){
-  if(_drawerOpen) closeNavDrawer(); else openNavDrawer();
-}
-
-function drawerNav(page){
-  closeNavDrawer();
-  switchPage(page);
-}
-
-// Swipe-down to close drawer
-(function(){
-  var startY = 0;
-  var drawer = null;
-  document.addEventListener('touchstart', function(e){
-    drawer = document.getElementById('nav-drawer');
-    if(drawer && drawer.classList.contains('open')){
-      startY = e.touches[0].clientY;
-    }
-  }, {passive:true});
-  document.addEventListener('touchend', function(e){
-    if(!drawer || !drawer.classList.contains('open')) return;
-    var endY = e.changedTouches[0].clientY;
-    if(endY - startY > 60) closeNavDrawer();
-  }, {passive:true});
-})();
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
