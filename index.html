@@ -341,15 +341,15 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(5){animation-delay:0.2s}
 
 /* DESKTOP NAV */
-.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
-.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
-.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
-.desk-nav-item:hover{color:var(--white)}
-.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
+
+
+
+
+
 
 /* RESPONSIVE */
 @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
-@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}body{padding-bottom:0}.bottom-nav{display:none}.desktop-nav{display:flex!important}.toast{bottom:24px}}
+@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}body{padding-bottom:0}.bottom-nav{display:none}.toast{bottom:24px}}
 @media(max-width:399px){.overall-inner{grid-template-columns:1fr 1fr}.big-stat:nth-child(2){grid-column:span 2;order:-1}.month-sublabel{display:none}.arc-container{width:120px;height:75px}.arc-container svg{width:120px;height:120px;margin-top:-48px}}
 
 /* LANGUAGE SWITCHER */
@@ -361,7 +361,7 @@ h1 span{color:var(--gold)}
 .lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
 .lang-fab-option:hover{background:rgba(255,255,255,0.06);color:var(--white)}
 .lang-fab-option.active{background:rgba(232,184,75,0.15);color:var(--gold);font-weight:600}
-@media(min-width:768px){.lang-fab{bottom:16px}}
+@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}}
 
 /* PROFILE ICON BUTTON */
 .profile-icon-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.88rem;font-weight:700;color:var(--black);transition:all 0.25s;flex-shrink:0;box-shadow:0 2px 8px rgba(232,184,75,0.2)}
@@ -625,6 +625,17 @@ h1 span{color:var(--gold)}
 .translate-history-arrow{color:var(--muted);font-size:0.8rem;flex-shrink:0}
 .translate-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:0.82rem}
 .translate-empty-icon{font-size:2rem;margin-bottom:8px}
+
+.translate-apikey-wrap{margin-bottom:18px;background:rgba(232,184,75,0.05);border:1px solid rgba(232,184,75,0.2);border-radius:10px;padding:14px 16px}
+.translate-apikey-row{display:flex;gap:8px;margin-bottom:6px}
+.translate-apikey-input{flex:1;background:#111;border:1px solid var(--border);border-radius:7px;padding:10px 14px;color:var(--white);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.translate-apikey-input:focus{border-color:var(--gold)}
+.translate-apikey-input::placeholder{color:#555}
+.translate-apikey-btn{padding:10px 18px;background:var(--gold);color:var(--black);border:none;border-radius:7px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap;transition:opacity 0.2s}
+.translate-apikey-btn:active{opacity:0.8}
+.translate-apikey-hint{font-size:0.68rem;color:var(--muted);letter-spacing:0.03em}
+.translate-apikey-wrap.has-key{border-color:rgba(61,186,110,0.3);background:rgba(61,186,110,0.04)}
+.translate-apikey-wrap.has-key .translate-apikey-hint::before{content:'✓ Key saved  ·  '}
 
 /* ADMIN PAGE */
 .admin-page{padding:0 16px 40px;max-width:1100px;margin:0 auto}
@@ -1110,37 +1121,7 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- DESKTOP NAV -->
-<nav class="desktop-nav" id="desktop-nav">
-<button aria-label="Open Tracker" class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg> Tracker</button>
-<button aria-label="Open Documents" class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg> Dokumente</button>
-<button aria-label="Open News" class="desk-nav-item" data-page="news" onclick="switchPage('news')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg> News</button>
-<button aria-label="Open Translator" class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Übersetzer</button>
-<button aria-label="Quiz" class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg> Quiz</button>
-<button aria-label="Level" class="desk-nav-item" data-page="level" onclick="switchPage('level')" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Niveau</button>
-        <button aria-label="Vokabeln" class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" type="button">📚 Vokabeln</button>
-        <button aria-label="Hören" class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" type="button">🎧 Hören</button>
-<button aria-label="Admin" class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" style="display:none" type="button"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Admin</button>
-<div class="desk-nav-right">
-<!-- Notification Bell -->
-<div style="position:relative">
-<button class="notif-btn" id="desk-notif-btn" onclick="toggleNotifPanel()" title="Notifications">
-<svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-<span class="notif-badge" id="notif-badge"></span>
-</button>
-<div class="notif-panel" id="notif-panel">
-<div class="notif-panel-head">
-<span class="notif-panel-title">🔔 Notifications</span>
-<button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
-</div>
-<div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
-<div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
-</div>
-</div>
-</div>
-<button class="profile-icon-btn" id="desk-profile-btn" onclick="openProfileModal()" style="display:none" title="Profile">?</button>
-</div>
-</nav>
+
 <!-- TRACKER PAGE -->
 <div class="page active" id="page-tracker">
 <header>
@@ -1228,8 +1209,13 @@ h1 span{color:var(--gold)}
 </div>
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1>📁 <span>Dokumente</span></h1>
+</div>
+</header>
 <div class="pdf-page">
-<div class="section-title" style="margin-bottom:20px;">📁 Meine Dokumente</div>
 <div class="storage-bar">
 <span class="storage-label">💾 Local</span>
 <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
@@ -1363,9 +1349,14 @@ h1 span{color:var(--gold)}
 </div>
 <!-- NEWS PAGE -->
 <div class="page" id="page-news">
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1>📰 <span id="news-page-title">Artikel &amp; News</span></h1>
+</div>
+</header>
 <div class="news-page">
 <div class="news-header">
-<h2 id="news-page-title">📰 Artikel &amp; News</h2>
 <p id="news-page-sub">Eigene Artikel und Updates veröffentlichen</p>
 </div>
 <div class="news-composer">
@@ -1409,10 +1400,23 @@ h1 span{color:var(--gold)}
 </div>
 <!-- TRANSLATE PAGE -->
 <div class="page" id="page-translate">
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1>🌐 <span id="translate-page-title">Übersetzer</span></h1>
+</div>
+</header>
 <div class="translate-page">
 <div class="translate-header">
-<h2 id="translate-page-title">🌐 Übersetzer</h2>
 <p id="translate-page-sub">Deutsch → Arabisch &amp; Englisch</p>
+</div>
+<!-- Google API Key -->
+<div class="translate-apikey-wrap" id="translate-apikey-wrap">
+  <div class="translate-apikey-row">
+    <input type="password" id="translate-api-key-input" class="translate-apikey-input" placeholder="🔑 Google Cloud Translation API Key" autocomplete="off"/>
+    <button class="translate-apikey-btn" onclick="saveTranslateApiKey()">Save</button>
+  </div>
+  <div class="translate-apikey-hint">Enter your key once — saved locally. <a href="https://console.cloud.google.com/apis/library/translate.googleapis.com" target="_blank" style="color:var(--gold)">Get a key ↗</a></div>
 </div>
 <div class="translate-input-wrap">
 <textarea class="translate-textarea" id="translate-input" placeholder="Deutsches Wort oder Satz eingeben..." rows="4"></textarea>
@@ -4480,11 +4484,11 @@ function restoreHistory(i){
   window.scrollTo(0, 0);
 }
 
-async function fetchWithTimeout(url, ms=8000){
+async function fetchWithTimeout(url, ms=8000, options={}){
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), ms);
   try {
-    const r = await fetch(url, { signal: controller.signal });
+    const r = await fetch(url, { signal: controller.signal, ...options });
     clearTimeout(timer);
     return r;
   } catch(e) {
@@ -4509,34 +4513,32 @@ async function fetchWithTimeout(url, ms=8000){
  * @param {string} targetLang Target ISO language code (e.g. 'en' or 'ar')
  * @returns {Promise<string>} The translated text
  */
+function getGoogleApiKey(){
+  return localStorage.getItem('google_translate_api_key') || '';
+}
+
 async function translateOne(text, targetLang){
-  // Attempt using Google Translate unofficial endpoint first.
-  try{
-    // Build URL for Google translate.  `sl` is source language, `tl` target.
-    const gUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=de&tl=${encodeURIComponent(targetLang)}&q=${encodeURIComponent(text)}`;
-    const gRes = await fetchWithTimeout(gUrl, 8000);
-    if(gRes.ok){
-      const gJson = await gRes.json();
-      // Extract the translation from the nested array: data[0][0][0]
-      if(Array.isArray(gJson) && Array.isArray(gJson[0]) && Array.isArray(gJson[0][0])){
-        const gTrans = gJson[0][0][0];
-        if(gTrans && typeof gTrans === 'string' && gTrans.trim().length > 0){
-          return gTrans;
-        }
-      }
-    }
-  }catch(ignored){
-    // Ignore any errors; we will fall back to MyMemory
+  return translateGenericGCloud(text, 'de', targetLang);
+}
+
+/* ===== Official Google Cloud Translation API ===== */
+async function translateGenericGCloud(text, from, to){
+  const apiKey = getGoogleApiKey();
+  if(!apiKey) throw new Error('NO_KEY');
+  const url = `https://translation.googleapis.com/language/translate/v2?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetchWithTimeout(url, 10000, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ q: text, source: from, target: to, format: 'text' })
+  });
+  if(!res.ok){
+    const errJson = await res.json().catch(() => ({}));
+    throw new Error(errJson?.error?.message || `HTTP ${res.status}`);
   }
-  // Fallback to MyMemory API if Google fails
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=de|${encodeURIComponent(targetLang)}&de=achghaf.translator@gmail.com`;
-  const r = await fetchWithTimeout(url, 8000);
-  if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  const responseStatus = d?.responseStatus;
-  const tx = d?.responseData?.translatedText || '';
-  if(responseStatus === 403 || !tx) throw new Error(`API ${responseStatus}: ${d?.responseDetails || 'empty'}`);
-  return tx;
+  const data = await res.json();
+  const result = data?.data?.translations?.[0]?.translatedText;
+  if(!result) throw new Error('Empty response');
+  return result;
 }
 
 async function doTranslate(){
@@ -4568,7 +4570,8 @@ async function doTranslate(){
   }));
   // If none of the translations succeeded, show an error card
   if(targets.every(lang => !results[lang])){
-    resultsContainer.innerHTML = `<div class="translate-card" style="border-color:rgba(204,31,31,0.3)"><div class="translate-card-body"><div class="translate-result-text" style="color:#ff6b6b;font-size:0.85rem">⚠ Translation failed.</div></div></div>`;
+    const noKey = !getGoogleApiKey();
+    resultsContainer.innerHTML = `<div class="translate-card" style="border-color:rgba(204,31,31,0.3)"><div class="translate-card-body"><div class="translate-result-text" style="color:#ff6b6b;font-size:0.85rem">${noKey ? '🔑 Google API key missing — enter it in the field above.' : '⚠ Translation failed. Check your API key.'}</div></div></div>`;
     return;
   }
   // Render dynamic result cards
@@ -4580,8 +4583,23 @@ async function doTranslate(){
   renderTranslateHistory();
 }
 
+function saveTranslateApiKey(){
+  const inp = document.getElementById('translate-api-key-input');
+  const key = (inp?.value || '').trim();
+  if(!key){ showToast('⚠ Enter an API key first'); return; }
+  localStorage.setItem('google_translate_api_key', key);
+  inp.value = '';
+  inp.placeholder = '🔑 Key saved — click Save to update';
+  const wrap = document.getElementById('translate-apikey-wrap');
+  if(wrap) wrap.classList.add('has-key');
+  showToast('✓ API key saved');
+}
+
 function initTranslatePage(){
   loadTranslateHistory();
+  // Show saved key status
+  const wrap = document.getElementById('translate-apikey-wrap');
+  if(wrap && getGoogleApiKey()) wrap.classList.add('has-key');
   if(_translatePageBound) return;
   _translatePageBound = true;
   const inp = document.getElementById('translate-input');
@@ -6101,34 +6119,7 @@ function showLevelResult() {
        * @param {string} to Target language code (e.g. 'de')
        */
       async function translateGeneric(text, from, to){
-        // First try Google translate for arbitrary language pairs.  The
-        // endpoint returns a nested array; see discussion in py‑googletrans
-        // project【670556233022063†L525-L566】.  We prefix dt=t to request a
-        // translation and supply sl (source) and tl (target) language codes.
-        try{
-          const gUrl=`https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&q=${encodeURIComponent(text)}`;
-          const gRes=await fetchWithTimeout(gUrl,8000);
-          if(gRes.ok){
-            const gJson=await gRes.json();
-            if(Array.isArray(gJson) && Array.isArray(gJson[0]) && Array.isArray(gJson[0][0])){
-              const gTrans=gJson[0][0][0];
-              if(gTrans && typeof gTrans==='string' && gTrans.trim().length>0){
-                return gTrans;
-              }
-            }
-          }
-        }catch(ignored){
-          // Ignore and fall back to MyMemory
-        }
-        // Fall back to MyMemory if Google translation fails
-        const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(from)}|${encodeURIComponent(to)}&de=achghaf.translator@gmail.com`;
-        const r=await fetchWithTimeout(url,8000);
-        if(!r.ok) throw new Error(`HTTP ${r.status}`);
-        const d=await r.json();
-        const status=d?.responseStatus;
-        const tx=d?.responseData?.translatedText||'';
-        if(status===403||!tx) throw new Error(`API ${status}: ${d?.responseDetails||'empty'}`);
-        return tx;
+        return translateGenericGCloud(text, from, to);
       }
 
       /**
