@@ -83,13 +83,44 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block}
 
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
+/* BOTTOM NAV — single menu button */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding-bottom:env(safe-area-inset-bottom);padding-left:20px;padding-right:20px;z-index:1202}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
 .nav-icon{font-size:1.3rem;line-height:1;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-icon{color:var(--gold)}
 .nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
+/* ACTIVE PAGE INDICATOR */
+.nav-current{display:flex;align-items:center;gap:10px;flex:1}
+.nav-current-icon{font-size:1.4rem;color:var(--gold)}
+.nav-current-label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--gold)}
+/* HAMBURGER BUTTON */
+.nav-menu-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 10px;background:none;border:none;-webkit-tap-highlight-color:transparent}
+.nav-menu-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
+.nav-menu-btn.open .nav-menu-label{color:var(--gold)}
+.ham{display:flex;flex-direction:column;gap:5px;width:22px}
+.ham span{display:block;height:2px;background:var(--muted);border-radius:2px;transition:all 0.3s cubic-bezier(0.22,1,0.36,1);transform-origin:center}
+.nav-menu-btn.open .ham span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--gold)}
+.nav-menu-btn.open .ham span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-menu-btn.open .ham span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--gold)}
+/* NAV DRAWER OVERLAY */
+.nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.nav-drawer-overlay.open{opacity:1;pointer-events:auto}
+/* NAV DRAWER */
+.nav-drawer{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));left:0;right:0;background:#0f0f0f;border-top:1px solid var(--border);border-radius:20px 20px 0 0;z-index:1400;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);max-height:82vh;overflow-y:auto;padding-bottom:8px}
+.nav-drawer.open{transform:translateY(0)}
+.nav-drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px}
+.nav-drawer-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:0 20px 12px}
+.nav-drawer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}
+.nav-drawer-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left;-webkit-tap-highlight-color:transparent;width:100%;appearance:none;-webkit-appearance:none}
+.nav-drawer-item:active{transform:scale(0.96)}
+.nav-drawer-item.active{border-color:var(--gold);background:rgba(232,184,75,0.07)}
+.nav-drawer-item.active .nav-drawer-item-label{color:var(--gold)}
+.nav-drawer-item-icon{font-size:1.4rem;flex-shrink:0;line-height:1}
+.nav-drawer-item-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.06em;color:var(--white);line-height:1.2;display:block}
+.nav-drawer-item-sub{font-size:0.62rem;color:var(--muted);margin-top:2px;display:block}
+.nav-drawer-active-dot{display:none;width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto}
+.nav-drawer-item.active .nav-drawer-active-dot{display:block}
 
 /* HEADER */
 header{padding:36px 16px 24px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
@@ -329,8 +360,8 @@ h1 span{color:var(--gold)}
 @media(min-width:768px){.lang-fab{bottom:16px}}
 
 /* PROFILE ICON BUTTON */
-.profile-icon-btn{width:32px;height:32px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;font-weight:700;color:var(--black);transition:all 0.2s;flex-shrink:0}
-.profile-icon-btn:hover{box-shadow:0 0 0 2px var(--gold),0 0 12px rgba(232,184,75,0.3)}
+.profile-icon-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.88rem;font-weight:700;color:var(--black);transition:all 0.25s;flex-shrink:0;box-shadow:0 2px 8px rgba(232,184,75,0.2)}
+.profile-icon-btn:hover{box-shadow:0 0 0 3px rgba(232,184,75,0.3),0 4px 16px rgba(232,184,75,0.25);transform:scale(1.06)}
 .profile-icon-btn:active{transform:scale(0.93)}
 /* ===== NOTIFICATIONS ===== */
 .notif-btn{position:relative;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.2s;flex-shrink:0}
@@ -382,39 +413,76 @@ h1 span{color:var(--gold)}
 
 
 /* PROFILE MODAL */
-.profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:700;align-items:flex-end;justify-content:center}
+.profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:700;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .profile-modal.open{display:flex}
 @media(min-width:480px){.profile-modal{align-items:center;padding:24px}}
-.profile-sheet{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;overflow:hidden;animation:slideUp 0.25s ease}
-@media(min-width:480px){.profile-sheet{border-radius:12px;animation:fadeInScale 0.2s ease}}
+.profile-sheet{width:100%;max-width:440px;background:var(--card);border:1px solid rgba(255,255,255,0.08);border-radius:20px 20px 0 0;overflow:hidden;animation:slideUp 0.3s cubic-bezier(0.22,1,0.36,1);box-shadow:0 -12px 48px rgba(0,0,0,0.5)}
+@media(min-width:480px){.profile-sheet{border-radius:16px;animation:fadeInScale 0.25s cubic-bezier(0.22,1,0.36,1)}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-@keyframes fadeInScale{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
-.profile-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+@keyframes fadeInScale{from{opacity:0;transform:scale(0.94) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+/* Profile banner / hero area */
+.profile-banner{height:72px;background:linear-gradient(135deg,rgba(232,184,75,0.18) 0%,rgba(91,126,201,0.14) 50%,rgba(204,31,31,0.10) 100%);position:relative;overflow:hidden}
+.profile-banner::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(255,255,255,0.018) 18px,rgba(255,255,255,0.018) 19px)}
+.profile-banner-flag{position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%)}
+.profile-handle{width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:10px auto 0;position:relative;z-index:2}
 @media(min-width:480px){.profile-handle{display:none}}
-.profile-header{padding:24px 24px 18px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border)}
-.profile-avatar-big{width:52px;height:52px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--black);flex-shrink:0}
-.profile-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.05em;line-height:1.1}
-.profile-email-small{font-size:0.72rem;color:var(--muted);margin-top:3px;word-break:break-all}
-.profile-close{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
-.profile-close:hover{border-color:var(--white);color:var(--white)}
-.profile-body{padding:20px 24px 28px}
-.profile-field{margin-bottom:14px}
+/* Avatar decoration */
+.profile-avatar-wrap{position:relative;width:72px;height:72px;flex-shrink:0;margin-top:-36px}
+.profile-avatar-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 180deg,var(--gold) 0deg,#cc1f1f 120deg,#5b7ec9 240deg,var(--gold) 360deg);animation:ringRotate 6s linear infinite;z-index:0}
+@keyframes ringRotate{to{transform:rotate(360deg)}}
+.profile-avatar-ring-inner{position:absolute;inset:2px;border-radius:50%;background:var(--card);z-index:1}
+.profile-avatar-big{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--black);cursor:pointer;transition:filter 0.2s}
+.profile-avatar-big:hover{filter:brightness(1.1)}
+.profile-avatar-edit-hint{position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--gold);border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:0.55rem;z-index:3;pointer-events:none}
+/* Emoji picker for avatar */
+.avatar-emoji-picker{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid var(--border);border-radius:12px;padding:12px;z-index:800;box-shadow:0 12px 40px rgba(0,0,0,0.7);width:220px}
+.avatar-emoji-picker.open{display:block}
+.avatar-emoji-title{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px}
+.avatar-emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.avatar-emoji-opt{background:transparent;border:1px solid transparent;border-radius:8px;padding:5px;font-size:1.1rem;cursor:pointer;transition:all 0.15s;line-height:1;text-align:center}
+.avatar-emoji-opt:hover{background:rgba(255,255,255,0.08);border-color:var(--border)}
+.avatar-emoji-opt.selected{background:rgba(232,184,75,0.15);border-color:var(--gold)}
+/* Color swatches */
+.avatar-color-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.avatar-color-swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;flex-shrink:0}
+.avatar-color-swatch.selected{border-color:var(--white);transform:scale(1.15)}
+.profile-header{padding:16px 20px 18px;display:flex;align-items:flex-end;gap:14px;border-bottom:1px solid var(--border);position:relative}
+.profile-header-info{flex:1;min-width:0;padding-bottom:2px}
+.profile-name{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.05em;line-height:1.1;color:var(--white)}
+.profile-role-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.25)}
+.profile-email-small{font-size:0.68rem;color:var(--muted);margin-top:3px;word-break:break-all;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}
+.profile-close{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;align-self:flex-start;margin-top:4px}
+.profile-close:hover{background:rgba(255,255,255,0.1);border-color:var(--white);color:var(--white)}
+.profile-body{padding:18px 20px 24px;overflow-y:auto;max-height:calc(80vh - 160px)}
+/* Section labels */
+.profile-section-label{font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.profile-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.profile-field{margin-bottom:12px}
 .profile-field label{display:block;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
-.profile-field input{width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
-.profile-field input:focus{border-color:var(--gold)}
-.profile-field input[readonly]{opacity:0.45;cursor:default}
-.profile-actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.profile-btn{width:100%;padding:11px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:none}
-.profile-btn.primary{background:var(--gold);color:var(--black)}
-.profile-btn.primary:hover{opacity:0.88}
-.profile-btn.primary:disabled{opacity:0.4;cursor:default}
-.profile-btn.danger{background:transparent;border:1px solid rgba(204,31,31,0.4);color:#ff6b6b}
+.profile-field input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s,background 0.2s;-webkit-appearance:none}
+.profile-field input:focus{border-color:var(--gold);background:rgba(232,184,75,0.04)}
+.profile-field input[readonly]{opacity:0.4;cursor:default;background:transparent}
+.profile-field .input-hint{font-size:0.62rem;color:var(--muted);margin-top:4px;letter-spacing:0.03em}
+.profile-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.profile-btn{width:100%;padding:11px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.profile-btn.primary{background:linear-gradient(135deg,var(--gold) 0%,#c9a040 100%);color:var(--black);box-shadow:0 2px 12px rgba(232,184,75,0.25)}
+.profile-btn.primary:hover{opacity:0.9;box-shadow:0 4px 18px rgba(232,184,75,0.35)}
+.profile-btn.primary:disabled{opacity:0.4;cursor:default;box-shadow:none}
+.profile-btn.secondary{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted)}
+.profile-btn.secondary:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);color:var(--white)}
+.profile-btn.danger{background:transparent;border:1px solid rgba(204,31,31,0.35);color:#ff6b6b}
 .profile-btn.danger:hover{background:rgba(204,31,31,0.1);border-color:var(--red)}
 .profile-btn:active{transform:scale(0.97)}
-.profile-msg{font-size:0.75rem;padding:8px 12px;border-radius:4px;margin-top:8px;display:none}
-.profile-msg.success{background:rgba(61,186,110,0.15);border:1px solid rgba(61,186,110,0.3);color:var(--green);display:block}
-.profile-msg.error{background:rgba(204,31,31,0.12);border:1px solid rgba(204,31,31,0.3);color:#ff6b6b;display:block}
-.profile-divider{height:1px;background:var(--border);margin:18px 0}
+.profile-msg{font-size:0.75rem;padding:9px 14px;border-radius:8px;margin-top:8px;display:none;line-height:1.5}
+.profile-msg.success{background:rgba(61,186,110,0.12);border:1px solid rgba(61,186,110,0.3);color:var(--green);display:block}
+.profile-msg.error{background:rgba(204,31,31,0.10);border:1px solid rgba(204,31,31,0.3);color:#ff6b6b;display:block}
+.profile-divider{height:1px;background:var(--border);margin:16px 0}
+/* Profile stat chips */
+.profile-stats-row{display:flex;gap:8px;margin:14px 0 2px}
+.profile-stat-chip{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center}
+.profile-stat-chip-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);line-height:1}
+.profile-stat-chip-label{font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px}
+.input-hint{font-size:0.62rem;color:var(--muted);margin-top:5px;letter-spacing:0.02em;padding-left:2px}
 
 /* STREAK COUNTER */
 .streak-counter{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(232,184,75,0.04);transition:border-color 0.3s,background 0.3s;min-width:100px}
@@ -697,29 +765,7 @@ h1 span{color:var(--gold)}
 .level-restart-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
 .level-restart-btn:hover{border-color:var(--gold);color:var(--gold)}
 
-/* Profile progress bar */
-.profile-progress-container{
-    margin-top:1rem;
-    text-align:center;
-}
-.profile-progress-track{
-    width:100%;
-    height:8px;
-    background-color:var(--border);
-    border-radius:4px;
-    overflow:hidden;
-}
-.profile-progress-fill{
-    height:100%;
-    background-color:var(--gold);
-    width:0%;
-    transition:width 0.3s ease;
-}
-.profile-progress-percent{
-    font-size:0.8rem;
-    margin-top:0.2rem;
-    display:block;
-}
+/* Profile progress (legacy – replaced by stat chips) */
 
 </style>
 <style>
@@ -728,38 +774,40 @@ h1 span{color:var(--gold)}
   from { opacity:0; transform: translateY(20px);} 
   to { opacity:1; transform: translateY(0);} 
 }
-@keyframes pulseStripes {
-  0%,100% { filter: brightness(1); }
-  50% { filter: brightness(1.3); }
+/* ---- Flag shimmer & reveal animation ---- */
+@keyframes flagScan {
+  0%   { left: -50%; }
+  60%  { left: 130%; }
+  100% { left: 130%; }
 }
-/* Additional enhancements for nav items with subtle sliding motion */
-.nav-item {
-  transition: transform 0.3s ease, margin 0.3s ease, color 0.3s ease;
-  margin: 0 2px;
+@keyframes flagReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
 }
-.nav-item:hover {
-  transform: translateY(-4px);
-  margin-left: 6px;
-  margin-right: 6px;
+/* login-flag: inline flow element, needs relative */
+.login-flag {
+  position: relative;
+  overflow: hidden;
+  animation: flagReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;
 }
-/* Fade in and slide up login box on show */
-.login-box {
-  animation: fadeInUp 0.5s ease both;
-}
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* Animated flag stripes on login and page headers */
-.login-flag,
+/* flag-stripe: already position:absolute — just add overflow+animation */
 .flag-stripe {
-  animation: pulseStripes 3s ease-in-out infinite;
+  overflow: hidden;
+  animation: flagReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+/* Shimmer sweep on both */
+.login-flag::after,
+.flag-stripe::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -50%;
+  width: 45%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.5) 50%, transparent 80%);
+  animation: flagScan 2.6s ease-in-out infinite;
+  animation-delay: 0.7s;
+  pointer-events: none;
 }
 /* Fade in login box when shown */
 .login-screen.visible .login-box {
@@ -985,6 +1033,7 @@ h1 span{color:var(--gold)}
 <button class="login-tab" id="tab-register" onclick="switchAuthTab('register')">Registrieren</button>
 </div>
 <div class="login-field"><label>Email</label><input autocomplete="email" id="auth-email" maxlength="254" placeholder="example@gmail.com" required="" type="email"/></div>
+<div class="login-field" id="field-name" style="display:none"><label>Display Name</label><input autocomplete="name" id="auth-name" maxlength="40" placeholder="Your name..." type="text"/></div>
 <div class="login-field" id="field-password"><label>Passwort</label><input autocomplete="current-password" id="auth-password" placeholder="••••••••" type="password"/></div>
 <div class="login-field" id="field-confirm-password" style="display:none"><label>Passwort bestätigen</label><input autocomplete="new-password" id="auth-confirm-password" placeholder="••••••••" type="password"/></div>
         <!-- Password strength indicator -->
@@ -1211,32 +1260,54 @@ h1 span{color:var(--gold)}
 <!-- PROFILE MODAL -->
 <div class="profile-modal" id="profile-modal" onclick="handleProfileOverlayClick(event)">
 <div class="profile-sheet" id="profile-sheet">
+<!-- Decorative banner -->
+<div class="profile-banner"><div class="profile-banner-flag"></div></div>
 <div class="profile-handle"></div>
 <div class="profile-header">
-<div class="profile-avatar-big" id="profile-avatar-big">?</div>
-<div>
-<div class="profile-name" id="profile-display-name">–</div>
-<div class="profile-email-small" id="profile-display-email">–</div>
-                <div class=\"profile-progress-container\">
-                    <span id=\"profile-progress-percent\" class=\"profile-progress-percent\"></span>
-                    <div class=\"profile-progress-track\">
-                        <div id=\"profile-progress-bar\" class=\"profile-progress-fill\"></div>
-                    </div>
-                </div>
+  <!-- Avatar with spinning ring decoration -->
+  <div class="profile-avatar-wrap" id="profile-avatar-wrap" style="position:relative">
+    <div class="profile-avatar-ring"></div>
+    <div class="profile-avatar-ring-inner"></div>
+    <div class="profile-avatar-big" id="profile-avatar-big" onclick="toggleAvatarPicker(event)" title="Change avatar">?</div>
+    <div class="profile-avatar-edit-hint">✎</div>
+    <!-- Emoji + color picker -->
+    <div class="avatar-emoji-picker" id="avatar-emoji-picker">
+      <div class="avatar-emoji-title">Choose icon</div>
+      <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
+      <div class="avatar-emoji-title" style="margin-top:10px">Color</div>
+      <div class="avatar-color-row" id="avatar-color-row"></div>
+    </div>
+  </div>
+  <div class="profile-header-info">
+    <div class="profile-name" id="profile-display-name">–</div>
+    <div class="profile-role-badge" id="profile-role-badge">🎯 B1 Learner</div>
+    <div class="profile-email-small" id="profile-display-email">–</div>
+  </div>
+  <button class="profile-close" onclick="closeProfileModal()">✕</button>
 </div>
-<button class="profile-close" onclick="closeProfileModal()">✕</button>
+
+<!-- Stats chips row -->
+<div class="profile-stats-row" id="profile-stats-row" style="padding:0 20px">
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-weeks">0</div><div class="profile-stat-chip-label">Weeks</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-streak">0</div><div class="profile-stat-chip-label">Streak</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-progress">0%</div><div class="profile-stat-chip-label">Progress</div></div>
 </div>
+
 <div class="profile-body">
+<!-- Identity section -->
+<div class="profile-section-label">Identity</div>
+<div class="profile-field">
+  <label>Display Name</label>
+  <input id="profile-name-input" maxlength="40" placeholder="How should we call you?" type="text" autocomplete="name"/>
+  <div class="input-hint">Shown in the header and your profile</div>
+</div>
 <div class="profile-field">
 <label id="lbl-email">Email</label>
 <input id="profile-email-input" maxlength="254" readonly="" type="email"/>
 </div>
-        <!-- Additional bio field for user profile -->
-        <div class="profile-field">
-          <label id="lbl-bio">Bio</label>
-          <textarea id="profile-bio" placeholder="Erzähle uns etwas über dich..." rows="3" style="width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;resize:vertical;"></textarea>
-        </div>
 <div class="profile-divider"></div>
+<!-- Security section -->
+<div class="profile-section-label">Security</div>
 <div class="profile-field">
 <label id="lbl-new-pwd">New password</label>
 <input autocomplete="new-password" id="profile-pwd1" placeholder="••••••••" type="password"/>
@@ -1247,6 +1318,8 @@ h1 span{color:var(--gold)}
 </div>
 <div class="profile-msg" id="profile-msg"></div>
 <div class="profile-divider"></div>
+<!-- Notifications section -->
+<div class="profile-section-label">Notifications</div>
 <div class="profile-reminder-row">
 <div class="profile-reminder-info">
 <div class="profile-reminder-label" id="lbl-reminder">🔔 Streak reminder</div>
@@ -1259,9 +1332,7 @@ h1 span{color:var(--gold)}
 <div class="profile-reminder-status" id="notif-status"></div>
 <div class="profile-actions">
 <button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()">💾 Save changes</button>
-        <!-- Add an option to change the avatar/profile picture -->
-        <button class="profile-btn" onclick="alert('Funktion zum Ändern des Profilbilds folgt bald!')">🖼️ Profilbild ändern</button>
-<div class="profile-divider"></div>
+<div class="profile-divider" style="margin:6px 0"></div>
 <button class="profile-btn danger" onclick="logout()">↩ Log out</button>
 </div>
 <!-- ADMIN PANEL -->
@@ -1437,56 +1508,86 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- BOTTOM NAV -->
+<!-- Drawer overlay -->
+<div class="nav-drawer-overlay" id="nav-drawer-overlay" onclick="closeNavDrawer()"></div>
+
+<!-- Drawer panel -->
+<div class="nav-drawer" id="nav-drawer">
+  <div class="nav-drawer-handle"></div>
+  <div class="nav-drawer-title">Navigation</div>
+  <div class="nav-drawer-grid">
+    <button class="nav-drawer-item active" data-page="tracker" onclick="drawerNav('tracker')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></span>
+      <span><span class="nav-drawer-item-label">Tracker</span><span class="nav-drawer-item-sub">Fortschritt</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="pdf" onclick="drawerNav('pdf')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg></span>
+      <span><span class="nav-drawer-item-label">Dokumente</span><span class="nav-drawer-item-sub">PDFs</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="news" onclick="drawerNav('news')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></span>
+      <span><span class="nav-drawer-item-label">News</span><span class="nav-drawer-item-sub">Artikel</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="translate" onclick="drawerNav('translate')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      <span><span class="nav-drawer-item-label">Übersetzer</span><span class="nav-drawer-item-sub">DE / AR / EN</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="quiz" onclick="drawerNav('quiz')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg></span>
+      <span><span class="nav-drawer-item-label">Quiz</span><span class="nav-drawer-item-sub">KI-Fragen</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="vocab" onclick="drawerNav('vocab')">
+      <span class="nav-drawer-item-icon">📚</span>
+      <span><span class="nav-drawer-item-label">Vokabeln</span><span class="nav-drawer-item-sub">Flashcards</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="listening" onclick="drawerNav('listening')">
+      <span class="nav-drawer-item-icon">🎧</span>
+      <span><span class="nav-drawer-item-label">Hören</span><span class="nav-drawer-item-sub">Übungen</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="level" onclick="drawerNav('level')">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      <span><span class="nav-drawer-item-label">Niveau</span><span class="nav-drawer-item-sub">Level Test</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+    <button class="nav-drawer-item" data-page="admin" id="mob-admin-nav" onclick="drawerNav('admin')" style="display:none">
+      <span class="nav-drawer-item-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <span><span class="nav-drawer-item-label">Admin</span><span class="nav-drawer-item-sub">Dashboard</span></span>
+      <span class="nav-drawer-active-dot"></span>
+    </button>
+  </div>
+</div>
+
+<!-- Bottom nav bar: current page + notifications + menu -->
 <nav class="bottom-nav">
-<div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M7 16V12M12 16V8M17 16v-4"></path></svg></div>
-<div class="nav-label" data-i18n="nav_tracker">Tracker</div>
-</div>
-<div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" x2="15" y1="13" y2="13"></line><line x1="9" x2="15" y1="17" y2="17"></line></svg></div>
-<div class="nav-label" data-i18n="nav_docs">Dokumente</div>
-</div>
-<div class="nav-item" data-page="news" onclick="switchPage('news')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"></path><path d="M4 9h16M9 4v16"></path></svg></div>
-<div class="nav-label" data-i18n="nav_news">News</div>
-</div>
-<div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
-<div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
-</div>
-<div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
-<div class="nav-label">Quiz</div>
-</div>
-  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">📚</div>
-    <div class="nav-label">Vokabeln</div>
+  <!-- current page indicator -->
+  <div class="nav-current" id="nav-current-indicator">
+    <span class="nav-current-icon" id="nav-current-icon"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></span>
+    <span class="nav-current-label" id="nav-current-label">Tracker</span>
   </div>
-  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">🎧</div>
-    <div class="nav-label">Hören</div>
-  </div>
-<div class="nav-item" data-page="level" onclick="switchPage('level')">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
-<div class="nav-label">Niveau</div>
-</div>
-<div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
-<div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-<div class="nav-label">Admin</div>
-</div>
-    <!-- Profile nav item for mobile -->
-    <div class="nav-item" onclick="openProfileModal()" title="Profil">
-      <div class="nav-icon">👤</div>
-      <div class="nav-label">Profil</div>
+
+  <!-- notification bell -->
+  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative;flex:0 0 auto;padding:0 4px">
+    <div class="nav-icon" style="position:relative;display:inline-flex">
+      <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
-<!-- Mobile notification bell -->
-<div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
-<div class="nav-icon" style="position:relative;display:inline-flex">
-<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-<span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
-</div>
-<div class="nav-label">Alerts</div>
-</div>
+    <div class="nav-label">Alerts</div>
+  </div>
+
+  <!-- hamburger menu button -->
+  <button class="nav-menu-btn" id="nav-menu-btn" onclick="toggleNavDrawer()" aria-label="Menu">
+    <div class="ham">
+      <span></span><span></span><span></span>
+    </div>
+    <span class="nav-menu-label">Menu</span>
+  </button>
 </nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
@@ -1802,6 +1903,7 @@ function switchAuthTab(mode){
   const isReg = mode==='register';
   document.getElementById('field-password').style.display='block';
   document.getElementById('field-confirm-password').style.display=isReg?'block':'none';
+  const fieldName=document.getElementById('field-name');if(fieldName)fieldName.style.display=isReg?'block':'none';
   document.getElementById('auth-password').placeholder=isReg?'Passwort wählen (min. 6 Zeichen)':'••••••••';
   document.getElementById('auth-password').autocomplete=isReg?'new-password':'current-password';
   document.getElementById('auth-btn').textContent=isReg?'Konto erstellen':'Anmelden';
@@ -1829,6 +1931,7 @@ async function handleAuth(){
   if(authMode==='register'){
     const pwd=document.getElementById('auth-password').value;
     const confirmPwd=document.getElementById('auth-confirm-password').value;
+    const displayName=(document.getElementById('auth-name')&&document.getElementById('auth-name').value.trim())||'';
     if(!email){showAuthError('Bitte gib deine E-Mail ein.');return;}
     if(!pwd||pwd.length<6){showAuthError('Passwort muss mindestens 6 Zeichen haben.');return;}
     if(pwd!==confirmPwd){showAuthError('Passwörter stimmen nicht überein.');return;}
@@ -1838,16 +1941,12 @@ async function handleAuth(){
       const {data,error}=await _supa.auth.signUp({
         email,
         password:pwd,
-        // Set new accounts to a "pending" role so an admin can approve them later
-        options:{ data:{ role:'pending' } }
+        options:{ data:{ role:'pending', name: displayName||undefined } }
       });
       if(error) throw error;
+      if(displayName) try{localStorage.setItem('profile_display_name',displayName);}catch(_){}
       btn.disabled=false;btn.textContent='Konto erstellen';
-      // If session is returned immediately (email confirm disabled), log in directly
-      if(data?.session){
-        // onAuthStateChange will handle the rest
-        return;
-      }
+      if(data?.session){ return; }
       showRequestScreen();
     }catch(e){
       btn.disabled=false;btn.textContent='Konto erstellen';
@@ -1912,27 +2011,117 @@ _supa.auth.onAuthStateChange(async(event,session)=>{
 
 function showUserBadge(user){
   // Determine display name from user metadata or email
-  const name = (user.user_metadata && (user.user_metadata.name || user.user_metadata.full_name)) || (user.email ? user.email.split('@')[0] : '');
+  const savedName = localStorage.getItem('profile_display_name');
+  const name = savedName || (user.user_metadata && (user.user_metadata.name || user.user_metadata.full_name)) || (user.email ? user.email.split('@')[0] : '');
+  const avatarEmoji = localStorage.getItem('profile_avatar_emoji') || '';
+  const avatarColor = localStorage.getItem('profile_avatar_color') || '';
   const initial = name ? name[0].toUpperCase() : '?';
+  const avatarDisplay = avatarEmoji || initial;
   // Update all profile avatar buttons
   ['mob-profile-btn','desk-profile-btn'].forEach(id=>{
-    const el=document.getElementById(id);if(el){el.textContent=initial;el.style.display='flex';}
+    const el=document.getElementById(id);
+    if(el){
+      el.textContent=avatarDisplay;
+      el.style.display='flex';
+      if(avatarColor) el.style.background=avatarColor;
+    }
   });
   // Populate profile modal
   const avatarBig=document.getElementById('profile-avatar-big');
-  if(avatarBig) avatarBig.textContent=initial;
+  if(avatarBig){
+    avatarBig.textContent=avatarDisplay;
+    if(avatarColor) avatarBig.style.background=avatarColor;
+    else avatarBig.style.background='linear-gradient(135deg,var(--gold) 0%,#b5832a 100%)';
+  }
   const displayNameEl=document.getElementById('profile-display-name');
   if(displayNameEl) displayNameEl.textContent=name||initial;
   const displayEmail=document.getElementById('profile-display-email');
   if(displayEmail) displayEmail.textContent=user.email||'';
   const emailInput=document.getElementById('profile-email-input');
   if(emailInput) emailInput.value=user.email||'';
+  const nameInput=document.getElementById('profile-name-input');
+  if(nameInput) nameInput.value=name||'';
   // Update name in header
   const headerNameEl=document.getElementById('user-header-name');
   if(headerNameEl) headerNameEl.textContent = name || '';
+  // Update stats chips
+  updateProfileStats();
   updateDocsAccountHint();
   applyRoleUI();
 }
+
+function updateProfileStats(){
+  try{
+    const weeks=Object.keys(state.completedWeeks||{}).filter(k=>state.completedWeeks[k]).length;
+    const streak=state.streak||0;
+    const pct=Math.round(weeks/20*100);
+    const psw=document.getElementById('ps-weeks');if(psw)psw.textContent=weeks;
+    const pss=document.getElementById('ps-streak');if(pss)pss.textContent=streak;
+    const psp=document.getElementById('ps-progress');if(psp)psp.textContent=pct+'%';
+  }catch(e){}
+}
+
+// Avatar picker logic
+const AVATAR_EMOJIS=['🦊','🐻','🦁','🐼','🐯','🐺','🦅','🐙','🌟','⚡','🎯','🔥','🌙','💎','🎸','🚀','🌺','🍀'];
+const AVATAR_COLORS=['linear-gradient(135deg,#e8b84b,#b5832a)','linear-gradient(135deg,#5b7ec9,#3a5fa0)','linear-gradient(135deg,#3dba6e,#2a8c50)','linear-gradient(135deg,#cc1f1f,#991515)','linear-gradient(135deg,#8b3dba,#6a2d9a)','linear-gradient(135deg,#3aacf0,#2080c0)','linear-gradient(135deg,#f07030,#c05020)','linear-gradient(135deg,#888,#444)'];
+
+function initAvatarPicker(){
+  const grid=document.getElementById('avatar-emoji-grid');
+  const colorRow=document.getElementById('avatar-color-row');
+  if(!grid||!colorRow)return;
+  const currentEmoji=localStorage.getItem('profile_avatar_emoji')||'';
+  const currentColor=localStorage.getItem('profile_avatar_color')||'';
+  grid.innerHTML='';
+  AVATAR_EMOJIS.forEach(em=>{
+    const btn=document.createElement('button');
+    btn.className='avatar-emoji-opt'+(currentEmoji===em?' selected':'');
+    btn.textContent=em;
+    btn.onclick=(e)=>{
+      e.stopPropagation();
+      localStorage.setItem('profile_avatar_emoji',em);
+      document.querySelectorAll('.avatar-emoji-opt').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      if(currentUser) showUserBadge(currentUser);
+    };
+    grid.appendChild(btn);
+  });
+  // Add "initial" option
+  const clearBtn=document.createElement('button');
+  clearBtn.className='avatar-emoji-opt'+(currentEmoji===''?' selected':'');
+  clearBtn.textContent='Aa';clearBtn.style.fontSize='0.75rem';clearBtn.style.fontFamily="'Bebas Neue',sans-serif";
+  clearBtn.onclick=(e)=>{e.stopPropagation();localStorage.removeItem('profile_avatar_emoji');document.querySelectorAll('.avatar-emoji-opt').forEach(b=>b.classList.remove('selected'));clearBtn.classList.add('selected');if(currentUser)showUserBadge(currentUser);};
+  grid.appendChild(clearBtn);
+
+  colorRow.innerHTML='';
+  AVATAR_COLORS.forEach(c=>{
+    const sw=document.createElement('div');
+    sw.className='avatar-color-swatch'+(currentColor===c?' selected':'');
+    sw.style.background=c;
+    sw.onclick=(e)=>{
+      e.stopPropagation();
+      localStorage.setItem('profile_avatar_color',c);
+      document.querySelectorAll('.avatar-color-swatch').forEach(s=>s.classList.remove('selected'));
+      sw.classList.add('selected');
+      if(currentUser)showUserBadge(currentUser);
+    };
+    colorRow.appendChild(sw);
+  });
+}
+
+function toggleAvatarPicker(e){
+  e.stopPropagation();
+  initAvatarPicker();
+  const picker=document.getElementById('avatar-emoji-picker');
+  if(picker) picker.classList.toggle('open');
+}
+
+document.addEventListener('click',function(e){
+  const picker=document.getElementById('avatar-emoji-picker');
+  const wrap=document.getElementById('profile-avatar-wrap');
+  if(picker&&picker.classList.contains('open')&&!wrap.contains(e.target)){
+    picker.classList.remove('open');
+  }
+});
 
 // ===== DATA =====
 const DATA_I18N={
@@ -2469,6 +2658,7 @@ function switchPage(page){
   }
 
   window.scrollTo(0,0);
+  updateNavCurrentIndicator(page);
 }
 
 function bindNavigationControls(){
@@ -2568,19 +2758,87 @@ async function initApp(){
   }catch(e){ console.warn('Init analytics error', e); }
 }
 
+
+// ===== NAV DRAWER =====
+var _drawerOpen = false;
+
+// Page metadata for the current indicator
+var PAGE_META = {
+  tracker:   { label: 'Tracker',    icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>' },
+  pdf:       { label: 'Dokumente',  icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg>' },
+  news:      { label: 'News',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>' },
+  translate: { label: 'Übersetzer', icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
+  quiz:      { label: 'Quiz',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>' },
+  vocab:     { label: 'Vokabeln',   icon: '📚' },
+  listening: { label: 'Hören',      icon: '🎧' },
+  level:     { label: 'Niveau',     icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+  admin:     { label: 'Admin',      icon: '👑' },
+};
+
+function updateNavCurrentIndicator(page){
+  var meta = PAGE_META[page] || { label: page, icon: '●' };
+  var iconEl = document.getElementById('nav-current-icon');
+  var labelEl = document.getElementById('nav-current-label');
+  if(iconEl) iconEl.innerHTML = meta.icon;
+  if(labelEl) labelEl.textContent = meta.label;
+  // update active state in drawer
+  document.querySelectorAll('.nav-drawer-item[data-page]').forEach(function(el){
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+}
+
+function openNavDrawer(){
+  _drawerOpen = true;
+  document.getElementById('nav-drawer').classList.add('open');
+  document.getElementById('nav-drawer-overlay').classList.add('open');
+  document.getElementById('nav-menu-btn').classList.add('open');
+}
+
+function closeNavDrawer(){
+  _drawerOpen = false;
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-drawer-overlay').classList.remove('open');
+  document.getElementById('nav-menu-btn').classList.remove('open');
+}
+
+function toggleNavDrawer(){
+  if(_drawerOpen) closeNavDrawer(); else openNavDrawer();
+}
+
+function drawerNav(page){
+  closeNavDrawer();
+  switchPage(page);
+}
+
+// Swipe-down to close drawer
+(function(){
+  var startY = 0;
+  var drawer = null;
+  document.addEventListener('touchstart', function(e){
+    drawer = document.getElementById('nav-drawer');
+    if(drawer && drawer.classList.contains('open')){
+      startY = e.touches[0].clientY;
+    }
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(!drawer || !drawer.classList.contains('open')) return;
+    var endY = e.changedTouches[0].clientY;
+    if(endY - startY > 60) closeNavDrawer();
+  }, {passive:true});
+})();
+
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 // ===== PROFILE MODAL =====
 function openProfileModal(){
-  const progress = computeProgress();
-  try {
-    document.getElementById("profile-progress-bar").style.width = progress + "%";
-    document.getElementById("profile-progress-percent").textContent = progress + "%";
-  } catch(e) {}
-
   document.getElementById('profile-msg').className='profile-msg';
   document.getElementById('profile-pwd1').value='';
   document.getElementById('profile-pwd2').value='';
+  // Close avatar picker if open
+  const picker=document.getElementById('avatar-emoji-picker');
+  if(picker) picker.classList.remove('open');
+  // Refresh stats chips
+  updateProfileStats();
   document.getElementById('profile-modal').classList.add('open');
   document.body.style.overflow='hidden';
   applyProfileLang();
@@ -2609,11 +2867,25 @@ function applyProfileLang(){
 async function saveProfileChanges(){
   const pwd1=document.getElementById('profile-pwd1').value;
   const pwd2=document.getElementById('profile-pwd2').value;
+  const nameInput=document.getElementById('profile-name-input');
+  const newName=(nameInput&&nameInput.value.trim())||'';
   const msg=document.getElementById('profile-msg');
   const btn=document.getElementById('profile-save-btn');
   msg.className='profile-msg';
   const L=i18n[currentLang]||i18n.de;
-  if(!pwd1&&!pwd2){msg.textContent=L.profile_no_change||'Enter a new password to update.';msg.className='profile-msg error';return;}
+
+  // Save display name locally
+  if(newName){
+    localStorage.setItem('profile_display_name',newName);
+    if(currentUser) showUserBadge(currentUser);
+  }
+
+  // If no password change, just save name
+  if(!pwd1&&!pwd2){
+    if(newName){msg.textContent='✓ Profile updated!';msg.className='profile-msg success';}
+    else{msg.textContent=L.profile_no_change||'Enter a new password to update.';msg.className='profile-msg error';}
+    return;
+  }
   if(pwd1!==pwd2){msg.textContent=L.profile_pwd_mismatch||'Passwords do not match.';msg.className='profile-msg error';return;}
   if(pwd1.length<6){msg.textContent=L.profile_pwd_short||'Password too short (min 6 chars).';msg.className='profile-msg error';return;}
   btn.disabled=true;btn.textContent='...';
