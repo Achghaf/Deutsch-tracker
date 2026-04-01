@@ -83,13 +83,29 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block}
 
-/* ===== BOTTOM NAV — 5 pinned tabs + More ===== */
-:root{--nav-h:58px}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
-.nav-icon{font-size:1.3rem;line-height:1;color:var(--muted);transition:color 0.2s}
-.nav-item.active .nav-icon{color:var(--gold)}
-.nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
+/* ===== BOTTOM NAV — scrollable emoji tabs ===== */
+:root{--nav-h:62px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
+/* Scroll track — takes full width inside the nav */
+.bottom-nav-track{display:flex;align-items:flex-start;padding-top:6px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;width:100%;scroll-snap-type:x proximity}
+.bottom-nav-track::-webkit-scrollbar{display:none}
+/* Fade edges to hint at scrollability */
+.bottom-nav::before,.bottom-nav::after{content:'';position:absolute;top:0;bottom:0;width:28px;z-index:2;pointer-events:none;transition:opacity 0.3s}
+.bottom-nav::before{left:0;background:linear-gradient(to right,#111 0%,transparent 100%);opacity:0}
+.bottom-nav::after{right:0;background:linear-gradient(to left,#111 0%,transparent 100%)}
+.bottom-nav.can-scroll-left::before{opacity:1}
+.bottom-nav.can-scroll-right::after{opacity:1}
+/* Each tab item */
+.nav-item{min-width:64px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 6px;transition:all 0.18s;scroll-snap-align:start;-webkit-tap-highlight-color:transparent;position:relative}
+.nav-item:active{transform:scale(0.9)}
+/* Emoji icon */
+.nav-icon{font-size:1.55rem;line-height:1;transition:transform 0.18s,filter 0.18s;filter:grayscale(0.4) opacity(0.55)}
+.nav-item.active .nav-icon{filter:grayscale(0) opacity(1);transform:scale(1.15) translateY(-1px)}
+/* Active indicator dot */
+.nav-item::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity 0.18s}
+.nav-item.active::after{opacity:1}
+/* Label */
+.nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.18s;white-space:nowrap}
 .nav-item.active .nav-label{color:var(--gold)}
 /* NAV DRAWER OVERLAY */
 .nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -353,9 +369,13 @@ h1 span{color:var(--gold)}
 @media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}}
 
 /* PROFILE ICON BUTTON */
-.profile-icon-btn{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.88rem;font-weight:700;color:var(--black);transition:all 0.25s;flex-shrink:0;box-shadow:0 2px 8px rgba(232,184,75,0.2)}
-.profile-icon-btn:hover{box-shadow:0 0 0 3px rgba(232,184,75,0.3),0 4px 16px rgba(232,184,75,0.25);transform:scale(1.06)}
-.profile-icon-btn:active{transform:scale(0.93)}
+.profile-icon-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2.5px solid rgba(232,184,75,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;font-weight:700;color:var(--black);transition:all 0.25s;flex-shrink:0;box-shadow:0 0 0 0 rgba(232,184,75,0),0 2px 10px rgba(232,184,75,0.25);overflow:hidden;line-height:1;padding:0}
+.profile-icon-btn:hover{box-shadow:0 0 0 3px rgba(232,184,75,0.35),0 4px 18px rgba(232,184,75,0.3);transform:scale(1.08);border-color:var(--gold)}
+.profile-icon-btn:active{transform:scale(0.92)}
+/* Mobile nav profile circle */
+.mob-profile-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.5);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;font-weight:700;color:var(--black);overflow:hidden;line-height:1;padding:0;transition:all 0.2s;box-shadow:0 2px 8px rgba(232,184,75,0.2)}
+.nav-item:active .mob-profile-circle{transform:scale(0.9)}
+.nav-item.active .mob-profile-circle{border-color:var(--gold);box-shadow:0 0 0 2.5px rgba(232,184,75,0.3),0 2px 10px rgba(232,184,75,0.3)}
 /* ===== NOTIFICATIONS ===== */
 .notif-btn{position:relative;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.2s;flex-shrink:0}
 .notif-btn:hover{border-color:var(--gold);color:var(--gold)}
@@ -420,13 +440,13 @@ h1 span{color:var(--gold)}
 .profile-handle{width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:10px auto 0;position:relative;z-index:2}
 @media(min-width:480px){.profile-handle{display:none}}
 /* Avatar decoration */
-.profile-avatar-wrap{position:relative;width:72px;height:72px;flex-shrink:0;margin-top:-36px}
-.profile-avatar-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(from 180deg,var(--gold) 0deg,#cc1f1f 120deg,#5b7ec9 240deg,var(--gold) 360deg);animation:ringRotate 6s linear infinite;z-index:0}
+.profile-avatar-wrap{position:relative;width:84px;height:84px;flex-shrink:0;margin-top:-42px}
+.profile-avatar-ring{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(from 180deg,var(--gold) 0deg,#e8b84b 60deg,#cc1f1f 120deg,#8b3dba 200deg,#5b7ec9 280deg,var(--gold) 360deg);animation:ringRotate 4s linear infinite;z-index:0;filter:blur(0.5px)}
 @keyframes ringRotate{to{transform:rotate(360deg)}}
-.profile-avatar-ring-inner{position:absolute;inset:2px;border-radius:50%;background:var(--card);z-index:1}
-.profile-avatar-big{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--black);cursor:pointer;transition:filter 0.2s}
-.profile-avatar-big:hover{filter:brightness(1.1)}
-.profile-avatar-edit-hint{position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--gold);border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:0.55rem;z-index:3;pointer-events:none}
+.profile-avatar-ring-inner{position:absolute;inset:3px;border-radius:50%;background:var(--card);z-index:1}
+.profile-avatar-big{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--black);cursor:pointer;transition:filter 0.2s,transform 0.2s;overflow:hidden;line-height:1;padding:0}
+.profile-avatar-big:hover{filter:brightness(1.15);transform:scale(1.04)}
+.profile-avatar-edit-hint{position:absolute;bottom:0px;right:0px;width:22px;height:22px;border-radius:50%;background:var(--gold);border:2.5px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:0.6rem;z-index:3;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.4)}
 /* Emoji picker for avatar */
 .avatar-emoji-picker{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid var(--border);border-radius:12px;padding:12px;z-index:800;box-shadow:0 12px 40px rgba(0,0,0,0.7);width:220px}
 .avatar-emoji-picker.open{display:block}
@@ -1531,49 +1551,57 @@ h1 span{color:var(--gold)}
 </div>
 <!-- Bottom nav bar -->
 <nav class="bottom-nav" id="bottom-nav">
+<div class="bottom-nav-track" id="bottom-nav-track">
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></div>
+    <div class="nav-icon">📊</div>
     <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
   </div>
   <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg></div>
+    <div class="nav-icon">📄</div>
     <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
   <div class="nav-item" data-page="news" onclick="switchPage('news')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
+    <div class="nav-icon">📰</div>
     <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
   <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="nav-icon">🌐</div>
     <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
   <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg></div>
+    <div class="nav-icon">🧠</div>
     <div class="nav-label">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+    <div class="nav-icon">📚</div>
     <div class="nav-label">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
+    <div class="nav-icon">🎧</div>
     <div class="nav-label">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div class="nav-icon">📈</div>
     <div class="nav-label">Niveau</div>
   </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
-    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="nav-icon">👑</div>
     <div class="nav-label">Admin</div>
   </div>
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative;display:inline-flex">
-      <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      🔔
       <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
     <div class="nav-label">Alerts</div>
   </div>
+  <div class="nav-item" id="mob-profile-nav-item" onclick="openProfileModal()" style="display:none">
+    <div class="nav-icon" style="display:flex;align-items:center;justify-content:center">
+      <div class="mob-profile-circle" id="mob-profile-btn">?</div>
+    </div>
+    <div class="nav-label">Profil</div>
+  </div>
+</div>
 </nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
@@ -1991,6 +2019,7 @@ _supa.auth.onAuthStateChange(async(event,session)=>{
     if(document.getElementById('confirm-screen').classList.contains('visible'))return;
     showLoginScreen();
     ['mob-profile-btn','desk-profile-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    const mobProfileNav=document.getElementById('mob-profile-nav-item');if(mobProfileNav)mobProfileNav.style.display='none';
     closeProfileModal();
   }
 });
@@ -2010,8 +2039,14 @@ function showUserBadge(user){
       el.textContent=avatarDisplay;
       el.style.display='flex';
       if(avatarColor) el.style.background=avatarColor;
+      else el.style.background='linear-gradient(135deg,var(--gold) 0%,#b5832a 100%)';
     }
   });
+  // Show mobile profile nav item
+  const mobProfileNav=document.getElementById('mob-profile-nav-item');
+  if(mobProfileNav) mobProfileNav.style.display='';
+  const deskProfileBtn=document.getElementById('desk-profile-btn');
+  if(deskProfileBtn) deskProfileBtn.style.display='flex';
   // Populate profile modal
   const avatarBig=document.getElementById('profile-avatar-big');
   if(avatarBig){
@@ -2646,6 +2681,19 @@ function switchPage(page){
   window.scrollTo(0,0);
   updateNavCurrentIndicator(page);
   if(typeof updateNavTabs==='function') updateNavTabs(page);
+  // Scroll active nav item into view in the scrollable bottom nav
+  try{
+    const track=document.getElementById('bottom-nav-track');
+    const activeItem=track&&track.querySelector('.nav-item.active');
+    if(activeItem&&track){
+      const itemLeft=activeItem.offsetLeft;
+      const itemWidth=activeItem.offsetWidth;
+      const trackWidth=track.clientWidth;
+      const scrollTarget=itemLeft-(trackWidth/2)+(itemWidth/2);
+      track.scrollTo({left:Math.max(0,scrollTarget),behavior:'smooth'});
+    }
+    updateNavScrollFade();
+  }catch(e){}
 }
 
 function bindNavigationControls(){
@@ -6229,6 +6277,30 @@ function showLevelResult() {
       };
 
     })();
+
+    // ===== Bottom nav scroll fade indicators =====
+    function updateNavScrollFade(){
+      const nav=document.getElementById('bottom-nav');
+      const track=document.getElementById('bottom-nav-track');
+      if(!nav||!track)return;
+      const scrollLeft=track.scrollLeft;
+      const maxScroll=track.scrollWidth-track.clientWidth;
+      nav.classList.toggle('can-scroll-left', scrollLeft>4);
+      nav.classList.toggle('can-scroll-right', maxScroll>4 && scrollLeft<maxScroll-4);
+    }
+    // Init on DOM ready
+    document.addEventListener('DOMContentLoaded',function(){
+      const track=document.getElementById('bottom-nav-track');
+      if(track){
+        track.addEventListener('scroll',updateNavScrollFade,{passive:true});
+        // Small delay to let layout settle
+        setTimeout(updateNavScrollFade,200);
+      }
+    });
+    // Also run after a resize
+    window.addEventListener('resize',updateNavScrollFade,{passive:true});
+    // Run once at page load too
+    setTimeout(updateNavScrollFade,400);
     </script>
 </body>
 </html>
