@@ -244,6 +244,48 @@ h1 span{color:var(--gold)}
 
 /* PDF PAGE */
 .pdf-page{padding:24px 16px;max-width:1148px;margin:0 auto}
+
+/* CODE SCANNER */
+.scanner-bar{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+.scanner-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:8px;border:1.5px solid rgba(232,184,75,0.45);background:rgba(232,184,75,0.06);color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s}
+.scanner-btn:hover{background:rgba(232,184,75,0.13);border-color:var(--gold)}
+.scanner-btn svg{flex-shrink:0}
+.scanner-modal{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.92);flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.scanner-modal.open{display:flex}
+.scanner-shell{width:100%;max-width:440px;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.scanner-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+.scanner-header-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.08em;color:var(--gold)}
+.scanner-close-btn{background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color 0.2s}
+.scanner-close-btn:hover{color:var(--white)}
+.scanner-video-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;overflow:hidden}
+.scanner-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.scanner-frame{width:65%;height:65%;position:relative}
+.scanner-frame::before,.scanner-frame::after{content:'';position:absolute;width:24px;height:24px;border-color:var(--gold);border-style:solid}
+.scanner-frame::before{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 4px}
+.scanner-frame::after{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 4px}
+.scanner-frame-tr,.scanner-frame-bl{position:absolute;width:24px;height:24px;border-color:var(--gold);border-style:solid}
+.scanner-frame-tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
+.scanner-frame-bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
+.scanner-line{position:absolute;left:4%;right:4%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:scanLine 2s ease-in-out infinite;top:50%}
+@keyframes scanLine{0%,100%{top:15%}50%{top:85%}}
+.scanner-hint{padding:12px 18px;font-size:0.73rem;color:var(--muted);text-align:center;border-top:1px solid var(--border)}
+.scanner-result-area{padding:14px 18px;border-top:1px solid var(--border);display:none}
+.scanner-result-area.visible{display:block}
+.scanner-result-label{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.scanner-result-text{font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--white);word-break:break-all;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:10px;line-height:1.55;max-height:100px;overflow-y:auto}
+.scanner-result-actions{display:flex;gap:8px;flex-wrap:wrap}
+.scanner-result-btn{padding:7px 14px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all 0.18s}
+.scanner-result-btn:hover{border-color:var(--gold);color:var(--gold)}
+.scanner-result-btn.primary{background:rgba(232,184,75,0.12);border-color:rgba(232,184,75,0.5);color:var(--gold)}
+.scanner-result-btn.primary:hover{background:rgba(232,184,75,0.22)}
+.scanner-upload-input{display:none}
+.scanner-tabs{display:flex;border-bottom:1px solid var(--border)}
+.scanner-tab{flex:1;padding:10px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.18s;position:relative}
+.scanner-tab.active{color:var(--gold)}
+.scanner-tab.active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--gold);border-radius:2px}
+.scanner-camera-err{padding:40px 24px;text-align:center;color:var(--muted);font-size:0.82rem;line-height:1.6}
+.scanner-camera-err .err-icon{font-size:2.5rem;margin-bottom:10px}
 .storage-bar{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .storage-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
 .storage-track{flex:1;min-width:120px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
@@ -1300,6 +1342,16 @@ h1 span{color:var(--gold)}
 <input autocomplete="off" class="docs-search-input" id="docs-search" placeholder="Dokument suchen..." type="search"/>
 </div>
 </div>
+<div class="scanner-bar">
+  <button class="scanner-btn" onclick="openScannerModal()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+      <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+      <line x1="7" y1="12" x2="17" y2="12"/><line x1="12" y1="7" x2="12" y2="17"/>
+    </svg>
+    QR &amp; Barcode Scanner
+  </button>
+</div>
 <div class="pdf-upload-zone" id="upload-zone">
 <input accept=".pdf,application/pdf" id="pdf-input" multiple="" type="file"/>
 <div class="upload-icon">📄</div>
@@ -1316,6 +1368,47 @@ h1 span{color:var(--gold)}
 </div>
 <div class="pdf-grid" id="pdf-grid"></div>
 </div>
+</div>
+<!-- SCANNER MODAL -->
+<div class="scanner-modal" id="scanner-modal">
+  <div class="scanner-shell">
+    <div class="scanner-header">
+      <span class="scanner-header-title">📷 Code Scanner</span>
+      <button class="scanner-close-btn" onclick="closeScannerModal()">✕</button>
+    </div>
+    <div class="scanner-tabs">
+      <button class="scanner-tab active" id="tab-camera" onclick="switchScannerTab('camera')">📷 Camera</button>
+      <button class="scanner-tab" id="tab-image" onclick="switchScannerTab('image')">🖼 Upload Image</button>
+    </div>
+    <div id="scanner-camera-panel">
+      <div class="scanner-video-wrap" id="scanner-video-wrap">
+        <video id="scanner-video" autoplay playsinline muted></video>
+        <div class="scanner-overlay">
+          <div class="scanner-frame">
+            <div class="scanner-frame-tr"></div>
+            <div class="scanner-frame-bl"></div>
+            <div class="scanner-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="scanner-hint" id="scanner-hint">Point the camera at a QR code or barcode</div>
+    </div>
+    <div id="scanner-image-panel" style="display:none">
+      <div style="padding:24px 18px;text-align:center">
+        <label style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;color:var(--muted)">
+          <div style="font-size:2.8rem">🖼</div>
+          <span style="font-size:0.82rem">Tap to choose an image with a QR or barcode</span>
+          <input type="file" accept="image/*" class="scanner-upload-input" id="scanner-image-input" onchange="scanFromImage(event)"/>
+        </label>
+      </div>
+      <div class="scanner-hint">Supports QR codes, EAN, UPC, Code128 &amp; more</div>
+    </div>
+    <div class="scanner-result-area" id="scanner-result-area">
+      <div class="scanner-result-label">✅ Code Detected</div>
+      <div class="scanner-result-text" id="scanner-result-text"></div>
+      <div class="scanner-result-actions" id="scanner-result-actions"></div>
+    </div>
+  </div>
 </div>
 <!-- PROFILE MODAL -->
 <div class="profile-modal" id="profile-modal" onclick="handleProfileOverlayClick(event)">
@@ -5102,6 +5195,143 @@ async function adminChangeRole(email, newRole, selectEl){
     showToast('✗ ' + (e?.message||String(e)));
     selectEl.disabled = false;
   }
+}
+
+/* ===== QR / BARCODE SCANNER ===== */
+let _scanStream=null,_scanTimer=null,_scanCanvas=null,_scanCtx=null,_scanTab='camera';
+
+function openScannerModal(){
+  document.getElementById('scanner-modal').classList.add('open');
+  document.getElementById('scanner-result-area').classList.remove('visible');
+  if(_scanTab==='camera') startCamera();
+}
+
+function closeScannerModal(){
+  stopCamera();
+  document.getElementById('scanner-modal').classList.remove('open');
+  document.getElementById('scanner-result-area').classList.remove('visible');
+}
+
+function switchScannerTab(tab){
+  _scanTab=tab;
+  document.getElementById('tab-camera').classList.toggle('active',tab==='camera');
+  document.getElementById('tab-image').classList.toggle('active',tab==='image');
+  document.getElementById('scanner-camera-panel').style.display=tab==='camera'?'':'none';
+  document.getElementById('scanner-image-panel').style.display=tab==='image'?'':'none';
+  document.getElementById('scanner-result-area').classList.remove('visible');
+  if(tab==='camera'){startCamera();}else{stopCamera();}
+}
+
+async function startCamera(){
+  const wrap=document.getElementById('scanner-video-wrap');
+  const video=document.getElementById('scanner-video');
+  try{
+    _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    video.srcObject=_scanStream;
+    video.play();
+    video.onloadedmetadata=()=>{ startScanLoop(video); };
+    document.getElementById('scanner-hint').textContent='Point the camera at a QR code or barcode';
+  }catch(err){
+    wrap.innerHTML='<div class="scanner-camera-err"><div class="err-icon">\uD83D\uDEAB</div><div>Camera access denied.<br>Please allow camera permissions and try again,<br>or use the <strong>Upload Image</strong> tab instead.</div></div>';
+  }
+}
+
+function stopCamera(){
+  clearInterval(_scanTimer);_scanTimer=null;
+  if(_scanStream){_scanStream.getTracks().forEach(t=>t.stop());_scanStream=null;}
+}
+
+function startScanLoop(video){
+  if(!_scanCanvas){_scanCanvas=document.createElement('canvas');_scanCtx=_scanCanvas.getContext('2d',{willReadFrequently:true});}
+  clearInterval(_scanTimer);
+  _scanTimer=setInterval(async()=>{
+    if(video.readyState<2||video.paused)return;
+    _scanCanvas.width=video.videoWidth;_scanCanvas.height=video.videoHeight;
+    _scanCtx.drawImage(video,0,0);
+    const result=await decodeFrame(_scanCanvas,_scanCtx);
+    if(result){
+      clearInterval(_scanTimer);
+      showScanResult(result);
+      document.getElementById('scanner-hint').textContent='\u2705 Code read! See result below.';
+    }
+  },300);
+}
+
+async function decodeFrame(canvas,ctx){
+  if('BarcodeDetector' in window){
+    try{
+      const bd=new BarcodeDetector({formats:['qr_code','ean_13','ean_8','upc_a','upc_e','code_128','code_39','itf','data_matrix','pdf417','aztec','codabar']});
+      const codes=await bd.detect(canvas);
+      if(codes.length>0)return codes[0].rawValue;
+    }catch(e){}
+  }
+  try{
+    if(!window.jsQR){
+      await loadScript('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js');
+    }
+    const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code=window.jsQR(imageData.data,canvas.width,canvas.height,{inversionAttempts:'dontInvert'});
+    if(code)return code.data;
+  }catch(e){}
+  return null;
+}
+
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');s.src=src;
+    s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
+}
+
+async function scanFromImage(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  document.getElementById('scanner-result-area').classList.remove('visible');
+  const img=new Image();
+  const url=URL.createObjectURL(file);
+  img.onload=async()=>{
+    if(!_scanCanvas){_scanCanvas=document.createElement('canvas');_scanCtx=_scanCanvas.getContext('2d',{willReadFrequently:true});}
+    _scanCanvas.width=img.naturalWidth;_scanCanvas.height=img.naturalHeight;
+    _scanCtx.drawImage(img,0,0);
+    URL.revokeObjectURL(url);
+    const result=await decodeFrame(_scanCanvas,_scanCtx);
+    if(result){showScanResult(result);}
+    else{showToast('\u26A0\uFE0F No code found in that image');}
+    event.target.value='';
+  };
+  img.src=url;
+}
+
+function showScanResult(value){
+  const area=document.getElementById('scanner-result-area');
+  document.getElementById('scanner-result-text').textContent=value;
+  const actions=document.getElementById('scanner-result-actions');
+  actions.innerHTML='';
+  const copyBtn=document.createElement('button');
+  copyBtn.className='scanner-result-btn primary';
+  copyBtn.textContent='\uD83D\uDCCB Copy';
+  copyBtn.onclick=()=>{navigator.clipboard.writeText(value).then(()=>showToast('\u2713 Copied!'));};
+  actions.appendChild(copyBtn);
+  const isUrl=/^https?:\/\//i.test(value)||/^www\./i.test(value);
+  if(isUrl){
+    const openBtn=document.createElement('button');
+    openBtn.className='scanner-result-btn';
+    openBtn.textContent='\uD83D\uDD17 Open Link';
+    openBtn.onclick=()=>{window.open(value.startsWith('http')?value:'https://'+value,'_blank');};
+    actions.appendChild(openBtn);
+  }
+  const againBtn=document.createElement('button');
+  againBtn.className='scanner-result-btn';
+  againBtn.textContent='\uD83D\uDD04 Scan Again';
+  againBtn.onclick=()=>{
+    area.classList.remove('visible');
+    if(_scanTab==='camera'){
+      document.getElementById('scanner-hint').textContent='Point the camera at a QR code or barcode';
+      startScanLoop(document.getElementById('scanner-video'));
+    }
+  };
+  actions.appendChild(againBtn);
+  area.classList.add('visible');
 }
 
 </script>
