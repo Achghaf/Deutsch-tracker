@@ -878,68 +878,42 @@ h1 span{color:var(--gold)}
   letter-spacing:0.08em;
   text-align:center;
 }
-/* Vocabulary flashcard styles */
-#page-vocab .flashcard-container {
-  perspective:1000px;
-  margin:24px auto;
-  max-width:300px;
-  position:relative;
-}
-.flashcard {
-  width:100%;
-  height:200px;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform 0.6s ease;
-  cursor:pointer;
-}
-.flashcard.flip {
-  transform:rotateY(180deg);
-}
-.flashcard-face {
-  position:absolute;
-  width:100%;
-  height:100%;
-  backface-visibility:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.3rem;
-  line-height:1.4;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:var(--card);
-}
-.flashcard-back {
-  transform:rotateY(180deg);
-  font-size:1rem;
-  font-family:'DM Sans',sans-serif;
-}
-/* Vocab controls */
-#page-vocab .vocab-controls {
-  display:flex;
-  gap:12px;
-  margin-top:16px;
-}
-#page-vocab .vocab-controls button {
-  flex:1;
-}
-/* Progress bar for vocab */
-.progress-bar {
-  height:6px;
-  background:var(--border);
-  border-radius:3px;
-  overflow:hidden;
-  margin-top:8px;
-}
-.progress-bar-fill {
-  height:100%;
-  width:0%;
-  background:var(--gold);
-  transition:width 0.3s ease;
-}
+/* ===== MATCH PAIRS — Vocabulary ===== */
+.vocab-wrap{padding:20px 16px 32px;max-width:700px;margin:0 auto}
+.vocab-topbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.vocab-cat-btn{padding:6px 14px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s;text-transform:uppercase}
+.vocab-cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08)}
+.vocab-score-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px}
+.vocab-score-chip{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)}
+.vocab-score-chip span{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold)}
+.vocab-progress-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.vocab-progress-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.4s ease}
+.vocab-new-btn{padding:7px 16px;border:1px solid var(--gold);border-radius:999px;background:transparent;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.vocab-new-btn:hover{background:rgba(232,184,75,0.1)}
+.vocab-new-btn:active{transform:scale(0.96)}
+/* Grid */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:500px){.match-grid{grid-template-columns:1fr 1fr 1fr}}
+.match-card{position:relative;min-height:68px;border:2px solid var(--border);border-radius:14px;background:var(--card);display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 10px;cursor:pointer;transition:border-color 0.18s,background 0.18s,transform 0.15s;user-select:none;-webkit-tap-highlight-color:transparent;word-break:break-word;line-height:1.3}
+.match-card:active{transform:scale(0.94)}
+.match-card.de{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.04em;color:var(--white)}
+.match-card.en{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;color:var(--muted)}
+.match-card.selected{border-color:var(--gold);background:rgba(232,184,75,0.10);color:var(--white)}
+.match-card.matched{border-color:var(--green);background:rgba(61,186,110,0.10);pointer-events:none;animation:matchPop 0.32s ease}
+.match-card.matched .match-card-text{color:var(--green)}
+.match-card.wrong{border-color:var(--red);background:rgba(204,31,31,0.10);animation:wrongShake 0.4s ease}
+.match-card-text{position:relative;z-index:1}
+.match-card.matched::after{content:'✓';position:absolute;top:6px;right:9px;font-size:0.65rem;color:var(--green);opacity:0.8}
+@keyframes matchPop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* Finished screen */
+.vocab-finished{text-align:center;padding:40px 20px;display:none}
+.vocab-finished.visible{display:block}
+.vocab-finished-icon{font-size:3.5rem;margin-bottom:12px}
+.vocab-finished-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.08em;color:var(--gold);margin-bottom:8px}
+.vocab-finished-sub{font-size:0.85rem;color:var(--muted);margin-bottom:24px}
+.vocab-finished-btn{padding:12px 32px;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s}
+.vocab-finished-btn:active{transform:scale(0.96)}
 /* Listening practice styles */
 #page-listening .listening-container {
   max-width:600px;
@@ -1654,7 +1628,7 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- Supabase -->
-<!-- Vocabulary Trainer Page -->
+<!-- Vocabulary Trainer Page — Match Pairs -->
 <div class="page" id="page-vocab">
   <header>
     <div class="flag-stripe"></div>
@@ -1662,27 +1636,30 @@ h1 span{color:var(--gold)}
       <h1><span id="vocab-title">Vokabeltrainer</span></h1>
     </div>
   </header>
-  <div style="padding:24px 16px;max-width:700px;margin:0 auto">
-    <div class="flashcard-container">
-      <div class="flashcard" id="vocab-card">
-        <div class="flashcard-face flashcard-front" id="vocab-front">Front</div>
-        <div class="flashcard-face flashcard-back" id="vocab-back">Back</div>
-      </div>
+  <div class="vocab-wrap">
+    <!-- Category filters -->
+    <div class="vocab-topbar">
+      <button class="vocab-cat-btn active" data-cat="all">Alle</button>
+      <button class="vocab-cat-btn" data-cat="noun">🔵 Nomen</button>
+      <button class="vocab-cat-btn" data-cat="verb">🟢 Verben</button>
+      <button class="vocab-cat-btn" data-cat="adjective">🟡 Adj.</button>
+      <button class="vocab-cat-btn" data-cat="phrase">🟣 Phrasen</button>
     </div>
-    <div class="vocab-controls">
-      <button class="login-btn" id="vocab-known-btn">✓ Kenne ich</button>
-      <button class="login-btn" id="vocab-again-btn">✗ Nochmal</button>
+    <!-- Score + progress row -->
+    <div class="vocab-score-row">
+      <div class="vocab-score-chip">✅ <span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
+      <div class="vocab-progress-bar"><div class="vocab-progress-fill" id="vocab-progress-fill"></div></div>
+      <button class="vocab-new-btn" onclick="newVocabRound()">↻ Nouveau</button>
     </div>
-    <div class="progress-bar">
-      <div class="progress-bar-fill" id="vocab-progress-bar"></div>
+    <!-- Match grid -->
+    <div class="match-grid" id="match-grid"></div>
+    <!-- Finished screen -->
+    <div class="vocab-finished" id="vocab-finished">
+      <div class="vocab-finished-icon">🎉</div>
+      <div class="vocab-finished-title">Parfait !</div>
+      <div class="vocab-finished-sub" id="vocab-finished-sub">Toutes les paires trouvées !</div>
+      <button class="vocab-finished-btn" onclick="newVocabRound()">↻ Nouveau round</button>
     </div>
-    <select id="vocab-filter" style="margin-top:12px;width:100%;padding:8px;border-radius:6px;background:var(--card);color:var(--white);border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:0.8rem;">
-      <option value="all">Alle Kategorien</option>
-      <option value="noun">Nomen</option>
-      <option value="verb">Verben</option>
-      <option value="adjective">Adjektive</option>
-      <option value="phrase">Phrasen</option>
-    </select>
   </div>
 </div>
 <!-- Listening Practice Page -->
@@ -3674,23 +3651,6 @@ function applyLang(){
   const vocabTitleEl=document.getElementById('vocab-title');
   if(vocabTitleEl){
     vocabTitleEl.textContent=L.vocab_title||'📚 Vocabulary Trainer';
-  }
-  const vocabKnownBtn=document.getElementById('vocab-known-btn');
-  if(vocabKnownBtn){
-    vocabKnownBtn.textContent=L.vocab_known_btn||'✓ Know it';
-  }
-  const vocabAgainBtn=document.getElementById('vocab-again-btn');
-  if(vocabAgainBtn){
-    vocabAgainBtn.textContent=L.vocab_again_btn||'✗ Again';
-  }
-  const vocabFilter=document.getElementById('vocab-filter');
-  if(vocabFilter){
-    const opts=vocabFilter.options;
-    if(opts[0]) opts[0].text=L.vocab_filter_all||'All categories';
-    if(opts[1]) opts[1].text=L.vocab_filter_noun||'Nouns';
-    if(opts[2]) opts[2].text=L.vocab_filter_verb||'Verbs';
-    if(opts[3]) opts[3].text=L.vocab_filter_adjective||'Adjectives';
-    if(opts[4]) opts[4].text=L.vocab_filter_phrase||'Phrases';
   }
 
   // Listening Practice page i18n
@@ -5891,28 +5851,16 @@ function showLevelResult() {
       // will be loaded from Supabase when available, otherwise from a
       // free API or a small fallback list.  A queue is used for
       // spaced‑repetition logic and progress tracking.
+      // ===== MATCH PAIRS VOCABULARY ENGINE =====
       let vocabData=[];
-      let vocabQueue=[];
-      let vocabCurrent=null;
+      let matchActiveCat='all';
+      let matchSelected=null;
+      let matchMatched=new Set();
+      let matchRoundPairs=[];
+      let matchBlocked=false;
 
-      /**
-       * Fetch a set of random German words from a free API and
-       * translate them into English via MyMemory.  This helper makes
-       * individual translation calls for each word, so only a small
-       * number of words should be requested at a time.  If any
-       * network request fails the function resolves to an empty array.
-       *
-       * Note: these network calls run client side and require a
-       * working internet connection.  When offline or in case of
-       * network errors the caller should fall back to a static list.
-       *
-       * @param {number} count Number of words to fetch.
-       * @returns {Promise<Array<{de:string,en:string,example:string,cat:string}>>}
-       */
-      async function fetchRandomVocab(count=10){
+      async function fetchRandomVocab(count=12){
         try{
-          // Request random German words.  See
-          // https://random-words-api.kushcreates.com/ for docs.
           const res=await fetch(`https://random-words-api.kushcreates.com/api?language=de&words=${count}`);
           if(!res.ok) throw new Error(`HTTP ${res.status}`);
           const words=await res.json();
@@ -5921,127 +5869,132 @@ function showLevelResult() {
             const word=(item.word||item.name||'').trim();
             if(!word) continue;
             let translation='';
-            try{
-              // Use MyMemory translation API via our existing translateOne
-              // helper to convert German words to English.  Passing
-              // targetLang 'en' triggers the API call defined below.
-              translation=await translateOne(word,'en');
-            }catch(e){
-              translation='';
-            }
-            entries.push({de:word,en:translation||'',example:'',cat:'other'});
+            try{ translation=await translateOne(word,'en'); }catch(e){}
+            entries.push({de:word,en:translation||'',cat:'other'});
           }
           return entries;
-        }catch(e){
-          console.error('fetchRandomVocab error',e);
-          return [];
-        }
+        }catch(e){ return []; }
       }
 
-      /**
-       * Initialise the vocabulary page.  If data has already been
-       * loaded this simply calls setupVocab(); otherwise it tries to
-       * fetch the user’s personal vocabulary from Supabase.  When
-       * Supabase is unavailable or returns no data a free API is
-       * consulted to populate vocabData; as a final fallback a
-       * predefined list of common words is used.  This function is
-       * asynchronous to allow awaiting API calls.
-       */
       window.initVocabPage=async function(){
-        // When offline or not logged in currentUser may be null.  In
-        // that case we proceed straight to API and fallback logic.
         if(vocabData.length===0){
-          // Try to fetch from Supabase first when a user is present.
           let loaded=false;
           if(currentUser){
             try{
-              const { data,error } = await _supa.from('vocabulary').select('*').eq('user_id', currentUser.id);
+              const {data,error}=await _supa.from('vocabulary').select('*').eq('user_id',currentUser.id);
               if(error) throw error;
-              if(data && data.length>0){
-                vocabData=(data||[]).map(row=>({de:row.word,en:row.translation,example:row.example||'',cat:row.category||'other'}));
+              if(data&&data.length>0){
+                vocabData=data.map(r=>({de:r.word,en:r.translation,cat:r.category||'other'}));
                 loaded=true;
               }
-            }catch(e){
-              console.warn('Supabase vocabulary load failed:',e?.message||e);
-            }
+            }catch(e){ console.warn('Supabase vocab:',e?.message||e); }
           }
-          // If Supabase returned nothing try the free API for fresh words.
           if(!loaded){
             try{
-              const apiWords=await fetchRandomVocab(8);
-              if(apiWords && apiWords.length>0){
-                vocabData=apiWords;
-                loaded=true;
-              }
-            }catch(e){
-              console.warn('Random vocab API failed:',e?.message||e);
-            }
+              const api=await fetchRandomVocab(12);
+              if(api&&api.length>0){ vocabData=api; loaded=true; }
+            }catch(e){}
           }
-          // Final fallback: small predefined list so the page never
-          // appears empty.
           if(!loaded){
             vocabData=[
-              {de:'Haus',en:'house',example:'Das Haus ist groß.',cat:'noun'},
-              {de:'gehen',en:'to go',example:'Ich gehe zur Schule.',cat:'verb'},
-              {de:'schnell',en:'fast',example:'Der Zug ist schnell.',cat:'adjective'},
-              {de:'Vielen Dank',en:'thank you',example:'Vielen Dank für deine Hilfe.',cat:'phrase'}
+              {de:'Haus',en:'house',cat:'noun'},{de:'gehen',en:'to go',cat:'verb'},
+              {de:'schnell',en:'fast',cat:'adjective'},{de:'Vielen Dank',en:'thank you',cat:'phrase'},
+              {de:'Wasser',en:'water',cat:'noun'},{de:'lernen',en:'to learn',cat:'verb'},
+              {de:'sch\u00f6n',en:'beautiful',cat:'adjective'},{de:'Bitte',en:'please',cat:'phrase'},
+              {de:'Buch',en:'book',cat:'noun'},{de:'essen',en:'to eat',cat:'verb'},
+              {de:'gro\u00df',en:'big',cat:'adjective'},{de:'Entschuldigung',en:'excuse me',cat:'phrase'},
             ];
           }
         }
-        setupVocab();
+        document.querySelectorAll('#page-vocab .vocab-cat-btn').forEach(btn=>{
+          if(!btn.dataset.bound){
+            btn.dataset.bound='1';
+            btn.onclick=function(){
+              document.querySelectorAll('#page-vocab .vocab-cat-btn').forEach(b=>b.classList.remove('active'));
+              btn.classList.add('active');
+              matchActiveCat=btn.dataset.cat;
+              newVocabRound();
+            };
+          }
+        });
+        newVocabRound();
       };
-      function setupVocab(){
-        const filterSel=document.getElementById('vocab-filter');
-        const card=document.getElementById('vocab-card');
-        if(!filterSel) return;
-        function buildQueue(){
-          const cat=filterSel.value;
-          const cards=(cat==='all')?vocabData:vocabData.filter(x=>x.cat===cat);
-          vocabQueue=[...cards];
-          vocabCurrent=null;
-          updateVocab();
-        }
-        if(!filterSel.dataset.bound){
-          filterSel.dataset.bound='1';
-          filterSel.addEventListener('change',buildQueue);
-        }
-        buildQueue();
-        if(card){
-          card.onclick=function(){ card.classList.toggle('flip'); };
-        }
-        const knownBtn=document.getElementById('vocab-known-btn');
-        const againBtn=document.getElementById('vocab-again-btn');
-        if(knownBtn) knownBtn.onclick=function(){ window.markVocab(true); };
-        if(againBtn) againBtn.onclick=function(){ window.markVocab(false); };
-      }
-      function updateVocab(){
-        const front=document.getElementById('vocab-front');
-        const back=document.getElementById('vocab-back');
-        const bar=document.getElementById('vocab-progress-bar');
-        const card=document.getElementById('vocab-card');
-        if(!front||!bar) return;
-        if(vocabQueue.length===0){
-          // When all cards are finished display a localized finished message
-          front.textContent = (typeof t==='function' ? t('vocab_finished') : null) || '🎉 Finished!';
-          if(back) back.innerHTML='';
-          bar.style.width='100%';
+
+      window.newVocabRound=function(){
+        const pool=(matchActiveCat==='all')?vocabData:vocabData.filter(x=>x.cat===matchActiveCat);
+        const grid=document.getElementById('match-grid');
+        if(!pool||pool.length===0){
+          if(grid) grid.innerHTML='<p style="color:var(--muted);font-size:0.85rem;grid-column:1/-1;text-align:center;padding:20px">Keine Vokabeln in dieser Kategorie.</p>';
           return;
         }
-        vocabCurrent=vocabQueue[0];
-        card.classList.remove('flip');
-        front.textContent=vocabCurrent.de;
-        if(back) back.innerHTML='<strong>'+vocabCurrent.en+'</strong><br/><em>'+vocabCurrent.example+'</em>';
-        const progress=((vocabData.length-vocabQueue.length)/Math.max(vocabData.length,1))*100;
-        bar.style.width=progress+'%';
-      }
-      window.markVocab=function(correct){
-        if(!vocabCurrent) return;
-        vocabQueue.shift();
-        if(!correct){
-          vocabQueue.splice(2,0,vocabCurrent);
-        }
-        updateVocab();
+        const shuffled=[...pool].sort(()=>Math.random()-0.5);
+        matchRoundPairs=shuffled.slice(0,Math.min(6,shuffled.length)).map((p,i)=>({...p,id:i}));
+        matchSelected=null;
+        matchMatched=new Set();
+        matchBlocked=false;
+        document.getElementById('vocab-finished').classList.remove('visible');
+        renderMatchGrid();
+        updateMatchScore();
       };
+
+      function renderMatchGrid(){
+        const grid=document.getElementById('match-grid');
+        if(!grid) return;
+        const deCards=matchRoundPairs.map(p=>({id:p.id,type:'de',text:p.de}));
+        const enCards=matchRoundPairs.map(p=>({id:p.id,type:'en',text:p.en}));
+        const all=[...deCards,...enCards].sort(()=>Math.random()-0.5);
+        grid.innerHTML='';
+        all.forEach(card=>{
+          const el=document.createElement('div');
+          el.className='match-card '+card.type;
+          el.dataset.id=card.id;
+          el.dataset.type=card.type;
+          el.innerHTML='<span class="match-card-text">'+card.text+'</span>';
+          el.onclick=()=>handleMatchTap(el,card);
+          grid.appendChild(el);
+        });
+      }
+
+      function handleMatchTap(el,card){
+        if(matchBlocked||matchMatched.has(card.id)) return;
+        if(matchSelected&&matchSelected.id===card.id&&matchSelected.type===card.type){
+          el.classList.remove('selected'); matchSelected=null; return;
+        }
+        if(matchSelected&&matchSelected.type===card.type){
+          document.querySelectorAll('.match-card.selected').forEach(c=>c.classList.remove('selected'));
+          el.classList.add('selected'); matchSelected=card; return;
+        }
+        el.classList.add('selected');
+        if(!matchSelected){ matchSelected=card; return; }
+        const prev=matchSelected; matchSelected=null; matchBlocked=true;
+        if(prev.id===card.id){
+          setTimeout(()=>{
+            document.querySelectorAll('.match-card[data-id="'+card.id+'"]').forEach(c=>{ c.classList.remove('selected'); c.classList.add('matched'); });
+            matchMatched.add(card.id); matchBlocked=false;
+            updateMatchScore();
+            if(matchMatched.size===matchRoundPairs.length) showVocabFinished();
+          },200);
+        }else{
+          setTimeout(()=>{
+            document.querySelectorAll('.match-card.selected').forEach(c=>{ c.classList.remove('selected'); c.classList.add('wrong'); setTimeout(()=>c.classList.remove('wrong'),420); });
+            matchBlocked=false;
+          },180);
+        }
+      }
+
+      function updateMatchScore(){
+        const matched=matchMatched.size, total=matchRoundPairs.length;
+        const el1=document.getElementById('vocab-matched'), el2=document.getElementById('vocab-total'), bar=document.getElementById('vocab-progress-fill');
+        if(el1) el1.textContent=matched; if(el2) el2.textContent=total;
+        if(bar) bar.style.width=total>0?(matched/total*100)+'%':'0%';
+      }
+
+      function showVocabFinished(){
+        const sub=document.getElementById('vocab-finished-sub');
+        if(sub) sub.textContent=matchRoundPairs.length+' paires trouv\u00e9es ! \ud83c\udfc6';
+        document.getElementById('vocab-finished').classList.add('visible');
+      }
+
       // Listening practice
       // The listening module presents a German sentence and hides its
       // English translation until the user reveals it.  Users then type
