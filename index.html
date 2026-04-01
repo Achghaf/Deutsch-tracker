@@ -1783,15 +1783,33 @@ const SUPABASE_URL = 'https://crgqqzpkppmlhjyawumk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 // =====================================================
 
-// Initialize Supabase with session persistence and auto-refresh enabled.
-const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: {
-    // Persist the user session in local storage so that refreshes keep the user logged in.
-    persistSession: true,
-    // Automatically refresh the access token when it expires.
-    autoRefreshToken: true,
-  },
-});
+// Initialize Supabase — guard against CDN load failure
+let _supa;
+try {
+  if (typeof supabase === 'undefined') throw new Error('Supabase CDN not loaded');
+  _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+  });
+} catch(e) {
+  console.error('Supabase init failed:', e);
+  // Show login screen immediately so the app is not stuck on the loader
+  document.addEventListener('DOMContentLoaded', function() {
+    var loader = document.getElementById('app-loader');
+    if (loader) loader.classList.remove('visible');
+    var login = document.getElementById('login-screen');
+    if (login) login.classList.add('visible');
+  });
+  // Also try immediately in case DOM is already ready
+  (function() {
+    var loader = document.getElementById('app-loader');
+    if (loader) loader.classList.remove('visible');
+    var login = document.getElementById('login-screen');
+    if (login) login.classList.add('visible');
+  })();
+}
 let currentUser = null;
 let currentRole = 'user'; // 'admin' | 'user'
 let newsFilter = 'all';
@@ -1955,7 +1973,12 @@ async function bootstrapAuth(){
     showLoginScreen();
   }
 }
-bootstrapAuth();
+if (_supa) {
+  bootstrapAuth();
+} else {
+  // _supa failed to init - loader already hidden by init guard above
+  console.warn('Skipping bootstrapAuth: Supabase unavailable');
+}
 
 
 // ===== AUTH SUPABASE =====
@@ -2073,7 +2096,7 @@ async function logout(){
 
 // Supabase handles the session automatically.
 
-_supa.auth.onAuthStateChange(async(event,session)=>{
+if (_supa) _supa.auth.onAuthStateChange(async(event,session)=>{
   if(session?.user){
     // Persist the logged-in user to localStorage so refreshes keep them signed in.
     try{ localStorage.setItem('persist_user', JSON.stringify(session.user)); } catch(_){ }
