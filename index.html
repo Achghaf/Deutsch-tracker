@@ -85,25 +85,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ===== BOTTOM NAV — 5 pinned tabs + More ===== */
 :root{--nav-h:58px}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:stretch;padding-bottom:env(safe-area-inset-bottom);z-index:1202}
-.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:6px 2px 4px;border:none;background:transparent;-webkit-tap-highlight-color:transparent;position:relative;transition:background 0.15s;min-width:0}
-.nav-tab:active{background:rgba(255,255,255,0.04)}
-.nav-tab-icon{font-size:1.2rem;line-height:1;color:var(--muted);transition:color 0.2s,transform 0.2s;display:flex;align-items:center;justify-content:center;width:26px;height:26px}
-.nav-tab-label{font-size:0.52rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);transition:color 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;max-width:52px;text-align:center}
-.nav-tab.active .nav-tab-icon{color:var(--gold);transform:translateY(-2px)}
-.nav-tab.active .nav-tab-label{color:var(--gold)}
-.nav-tab.active::after{content:'';position:absolute;bottom:calc(env(safe-area-inset-bottom) + 1px);left:50%;transform:translateX(-50%);width:20px;height:3px;border-radius:2px;background:var(--gold)}
-.nav-tab-badge{position:absolute;top:4px;right:calc(50% - 17px);min-width:15px;height:15px;background:var(--red);color:#fff;border-radius:999px;font-size:0.5rem;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 3px;border:2px solid #111}
-.nav-tab-badge.visible{display:flex}
-/* More button hamburger lines */
-.nav-tab.more-btn .nav-tab-icon{flex-direction:column;gap:3.5px;width:20px;height:18px}
-.nav-tab.more-btn .nav-tab-icon span{display:block;width:100%;height:2px;background:var(--muted);border-radius:2px;transition:all 0.3s cubic-bezier(0.22,1,0.36,1);transform-origin:center}
-.nav-tab.more-btn.open .nav-tab-icon span:nth-child(1){transform:translateY(5.5px) rotate(45deg);background:var(--gold)}
-.nav-tab.more-btn.open .nav-tab-icon span:nth-child(2){opacity:0;transform:scaleX(0)}
-.nav-tab.more-btn.open .nav-tab-icon span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);background:var(--gold)}
-.nav-tab.more-btn.open .nav-tab-label{color:var(--gold)}
-/* Legacy compat */
-.nav-item{display:none}.nav-icon{}.nav-label{}.nav-current{display:none}.nav-current-icon{}.nav-current-label{}.nav-menu-btn{display:none}.nav-menu-label{}.ham{display:none}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:6px;z-index:1202;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;transition:all 0.2s}
+.nav-icon{font-size:1.3rem;line-height:1;color:var(--muted);transition:color 0.2s}
+.nav-item.active .nav-icon{color:var(--gold)}
+.nav-label{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
+.nav-item.active .nav-label{color:var(--gold)}
 /* NAV DRAWER OVERLAY */
 .nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .nav-drawer-overlay.open{opacity:1;pointer-events:auto}
@@ -1609,32 +1596,51 @@ h1 span{color:var(--gold)}
   </div>
 </div>
 
-<!-- Bottom nav bar: Tracker + Pages + Alerts -->
+<!-- Bottom nav bar -->
 <nav class="bottom-nav" id="bottom-nav">
-
-  <!-- Tab 1: Tracker -->
-  <button class="nav-tab active" data-page="tracker" onclick="navTabClick('tracker',this)" aria-label="Tracker">
-    <div class="nav-tab-icon"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></div>
-    <span class="nav-tab-label">Tracker</span>
-  </button>
-
-  <!-- Tab 2: Pages (opens full drawer) -->
-  <button class="nav-tab more-btn" id="nav-more-btn" onclick="toggleNavDrawer()" aria-label="Pages">
-    <div class="nav-tab-icon">
-      <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="5" cy="5" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="12" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/></svg>
+  <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg></div>
+    <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
+  </div>
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg></div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+  </div>
+  <div class="nav-item" data-page="news" onclick="switchPage('news')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
+    <div class="nav-label" data-i18n="nav_news">News</div>
+  </div>
+  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
+  </div>
+  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg></div>
+    <div class="nav-label">Quiz</div>
+  </div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">📚</div>
+    <div class="nav-label">Vokabeln</div>
+  </div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">🎧</div>
+    <div class="nav-label">Hören</div>
+  </div>
+  <div class="nav-item" data-page="level" onclick="switchPage('level')">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div class="nav-label">Niveau</div>
+  </div>
+  <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="nav-label">Admin</div>
+  </div>
+  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
+    <div class="nav-icon" style="position:relative;display:inline-flex">
+      <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
-    <span class="nav-tab-label">Pages</span>
-  </button>
-
-  <!-- Tab 3: Alerts (bell) -->
-  <button class="nav-tab" id="mob-notif-btn" onclick="mobToggleNotif(event)" aria-label="Alerts" style="position:relative">
-    <div class="nav-tab-icon" style="position:relative">
-      <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="nav-tab-badge" id="mob-notif-badge"></span>
-    </div>
-    <span class="nav-tab-label">Alerts</span>
-  </button>
-
+    <div class="nav-label">Alerts</div>
+  </div>
 </nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
