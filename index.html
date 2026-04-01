@@ -1460,7 +1460,7 @@ h1 span{color:var(--gold)}
 <div class="admin-hero-sub">User management &amp; signup stats</div>
 </div>
 <!-- PENDING REQUESTS -->
-<div class="admin-section-title">23f3 Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
+<div class="admin-section-title">⏳ Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
 <div class="admin-users-wrap" style="margin-bottom:28px">
 <div id="admin-pending-list"><div class="admin-empty">Loading requests...</div></div>
 </div>
@@ -1933,7 +1933,24 @@ async function handleAuth(){
         email,
         password:pwd,
         options:{ data:{ role:'pending', name: displayName||undefined } }
-      });
+      });      // When a user signs up we also create a record in the `pending_users` table so that
+      // admins can view and approve the access request. Without this insert new accounts
+      // would never appear in the Pending Access Requests list. We only perform the insert
+      // if there was no sign‑up error. We intentionally swallow any insert errors here
+      // because the primary sign‑up may still succeed, and failing to insert should not
+      // block the user from completing registration.
+      if (!error) {
+        try {
+          await _supa.from('pending_users').insert({
+            email: email,
+            full_name: displayName || null,
+            status: 'pending'
+          });
+        } catch (insErr) {
+          console.error('Failed to insert pending user', insErr);
+        }
+      }
+
       if(error) throw error;
       if(displayName) try{localStorage.setItem('profile_display_name',displayName);}catch(_){}
       btn.disabled=false;btn.textContent='Konto erstellen';
