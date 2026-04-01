@@ -1833,14 +1833,22 @@ h1 span{color:var(--gold)}
       <h1><span id="vocab-title">Vokabeltrainer</span></h1>
     </div>
   </header>
+  <div style="max-width:700px;margin:0 auto;padding:10px 16px 0">
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:8px;padding:9px 14px;font-size:0.73rem;color:var(--muted)">
+      <span style="font-size:1rem">🌐</span>
+      <span>B1-Wortschatz aus <a href="https://www.deutschforyou.com/wortschatz/b1" target="_blank" style="color:var(--gold);text-decoration:none">deutschforyou.com</a> — Berufe · Bewerbung · Umwelt · Gesellschaft · Gesundheit · Kommunikation</span>
+    </div>
+  </div>
   <div class="vocab-wrap">
     <!-- Category filters -->
     <div class="vocab-topbar">
       <button class="vocab-cat-btn active" data-cat="all">Alle</button>
-      <button class="vocab-cat-btn" data-cat="noun">🔵 Nomen</button>
-      <button class="vocab-cat-btn" data-cat="verb">🟢 Verben</button>
-      <button class="vocab-cat-btn" data-cat="adjective">🟡 Adj.</button>
-      <button class="vocab-cat-btn" data-cat="phrase">🟣 Phrasen</button>
+      <button class="vocab-cat-btn" data-cat="berufe">💼 Berufe</button>
+      <button class="vocab-cat-btn" data-cat="bewerbung">📄 Bewerbung</button>
+      <button class="vocab-cat-btn" data-cat="umwelt">🌿 Umwelt</button>
+      <button class="vocab-cat-btn" data-cat="gesellschaft">🏛 Gesellschaft</button>
+      <button class="vocab-cat-btn" data-cat="gesundheit">🏥 Gesundheit</button>
+      <button class="vocab-cat-btn" data-cat="kommunikation">💬 Kommunikation</button>
     </div>
     <!-- Score + progress row -->
     <div class="vocab-score-row">
@@ -5360,6 +5368,7 @@ function showScanResult(value){
 <option value="grammar">📘 Grammatik</option>
 <option value="vocabulary">📚 Vokabeln</option>
 <option value="reading">📖 Leseverständnis</option>
+<option value="wortschatz">🌐 Wortschatz B1 (DeutschForYou)</option>
 </select>
 </div>
 <div>
@@ -5606,6 +5615,74 @@ const QUESTION_BANK = {
       {q:"Was ist ein Synonym von 'verhindern'?", options:["stoppen","erlauben","fördern","unterstützen"], correct:0, explanation:"verhindern ≈ stoppen."},
       {q:"Was bedeutet 'die Bestätigung'?", options:["confirmation","rejection","condition","assumption"], correct:0, explanation:"Bestätigung = confirmation."}
     ],
+    wortschatz: [
+      // ── Berufe (Jobs & Professions) ──
+      {q:"Was bedeutet 'der Rechtsanwalt'?", options:["lawyer","doctor","engineer","accountant"], correct:0, explanation:"Rechtsanwalt = lawyer."},
+      {q:"Was ist 'die Krankenschwester' auf Englisch?", options:["nurse","midwife","pharmacist","surgeon"], correct:0, explanation:"Krankenschwester = nurse (female)."},
+      {q:"Was bedeutet 'der Handwerker'?", options:["tradesman / craftsman","factory worker","office worker","manager"], correct:0, explanation:"Handwerker = craftsman or tradesperson."},
+      {q:"Was ist 'der Buchhalter' auf Englisch?", options:["accountant","bookseller","librarian","auditor"], correct:0, explanation:"Buchhalter = accountant."},
+      {q:"Was bedeutet 'die Selbstständigkeit'?", options:["self-employment","unemployment","retirement","promotion"], correct:0, explanation:"Selbstständigkeit = self-employment or independence."},
+      {q:"Was ist das Synonym von 'berufstätig'?", options:["erwerbstätig","arbeitslos","beschäftigt","berufslos"], correct:0, explanation:"berufstätig ≈ erwerbstätig (employed)."},
+      {q:"Was bedeutet 'die Vollzeitstelle'?", options:["full-time position","part-time position","internship","temporary job"], correct:0, explanation:"Vollzeitstelle = full-time job."},
+      {q:"Was ist 'der Kollege' auf Englisch?", options:["colleague","boss","employee","client"], correct:0, explanation:"Kollege = colleague."},
+      {q:"Was bedeutet 'kündigen'?", options:["to resign / to fire","to hire","to apply","to promote"], correct:0, explanation:"kündigen = to resign (oneself) or to terminate (someone)."},
+      {q:"Was ist 'das Gehalt' auf Englisch?", options:["salary","bonus","pension","tax"], correct:0, explanation:"Gehalt = salary."},
+      // ── Bewerbung (Job Application) ──
+      {q:"Was bedeutet 'der Lebenslauf'?", options:["CV / résumé","cover letter","reference","contract"], correct:0, explanation:"Lebenslauf = CV or résumé."},
+      {q:"Was ist 'das Vorstellungsgespräch'?", options:["job interview","introductory letter","presentation","performance review"], correct:0, explanation:"Vorstellungsgespräch = job interview."},
+      {q:"Was bedeutet 'die Bewerbung'?", options:["application","advertisement","qualification","recommendation"], correct:0, explanation:"Bewerbung = application (for a job)."},
+      {q:"Was ist 'die Arbeitserfahrung' auf Englisch?", options:["work experience","qualification","training","internship"], correct:0, explanation:"Arbeitserfahrung = work experience."},
+      {q:"Was bedeutet 'die Qualifikation'?", options:["qualification","motivation","position","promotion"], correct:0, explanation:"Qualifikation = qualification."},
+      {q:"Was ist ein Synonym von 'bewerben (sich)'?", options:["kandidieren","kündigen","beschäftigen","einarbeiten"], correct:0, explanation:"sich bewerben ≈ kandidieren (to apply, to be a candidate)."},
+      {q:"Was bedeutet 'das Anschreiben'?", options:["cover letter","attachment","reference letter","employment contract"], correct:0, explanation:"Anschreiben = cover letter."},
+      {q:"Was ist 'der Arbeitgeber' auf Englisch?", options:["employer","employee","manager","recruiter"], correct:0, explanation:"Arbeitgeber = employer."},
+      {q:"Was bedeutet 'die Probezeit'?", options:["probationary period","work break","overtime","annual leave"], correct:0, explanation:"Probezeit = probationary / trial period."},
+      {q:"Was ist 'die Stellenanzeige'?", options:["job advertisement","job contract","salary slip","application form"], correct:0, explanation:"Stellenanzeige = job advertisement."},
+      // ── Umwelt (Environment) ──
+      {q:"Was bedeutet 'die Nachhaltigkeit'?", options:["sustainability","recycling","pollution","conservation"], correct:0, explanation:"Nachhaltigkeit = sustainability."},
+      {q:"Was ist 'der Klimawandel' auf Englisch?", options:["climate change","global warming","air pollution","natural disaster"], correct:0, explanation:"Klimawandel = climate change."},
+      {q:"Was bedeutet 'die Treibhausgase'?", options:["greenhouse gases","exhaust fumes","industrial waste","chemical gases"], correct:0, explanation:"Treibhausgase = greenhouse gases."},
+      {q:"Was ist das Synonym von 'umweltfreundlich'?", options:["ökologisch","umweltschädlich","industriell","synthetisch"], correct:0, explanation:"umweltfreundlich ≈ ökologisch (eco-friendly)."},
+      {q:"Was bedeutet 'erneuerbare Energien'?", options:["renewable energies","nuclear energy","fossil fuels","electrical energy"], correct:0, explanation:"erneuerbare Energien = renewable energies."},
+      {q:"Was ist 'die Abfallentsorgung'?", options:["waste disposal","waste production","recycling center","landfill"], correct:0, explanation:"Abfallentsorgung = waste disposal."},
+      {q:"Was bedeutet 'die Luftverschmutzung'?", options:["air pollution","water pollution","soil contamination","noise pollution"], correct:0, explanation:"Luftverschmutzung = air pollution."},
+      {q:"Was ist 'das Recycling' auf Deutsch?", options:["das Recycling / Wiederverwertung","die Entsorgung","der Abfall","der Müll"], correct:0, explanation:"Recycling = Wiederverwertung in German."},
+      {q:"Was bedeutet 'der Naturschutz'?", options:["nature conservation","nature documentary","natural history","national park"], correct:0, explanation:"Naturschutz = nature conservation."},
+      {q:"Was ist 'die Überschwemmung'?", options:["flood","drought","earthquake","storm"], correct:0, explanation:"Überschwemmung = flood."},
+      // ── Gesellschaft (Society) ──
+      {q:"Was bedeutet 'die Integration'?", options:["integration","immigration","assimilation","migration"], correct:0, explanation:"Integration = integration into society."},
+      {q:"Was ist 'die Gleichberechtigung'?", options:["equal rights","human rights","civil rights","voting rights"], correct:0, explanation:"Gleichberechtigung = equal rights / gender equality."},
+      {q:"Was bedeutet 'die Demokratie'?", options:["democracy","monarchy","dictatorship","republic"], correct:0, explanation:"Demokratie = democracy."},
+      {q:"Was ist 'die Armut' auf Englisch?", options:["poverty","inequality","unemployment","homelessness"], correct:0, explanation:"Armut = poverty."},
+      {q:"Was bedeutet 'die Meinungsfreiheit'?", options:["freedom of speech","freedom of movement","freedom of religion","freedom of press"], correct:0, explanation:"Meinungsfreiheit = freedom of speech / opinion."},
+      {q:"Was ist ein Synonym von 'gemeinschaftlich'?", options:["kollektiv","privat","individuell","persönlich"], correct:0, explanation:"gemeinschaftlich ≈ kollektiv (collective, communal)."},
+      {q:"Was bedeutet 'die Diskriminierung'?", options:["discrimination","segregation","prejudice","stereotype"], correct:0, explanation:"Diskriminierung = discrimination."},
+      {q:"Was ist 'das Ehrenamt'?", options:["voluntary work","honorary title","civil service","part-time job"], correct:0, explanation:"Ehrenamt = voluntary/honorary work."},
+      {q:"Was bedeutet 'der demografische Wandel'?", options:["demographic change","economic change","political change","social change"], correct:0, explanation:"demografischer Wandel = demographic change (aging population etc.)."},
+      {q:"Was ist 'die Sozialhilfe'?", options:["social welfare / benefits","social insurance","pension","health insurance"], correct:0, explanation:"Sozialhilfe = social welfare benefits."},
+      // ── Gesundheit (Health) ──
+      {q:"Was bedeutet 'die Krankenversicherung'?", options:["health insurance","life insurance","accident insurance","pension insurance"], correct:0, explanation:"Krankenversicherung = health insurance."},
+      {q:"Was ist 'das Rezept' im medizinischen Kontext?", options:["prescription","recipe","diagnosis","treatment"], correct:0, explanation:"Rezept = prescription (in a medical context)."},
+      {q:"Was bedeutet 'die Vorsorge'?", options:["prevention / precaution","treatment","recovery","diagnosis"], correct:0, explanation:"Vorsorge = prevention or precautionary care."},
+      {q:"Was ist 'der Facharzt'?", options:["specialist / consultant","GP","surgeon","pharmacist"], correct:0, explanation:"Facharzt = medical specialist."},
+      {q:"Was bedeutet 'die Nebenwirkung'?", options:["side effect","main effect","overdose","allergic reaction"], correct:0, explanation:"Nebenwirkung = side effect."},
+      {q:"Was ist 'die Notaufnahme'?", options:["emergency room","outpatient clinic","waiting room","operating theatre"], correct:0, explanation:"Notaufnahme = emergency room / A&E."},
+      {q:"Was bedeutet 'psychische Gesundheit'?", options:["mental health","physical health","emotional well-being","social health"], correct:0, explanation:"psychische Gesundheit = mental health."},
+      {q:"Was ist 'die Genesung'?", options:["recovery","illness","treatment","diagnosis"], correct:0, explanation:"Genesung = recovery (from illness)."},
+      {q:"Was bedeutet 'ausgewogen'?", options:["balanced","healthy","nutritious","organic"], correct:0, explanation:"ausgewogen = balanced (e.g., ausgewogene Ernährung = balanced diet)."},
+      {q:"Was ist 'die Impfung'?", options:["vaccination","injection","blood test","surgery"], correct:0, explanation:"Impfung = vaccination."},
+      // ── Kommunikation (Communication) ──
+      {q:"Was bedeutet 'missverständlich'?", options:["misleading / ambiguous","understandable","clear","polite"], correct:0, explanation:"missverständlich = prone to misunderstanding, ambiguous."},
+      {q:"Was ist 'die Verhandlung'?", options:["negotiation","presentation","conversation","discussion"], correct:0, explanation:"Verhandlung = negotiation."},
+      {q:"Was bedeutet 'überzeugen'?", options:["to convince / persuade","to inform","to argue","to explain"], correct:0, explanation:"überzeugen = to convince or persuade."},
+      {q:"Was ist 'das Missverständnis'?", options:["misunderstanding","disagreement","conflict","argument"], correct:0, explanation:"Missverständnis = misunderstanding."},
+      {q:"Was bedeutet 'sich äußern'?", options:["to express oneself","to listen","to agree","to be silent"], correct:0, explanation:"sich äußern = to express oneself / make a statement."},
+      {q:"Was ist ein Synonym von 'mitteilen'?", options:["informieren","verstehen","antworten","fragen"], correct:0, explanation:"mitteilen ≈ informieren (to inform, to communicate)."},
+      {q:"Was bedeutet 'die Stellungnahme'?", options:["statement / position","argument","question","answer"], correct:0, explanation:"Stellungnahme = official statement or position."},
+      {q:"Was ist 'höflich' auf Englisch?", options:["polite","friendly","respectful","formal"], correct:0, explanation:"höflich = polite."},
+      {q:"Was bedeutet 'schriftlich'?", options:["in writing / written","verbally","officially","formally"], correct:0, explanation:"schriftlich = in writing."},
+      {q:"Was ist 'die Zusammenfassung'?", options:["summary","conclusion","introduction","paragraph"], correct:0, explanation:"Zusammenfassung = summary."}
+    ],
     reading: [
       {q:"'Trotz steigender Preise kaufen viele Deutsche weiterhin Bio-Produkte.' Was zeigt das?", options:["Bio bleibt beliebt trotz höherer Kosten.","Bio wird billiger.","Niemand kauft mehr Bio.","Preise sinken."], correct:0, explanation:"'trotz steigender Preise...weiterhin' = despite higher prices, still buying."},
       {q:"'Die Studie zeigt, dass regelmäßige Bewegung das Risiko von Herzerkrankungen um 30% senkt.' Was ist das Ergebnis?", options:["Sport reduziert Herzerkrankungen deutlich.","Sport hat keinen Effekt.","Herzerkrankungen steigen.","30% aller Menschen sind krank."], correct:0, explanation:"'senkt...um 30%' = reduces by 30%."},
@@ -5803,7 +5880,7 @@ function getQuestions(level, topic, count) {
     : [level];
 
   let pool = [];
-  const topics = topic === 'mixed' ? ['grammar','vocabulary','reading'] : [topic];
+  const topics = topic === 'mixed' ? ['grammar','vocabulary','reading','wortschatz'] : [topic];
 
   levels.forEach(lvl => {
     topics.forEach(tp => {
@@ -6313,16 +6390,36 @@ function showLevelResult() {
           }
           if(!loaded){
             vocabData=[
-              {de:'Haus',en:'house',cat:'noun'},{de:'gehen',en:'to go',cat:'verb'},
-              {de:'schnell',en:'fast',cat:'adjective'},{de:'Vielen Dank',en:'thank you',cat:'phrase'},
-              {de:'Wasser',en:'water',cat:'noun'},{de:'lernen',en:'to learn',cat:'verb'},
-              {de:'sch\u00f6n',en:'beautiful',cat:'adjective'},{de:'Bitte',en:'please',cat:'phrase'},
-              {de:'Buch',en:'book',cat:'noun'},{de:'essen',en:'to eat',cat:'verb'},
-              {de:'gro\u00df',en:'big',cat:'adjective'},{de:'Entschuldigung',en:'excuse me',cat:'phrase'},
-              {de:'Auto',en:'car',cat:'noun'},{de:'schreiben',en:'to write',cat:'verb'},
-              {de:'laut',en:'loud',cat:'adjective'},{de:'Guten Abend',en:'good evening',cat:'phrase'},
-              {de:'Freund',en:'friend',cat:'noun'},{de:'lieben',en:'to love',cat:'verb'},
-              {de:'neu',en:'new',cat:'adjective'},{de:'Danke sch\u00f6n',en:'thank you very much',cat:'phrase'}
+              // Berufe
+              {de:'der Rechtsanwalt',en:'lawyer',cat:'berufe'},{de:'der Buchhalter',en:'accountant',cat:'berufe'},
+              {de:'der Handwerker',en:'craftsman / tradesman',cat:'berufe'},{de:'das Gehalt',en:'salary',cat:'berufe'},
+              {de:'kündigen',en:'to resign / terminate',cat:'berufe'},{de:'die Vollzeitstelle',en:'full-time position',cat:'berufe'},
+              {de:'der Kollege',en:'colleague',cat:'berufe'},{de:'die Selbstständigkeit',en:'self-employment',cat:'berufe'},
+              // Bewerbung
+              {de:'der Lebenslauf',en:'CV / résumé',cat:'bewerbung'},{de:'das Vorstellungsgespräch',en:'job interview',cat:'bewerbung'},
+              {de:'das Anschreiben',en:'cover letter',cat:'bewerbung'},{de:'die Probezeit',en:'probationary period',cat:'bewerbung'},
+              {de:'die Stellenanzeige',en:'job advertisement',cat:'bewerbung'},{de:'der Arbeitgeber',en:'employer',cat:'bewerbung'},
+              {de:'die Qualifikation',en:'qualification',cat:'bewerbung'},{de:'sich bewerben',en:'to apply for a job',cat:'bewerbung'},
+              // Umwelt
+              {de:'die Nachhaltigkeit',en:'sustainability',cat:'umwelt'},{de:'der Klimawandel',en:'climate change',cat:'umwelt'},
+              {de:'die Luftverschmutzung',en:'air pollution',cat:'umwelt'},{de:'der Naturschutz',en:'nature conservation',cat:'umwelt'},
+              {de:'erneuerbare Energien',en:'renewable energies',cat:'umwelt'},{de:'die Überschwemmung',en:'flood',cat:'umwelt'},
+              {de:'die Treibhausgase',en:'greenhouse gases',cat:'umwelt'},{de:'das Recycling',en:'recycling',cat:'umwelt'},
+              // Gesellschaft
+              {de:'die Gleichberechtigung',en:'equal rights',cat:'gesellschaft'},{de:'die Demokratie',en:'democracy',cat:'gesellschaft'},
+              {de:'die Diskriminierung',en:'discrimination',cat:'gesellschaft'},{de:'das Ehrenamt',en:'voluntary work',cat:'gesellschaft'},
+              {de:'die Armut',en:'poverty',cat:'gesellschaft'},{de:'die Integration',en:'integration',cat:'gesellschaft'},
+              {de:'die Meinungsfreiheit',en:'freedom of speech',cat:'gesellschaft'},{de:'die Sozialhilfe',en:'social welfare',cat:'gesellschaft'},
+              // Gesundheit
+              {de:'die Krankenversicherung',en:'health insurance',cat:'gesundheit'},{de:'das Rezept',en:'prescription',cat:'gesundheit'},
+              {de:'die Vorsorge',en:'prevention / precaution',cat:'gesundheit'},{de:'der Facharzt',en:'specialist doctor',cat:'gesundheit'},
+              {de:'die Nebenwirkung',en:'side effect',cat:'gesundheit'},{de:'die Notaufnahme',en:'emergency room',cat:'gesundheit'},
+              {de:'die Genesung',en:'recovery',cat:'gesundheit'},{de:'die Impfung',en:'vaccination',cat:'gesundheit'},
+              // Kommunikation
+              {de:'die Verhandlung',en:'negotiation',cat:'kommunikation'},{de:'überzeugen',en:'to convince / persuade',cat:'kommunikation'},
+              {de:'das Missverständnis',en:'misunderstanding',cat:'kommunikation'},{de:'die Stellungnahme',en:'statement / position',cat:'kommunikation'},
+              {de:'sich äußern',en:'to express oneself',cat:'kommunikation'},{de:'die Zusammenfassung',en:'summary',cat:'kommunikation'},
+              {de:'höflich',en:'polite',cat:'kommunikation'},{de:'schriftlich',en:'in writing',cat:'kommunikation'},
             ];
           }
         }
