@@ -1115,8 +1115,8 @@ h1 span{color:var(--gold)}
   <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
   </button>
-  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">📚 Vokabeln</button>
-  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">🎧 Hören</button>
+  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">Vokabeln</button>
+  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">Hören</button>
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
@@ -1234,7 +1234,7 @@ h1 span{color:var(--gold)}
 <header>
 <div class="flag-stripe"></div>
 <div class="header-inner">
-<h1>📁 <span>Dokumente</span></h1>
+<h1><span>Dokumente</span></h1>
 </div>
 </header>
 <div class="pdf-page">
@@ -1374,7 +1374,7 @@ h1 span{color:var(--gold)}
 <header>
 <div class="flag-stripe"></div>
 <div class="header-inner">
-<h1>📰 <span id="news-page-title">Artikel &amp; News</span></h1>
+<h1><span id="news-page-title">Artikel &amp; News</span></h1>
 </div>
 </header>
 <div class="news-page">
@@ -1425,7 +1425,7 @@ h1 span{color:var(--gold)}
 <header>
 <div class="flag-stripe"></div>
 <div class="header-inner">
-<h1>🌐 <span id="translate-page-title">Übersetzer</span></h1>
+<h1><span id="translate-page-title">Übersetzer</span></h1>
 </div>
 </header>
 <div class="translate-page">
@@ -1462,7 +1462,7 @@ h1 span{color:var(--gold)}
 <div class="admin-page">
 <div class="admin-hero">
 <div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
-<div class="admin-hero-title">👑 Admin <span>Dashboard</span></div>
+<div class="admin-hero-title">Admin <span>Dashboard</span></div>
 <div class="admin-hero-sub">User management &amp; signup stats</div>
 </div>
 <!-- PENDING REQUESTS -->
@@ -1552,11 +1552,11 @@ h1 span{color:var(--gold)}
     <div class="nav-label">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">📚</div>
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
     <div class="nav-label">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">🎧</div>
+    <div class="nav-icon"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
     <div class="nav-label">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
@@ -1631,7 +1631,7 @@ h1 span{color:var(--gold)}
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
-      <h1>📚 <span id="vocab-title">Vokabeltrainer</span></h1>
+      <h1><span id="vocab-title">Vokabeltrainer</span></h1>
     </div>
   </header>
   <div style="padding:24px 16px;max-width:700px;margin:0 auto">
@@ -1662,7 +1662,7 @@ h1 span{color:var(--gold)}
   <header>
     <div class="flag-stripe"></div>
     <div class="header-inner">
-      <h1>🎧 <span id="listening-title">Hörverständnis</span></h1>
+      <h1><span id="listening-title">Hörverständnis</span></h1>
     </div>
   </header>
   <div class="listening-container">
@@ -2938,7 +2938,7 @@ const i18n={
     section_daily:'Tägliche Aufgaben',
     section_notes:'Notizen',
     notes_placeholder:'Schreib hier deine Gedanken auf Deutsch...',
-    pdf_title:'📁 Meine Dokumente',
+    pdf_title:'Meine Dokumente',
     storage_label:'💾 Lokal',
     storage_loading:'Lädt...',
     storage_file_singular:'Datei',
@@ -3568,7 +3568,7 @@ function applyLang(){
   if(desktopNav[3])desktopNav[3].textContent='🌐 '+(L.nav_translate||'Translator');
 
 
-  const newsPageTitle=document.getElementById('news-page-title');if(newsPageTitle)newsPageTitle.textContent=L.news_page_title||'📰 Articles & News';
+  const newsPageTitle=document.getElementById('news-page-title');if(newsPageTitle)newsPageTitle.textContent=L.news_page_title||'Articles & News';
   const newsPageSub=document.getElementById('news-page-sub');if(newsPageSub)newsPageSub.textContent=L.news_page_sub||'Publish your own articles and updates';
   const newsTitleLabel=document.getElementById('news-title-label');if(newsTitleLabel)newsTitleLabel.textContent=L.news_title_label||'Title';
   const newsTypeLabel=document.getElementById('news-type-label');if(newsTypeLabel)newsTypeLabel.textContent=L.news_type_label||'Type';
@@ -3610,7 +3610,7 @@ function applyLang(){
   if(document.getElementById('profile-modal').classList.contains('open'))applyProfileLang();
   updateNewsComposerUi();
   // Translate page i18n
-  const tpt=document.getElementById('translate-page-title');if(tpt)tpt.textContent=L.translate_page_title||'🌐 Translator';
+  const tpt=document.getElementById('translate-page-title');if(tpt)tpt.textContent=L.translate_page_title||'Translator';
   const tps=document.getElementById('translate-page-sub');if(tps)tps.textContent=L.translate_page_sub||'Translate between German, English & Arabic';
   const tbl=document.getElementById('translate-btn-label');if(tbl)tbl.textContent=L.translate_btn_label||'Translate';
   const thl=document.getElementById('translate-history-label');if(thl)thl.textContent=L.translate_history_label||'History';
