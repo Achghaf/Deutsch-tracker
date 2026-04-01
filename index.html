@@ -372,15 +372,13 @@ h1 span{color:var(--gold)}
 @media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}}
 
 /* PROFILE ICON BUTTON */
-.profile-icon-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2.5px solid rgba(232,184,75,0.7);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;font-weight:700;color:var(--black);transition:all 0.22s cubic-bezier(0.34,1.56,0.64,1);flex-shrink:0;box-shadow:0 2px 12px rgba(232,184,75,0.3),0 0 0 0 rgba(232,184,75,0);overflow:hidden;line-height:1;padding:0;position:relative}
-.profile-icon-btn::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(232,184,75,0);transition:all 0.22s;pointer-events:none}
-.profile-icon-btn:hover{box-shadow:0 4px 20px rgba(232,184,75,0.45),0 0 0 3px rgba(232,184,75,0.25);transform:scale(1.1);border-color:var(--gold)}
-.profile-icon-btn:hover::after{border-color:rgba(232,184,75,0.4);inset:-6px}
-.profile-icon-btn:active{transform:scale(0.9)}
+.profile-icon-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2.5px solid rgba(232,184,75,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;font-weight:700;color:var(--black);transition:all 0.25s;flex-shrink:0;box-shadow:0 0 0 0 rgba(232,184,75,0),0 2px 10px rgba(232,184,75,0.25);overflow:hidden;line-height:1;padding:0}
+.profile-icon-btn:hover{box-shadow:0 0 0 3px rgba(232,184,75,0.35),0 4px 18px rgba(232,184,75,0.3);transform:scale(1.08);border-color:var(--gold)}
+.profile-icon-btn:active{transform:scale(0.92)}
 /* Mobile nav profile circle */
-.mob-profile-circle{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.6);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;font-weight:700;color:var(--black);overflow:hidden;line-height:1;padding:0;transition:all 0.2s;box-shadow:0 2px 10px rgba(232,184,75,0.25)}
+.mob-profile-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold) 0%,#b5832a 100%);border:2px solid rgba(232,184,75,0.5);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;font-weight:700;color:var(--black);overflow:hidden;line-height:1;padding:0;transition:all 0.2s;box-shadow:0 2px 8px rgba(232,184,75,0.2)}
 .nav-item:active .mob-profile-circle{transform:scale(0.9)}
-.nav-item.active .mob-profile-circle{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,184,75,0.3),0 2px 12px rgba(232,184,75,0.35)}
+.nav-item.active .mob-profile-circle{border-color:var(--gold);box-shadow:0 0 0 2.5px rgba(232,184,75,0.3),0 2px 10px rgba(232,184,75,0.3)}
 /* ===== NOTIFICATIONS ===== */
 .notif-btn{position:relative;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.2s;flex-shrink:0}
 .notif-btn:hover{border-color:var(--gold);color:var(--gold)}
@@ -1150,7 +1148,7 @@ h1 span{color:var(--gold)}
         </div>
       </div>
     </div>
-    <button class="profile-icon-btn" id="desk-profile-btn" onclick="openProfileModal()" title="Profile" style="display:none">?</button>
+    <button class="profile-icon-btn" id="desk-profile-btn" onclick="openProfileModal()" title="Profile" style="display:none"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
   </div>
 </nav>
 
@@ -1783,33 +1781,15 @@ const SUPABASE_URL = 'https://crgqqzpkppmlhjyawumk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_IZamkQuR6GgxYLQUqYOOOw_EtlieEI_';
 // =====================================================
 
-// Initialize Supabase — guard against CDN load failure
-let _supa;
-try {
-  if (typeof supabase === 'undefined') throw new Error('Supabase CDN not loaded');
-  _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    },
-  });
-} catch(e) {
-  console.error('Supabase init failed:', e);
-  // Show login screen immediately so the app is not stuck on the loader
-  document.addEventListener('DOMContentLoaded', function() {
-    var loader = document.getElementById('app-loader');
-    if (loader) loader.classList.remove('visible');
-    var login = document.getElementById('login-screen');
-    if (login) login.classList.add('visible');
-  });
-  // Also try immediately in case DOM is already ready
-  (function() {
-    var loader = document.getElementById('app-loader');
-    if (loader) loader.classList.remove('visible');
-    var login = document.getElementById('login-screen');
-    if (login) login.classList.add('visible');
-  })();
-}
+// Initialize Supabase with session persistence and auto-refresh enabled.
+const _supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    // Persist the user session in local storage so that refreshes keep the user logged in.
+    persistSession: true,
+    // Automatically refresh the access token when it expires.
+    autoRefreshToken: true,
+  },
+});
 let currentUser = null;
 let currentRole = 'user'; // 'admin' | 'user'
 let newsFilter = 'all';
@@ -1973,12 +1953,7 @@ async function bootstrapAuth(){
     showLoginScreen();
   }
 }
-if (_supa) {
-  bootstrapAuth();
-} else {
-  // _supa failed to init - loader already hidden by init guard above
-  console.warn('Skipping bootstrapAuth: Supabase unavailable');
-}
+bootstrapAuth();
 
 
 // ===== AUTH SUPABASE =====
@@ -2096,7 +2071,7 @@ async function logout(){
 
 // Supabase handles the session automatically.
 
-if (_supa) _supa.auth.onAuthStateChange(async(event,session)=>{
+_supa.auth.onAuthStateChange(async(event,session)=>{
   if(session?.user){
     // Persist the logged-in user to localStorage so refreshes keep them signed in.
     try{ localStorage.setItem('persist_user', JSON.stringify(session.user)); } catch(_){ }
@@ -2176,26 +2151,6 @@ function updateProfileStats(){
 const AVATAR_EMOJIS=['🦊','🐻','🦁','🐼','🐯','🐺','🦅','🐙','🌟','⚡','🎯','🔥','🌙','💎','🎸','🚀','🌺','🍀'];
 const AVATAR_COLORS=['linear-gradient(135deg,#e8b84b,#b5832a)','linear-gradient(135deg,#5b7ec9,#3a5fa0)','linear-gradient(135deg,#3dba6e,#2a8c50)','linear-gradient(135deg,#cc1f1f,#991515)','linear-gradient(135deg,#8b3dba,#6a2d9a)','linear-gradient(135deg,#3aacf0,#2080c0)','linear-gradient(135deg,#f07030,#c05020)','linear-gradient(135deg,#888,#444)'];
 
-// Central function: reads current saved prefs and updates ALL avatar surfaces instantly
-function updateAllAvatars(){
-  if(!currentUser) return;
-  const savedName = localStorage.getItem('profile_display_name');
-  const name = savedName || (currentUser.user_metadata&&(currentUser.user_metadata.name||currentUser.user_metadata.full_name)) || (currentUser.email?currentUser.email.split('@')[0]:'');
-  const emoji = localStorage.getItem('profile_avatar_emoji')||'';
-  const color = localStorage.getItem('profile_avatar_color')||'';
-  const initial = name ? name[0].toUpperCase() : '?';
-  const display = emoji || initial;
-  const bg = color || 'linear-gradient(135deg,var(--gold) 0%,#b5832a 100%)';
-  // Big modal avatar
-  const avatarBig = document.getElementById('profile-avatar-big');
-  if(avatarBig){ avatarBig.textContent=display; avatarBig.style.background=bg; }
-  // Desktop + mobile nav buttons
-  ['mob-profile-btn','desk-profile-btn'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){ el.textContent=display; el.style.background=bg; el.style.display='flex'; }
-  });
-}
-
 function initAvatarPicker(){
   const grid=document.getElementById('avatar-emoji-grid');
   const colorRow=document.getElementById('avatar-color-row');
@@ -2212,21 +2167,15 @@ function initAvatarPicker(){
       localStorage.setItem('profile_avatar_emoji',em);
       document.querySelectorAll('.avatar-emoji-opt').forEach(b=>b.classList.remove('selected'));
       btn.classList.add('selected');
-      updateAllAvatars();
+      if(currentUser) showUserBadge(currentUser);
     };
     grid.appendChild(btn);
   });
-  // "Use initial" option
+  // Add "initial" option
   const clearBtn=document.createElement('button');
   clearBtn.className='avatar-emoji-opt'+(currentEmoji===''?' selected':'');
   clearBtn.textContent='Aa';clearBtn.style.fontSize='0.75rem';clearBtn.style.fontFamily="'Bebas Neue',sans-serif";
-  clearBtn.onclick=(e)=>{
-    e.stopPropagation();
-    localStorage.removeItem('profile_avatar_emoji');
-    document.querySelectorAll('.avatar-emoji-opt').forEach(b=>b.classList.remove('selected'));
-    clearBtn.classList.add('selected');
-    updateAllAvatars();
-  };
+  clearBtn.onclick=(e)=>{e.stopPropagation();localStorage.removeItem('profile_avatar_emoji');document.querySelectorAll('.avatar-emoji-opt').forEach(b=>b.classList.remove('selected'));clearBtn.classList.add('selected');if(currentUser)showUserBadge(currentUser);};
   grid.appendChild(clearBtn);
 
   colorRow.innerHTML='';
@@ -2239,7 +2188,7 @@ function initAvatarPicker(){
       localStorage.setItem('profile_avatar_color',c);
       document.querySelectorAll('.avatar-color-swatch').forEach(s=>s.classList.remove('selected'));
       sw.classList.add('selected');
-      updateAllAvatars();
+      if(currentUser)showUserBadge(currentUser);
     };
     colorRow.appendChild(sw);
   });
