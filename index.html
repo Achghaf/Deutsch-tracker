@@ -101,6 +101,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Emoji icon */
 .nav-icon{font-size:1.55rem;line-height:1;transition:transform 0.18s,filter 0.18s;filter:grayscale(0.4) opacity(0.55)}
 .nav-item.active .nav-icon{filter:grayscale(0) opacity(1);transform:scale(1.15) translateY(-1px)}
+/* When using SVG icons instead of emojis, scale the SVGs to match the original emoji size. The parent
+   .nav-icon element still controls filter/transform. */
+.nav-icon svg{width:1.55rem;height:1.55rem;display:block;}
 /* Active indicator dot */
 .nav-item::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity 0.18s}
 .nav-item.active::after{opacity:1}
@@ -1109,8 +1112,19 @@ h1 span{color:var(--gold)}
   <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
   </button>
-  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">Vokabeln</button>
-  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">Hören</button>
+  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
+    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+    </svg> Vokabeln
+  </button>
+  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
+    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+      <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+      <path d="M4 12a8 8 0 0 1 16 0"></path>
+    </svg> Hören
+  </button>
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
@@ -1526,45 +1540,102 @@ h1 span{color:var(--gold)}
 <!-- Bottom nav bar -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
+  <!-- Replace emoji icons with consistent Feather-style SVGs -->
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
-    <div class="nav-icon">📊</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"></line>
+        <line x1="12" y1="20" x2="12" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="14"></line>
+      </svg>
+    </div>
     <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
   </div>
   <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
-    <div class="nav-icon">📄</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+      </svg>
+    </div>
     <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
   <div class="nav-item" data-page="news" onclick="switchPage('news')">
-    <div class="nav-icon">📰</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16z"></path>
+        <path d="M16 21H2a2 2 0 0 1-2-2V9"></path>
+        <line x1="6" y1="10" x2="16" y2="10"></line>
+        <line x1="6" y1="14" x2="16" y2="14"></line>
+      </svg>
+    </div>
     <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
   <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-    <div class="nav-icon">🌐</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+    </div>
     <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
   <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
-    <div class="nav-icon">🧠</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
     <div class="nav-label">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">📚</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
     <div class="nav-label">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">🎧</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+        <path d="M4 12a8 8 0 0 1 16 0"></path>
+      </svg>
+    </div>
     <div class="nav-label">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
-    <div class="nav-icon">📈</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+    </div>
     <div class="nav-label">Niveau</div>
   </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
-    <div class="nav-icon">👑</div>
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+    </div>
     <div class="nav-label">Admin</div>
   </div>
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
-    <div class="nav-icon" style="position:relative;display:inline-flex">
-      🔔
+    <div class="nav-icon" style="position:relative">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
       <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
     <div class="nav-label">Alerts</div>
@@ -3560,13 +3631,22 @@ function applyLang(){
 
   const emailInput=document.getElementById('auth-email');if(emailInput)emailInput.placeholder=L.placeholder_email;
   const pwdInput=document.getElementById('auth-password');if(pwdInput)pwdInput.placeholder=L.placeholder_pwd;
-  const confirmInput=document.getElementById('auth-confirm');if(confirmInput)confirmInput.placeholder=L.placeholder_pwd;
+  // Fix incorrect ID for confirm password field and update its placeholder
+  const confirmInput=document.getElementById('auth-confirm-password');
+  if(confirmInput)confirmInput.placeholder=L.placeholder_pwd;
 
-  document.querySelectorAll('.login-field label').forEach((el,i)=>{
-    if(i===0)el.textContent=L.label_email;
-    if(i===1)el.textContent=L.label_pwd;
-    if(i===2)el.textContent=L.label_confirm;
-  });
+  // Update labels individually rather than relying on index order. The previous
+  // implementation used a simple index-based approach which broke when the
+  // "Display Name" field is shown in the registration tab. We instead look up
+  // each field by its ID and update the corresponding label if a translation
+  // string exists. Note: there is currently no explicit translation key for the
+  // display name label; if added in the future, use L.label_name here.
+  const emailLabel=document.querySelector('#auth-email')?.closest('.login-field')?.querySelector('label');
+  if(emailLabel&&L.label_email) emailLabel.textContent=L.label_email;
+  const pwdLabel=document.querySelector('#auth-password')?.closest('.login-field')?.querySelector('label');
+  if(pwdLabel&&L.label_pwd) pwdLabel.textContent=L.label_pwd;
+  const confirmLabel=document.querySelector('#auth-confirm-password')?.closest('.login-field')?.querySelector('label');
+  if(confirmLabel&&L.label_confirm) confirmLabel.textContent=L.label_confirm;
 
   const ab=document.getElementById('auth-btn');if(ab)ab.textContent=authMode==='login'?L.btn_login:L.btn_register;
 
