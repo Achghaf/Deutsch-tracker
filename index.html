@@ -4485,13 +4485,26 @@ async function translateOne(text, targetLang){
 
 /* ===== Google Translate (gtx endpoint) ===== */
 async function translateGenericGCloud(text, from, to){
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&q=${encodeURIComponent(text)}`;
-  const res = await fetchWithTimeout(url, 10000);
+  // Construct parameters for POST request. Google’s unofficial
+  // translate endpoint now expects POST rather than a long query string.
+  const params = new URLSearchParams();
+  params.append('client', 'gtx');
+  params.append('dt', 't');
+  params.append('sl', from);
+  params.append('tl', to);
+  params.append('q', text);
+  // Use fetchWithTimeout to send a POST request with URL encoded body.
+  const res = await fetchWithTimeout('https://translate.googleapis.com/translate_a/single', 10000, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: params
+  });
   if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  // Parse the returned JSON. The response is a nested array: [[["translation","original",...],...],...]
   const json = await res.json();
-  // Response is nested array: [[["translated","original",...],...],...]
   const parts = json?.[0];
   if(!Array.isArray(parts)) throw new Error('Unexpected response');
+  // Flatten the first element of each translation pair and join into a single string.
   const result = parts.map(p => p?.[0] || '').join('');
   if(!result.trim()) throw new Error('Empty result');
   return result;
@@ -5033,7 +5046,10 @@ const QUESTION_BANK = {
       {q:"Korrekte Form: Die Kinder ___ laut.", options:["sind","ist","bin","bist"], correct:0, explanation:"Die Kinder (Plural) + sein → sind."},
       {q:"Welcher Artikel? ___ Apfel ist rot.", options:["Der","Die","Das","Den"], correct:0, explanation:"'Apfel' ist maskulin → der Apfel."},
       {q:"Ergänze: Ich ___ gern Musik.", options:["höre","hört","hören","hörst"], correct:0, explanation:"Ich + hören → ich höre."},
-      {q:"Plural von 'die Frau'?", options:["die Frauen","die Fraus","die Frau","der Frauen"], correct:0, explanation:"Frau → Frauen (Plural mit -en)."}
+      {q:"Plural von 'die Frau'?", options:["die Frauen","die Fraus","die Frau","der Frauen"], correct:0, explanation:"Frau → Frauen (Plural mit -en)."},
+      {q:"Ergänze: ___ du alt?", options:["Bist","Bin","Ist","Sind"], correct:0, explanation:"Die Frage an du → Bist du alt?"},
+      {q:"Plural von 'der Tisch'?", options:["die Tische","die Tisch","der Tische","das Tische"], correct:0, explanation:"Plural: die Tische."},
+      {q:"Was ist korrekt? Wir ___ in der Schule.", options:["sind","ist","bin","bist"], correct:0, explanation:"Wir sind in der Schule."}
     ],
     vocabulary: [
       {q:"Was bedeutet 'Hund'?", options:["dog","cat","bird","fish"], correct:0, explanation:"Hund = dog auf Englisch."},
@@ -5055,7 +5071,10 @@ const QUESTION_BANK = {
       {q:"Was bedeutet 'alt'?", options:["old","new","young","big"], correct:0, explanation:"alt = old."},
       {q:"Wie sagt man 'good morning' auf Deutsch?", options:["Guten Morgen","Guten Abend","Gute Nacht","Guten Tag"], correct:0, explanation:"Guten Morgen = good morning."},
       {q:"Was ist 'Milch' auf Englisch?", options:["milk","water","juice","tea"], correct:0, explanation:"Milch = milk."},
-      {q:"Was bedeutet 'klein'?", options:["small","big","tall","long"], correct:0, explanation:"klein = small."}
+      {q:"Was bedeutet 'klein'?", options:["small","big","tall","long"], correct:0, explanation:"klein = small."},
+      {q:"Was bedeutet 'Freund'?", options:["friend","enemy","brother","father"], correct:0, explanation:"Freund = friend."},
+      {q:"Wie sagt man 'good night' auf Deutsch?", options:["Gute Nacht","Guten Morgen","Guten Tag","Auf Wiedersehen"], correct:0, explanation:"Gute Nacht = good night."},
+      {q:"Was ist 'Mutter' auf Englisch?", options:["mother","father","daughter","sister"], correct:0, explanation:"Mutter = mother."}
     ],
     reading: [
       {q:"'Ich heiße Anna.' Was erfahren wir?", options:["Ihren Namen","Ihr Alter","Ihre Stadt","Ihren Beruf"], correct:0, explanation:"'Ich heiße' = mein Name ist → wir erfahren den Namen."},
@@ -5077,7 +5096,10 @@ const QUESTION_BANK = {
       {q:"'Es regnet.' Wie ist das Wetter?", options:["Es regnet.","Es scheint die Sonne.","Es ist windig.","Es ist kalt."], correct:0, explanation:"'Es regnet' = it is raining."},
       {q:"'Ich lerne Deutsch seit drei Monaten.' Wie lange lerne ich?", options:["drei Monate","drei Jahre","drei Wochen","drei Tage"], correct:0, explanation:"'seit drei Monaten' = for three months."},
       {q:"'Das Restaurant ist zu.' Was bedeutet 'zu'?", options:["geschlossen","geöffnet","voll","leer"], correct:0, explanation:"'zu' = closed in this context."},
-      {q:"'Anna arbeitet als Lehrerin.' Was ist Annas Beruf?", options:["Lehrerin","Ärztin","Köchin","Verkäuferin"], correct:0, explanation:"'arbeitet als Lehrerin' = works as a teacher."}
+      {q:"'Anna arbeitet als Lehrerin.' Was ist Annas Beruf?", options:["Lehrerin","Ärztin","Köchin","Verkäuferin"], correct:0, explanation:"'arbeitet als Lehrerin' = works as a teacher."},
+      {q:"'Paul spielt Fußball im Park.' Was macht Paul?", options:["Fußball spielen","Tennis spielen","Schwimmen","Lesen"], correct:0, explanation:"Er spielt Fußball."},
+      {q:"'Sie liest ein interessantes Buch.' Was liest sie?", options:["ein Buch","eine Zeitung","eine Zeitschrift","einen Brief"], correct:0, explanation:"Sie liest ein Buch."},
+      {q:"'Der Arzt arbeitet im Krankenhaus.' Wo arbeitet der Arzt?", options:["im Krankenhaus","in der Schule","im Büro","im Restaurant"], correct:0, explanation:"Er arbeitet im Krankenhaus."}
     ]
   },
   A2: {
@@ -5101,7 +5123,10 @@ const QUESTION_BANK = {
       {q:"Genitiv: Das ist das Auto ___ Mannes.", options:["des","dem","den","der"], correct:0, explanation:"Genitiv maskulin → des Mannes."},
       {q:"Trennbares Verb: Er ___ um 7 Uhr ___. (aufstehen)", options:["steht / auf","aufsteht / —","steh / auf","steht auf / —"], correct:0, explanation:"Trennbares Verb: Präfix ans Ende → steht...auf."},
       {q:"Komparativ: Dieses Buch ist ___ interessant als jenes.", options:["interessanter","mehr interessant","am interessantesten","interessantest"], correct:0, explanation:"Komparativ: -er anhängen → interessanter."},
-      {q:"Welche Präposition? Das Bild hängt ___ der Wand.", options:["an","auf","in","vor"], correct:0, explanation:"Bilder hängen an der Wand (Lage → Dativ)."}
+      {q:"Welche Präposition? Das Bild hängt ___ der Wand.", options:["an","auf","in","vor"], correct:0, explanation:"Bilder hängen an der Wand (Lage → Dativ)."},
+      {q:"Ergänze: ___ der Tag, an dem du geboren bist?", options:["Welcher","Welche","Welches","Wer"], correct:0, explanation:"Tag (maskulin) → welcher Tag."},
+      {q:"Richtige Form: ___ du schon einmal in Berlin ___? (sein)", options:["Bist / gewesen","Warst / gewesen","Bist / war","War / warst"], correct:0, explanation:"Perfekt: Bist du schon einmal in Berlin gewesen?"},
+      {q:"Welche Präposition? Ich interessiere mich ___ Musik.", options:["für","auf","an","mit"], correct:0, explanation:"sich interessieren für."}
     ],
     vocabulary: [
       {q:"Was bedeutet 'Krankenhaus'?", options:["hospital","pharmacy","clinic","school"], correct:0, explanation:"Krankenhaus = hospital."},
@@ -5123,7 +5148,10 @@ const QUESTION_BANK = {
       {q:"Was bedeutet 'sofort'?", options:["immediately","later","soon","never"], correct:0, explanation:"sofort = immediately / right away."},
       {q:"Was ist 'Brücke' auf Englisch?", options:["bridge","road","river","tunnel"], correct:0, explanation:"Brücke = bridge."},
       {q:"Was bedeutet 'deshalb'?", options:["therefore","however","but","although"], correct:0, explanation:"deshalb = therefore / that's why."},
-      {q:"Was ist das Gegenteil von 'vergessen'?", options:["erinnern","denken","wissen","kennen"], correct:0, explanation:"Das Gegenteil von vergessen ist sich erinnern."}
+      {q:"Was ist das Gegenteil von 'vergessen'?", options:["erinnern","denken","wissen","kennen"], correct:0, explanation:"Das Gegenteil von vergessen ist sich erinnern."},
+      {q:"Was bedeutet 'bequem'?", options:["comfortable","difficult","heavy","expensive"], correct:0, explanation:"bequem = comfortable."},
+      {q:"Was ist das Gegenteil von 'hoch'?", options:["niedrig","groß","klein","weit"], correct:0, explanation:"hoch vs niedrig."},
+      {q:"Was bedeutet 'Zukunft'?", options:["future","past","present","history"], correct:0, explanation:"Zukunft = future."}
     ],
     reading: [
       {q:"'Der Zug hat Verspätung wegen des schlechten Wetters.' Warum hat der Zug Verspätung?", options:["wegen des Wetters","wegen eines Unfalls","wegen Bauarbeiten","wegen der Ferien"], correct:0, explanation:"'wegen des schlechten Wetters' = because of bad weather."},
@@ -5145,7 +5173,10 @@ const QUESTION_BANK = {
       {q:"'Das Hotel liegt direkt am Strand.' Wo liegt das Hotel?", options:["am Strand","im Stadtzentrum","am Bahnhof","im Wald"], correct:0, explanation:"'direkt am Strand' = right on the beach."},
       {q:"'Wegen Krankheit bleibt das Büro heute geschlossen.' Warum ist das Büro zu?", options:["wegen Krankheit","wegen Ferien","wegen Umbau","wegen Feiertag"], correct:0, explanation:"'wegen Krankheit' = due to illness."},
       {q:"'Sie lernt Deutsch, um in Deutschland studieren zu können.' Warum lernt sie Deutsch?", options:["um in Deutschland zu studieren","um Freunde zu finden","um zu reisen","um zu arbeiten"], correct:0, explanation:"'um...zu' drückt den Zweck aus."},
-      {q:"'Der Kurs findet dienstags und donnerstags statt.' An welchen Tagen?", options:["Dienstag und Donnerstag","Montag und Mittwoch","Mittwoch und Freitag","Montag und Freitag"], correct:0, explanation:"'dienstags und donnerstags' = Tuesdays and Thursdays."}
+      {q:"'Der Kurs findet dienstags und donnerstags statt.' An welchen Tagen?", options:["Dienstag und Donnerstag","Montag und Mittwoch","Mittwoch und Freitag","Montag und Freitag"], correct:0, explanation:"'dienstags und donnerstags' = Tuesdays and Thursdays."},
+      {q:"'Sie hat den Zug verpasst, weil er zu spät war.' Was hat sie verpasst?", options:["den Zug","den Bus","das Flugzeug","die Straßenbahn"], correct:0, explanation:"Sie hat den Zug verpasst."},
+      {q:"'Wir müssen einkaufen gehen, da der Kühlschrank leer ist.' Warum gehen sie einkaufen?", options:["Der Kühlschrank ist leer.","Sie haben Hunger.","Es regnet.","Sie haben keine Zeit."], correct:0, explanation:"Der Kühlschrank ist leer."},
+      {q:"'Obwohl er müde war, half er seiner Freundin beim Umzug.' Was tat er?", options:["Er half seiner Freundin.","Er ging schlafen.","Er ging ins Kino.","Er arbeitete nicht."], correct:0, explanation:"Er half beim Umzug."}
     ]
   },
   B1: {
@@ -5169,7 +5200,10 @@ const QUESTION_BANK = {
       {q:"Infinitiv mit zu: Er bat mich, ___ zu kommen.", options:["früher","früh","frühzeitig","frühes"], correct:0, explanation:"Adjektiv als Adverb: früher (komparativ) = earlier."},
       {q:"Welches Adjektiv? Das war eine ___ Entscheidung.", options:["schwierige","schwieriger","schwierigen","schwierigem"], correct:0, explanation:"Nach unbestimmtem Artikel, feminin, Nominativ → schwierige."},
       {q:"Passiv mit Modalverb: Das Problem ___ gelöst werden.", options:["muss","ist","hat","wird"], correct:0, explanation:"Modalverb + Passiv: muss + Partizip II + werden."},
-      {q:"Temporalsatz: ___ sie ankam, hatte er schon gegessen.", options:["Als","Wenn","Während","Bevor"], correct:0, explanation:"'Als' = when (einmalig in der Vergangenheit)."}
+      {q:"Temporalsatz: ___ sie ankam, hatte er schon gegessen.", options:["Als","Wenn","Während","Bevor"], correct:0, explanation:"'Als' = when (einmalig in der Vergangenheit)."},
+      {q:"Konjunktiv I: Er sagt, er ___ morgen kommen. (kommen)", options:["komme","kommt","gekommen","käme"], correct:0, explanation:"Konjunktiv I in indirekter Rede: komme."},
+      {q:"Adjektivdeklination: Das ___ Auto wurde repariert.", options:["defekte","defekter","defektes","defekten"], correct:0, explanation:"Nach bestimmtem Artikel, neutrum, Nominativ → defekte."},
+      {q:"Finalsatz: Ich lerne Deutsch, ___ in Deutschland zu arbeiten.", options:["um","damit","dass","ob"], correct:0, explanation:"Finalsatz mit Infinitiv + zu: um ... zu."}
     ],
     vocabulary: [
       {q:"Was bedeutet 'die Beziehung'?", options:["relationship","position","question","decision"], correct:0, explanation:"Beziehung = relationship."},
@@ -5191,7 +5225,10 @@ const QUESTION_BANK = {
       {q:"Was bedeutet 'im Gegensatz zu'?", options:["in contrast to","in addition to","because of","instead of"], correct:0, explanation:"im Gegensatz zu = in contrast to."},
       {q:"Was ist ein Synonym von 'versuchen'?", options:["probieren","machen","wollen","können"], correct:0, explanation:"versuchen ≈ probieren."},
       {q:"Was bedeutet 'die Maßnahme'?", options:["measure / action","law","rule","decision"], correct:0, explanation:"Maßnahme = measure or action taken."},
-      {q:"Was ist das Gegenteil von 'erlauben'?", options:["verbieten","fordern","verlangen","befehlen"], correct:0, explanation:"Das Gegenteil von erlauben ist verbieten."}
+      {q:"Was ist das Gegenteil von 'erlauben'?", options:["verbieten","fordern","verlangen","befehlen"], correct:0, explanation:"Das Gegenteil von erlauben ist verbieten."},
+      {q:"Was bedeutet 'die Bevölkerung'?", options:["population","government","company","education"], correct:0, explanation:"Bevölkerung = population."},
+      {q:"Was ist ein Synonym von 'verhindern'?", options:["stoppen","erlauben","fördern","unterstützen"], correct:0, explanation:"verhindern ≈ stoppen."},
+      {q:"Was bedeutet 'die Bestätigung'?", options:["confirmation","rejection","condition","assumption"], correct:0, explanation:"Bestätigung = confirmation."}
     ],
     reading: [
       {q:"'Trotz steigender Preise kaufen viele Deutsche weiterhin Bio-Produkte.' Was zeigt das?", options:["Bio bleibt beliebt trotz höherer Kosten.","Bio wird billiger.","Niemand kauft mehr Bio.","Preise sinken."], correct:0, explanation:"'trotz steigender Preise...weiterhin' = despite higher prices, still buying."},
@@ -5213,7 +5250,10 @@ const QUESTION_BANK = {
       {q:"'Das Angebot gilt nur solange der Vorrat reicht.' Was bedeutet das?", options:["Das Angebot ist begrenzt.","Das Angebot ist unbegrenzt.","Es gibt kein Angebot.","Das Angebot läuft ewig."], correct:0, explanation:"'solange der Vorrat reicht' = while supplies last."},
       {q:"'Wegen anhaltender Trockenheit drohen Ernteausfälle.' Was ist die Folge der Trockenheit?", options:["Schlechtere Ernte","Bessere Ernte","Mehr Regen","Günstigere Preise"], correct:0, explanation:"'Ernteausfälle' = crop failures due to drought."},
       {q:"'Die Konferenz brachte keine konkreten Ergebnisse.' Was bedeutet das?", options:["Es wurden keine klaren Beschlüsse gefasst.","Die Konferenz war sehr erfolgreich.","Viele Ergebnisse wurden erzielt.","Die Konferenz wurde abgesagt."], correct:0, explanation:"'keine konkreten Ergebnisse' = no concrete results."},
-      {q:"'Im Vergleich zum Vorjahr sind die Temperaturen gestiegen.' Was hat sich verändert?", options:["Es ist wärmer als letztes Jahr.","Es ist kälter als letztes Jahr.","Die Temperaturen sind gleich.","Das Wetter ist besser."], correct:0, explanation:"'gestiegen' = increased → wärmer."}
+      {q:"'Im Vergleich zum Vorjahr sind die Temperaturen gestiegen.' Was hat sich verändert?", options:["Es ist wärmer als letztes Jahr.","Es ist kälter als letztes Jahr.","Die Temperaturen sind gleich.","Das Wetter ist besser."], correct:0, explanation:"'gestiegen' = increased → wärmer."},
+      {q:"'Die Regierung plant Maßnahmen, um die Wirtschaft anzukurbeln.' Was will die Regierung tun?", options:["die Wirtschaft stimulieren","Steuern erhöhen","die Wirtschaft schwächen","die Industrie schließen"], correct:0, explanation:"'anzukurbeln' bedeutet 'to stimulate'."},
+      {q:"'Angesichts des starken Wettbewerbs muss das Unternehmen innovativ sein.' Warum muss es innovativ sein?", options:["wegen des starken Wettbewerbs","wegen des hohen Gewinns","wegen der guten Produkte","wegen der niedrigen Kosten"], correct:0, explanation:"Der Wettbewerb zwingt zur Innovation."},
+      {q:"'Der Professor betonte die Bedeutung von Bildung für die Zukunft.' Was betonte der Professor?", options:["die Bedeutung von Bildung","die Höhe der Kosten","den Spaß am Lernen","die Gefahr von Technik"], correct:0, explanation:"Er betonte die Bedeutung von Bildung."}
     ]
   }
 };
@@ -5903,6 +5943,10 @@ function showLevelResult() {
               {de:'sch\u00f6n',en:'beautiful',cat:'adjective'},{de:'Bitte',en:'please',cat:'phrase'},
               {de:'Buch',en:'book',cat:'noun'},{de:'essen',en:'to eat',cat:'verb'},
               {de:'gro\u00df',en:'big',cat:'adjective'},{de:'Entschuldigung',en:'excuse me',cat:'phrase'},
+              {de:'Auto',en:'car',cat:'noun'},{de:'schreiben',en:'to write',cat:'verb'},
+              {de:'laut',en:'loud',cat:'adjective'},{de:'Guten Abend',en:'good evening',cat:'phrase'},
+              {de:'Freund',en:'friend',cat:'noun'},{de:'lieben',en:'to love',cat:'verb'},
+              {de:'neu',en:'new',cat:'adjective'},{de:'Danke sch\u00f6n',en:'thank you very much',cat:'phrase'}
             ];
           }
         }
