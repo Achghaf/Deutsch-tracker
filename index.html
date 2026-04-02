@@ -386,9 +386,12 @@ h1 span{color:var(--gold)}
 
 /* DESKTOP NAV */
 .desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
-.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261;display:inline-flex;align-items:center;gap:7px}
+.desk-nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.45;background:rgba(255,255,255,0.06);border-radius:5px;padding:2px;box-sizing:content-box;transition:all 0.2s}
 .desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
+.desk-nav-item.active svg{opacity:1;background:rgba(232,184,75,0.15);color:var(--gold)}
 .desk-nav-item:hover{color:var(--white)}
+.desk-nav-item:hover svg{opacity:0.75;background:rgba(255,255,255,0.1)}
 .desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
 
 /* RESPONSIVE */
@@ -1564,6 +1567,8 @@ h1 span{color:var(--gold)}
 /* LANG FAB */
 /* LANG FAB */
 .lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
+.spinning-earth{animation:earthSpin 8s linear infinite;color:var(--gold);filter:drop-shadow(0 0 4px rgba(232,184,75,0.35))}
+@keyframes earthSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .lang-fab-btn:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(232,184,75,0.25);transform:scale(1.1)}
 .lang-fab-btn:active{transform:scale(0.92)}
 .lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
@@ -2341,7 +2346,15 @@ h1 span{color:var(--gold)}
       confusing or easy to overlook. By appending a second emoji (🌍) we
       signal clearly that this button relates to language and world selection.
     -->
-    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐🌍</button>
+    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">
+      <svg class="spinning-earth" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12h20"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        <path d="M6 5.5C7.5 7 9.5 8 12 8s4.5-1 6-2.5" stroke-opacity="0.5"/>
+        <path d="M6 18.5C7.5 17 9.5 16 12 16s4.5 1 6 2.5" stroke-opacity="0.5"/>
+      </svg>
+    </button>
 </div>
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
