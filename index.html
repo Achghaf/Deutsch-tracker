@@ -2335,7 +2335,13 @@ h1 span{color:var(--gold)}
 <button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
 <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
 </div>
-<button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐</button>
+    <!--
+      Added an extra emoji to the language button so it stands out more. The
+      original button only displayed a generic globe (🌐), which could be
+      confusing or easy to overlook. By appending a second emoji (🌍) we
+      signal clearly that this button relates to language and world selection.
+    -->
+    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐🌍</button>
 </div>
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
