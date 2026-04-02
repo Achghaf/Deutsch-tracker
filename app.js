@@ -280,29 +280,37 @@ async function handleAuth(){
   // Display a temporary spinner during login
   btn.textContent = '...';
   document.getElementById('auth-error').classList.remove('visible');
-  try {
-    const { error } = await _supa.auth.signInWithPassword({ email, password: pwd });
-    if (error) throw error;
-    // If sign in succeeds, restore button state.  onAuthStateChange will handle
-    // navigating away from the login screen, but restoring the button prevents a
-    // stuck spinner if the auth state change is delayed.
-    btn.disabled = false;
-    btn.textContent = t('btn_login');
-  } catch (e) {
-    // On error, re-enable the button and show the proper label
-    btn.disabled = false;
-    btn.textContent = t('btn_login');
-    const msgs = {
-      'Invalid login credentials': t('error_invalid_login'),
-      'Email not confirmed': t('error_not_confirmed'),
-    };
-    const serverMsg = (e && e.message) ? e.message : '';
-    if (/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)) {
-      showAuthError(t('error_too_many'));
-    } else {
-      showAuthError(msgs[serverMsg] || serverMsg || String(e));
+    try {
+      // Use signInWithPassword to authenticate. Destructure both data and error
+      // to ensure we handle the returned user session immediately.  This helps
+      // avoid cases where onAuthStateChange does not trigger due to race
+      // conditions in certain browsers or frameworks.
+      const { data, error } = await _supa.auth.signInWithPassword({ email, password: pwd });
+      if (error) throw error;
+      // When sign‑in succeeds, restore the button label and call
+      // startAuthenticatedApp with the returned user.  Even though
+      // onAuthStateChange will also fire, explicitly starting the app
+      // improves reliability and ensures the UI transitions immediately.
+      btn.disabled = false;
+      btn.textContent = t('btn_login');
+      if (data?.user) {
+        await startAuthenticatedApp(data.user);
+      }
+    } catch (e) {
+      // On error, re-enable the button and show the proper label
+      btn.disabled = false;
+      btn.textContent = t('btn_login');
+      const msgs = {
+        'Invalid login credentials': t('error_invalid_login'),
+        'Email not confirmed': t('error_not_confirmed'),
+      };
+      const serverMsg = (e && e.message) ? e.message : '';
+      if (/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)) {
+        showAuthError(t('error_too_many'));
+      } else {
+        showAuthError(msgs[serverMsg] || serverMsg || String(e));
+      }
     }
-  }
 }
 
 async function logout(){
