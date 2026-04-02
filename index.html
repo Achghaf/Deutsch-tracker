@@ -2259,7 +2259,7 @@ h1 span{color:var(--gold)}
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
       </svg>
     </div>
-    <div class="nav-label">Quiz</div>
+    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
     <div class="nav-icon">
@@ -2268,7 +2268,7 @@ h1 span{color:var(--gold)}
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-    <div class="nav-label">Vokabeln</div>
+    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
     <div class="nav-icon">
@@ -2278,7 +2278,7 @@ h1 span{color:var(--gold)}
         <path d="M4 12a8 8 0 0 1 16 0"></path>
       </svg>
     </div>
-    <div class="nav-label">Hören</div>
+    <div class="nav-label" data-i18n="nav_listening">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
     <div class="nav-icon">
@@ -2287,7 +2287,7 @@ h1 span{color:var(--gold)}
         <polyline points="17 6 23 6 23 12"></polyline>
       </svg>
     </div>
-    <div class="nav-label">Niveau</div>
+    <div class="nav-label" data-i18n="nav_level">Niveau</div>
   </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
@@ -2531,7 +2531,38 @@ h1 span{color:var(--gold)}
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
     <script>
-    /* ── STREAK FIX ─────────────────────────────────────────────────────────
+    /* ── I18N NAV PATCH ────────────────────────────────────────────────────
+       Ensures Vocabulaire and Écoute nav labels translate when setLang() is
+       called. Patches window.setLang to also update any data-i18n elements
+       that app.js may have missed.
+    ── ─────────────────────────────────────────────────────────────────────*/
+    (function(){
+      var NAV_TRANSLATIONS = {
+        de: { nav_vocab:'Vokabeln', nav_listening:'Hören', nav_quiz:'Quiz', nav_level:'Niveau', nav_tracker:'Tracker', nav_docs:'Dokumente', nav_news:'News', nav_translate:'Übersetzer' },
+        en: { nav_vocab:'Vocabulary', nav_listening:'Listening', nav_quiz:'Quiz', nav_level:'Level', nav_tracker:'Tracker', nav_docs:'Documents', nav_news:'News', nav_translate:'Translator' },
+        ar: { nav_vocab:'المفردات', nav_listening:'الاستماع', nav_quiz:'اختبار', nav_level:'المستوى', nav_tracker:'المتتبع', nav_docs:'الملفات', nav_news:'الأخبار', nav_translate:'المترجم' }
+      };
+
+      function applyNavTranslations(lang){
+        var map = NAV_TRANSLATIONS[lang] || NAV_TRANSLATIONS['de'];
+        document.querySelectorAll('[data-i18n]').forEach(function(el){
+          var key = el.getAttribute('data-i18n');
+          if(map[key] !== undefined) el.textContent = map[key];
+        });
+      }
+
+      // Patch setLang after app.js loads
+      window.addEventListener('load', function(){
+        var origSetLang = window.setLang;
+        window.setLang = function(lang){
+          if(origSetLang) origSetLang(lang);
+          applyNavTranslations(lang);
+        };
+        // Also apply for the currently stored language
+        var stored = localStorage.getItem('lang') || 'de';
+        applyNavTranslations(stored);
+      });
+    })();
        Replaces the broken streak logic from app.js.
        Rules:
          • Completing at least 1 task on day 1 → streak = 1
@@ -2671,100 +2702,6 @@ h1 span{color:var(--gold)}
     })();
     </script>
     
-    <!-- Language translation script -->
-    <script>
-    (function(){
-      // Define translations for important UI parts and notifications
-      const translations = {
-        de: {
-          loaderText: 'Verbindung...',
-          offlineBanner: 'Offline Modus – Änderungen werden lokal gespeichert',
-          notifTitle: '🔔 Benachrichtigungen',
-          notifModalTitle: '📣 Benachrichtigung senden',
-          notifTitlePlaceholder: 'Benachrichtigungstitel...',
-          notifMessagePlaceholder: 'Schreibe deine Nachricht hier...',
-          notifEmpty: 'Noch keine Benachrichtigungen',
-          notifCancelBtn: 'Abbrechen',
-          notifSendBtn: 'Senden'
-        },
-        en: {
-          loaderText: 'Connecting...',
-          offlineBanner: 'Offline mode – changes saved locally',
-          notifTitle: '🔔 Notifications',
-          notifModalTitle: '📣 Send Notification',
-          notifTitlePlaceholder: 'Notification title...',
-          notifMessagePlaceholder: 'Write your message here...',
-          notifEmpty: 'No notifications yet',
-          notifCancelBtn: 'Cancel',
-          notifSendBtn: 'Send'
-        },
-        ar: {
-          loaderText: 'جار الاتصال...',
-          offlineBanner: 'وضع عدم الاتصال – يتم حفظ التغييرات محليًا',
-          notifTitle: '🔔 الإشعارات',
-          notifModalTitle: '📣 إرسال إشعار',
-          notifTitlePlaceholder: 'عنوان الإشعار...',
-          notifMessagePlaceholder: 'اكتب رسالتك هنا...',
-          notifEmpty: 'لا توجد إشعارات بعد',
-          notifCancelBtn: 'إلغاء',
-          notifSendBtn: 'إرسال'
-        }
-      };
-
-      // Apply translations to the DOM
-      function applyTranslations(lang){
-        const trans = translations[lang] || translations.de;
-
-        const loader = document.getElementById('loader-text');
-        if(loader) loader.textContent = trans.loaderText;
-
-        const offline = document.getElementById('offline-banner');
-        if(offline) offline.textContent = trans.offlineBanner;
-
-        // Notification panel titles (desktop & mobile)
-        document.querySelectorAll('.notif-panel-title').forEach(function(el){
-          el.textContent = trans.notifTitle;
-        });
-
-        // Notification modal title
-        const modalTitle = document.querySelector('.notif-modal-title');
-        if(modalTitle) modalTitle.textContent = trans.notifModalTitle;
-
-        // Notification form placeholders
-        const titleInput = document.getElementById('notif-title-input');
-        if(titleInput) titleInput.setAttribute('placeholder', trans.notifTitlePlaceholder);
-        const bodyInput = document.getElementById('notif-body-input');
-        if(bodyInput) bodyInput.setAttribute('placeholder', trans.notifMessagePlaceholder);
-
-        // Empty notifications message
-        document.querySelectorAll('.notif-empty').forEach(function(el){
-          el.textContent = trans.notifEmpty;
-        });
-
-        // Modal buttons
-        const cancelBtn = document.querySelector('.notif-cancel-btn');
-        if(cancelBtn) cancelBtn.textContent = trans.notifCancelBtn;
-        const sendLabel = document.querySelector('#notif-send-btn .btn-label');
-        if(sendLabel) sendLabel.textContent = trans.notifSendBtn;
-      }
-
-      // Hook into existing language setter
-      const originalSetLang = window.setLang;
-      window.setLang = function(lang){
-        if(typeof originalSetLang === 'function'){
-          originalSetLang(lang);
-        }
-        applyTranslations(lang);
-      };
-
-      // Apply initial translations based on page language or default
-      document.addEventListener('DOMContentLoaded', function(){
-        const defaultLang = document.documentElement.lang || 'de';
-        applyTranslations(defaultLang);
-      });
-    })();
-    </script>
-
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
   <div class="avatar-emoji-title">Choose icon</div>
