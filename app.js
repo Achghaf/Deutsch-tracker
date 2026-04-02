@@ -227,17 +227,27 @@ async function handleAuth(){
     // Show a minimal spinner indicator while signing up
     btn.textContent = '...';
     document.getElementById('auth-error').classList.remove('visible');
-    try{
-      const {data,error}=await _supa.auth.signUp({
+    try {
+      // When registering a new user we call `signUp()` with a redirect URL so that
+      // the email confirmation link brings the user back to the app. We also
+      // attach the desired metadata.  Destructure both `data` and `error` so
+      // that we can act on the returned user and session immediately.
+      const { data, error } = await _supa.auth.signUp({
         email,
-        password:pwd,
-        options:{ data:{ role:'pending', name: displayName||undefined } }
-      });      // When a user signs up we also create a record in the `pending_users` table so that
-      // admins can view and approve the access request. Without this insert new accounts
-      // would never appear in the Pending Access Requests list. We only perform the insert
-      // if there was no sign‑up error. We intentionally swallow any insert errors here
-      // because the primary sign‑up may still succeed, and failing to insert should not
-      // block the user from completing registration.
+        password: pwd,
+        options: {
+          // Include a redirect so the user returns to the correct page after
+          // confirming their email. If email confirmations are disabled this
+          // value is ignored, but supplying it avoids a default redirect to
+          // `localhost:3000`. See `getSignupRedirectUrl()` for details.
+          emailRedirectTo: getSignupRedirectUrl(),
+          data: { role: 'pending', name: displayName || undefined }
+        }
+      });
+      // On successful sign‑up also insert an entry in the `pending_users` table so that
+      // admins can approve the request. This insert is non‑blocking and errors
+      // are intentionally ignored so that a failed insert does not prevent a
+      // successful account creation.
       if (!error) {
         try {
           await _supa.from('pending_users').insert({
@@ -249,21 +259,35 @@ async function handleAuth(){
           console.error('Failed to insert pending user', insErr);
         }
       }
-
-      if(error) throw error;
-      if(displayName) try{localStorage.setItem('profile_display_name',displayName);}catch(_){}
-      // Restore button state on success
+      // Store the display name in localStorage for later retrieval
+      if (displayName) {
+        try {
+          localStorage.setItem('profile_display_name', displayName);
+        } catch (_) { /* ignore */ }
+      }
+      // Re-enable the register button and restore its label
       btn.disabled = false;
-      // Use the translated label for the register button
       btn.textContent = t('btn_register');
-      if(data?.session){ return; }
+      // If there was an error returned from sign‑up, surface it to the user
+      if (error) {
+        throw error;
+      }
+      // If a session is returned (email confirmation disabled), immediately
+      // initialize the authenticated app. This avoids relying solely on
+      // `onAuthStateChange` which may be delayed or not fire depending on
+      // browser conditions.
+      if (data?.session && data.user) {
+        await startAuthenticatedApp(data.user);
+        return;
+      }
+      // Otherwise, show the “request access” screen and wait for admin approval
       showRequestScreen();
-    }catch(e){
-      // Restore button state on error
+    } catch (e) {
+      // Re-enable the register button and restore its label on error
       btn.disabled = false;
       btn.textContent = t('btn_register');
-      const msg=(e&&e.message)?e.message:String(e);
-      if(/already registered/i.test(msg)||/already exists/i.test(msg)){
+      const msg = (e && e.message) ? e.message : String(e);
+      if (/already registered/i.test(msg) || /already exists/i.test(msg)) {
         showAuthError('Diese E-Mail ist bereits registriert. Bitte melde dich an.');
       } else {
         showAuthError(msg);
