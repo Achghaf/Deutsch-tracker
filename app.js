@@ -2818,7 +2818,10 @@ async function fetchWithTimeout(url, ms=8000, options={}){
 function getGoogleApiKey(){ return ''; } // not needed for gtx endpoint
 
 async function translateOne(text, targetLang){
-  return translateGenericGCloud(text, 'de', targetLang);
+  // Use the generic helper to leverage multiple translation backends.  This
+  // preserves the original behaviour of translating from German to the
+  // specified target while adding fallback support when Google fails.
+  return translateGeneric(text, 'de', targetLang);
 }
 
 /* ===== Google Translate (gtx endpoint) ===== */
@@ -4599,8 +4602,64 @@ function showLevelResult() {
        * @param {string} from Source language code (e.g. 'en')
        * @param {string} to Target language code (e.g. 'de')
        */
+      /**
+       * Generic translation helper that tries multiple backends to achieve
+       * higher‑quality translations.  It first attempts to use Google’s
+       * unofficial gtx endpoint, which generally provides accurate results
+       * for major language pairs.  If that call either fails or returns
+       * an empty string, it falls back to the MyMemory service.  Should
+       * both services fail, an empty string is returned.  Additional
+       * translation backends can be added here in the future.
+       *
+       * @param {string} text Text to translate
+       * @param {string} from Source language code (e.g. 'en')
+       * @param {string} to Target language code (e.g. 'de')
+       * @returns {Promise<string>} Translated text or empty string on error
+       */
       async function translateGeneric(text, from, to){
-        return translateGenericGCloud(text, from, to);
+        // First try Google’s gtx endpoint
+        try{
+          const result = await translateGenericGCloud(text, from, to);
+          if(result && result.trim()){
+            return result;
+          }
+        }catch(err){
+          console.warn('Google translation failed:', err?.message || err);
+        }
+        // Fall back to the MyMemory API
+        try{
+          const result = await translateGenericMyMemory(text, from, to);
+          if(result && result.trim()){
+            return result;
+          }
+        }catch(err){
+          console.warn('MyMemory translation failed:', err?.message || err);
+        }
+        // Final fallback: return empty string
+        return '';
+      }
+
+      /**
+       * Translate using the MyMemory API.  This endpoint provides free
+       * translations with a generous quota and does not require an API
+       * key.  See https://mymemory.translated.net/ for details.  The
+       * returned JSON contains a `responseData.translatedText` field
+       * holding the translated string.
+       *
+       * @param {string} text Text to translate
+       * @param {string} from Source language code
+       * @param {string} to Target language code
+       * @returns {Promise<string>} Translated text
+       */
+      async function translateGenericMyMemory(text, from, to){
+        const query = encodeURIComponent(text);
+        const url = `https://api.mymemory.translated.net/get?q=${query}&langpair=${from}|${to}`;
+        const res = await fetchWithTimeout(url, 10000);
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const translated = json?.responseData?.translatedText || '';
+        if(!translated) throw new Error('Empty result');
+        return translated;
       }
 
       /**
