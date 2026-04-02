@@ -50,19 +50,20 @@ function applyRoleUI(){
     if(nameEl) nameEl.insertAdjacentElement('afterend', roleBadge);
   }
   // Display badge label and styles depending on the current role
-  if(currentRole === 'admin'){
-    roleBadge.textContent = '\u{1F451} Admin';
+  // Remove decorative emoji from the badge text to keep it professional.
+  if (currentRole === 'admin') {
+    roleBadge.textContent = 'Admin';
     roleBadge.style.background = 'rgba(232,184,75,0.15)';
     roleBadge.style.color = 'var(--gold)';
     roleBadge.style.border = '1px solid rgba(232,184,75,0.3)';
-  }else if(currentRole === 'pending'){
-    roleBadge.textContent = '\u{23F3} Pending';
+  } else if (currentRole === 'pending') {
+    roleBadge.textContent = 'Pending';
     // Use a subtle gold tint to indicate awaiting approval
     roleBadge.style.background = 'rgba(232,184,75,0.12)';
     roleBadge.style.color = 'var(--gold)';
     roleBadge.style.border = '1px solid rgba(232,184,75,0.3)';
-  }else{
-    roleBadge.textContent = '\u{1F464} User';
+  } else {
+    roleBadge.textContent = 'User';
     roleBadge.style.background = 'rgba(255,255,255,0.07)';
     roleBadge.style.color = 'var(--muted)';
     roleBadge.style.border = '1px solid var(--border)';
@@ -222,7 +223,9 @@ async function handleAuth(){
     if(!email){showAuthError('Bitte gib deine E-Mail ein.');return;}
     if(!pwd||pwd.length<6){showAuthError('Passwort muss mindestens 6 Zeichen haben.');return;}
     if(pwd!==confirmPwd){showAuthError('Passwörter stimmen nicht überein.');return;}
-    btn.disabled=true;btn.textContent='...';
+    btn.disabled = true;
+    // Show a minimal spinner indicator while signing up
+    btn.textContent = '...';
     document.getElementById('auth-error').classList.remove('visible');
     try{
       const {data,error}=await _supa.auth.signUp({
@@ -249,11 +252,16 @@ async function handleAuth(){
 
       if(error) throw error;
       if(displayName) try{localStorage.setItem('profile_display_name',displayName);}catch(_){}
-      btn.disabled=false;btn.textContent='Konto erstellen';
+      // Restore button state on success
+      btn.disabled = false;
+      // Use the translated label for the register button
+      btn.textContent = t('btn_register');
       if(data?.session){ return; }
       showRequestScreen();
     }catch(e){
-      btn.disabled=false;btn.textContent='Konto erstellen';
+      // Restore button state on error
+      btn.disabled = false;
+      btn.textContent = t('btn_register');
       const msg=(e&&e.message)?e.message:String(e);
       if(/already registered/i.test(msg)||/already exists/i.test(msg)){
         showAuthError('Diese E-Mail ist bereits registriert. Bitte melde dich an.');
@@ -268,20 +276,28 @@ async function handleAuth(){
   const pwd=document.getElementById('auth-password').value;
   if(!email||!pwd){showAuthError(t('error_fill_all'));return;}
   if(pwd.length<6){showAuthError(t('error_pwd_short'));return;}
-  btn.disabled=true;btn.textContent='...';
+  btn.disabled = true;
+  // Display a temporary spinner during login
+  btn.textContent = '...';
   document.getElementById('auth-error').classList.remove('visible');
-  try{
+  try {
     const { error } = await _supa.auth.signInWithPassword({ email, password: pwd });
-    if(error) throw error;
-  } catch(e){
+    if (error) throw error;
+    // If sign in succeeds, restore button state.  onAuthStateChange will handle
+    // navigating away from the login screen, but restoring the button prevents a
+    // stuck spinner if the auth state change is delayed.
     btn.disabled = false;
-    btn.textContent = 'Anmelden';
+    btn.textContent = t('btn_login');
+  } catch (e) {
+    // On error, re-enable the button and show the proper label
+    btn.disabled = false;
+    btn.textContent = t('btn_login');
     const msgs = {
       'Invalid login credentials': t('error_invalid_login'),
       'Email not confirmed': t('error_not_confirmed'),
     };
     const serverMsg = (e && e.message) ? e.message : '';
-    if(/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)){
+    if (/too many/i.test(serverMsg) || /429/.test(serverMsg) || /rate limit/i.test(serverMsg)) {
       showAuthError(t('error_too_many'));
     } else {
       showAuthError(msgs[serverMsg] || serverMsg || String(e));
@@ -451,6 +467,12 @@ document.addEventListener('click',function(e){
 });
 
 // ===== DATA =====
+// ===== DATA =====
+//
+// The DATA_I18N object defines curriculum and daily task data for each supported
+// language.  Decorative emojis formerly used in the daily task icons have been
+// removed to present a cleaner, more professional interface.  See README for
+// usage details.
 const DATA_I18N={
   de:{
     months:[
@@ -461,10 +483,10 @@ const DATA_I18N={
       {id:'m5',cls:'m5',title:'Monat 5',sub:'B1 Konsolidierung',desc:'Flüssigkeit · Immersion · Prüfungsvorbereitung',weeks:[{w:17,name:'Wortschatzerweiterung',topic:'Arbeit, Meinungen, Emotionen – 1000+ Wörter'},{w:18,name:'Sprechübung',topic:'italki Stunden, Gespräche, Aussprache'},{w:19,name:'Schreiben & Verstehen',topic:'kurze E-Mails, DW Artikel, B1 Texte'},{w:20,name:'B1 Probetest & Review',topic:'Vollständiger Probetest, Schwachstellen, Review'}]},
     ],
     dailyTasks:[
-      {id:'anki',name:'Anki Vokabeln',icon:'🃏',duration:'20 Min.'},
-      {id:'grammar',name:'Grammatik/Thema',icon:'📖',duration:'30 Min.'},
-      {id:'listen',name:'Hörverstehen',icon:'🎧',duration:'20 Min.'},
-      {id:'speak',name:'Sprechen / Schreiben',icon:'🗣',duration:'20 Min.'}
+      { id: 'anki',    name: 'Anki Vokabeln',        icon: '', duration: '20 Min.' },
+      { id: 'grammar', name: 'Grammatik/Thema',      icon: '', duration: '30 Min.' },
+      { id: 'listen',  name: 'Hörverstehen',         icon: '', duration: '20 Min.' },
+      { id: 'speak',   name: 'Sprechen / Schreiben', icon: '', duration: '20 Min.' }
     ]
   },
   en:{
@@ -476,10 +498,10 @@ const DATA_I18N={
       {id:'m5',cls:'m5',title:'Month 5',sub:'B1 consolidation',desc:'Fluency · Immersion · Exam prep',weeks:[{w:17,name:'Vocabulary expansion',topic:'Work, opinions, emotions – 1000+ words'},{w:18,name:'Speaking practice',topic:'italki lessons, conversations, pronunciation'},{w:19,name:'Writing & Comprehension',topic:'Short emails, DW articles, B1 texts'},{w:20,name:'B1 mock test & review',topic:'Full mock test, weak points, review'}]},
     ],
     dailyTasks:[
-      {id:'anki',name:'Anki vocabulary',icon:'🃏',duration:'20 min'},
-      {id:'grammar',name:'Grammar / Topic',icon:'📖',duration:'30 min'},
-      {id:'listen',name:'Listening practice',icon:'🎧',duration:'20 min'},
-      {id:'speak',name:'Speaking / Writing',icon:'🗣',duration:'20 min'}
+      { id: 'anki',    name: 'Anki vocabulary',       icon: '', duration: '20 min' },
+      { id: 'grammar', name: 'Grammar / Topic',       icon: '', duration: '30 min' },
+      { id: 'listen',  name: 'Listening practice',    icon: '', duration: '20 min' },
+      { id: 'speak',   name: 'Speaking / Writing',    icon: '', duration: '20 min' }
     ]
   }
 };
@@ -658,7 +680,14 @@ function toggleTask(id){
 }
 function resetAll(){if(!isAdmin()){showToast('⛔ Admin only');return;}if(!confirm(t('confirm_reset')))return;state={...state,completedWeeks:{},dailyDone:{},notes:'',streak:0,startDate:new Date().toDateString(),lastActiveDay:null,reminderNotif:!!state.reminderNotif};save();document.getElementById('notes-area').value='';render();renderNewsPage();}
 function render(){renderJourney();renderMonths();renderDaily();updateStats();}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  // Sanitize the message by stripping emojis for a cleaner, more professional toast.
+  const clean = typeof msg === 'string' ? stripEmojis(msg) : msg;
+  t.textContent = clean;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 
 // ===== PDF (Supabase Storage + DB) =====
 let pdfs=[],currentFilter='all',editingId=null,pdfDoc=null,currentPage=1,totalPages=1,docsSearchTerm='',pdfScrollHandler=null;
@@ -704,7 +733,8 @@ function updateStorageBar(){
   const totalBytes=pdfs.reduce((a,p)=>a+(p.size||0),0);
   const mb=(totalBytes/1024/1024).toFixed(1);
   const fileWord=pdfs.length===1?t('storage_file_singular'):t('storage_file_plural');
-  document.getElementById('storage-info').textContent=`${mb} MB · ${pdfs.length} ${fileWord} · ☁️ Supabase`;
+  // Removed cloud emoji from the storage info for a cleaner display
+  document.getElementById('storage-info').textContent = `${mb} MB · ${pdfs.length} ${fileWord} · Supabase`;
   const pct=Math.min(100,parseFloat(mb)/500*100);
   document.getElementById('storage-fill').style.width=pct+'%';
   document.getElementById('storage-fill').style.background=pct>80?'var(--red)':pct>50?'var(--gold)':'var(--green)';
@@ -759,7 +789,8 @@ function renderPdfGrid(){
   if(filtered.length===0){
     const email=currentUser?.email||'—';
     const emptyMsg=search?t('pdf_empty_search'):(currentFilter==='all'?t('pdf_empty_all'):t('pdf_empty_cat'));
-    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon">📂</div><p>${emptyMsg}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
+    // Remove decorative folder emoji from the empty state for a cleaner look
+    grid.innerHTML=`<div class="pdf-empty" style="grid-column:1/-1"><div class="empty-icon"></div><p>${emptyMsg}</p><p style="margin-top:8px;font-size:0.72rem;opacity:0.82">${t('docs_for_account')} ${email}</p></div>`;
     return;
   }
   const cats={
@@ -770,19 +801,19 @@ function renderPdfGrid(){
     other:t('cat_other')
   };
   const fmt=b=>b>1024*1024?(b/1024/1024).toFixed(1)+' MB':Math.round(b/1024)+' KB';
-  grid.innerHTML=filtered.map(p=>`
+    grid.innerHTML=filtered.map(p=>`
     <div class="pdf-card" id="card-${p.id}">
       <div class="pdf-preview" onclick="${p.uploading?'':` openPdf('${p.id}')`}">
         ${p.uploading
-          ?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon">⏫</div>`
+          ?`<div class="pdf-upload-overlay"><div class="upload-progress-bar"><div class="upload-progress-fill" id="prog-fill-${p.id}" style="width:${p.progress||0}%"></div></div><div class="upload-progress-text" id="prog-txt-${p.id}">${p.progress||0}%</div></div><div class="pdf-preview-icon"></div>`
           :lightMode
-            ?`<div class="pdf-preview-icon" style="display:flex;opacity:0.95;flex-direction:column;gap:10px"><span style="font-size:2.4rem">📄</span><span style="font-size:0.72rem;color:var(--muted);letter-spacing:0.06em">${t('pdf_tap_open')}</span></div>`
-            :`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">📄</div>`}
+            ?`<div class="pdf-preview-icon" style="display:flex;opacity:0.95;flex-direction:column;gap:10px"><span style="font-size:2.4rem">PDF</span><span style="font-size:0.72rem;color:var(--muted);letter-spacing:0.06em">${t('pdf_tap_open')}</span></div>`
+            :`<canvas id="thumb-${p.id}"></canvas><div class="pdf-preview-icon" id="icon-${p.id}" style="display:none">PDF</div>`}
       </div>
       <div class="pdf-card-body">
         <div class="pdf-cat-tag cat-${p.category}">${cats[p.category]||t('cat_other')}</div>
         <div class="pdf-card-name" title="${p.name}">${p.name}</div>
-        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||''}</span>${isAdmin()&&p.user_id!==currentUser?.id?`<span style="color:var(--gold);font-size:0.58rem">👤 other user</span>`:''}</div>
+        <div class="pdf-card-meta"><span>${fmt(p.size)}</span><span>${p.added_at||''}</span>${isAdmin()&&p.user_id!==currentUser?.id?`<span style="color:var(--gold);font-size:0.58rem">other user</span>`:''}</div>
       </div>
       ${p.uploading?'':`<div class="pdf-actions"><button class="pdf-action-btn" onclick="openPdf('${p.id}')">${t('pdf_view_btn')}</button>${isAdmin()||p.user_id===currentUser?.id?`<button class="pdf-action-btn" onclick="openRenameModal('${p.id}')">${t('pdf_edit_btn')}</button><button class="pdf-action-btn danger" onclick="deletePdf('${p.id}')">${t('pdf_delete_btn')}</button>`:``}</div>`}
     </div>`).join('');
@@ -1110,10 +1141,10 @@ var PAGE_META = {
   news:      { label: 'News',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>' },
   translate: { label: 'Übersetzer', icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
   quiz:      { label: 'Quiz',       icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>' },
-  vocab:     { label: 'Vokabeln',   icon: '📚' },
-  listening: { label: 'Hören',      icon: '🎧' },
+  vocab:     { label: 'Vokabeln',   icon: '' },
+  listening: { label: 'Hören',      icon: '' },
   level:     { label: 'Niveau',     icon: '<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
-  admin:     { label: 'Admin',      icon: '👑' },
+  admin:     { label: 'Admin',      icon: '' },
 };
 
 function updateNavCurrentIndicator(page){
@@ -1817,7 +1848,24 @@ const i18n={
   }
 };
 
-function t(key){return(i18n[currentLang]||i18n.de)[key]||key;}
+// Utility to strip emoji characters from UI strings.  The regex uses the
+// Unicode "Extended_Pictographic" property, which matches most emoji and
+// pictographs.  We also remove the optional variation selector (\uFE0F) to
+// ensure symbols such as keycap variants are normalized.
+function stripEmojis(str){
+  if (typeof str !== 'string') return str;
+  // Remove pictographic emojis and most other symbolic characters (general category So) as well as
+  // the variation selector.  This removes decorative icons like arrows, check marks and other
+  // dingbats that clutter the interface, while leaving punctuation and letters intact.
+  return str
+    .replace(/[\p{Extended_Pictographic}\p{So}]/gu, '')
+    .replace(/\uFE0F/g, '');
+}
+
+function t(key){
+  const val = (i18n[currentLang] || i18n.de)[key] || key;
+  return stripEmojis(val);
+}
 
 function toggleLangMenu(){
   const menu = document.getElementById('lang-fab-menu');
@@ -1964,7 +2012,11 @@ function applyLang(){
   const nextBtn=document.getElementById('next-page');if(nextBtn)nextBtn.textContent=(currentLang==='en'?'Next':'Weiter')+' ▶';
   if(pdfDoc){updatePdfViewerInfo(currentPage);document.querySelectorAll('.pdf-page-label').forEach((el,idx)=>el.textContent=`${t('pdf_page')} ${idx+1}`);}
 
-  const renameTitle=document.querySelector('.rename-title');if(renameTitle)renameTitle.textContent=currentLang==='en'?'✏️ Edit document':'✏️ Dokument bearbeiten';
+  const renameTitle=document.querySelector('.rename-title');
+  if(renameTitle){
+    // Remove the pencil emoji from the rename title.  Use a plain label per language.
+    renameTitle.textContent=currentLang==='en'?'Edit document':'Dokument bearbeiten';
+  }
   const renameInput=document.getElementById('rename-input');if(renameInput)renameInput.placeholder=currentLang==='en'?'Document name...':'Dokumentname...';
   const renameBtns=document.querySelectorAll('.rename-btn');
   if(renameBtns[0])renameBtns[0].textContent=currentLang==='en'?'Cancel':'Abbrechen';
@@ -1988,21 +2040,25 @@ function applyLang(){
   // Vocabulary Trainer page i18n
   const vocabTitleEl=document.getElementById('vocab-title');
   if(vocabTitleEl){
-    vocabTitleEl.textContent=L.vocab_title||'📚 Vocabulary Trainer';
+    // Fall back to a plain title without emojis
+    vocabTitleEl.textContent = L.vocab_title || 'Vocabulary Trainer';
   }
 
   // Listening Practice page i18n
   const listeningTitleEl=document.getElementById('listening-title');
   if(listeningTitleEl){
-    listeningTitleEl.textContent=L.listening_title||'🎧 Listening Practice';
+    // Fall back to a plain title without emojis
+    listeningTitleEl.textContent = L.listening_title || 'Listening Practice';
   }
   const playBtn=document.getElementById('listening-play-btn');
   if(playBtn){
-    playBtn.textContent=L.listening_audio_btn||'▶ Audio';
+    // Provide a plain fallback label for the play button
+    playBtn.textContent = L.listening_audio_btn || 'Audio';
   }
   const showBtn=document.getElementById('listening-show-btn');
   if(showBtn){
-    showBtn.textContent=L.listening_show_btn||'👁 Show translation';
+    // Provide a plain fallback label for the show translation button
+    showBtn.textContent = L.listening_show_btn || 'Show translation';
   }
   const listeningInput=document.getElementById('listening-input');
   if(listeningInput){
@@ -2412,12 +2468,14 @@ async function initNotifications(){
 async function populateNotifTargets(){
   const sel = document.getElementById('notif-target-select');
   if(!sel) return;
-  sel.innerHTML = '<option value="all">🌍 All Users</option>';
+  // Remove earth emoji from the "All Users" option
+  sel.innerHTML = '<option value="all">All Users</option>';
   if(_adminAllUsers && _adminAllUsers.length){
     _adminAllUsers.forEach(u=>{
       const opt = document.createElement('option');
       opt.value = u.email;
-      opt.textContent = '👤 ' + u.email;
+      // Display the user email without a leading icon
+      opt.textContent = u.email;
       sel.appendChild(opt);
     });
   }
@@ -2467,7 +2525,7 @@ function renderNotifList(){
         <div class="notif-item ${readIds.includes(n.id)?'':'unread'}" onclick="markOneRead('${n.id}')">
           <div class="notif-item-title">${escapeHtml(n.title||'')}</div>
           <div class="notif-item-body">${escapeHtml(n.body||'')}</div>
-          <div class="notif-item-date">${formatNewsDate(n.created_at)}${n.target!=='all'?' · 👤 '+escapeHtml(n.target):''}</div>
+          <div class="notif-item-date">${formatNewsDate(n.created_at)}${n.target!=='all'?' · '+escapeHtml(n.target):''}</div>
         </div>`).join('');
   document.querySelectorAll('#notif-list,#mob-notif-list').forEach(el=>{ if(el) el.innerHTML=html; });
 }
@@ -2961,21 +3019,23 @@ function initTranslatePage(){
 async function adminSetRole(role){
   const email = (document.getElementById('admin-target-email')?.value||'').trim().toLowerCase();
   const msgEl = document.getElementById('admin-panel-msg');
-  if(!email){ msgEl.style.color='#ff6b6b'; msgEl.textContent='⚠ Entrez un email.'; return; }
-  if(!isAdmin()){ msgEl.style.color='#ff6b6b'; msgEl.textContent='⛔ Accès refusé.'; return; }
-  msgEl.style.color='var(--muted)'; msgEl.textContent='⏳ Mise à jour...';
+  if(!email){ msgEl.style.color='#ff6b6b'; msgEl.textContent='Entrez un email.'; return; }
+  if(!isAdmin()){ msgEl.style.color='#ff6b6b'; msgEl.textContent='Accès refusé.'; return; }
+  msgEl.style.color='var(--muted)'; msgEl.textContent='Mise à jour...';
   try{
     // Use Supabase admin API via edge function or RPC
     // We use a custom RPC function 'set_user_role' (see setup instructions)
     const { data, error } = await _supa.rpc('set_user_role', { target_email: email, new_role: role });
     if(error) throw error;
     msgEl.style.color='var(--green)';
-    msgEl.textContent = `✓ ${email} → ${role === 'admin' ? '👑 Admin' : '👤 User'}`;
+    // Success message: show the updated role without decorative symbols
+    msgEl.textContent = `${email} set to ${role === 'admin' ? 'Admin' : 'User'}`;
     document.getElementById('admin-target-email').value = '';
     adminLoadUsers();
   } catch(e){
     msgEl.style.color='#ff6b6b';
-    msgEl.textContent = '✗ ' + (e?.message || String(e));
+    // Error message: prefix with "Error:" instead of using an icon
+    msgEl.textContent = 'Error: ' + (e?.message || String(e));
   }
 }
 
@@ -2990,8 +3050,8 @@ async function adminLoadUsers(){
     listEl.innerHTML = data.map(u => {
       const role = u.role || 'user';
       const badge = role === 'admin'
-        ? '<span style="color:var(--gold);font-size:0.65rem">👑 admin</span>'
-        : '<span style="color:var(--muted);font-size:0.65rem">👤 user</span>';
+        ? '<span style="color:var(--gold);font-size:0.65rem">admin</span>'
+        : '<span style="color:var(--muted);font-size:0.65rem">user</span>';
       return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
         <span style="color:var(--white);font-size:0.75rem">${u.email}</span>
         ${badge}
@@ -3105,12 +3165,12 @@ function renderAdminDocs(){
   if(!docs.length){ el.innerHTML='<div class="admin-empty">No documents found.</div>'; return; }
   el.innerHTML = docs.map(d=>`
     <div class="admin-user-row" style="flex-wrap:wrap;gap:8px">
-      <div style="font-size:1.4rem;flex-shrink:0">📄</div>
+      <div style="font-size:1.4rem;flex-shrink:0">PDF</div>
       <div class="admin-user-info" style="min-width:0;flex:1">
         <div class="admin-user-email" style="font-weight:600">${escapeHtml(d.name||'Untitled')}</div>
         <div class="admin-user-date">${d.user_id||'?'} · ${fmt(d.size||0)} · ${d.added_at||''}</div>
       </div>
-      <button onclick="adminDeleteDoc('${d.id}','${d.storage_path}')" style="padding:5px 12px;background:transparent;border:1px solid var(--red);border-radius:5px;color:#ff6b6b;font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;flex-shrink:0">🗑 Delete</button>
+      <button onclick="adminDeleteDoc('${d.id}','${d.storage_path}')" style="padding:5px 12px;background:transparent;border:1px solid var(--red);border-radius:5px;color:#ff6b6b;font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer;flex-shrink:0">Delete</button>
     </div>`).join('');
 }
 
@@ -3210,7 +3270,7 @@ function renderAdminUsersList(){
         <div class="admin-user-date">Joined ${dateStr} · <span style="color:${dotClass==='online'?'var(--green)':dotClass==='away'?'var(--gold)':'var(--muted)'}">${dotTitle}</span></div>
       </div>
       <span class="admin-role-badge ${role}">
-        ${role === 'admin' ? '👑 admin' : role === 'pending' ? '🕒 pending' : '👤 user'}
+        ${role === 'admin' ? 'admin' : role === 'pending' ? 'pending' : 'user'}
       </span>
       <select class="admin-role-select" onchange="adminChangeRole('${u.email}', this.value, this)">
         <option value="pending" ${role==='pending'?'selected':''}>Pending</option>
@@ -3240,7 +3300,7 @@ async function loadPendingRequests(){
       badge.style.display = count > 0 ? 'inline-block' : 'none';
     }
     if(!data || count === 0){
-      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">Keine ausstehenden Anfragen</div>';
       return;
     }
     list.innerHTML = data.map(r => {
@@ -3248,8 +3308,8 @@ async function loadPendingRequests(){
       return `<div class="pending-row" id="prow-${r.id}">
         <div class="pending-info">
           <div class="pending-email">${r.email}</div>
-          ${r.full_name ? `<div class="pending-name">👤 ${r.full_name}</div>` : ''}
-          ${r.reason ? `<div class="pending-reason">💬 "${r.reason}"</div>` : ''}
+          ${r.full_name ? `<div class="pending-name">${r.full_name}</div>` : ''}
+          ${r.reason ? `<div class="pending-reason">"${r.reason}"</div>` : ''}
         </div>
         <div class="pending-date">${date}</div>
         <div class="pending-actions">
@@ -3287,11 +3347,11 @@ async function approvePendingRequest(id, email, btn){
     }
     const list = document.getElementById('admin-pending-list');
     if(list && !list.querySelector('.pending-row')){
-      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">Keine ausstehenden Anfragen</div>';
     }
   }catch(e){
     showToast('✗ Fehler: ' + (e?.message||String(e)));
-    if(btn){ btn.disabled=false; btn.textContent='✓ Genehmigen'; }
+    if(btn){ btn.disabled = false; btn.textContent = 'Genehmigen'; }
     if(rejectBtn) rejectBtn.disabled=false;
   }
 }
@@ -3314,11 +3374,11 @@ async function rejectPendingRequest(id, btn){
     }
     const list = document.getElementById('admin-pending-list');
     if(list && !list.querySelector('.pending-row')){
-      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">✓ Keine ausstehenden Anfragen</div>';
+      list.innerHTML = '<div class="admin-empty" style="color:var(--green)">Keine ausstehenden Anfragen</div>';
     }
   }catch(e){
-    showToast('✗ Fehler: ' + (e?.message||String(e)));
-    if(btn){ btn.disabled=false; btn.textContent='✗ Ablehnen'; }
+    showToast('Fehler: ' + (e?.message || String(e)));
+    if(btn){ btn.disabled = false; btn.textContent = 'Ablehnen'; }
   }
 }
 
@@ -3909,17 +3969,17 @@ function suggestNextTasks(){
   const suggestions = [];
   const tasks = state.dailyDone || {};
   // Suggest completing daily tasks that are not done yet
-  if(!tasks['anki']) suggestions.push('📚 '+(currentLang==='ar'?'تمرن على المفردات':'Vokabeln lernen'));
-  if(!tasks['grammar']) suggestions.push('📖 '+(currentLang==='ar'?'راجع القواعد أو موضوعاً':'Grammatik oder ein Thema üben'));
-  if(!tasks['listen']) suggestions.push('🎧 '+(currentLang==='ar'?'قم بتمرين الاستماع':'Hörübung machen'));
-  if(!tasks['speak']) suggestions.push('🗣 '+(currentLang==='ar'?'تمرن على التحدث أو الكتابة':'Sprech- oder Schreibübung durchführen'));
+  if(!tasks['anki']) suggestions.push((currentLang==='ar'?'تمرن على المفردات':'Vokabeln lernen'));
+  if(!tasks['grammar']) suggestions.push((currentLang==='ar'?'راجع القواعد أو موضوعاً':'Grammatik oder ein Thema üben'));
+  if(!tasks['listen']) suggestions.push((currentLang==='ar'?'قم بتمرين الاستماع':'Hörübung machen'));
+  if(!tasks['speak']) suggestions.push((currentLang==='ar'?'تمرن على التحدث أو الكتابة':'Sprech- oder Schreibübung durchführen'));
   // If recent quiz performance is poor
   if(state.quizHistory && state.quizHistory.length > 0){
     const last = state.quizHistory[0];
-    if(last.pct < 60) suggestions.push('🧠 '+(currentLang==='ar'?'جرب اختباراً آخر لتحسين الأداء':'Mache ein weiteres Quiz, um deine Schwächen zu verbessern'));
+    if(last.pct < 60) suggestions.push((currentLang==='ar'?'جرب اختباراً آخر لتحسين الأداء':'Mache ein weiteres Quiz, um deine Schwächen zu verbessern'));
   }
   if(suggestions.length === 0){
-    suggestions.push('🎉 '+(currentLang==='ar'?'عمل رائع! استمر.':'Tolle Arbeit! Alle Aufgaben erledigt.'));
+    suggestions.push((currentLang==='ar'?'عمل رائع! استمر.':'Tolle Arbeit! Alle Aufgaben erledigt.'));
   }
   el.innerHTML = suggestions.map(s => `<div class="suggest-item">${s}</div>`).join('');
 }
@@ -4907,3 +4967,27 @@ function showLevelResult() {
     window.addEventListener('resize',updateNavScrollFade,{passive:true});
     // Run once at page load too
     setTimeout(updateNavScrollFade,400);
+
+    // Remove all emoji characters from static page content after the DOM is fully loaded.
+    // This improves professionalism by stripping decorative pictographs like fire, warning
+    // signs, and other emojis embedded directly in the HTML.  It walks the DOM and
+    // applies the existing stripEmojis helper to each text node.  Doing this once on
+    // DOMContentLoaded ensures dynamic content inserted later uses the t() helper
+    // (which already removes emojis) while static markup is cleaned up as well.
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        const nodesToClean = [];
+        let node;
+        while ((node = walker.nextNode())) {
+          nodesToClean.push(node);
+        }
+        nodesToClean.forEach(n => {
+          if (n.nodeValue && n.nodeValue.trim().length) {
+            n.nodeValue = stripEmojis(n.nodeValue);
+          }
+        });
+      } catch (e) {
+        console.warn('Failed to strip emojis from static content:', e);
+      }
+    });
