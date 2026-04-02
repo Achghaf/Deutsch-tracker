@@ -1978,7 +1978,7 @@ function applyLang(){
   const tbl=document.getElementById('translate-btn-label');if(tbl)tbl.textContent=L.translate_btn_label||'Translate';
   const thl=document.getElementById('translate-history-label');if(thl)thl.textContent=L.translate_history_label||'History';
   const thc=document.getElementById('translate-history-clear-btn');if(thc)thc.textContent=L.translate_history_clear||'Clear';
-  const tsp=document.getElementById('translate-speak-btn');if(tsp)tsp.querySelector('.btn-label').textContent='🔊 '+(L.translate_speak||'Listen');
+  const tsp=document.getElementById('translate-speak-label');if(tsp)tsp.textContent=(L.translate_speak||'Listen');
   const tinp=document.getElementById('translate-input');if(tinp)tinp.placeholder=L.translate_empty||'Enter a word or sentence in German, English or Arabic...';
   const nnav=document.querySelector('.nav-item[data-page="news"] .nav-label');if(nnav)nnav.textContent=L.nav_news||'News';
   const tnav=document.querySelector('.nav-item[data-page="translate"] .nav-label');if(tnav)tnav.textContent=L.nav_translate||'Translator';
@@ -2719,12 +2719,15 @@ function renderResultCardsDynamic(srcLang, results){
     const txt = results[lang] || '—';
     const enc = encInline(txt);
     const voice = lang === 'ar' ? 'ar-SA' : (lang === 'de' ? 'de-DE' : 'en-GB');
-    const dirAttr = lang === 'ar' ? 'dir="rtl" style="text-align:right"' : '';
+    const dirAttr = lang === 'ar' ? 'dir="rtl"' : '';
     cards.push(`<div class="translate-card">
       <div class="translate-card-header">
-        <div class="translate-card-lang"><span class="translate-card-flag">${info.flag}</span> ${info.name}</div>
-        <div style="display:flex;gap:6px;align-items:center">
-          <button class="translate-card-copy" onclick="speakResult(decodeURIComponent('${enc}'),'${voice}')">🔊</button>
+        <div class="translate-card-lang">
+          <span class="translate-card-flag">${info.flag}</span>
+          <span class="translate-card-lang-name">${info.name}</span>
+        </div>
+        <div class="translate-card-actions">
+          <button class="translate-card-speak" title="Listen" onclick="speakResult(decodeURIComponent('${enc}'),'${voice}')">🔊</button>
           <button class="translate-card-copy" onclick="copyText(decodeURIComponent('${enc}'), this)">${t('copy_btn')||'Copy'}</button>
         </div>
       </div>
@@ -2851,6 +2854,36 @@ async function translateGenericGCloud(text, from, to){
   return result;
 }
 
+/* ===== Global translateGeneric (with Google + MyMemory fallback) ===== */
+async function translateGenericMyMemory(text, from, to){
+  const query = encodeURIComponent(text);
+  const url = `https://api.mymemory.translated.net/get?q=${query}&langpair=${from}|${to}`;
+  const res = await fetchWithTimeout(url, 10000);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+  const translated = json?.responseData?.translatedText || '';
+  if(!translated) throw new Error('Empty result');
+  return translated;
+}
+
+async function translateGeneric(text, from, to){
+  // First try Google's gtx endpoint
+  try{
+    const result = await translateGenericGCloud(text, from, to);
+    if(result && result.trim()) return result;
+  }catch(err){
+    console.warn('Google translation failed:', err?.message || err);
+  }
+  // Fall back to the MyMemory API
+  try{
+    const result = await translateGenericMyMemory(text, from, to);
+    if(result && result.trim()) return result;
+  }catch(err){
+    console.warn('MyMemory translation failed:', err?.message || err);
+  }
+  return '';
+}
+
 async function doTranslate(){
   const input = document.getElementById('translate-input').value.trim();
   if(!input){
@@ -2866,7 +2899,7 @@ async function doTranslate(){
   // Show loading skeletons for each target language
   resultsContainer.innerHTML = targets.map(lang => {
     const info = langInfo[lang] || { flag:'', name: lang.toUpperCase() };
-    return `<div class="translate-card"><div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">${info.flag}</span> ${info.name}</div></div><div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:24px;border-radius:4px"></div></div></div>`;
+    return `<div class="translate-card"><div class="translate-card-header"><div class="translate-card-lang"><span class="translate-card-flag">${info.flag}</span><span class="translate-card-lang-name">${info.name}</span></div></div><div class="translate-card-body"><div class="translate-result-text loading-shimmer" style="height:22px;border-radius:6px"></div></div></div>`;
   }).join('');
   // Perform translations in parallel
   const results = { de:'', en:'', ar:'' };
@@ -2893,6 +2926,21 @@ async function doTranslate(){
 }
 
 function saveTranslateApiKey(){} // no longer needed
+
+function updateTranslateCharCount(el){
+  const count = el.value.length;
+  const display = document.getElementById('translate-char-count');
+  if(display) display.textContent = count + ' / 500';
+  // Update detected language badge
+  const badge = document.getElementById('translate-src-badge');
+  if(badge && el.value.trim()){
+    const lang = detectLanguage(el.value.trim());
+    const labels = { de:'DE · Erkannt', en:'EN · Detected', ar:'AR · مكتشف' };
+    badge.textContent = labels[lang] || 'AUTO';
+  } else if(badge){
+    badge.textContent = 'AUTO';
+  }
+}
 
 function initTranslatePage(){
   loadTranslateHistory();

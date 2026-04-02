@@ -657,103 +657,376 @@ h1 span{color:var(--gold)}
   .news-card-actions{width:100%;justify-content:flex-end}
 }
 
-/* ===== TRANSLATE PAGE ===== */
-/*
-  The translate page now positions itself relative so that a fluid,
-  animated backdrop can be drawn behind it via a ::before pseudo
-  element.  This backdrop uses subtle radial gradients that move
-  slowly to create a sense of depth without distracting from the
-  content.  The animation is defined later in this stylesheet.
-*/
-.translate-page{position:relative;padding:24px 16px 32px;max-width:700px;margin:0 auto}
-.translate-header{margin-bottom:24px}
-.translate-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.08em;color:var(--white);margin-bottom:4px}
-.translate-header p{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+/* ===== TRANSLATE PAGE — Modern Redesign ===== */
+#page-translate header{background:transparent;border-bottom:none;padding:28px 16px 0}
+#page-translate h1{font-size:clamp(1.8rem,6vw,3rem)}
 
-.translate-input-wrap{position:relative;margin-bottom:12px}
-.translate-textarea{width:100%;min-height:110px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 48px 16px 16px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:1rem;line-height:1.6;resize:none;outline:none;transition:border-color 0.2s;-webkit-appearance:none}
-.translate-textarea:focus{border-color:var(--gold)}
-.translate-textarea::placeholder{color:#444}
-.translate-clear-btn{position:absolute;top:12px;right:12px;background:transparent;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;line-height:1;transition:color 0.2s}
-.translate-clear-btn:hover{color:var(--white)}
+.translate-page{
+  position:relative;
+  padding:20px 16px 40px;
+  max-width:680px;
+  margin:0 auto;
+}
 
-.translate-actions{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.translate-btn{flex:1;min-width:120px;padding:11px 16px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.translate-btn:active{transform:scale(0.97)}
-.translate-btn:disabled{opacity:0.4;cursor:default}
-.translate-btn.primary{background:var(--gold);color:var(--black)}
-.translate-btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--white)}
-.translate-btn .btn-spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
-.translate-btn.loading .btn-spinner{display:block}
-.translate-btn.loading .btn-label{display:none}
-
-.translate-results{display:flex;flex-direction:column;gap:12px}
-.translate-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.25s}
-.translate-card-header{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.translate-card-lang{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em}
-.translate-card-flag{font-size:1.2rem}
-.translate-card-copy{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:0.68rem;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.06em;transition:all 0.2s}
-.translate-card-copy:hover{border-color:var(--gold);color:var(--gold)}
-.translate-card-copy.copied{border-color:var(--green);color:var(--green)}
-.translate-card-body{padding:16px}
-.translate-result-text{font-size:0.95rem;line-height:1.7;color:var(--white);min-height:32px}
-.translate-result-text.loading-shimmer{background:linear-gradient(90deg,var(--border) 25%,#2f2f2f 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:20px;width:80%}
-.translate-phonetic{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);margin-top:6px}
-
-/*
-  Fluid animated background for the translate page.  We draw three
-  overlapping radial gradients that slowly drift over time to give
-  the page some visual interest.  The pseudo‑element lives behind
-  all content due to its negative z‑index.  Feel free to adjust
-  colours or animation duration to taste.
-*/
-.translate-page::before{
+/* Ambient glow orbs */
+.translate-page::before,.translate-page::after{
   content:'';
-  position:absolute;
-  top:0; left:0; right:0; bottom:0;
-  z-index:-1;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(91,126,201,0.12) 0%, transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(232,184,75,0.10) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, rgba(204,31,31,0.10) 0%, transparent 60%);
-  animation: translateBgMove 20s ease-in-out infinite alternate;
-  background-attachment: fixed;
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(80px);
+}
+.translate-page::before{
+  width:340px;height:340px;
+  top:10%;left:-10%;
+  background:radial-gradient(circle,rgba(91,126,201,0.18) 0%,transparent 70%);
+  animation:orbDrift 14s ease-in-out infinite alternate;
+}
+.translate-page::after{
+  width:280px;height:280px;
+  bottom:15%;right:-8%;
+  background:radial-gradient(circle,rgba(232,184,75,0.14) 0%,transparent 70%);
+  animation:orbDrift 18s ease-in-out infinite alternate-reverse;
+}
+@keyframes orbDrift{
+  0%{transform:translate(0,0) scale(1);}
+  100%{transform:translate(30px,40px) scale(1.15);}
 }
 
-@keyframes translateBgMove{
-  0%{transform: translate(0,0);}
-  100%{transform: translate(10%,10%);}
+/* Lang pill tabs */
+.translate-lang-tabs{
+  display:flex;
+  gap:6px;
+  margin-bottom:16px;
+  position:relative;
+  z-index:1;
 }
+.translate-lang-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.75rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.2s;
+  letter-spacing:0.04em;
+}
+.translate-lang-pill.active{
+  background:rgba(232,184,75,0.12);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.translate-lang-pill .pill-flag{font-size:1rem}
 
-/*
-  Fade and slide in translation cards when they are injected into the
-  DOM.  The "both" fill mode ensures that the element holds on to
-  its final keyframe values after the animation completes, so we
-  don't need to manually reset opacity or transform.  Adjust the
-  duration or easing to your liking.
-*/
+/* Main input panel */
+.translate-panel{
+  position:relative;
+  z-index:1;
+  background:rgba(22,22,22,0.9);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:12px;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  transition:border-color 0.25s;
+}
+.translate-panel:focus-within{border-color:rgba(232,184,75,0.4);}
+.translate-panel-top{
+  display:flex;
+  align-items:center;
+  padding:10px 14px 0;
+  gap:6px;
+}
+.translate-src-badge{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:3px 8px;
+}
+.translate-char-count{
+  margin-left:auto;
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;
+  color:#3a3a3a;
+  transition:color 0.2s;
+}
+.translate-textarea{
+  width:100%;
+  min-height:100px;
+  background:transparent;
+  border:none;
+  padding:12px 44px 12px 14px;
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-size:1.05rem;
+  line-height:1.65;
+  resize:none;
+  outline:none;
+  -webkit-appearance:none;
+}
+.translate-textarea::placeholder{color:#383838}
+.translate-panel-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-top:1px solid rgba(255,255,255,0.04);
+}
+.translate-clear-btn{
+  background:transparent;
+  border:none;
+  color:#383838;
+  font-size:0.85rem;
+  cursor:pointer;
+  padding:4px 8px;
+  border-radius:6px;
+  transition:all 0.2s;
+  font-family:'DM Sans',sans-serif;
+  letter-spacing:0.04em;
+  font-size:0.72rem;
+}
+.translate-clear-btn:hover{color:var(--muted);background:rgba(255,255,255,0.04)}
+.translate-speak-inline{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  font-size:0.72rem;
+  padding:5px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;
+  display:flex;align-items:center;gap:5px;
+}
+.translate-speak-inline:hover{border-color:#3a3a3a;color:var(--white)}
+.translate-btn-main{
+  margin-left:auto;
+  padding:8px 22px;
+  background:var(--gold);
+  color:var(--black);
+  border:none;
+  border-radius:8px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.05rem;
+  letter-spacing:0.1em;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.translate-btn-main:active{transform:scale(0.96);opacity:0.9}
+.translate-btn-main:disabled{opacity:0.35;cursor:default}
+.translate-btn-main .btn-spinner{
+  width:13px;height:13px;
+  border:2px solid rgba(0,0,0,0.25);
+  border-top-color:#000;
+  border-radius:50%;
+  animation:spin 0.7s linear infinite;
+  display:none;
+}
+.translate-btn-main.loading .btn-spinner{display:block}
+.translate-btn-main.loading .btn-label{display:none}
+
+/* Results */
+.translate-results{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  position:relative;
+  z-index:1;
+  margin-bottom:24px;
+}
 .translate-card{
-  animation: translateCardFade 0.45s ease both;
+  background:rgba(18,18,18,0.95);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  animation:tcardIn 0.38s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes tcardIn{
+  from{opacity:0;transform:translateY(10px) scale(0.98);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+.translate-card:nth-child(2){animation-delay:0.06s}
+.translate-card:nth-child(3){animation-delay:0.12s}
+
+.translate-card-header{
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.translate-card-lang{
+  display:flex;align-items:center;gap:8px;
+}
+.translate-card-flag{font-size:1.15rem;line-height:1}
+.translate-card-lang-name{
+  font-family:'DM Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.translate-card-actions{display:flex;gap:6px;align-items:center}
+.translate-card-speak{
+  background:transparent;
+  border:none;
+  color:#3a3a3a;
+  cursor:pointer;
+  font-size:0.9rem;
+  padding:3px 6px;
+  border-radius:5px;
+  transition:all 0.2s;
+  line-height:1;
+}
+.translate-card-speak:hover{color:var(--muted);background:rgba(255,255,255,0.05)}
+.translate-card-copy{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  font-size:0.6rem;
+  padding:3px 10px;
+  border-radius:5px;
+  cursor:pointer;
+  font-family:'DM Mono',monospace;
+  letter-spacing:0.08em;
+  transition:all 0.2s;
+}
+.translate-card-copy:hover{border-color:rgba(232,184,75,0.4);color:var(--gold)}
+.translate-card-copy.copied{border-color:var(--green);color:var(--green)}
+.translate-card-body{padding:14px}
+.translate-result-text{
+  font-size:1rem;
+  line-height:1.7;
+  color:var(--white);
+  min-height:28px;
+}
+.translate-result-text[dir="rtl"]{
+  font-size:1.05rem;
+  text-align:right;
+  font-family:'DM Sans',sans-serif;
+}
+.translate-result-text.loading-shimmer{
+  background:linear-gradient(90deg,var(--border) 25%,#252525 50%,var(--border) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.2s infinite;
+  border-radius:6px;
+  height:22px;
+  width:75%;
+}
+.translate-phonetic{
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem;
+  color:#3a3a3a;
+  margin-top:6px;
+  letter-spacing:0.06em;
 }
 
-@keyframes translateCardFade{
-  from{opacity:0;transform:translateY(8px);}
-  to{opacity:1;transform:translateY(0);}
+/* Divider between results and history */
+.translate-divider{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:4px 0 16px;
+}
+.translate-divider span{
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:#2e2e2e;
+  white-space:nowrap;
+}
+.translate-divider::before,.translate-divider::after{
+  content:'';flex:1;height:1px;background:rgba(255,255,255,0.05);
 }
 
-.translate-history{margin-top:28px}
-.translate-history-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.translate-history-clear{font-size:0.68rem;background:transparent;border:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;transition:color 0.2s}
-.translate-history-clear:hover{color:var(--red)}
-.translate-history-list{display:flex;flex-direction:column;gap:8px}
-.translate-history-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color 0.2s;display:flex;align-items:center;gap:10px}
-.translate-history-item:hover{border-color:#3a3a3a}
-.translate-history-item:active{border-color:var(--gold)}
-.translate-history-de{font-size:0.85rem;color:var(--white);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.translate-history-sub{font-size:0.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
-.translate-history-arrow{color:var(--muted);font-size:0.8rem;flex-shrink:0}
-.translate-empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:0.82rem}
-.translate-empty-icon{font-size:2rem;margin-bottom:8px}
+/* History */
+.translate-history{
+  position:relative;
+  z-index:1;
+}
+.translate-history-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+.translate-history-label{
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:#3a3a3a;
+}
+.translate-history-clear{
+  font-size:0.65rem;
+  background:transparent;
+  border:none;
+  color:#3a3a3a;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  padding:2px 6px;
+  border-radius:4px;
+  transition:all 0.2s;
+  letter-spacing:0.04em;
+}
+.translate-history-clear:hover{color:var(--red);background:rgba(204,31,31,0.08)}
+.translate-history-list{display:flex;flex-direction:column;gap:6px}
+.translate-history-item{
+  background:rgba(16,16,16,0.8);
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:10px;
+  padding:11px 14px;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.translate-history-item:hover{border-color:rgba(255,255,255,0.08);background:rgba(22,22,22,0.9)}
+.translate-history-item:active{border-color:rgba(232,184,75,0.25);transform:scale(0.99)}
+.translate-history-flag{font-size:0.95rem;flex-shrink:0}
+.translate-history-de{
+  font-size:0.85rem;
+  color:var(--white);
+  font-weight:500;
+  flex:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.translate-history-sub{
+  font-size:0.68rem;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:130px;
+}
+.translate-history-arrow{color:#2e2e2e;font-size:0.7rem;flex-shrink:0}
+.translate-empty{
+  text-align:center;
+  padding:28px 16px;
+  color:#2e2e2e;
+  font-size:0.78rem;
+  font-family:'DM Mono',monospace;
+  letter-spacing:0.08em;
+}
+.translate-empty-icon{font-size:1.8rem;margin-bottom:8px;display:block;opacity:0.4}
 
 /* ADMIN PAGE */
 .admin-page{padding:0 16px 40px;max-width:1100px;margin:0 auto}
@@ -1603,32 +1876,44 @@ h1 span{color:var(--gold)}
 </div>
 </header>
 <div class="translate-page">
-<div class="translate-header">
-<p id="translate-page-sub">Deutsch → Arabisch &amp; Englisch</p>
-</div>
-<div class="translate-input-wrap">
-<textarea class="translate-textarea" id="translate-input" placeholder="Deutsches Wort oder Satz eingeben..." rows="4"></textarea>
-<button class="translate-clear-btn" id="translate-clear" onclick="clearTranslateInput()" title="Clear">✕</button>
-</div>
-<div class="translate-actions">
-<button class="translate-btn primary" id="translate-btn" onclick="doTranslate()">
-<div class="btn-spinner"></div>
-<span class="btn-label" id="translate-btn-label">Übersetzen</span>
-</button>
-<button class="translate-btn secondary" id="translate-speak-btn" onclick="speakInput()" title="Pronounce">
-<span class="btn-label">🔊 Anhören</span>
-</button>
-</div>
-<div class="translate-results" id="translate-results">
-<!-- results injected here -->
-</div>
-<div class="translate-history" id="translate-history-section">
-<div class="translate-history-title">
-<span id="translate-history-label">Verlauf</span>
-<button class="translate-history-clear" id="translate-history-clear-btn" onclick="clearTranslateHistory()">Löschen</button>
-</div>
-<div class="translate-history-list" id="translate-history-list"></div>
-</div>
+
+  <!-- Input panel -->
+  <div class="translate-panel">
+    <div class="translate-panel-top">
+      <span class="translate-src-badge" id="translate-src-badge">DE · Erkannt</span>
+      <span class="translate-char-count" id="translate-char-count">0 / 500</span>
+    </div>
+    <textarea class="translate-textarea" id="translate-input"
+      placeholder="Wort oder Satz eingeben…"
+      rows="4"
+      maxlength="500"
+      oninput="updateTranslateCharCount(this)"></textarea>
+    <div class="translate-panel-actions">
+      <button class="translate-clear-btn" id="translate-clear" onclick="clearTranslateInput()">✕ Löschen</button>
+      <button class="translate-speak-inline" onclick="speakInput()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <span id="translate-speak-label">Anhören</span>
+      </button>
+      <button class="translate-btn-main" id="translate-btn" onclick="doTranslate()">
+        <div class="btn-spinner"></div>
+        <span class="btn-label" id="translate-btn-label">Übersetzen</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="translate-results" id="translate-results"></div>
+
+  <!-- History -->
+  <div class="translate-history" id="translate-history-section">
+    <div class="translate-divider"><span id="translate-history-label">Verlauf</span></div>
+    <div class="translate-history-title">
+      <span class="translate-history-label"></span>
+      <button class="translate-history-clear" id="translate-history-clear-btn" onclick="clearTranslateHistory()">Löschen</button>
+    </div>
+    <div class="translate-history-list" id="translate-history-list"></div>
+  </div>
+
 </div>
 </div>
 <!-- ADMIN PAGE -->
