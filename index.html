@@ -658,11 +658,48 @@ h1 span{color:var(--gold)}
 .news-empty .icon{font-size:2.2rem;margin-bottom:10px;opacity:0.6}
 .news-status{font-size:0.72rem;color:var(--muted);margin-top:8px;min-height:16px}
 .news-status.editing{color:var(--gold)}
+/* === News Upload === */
+.news-upload-area{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;background:#0a0a0a}
+.news-upload-area:hover,.news-upload-area.drag-over{border-color:var(--gold);background:rgba(232,184,75,0.04)}
+.news-upload-label{font-size:0.78rem;color:var(--muted);line-height:1.7;pointer-events:none}
+.news-upload-label strong{color:var(--gold)}
+.news-attachments-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-height:0}
+.news-attach-chip{display:flex;align-items:center;gap:7px;padding:5px 8px 5px 6px;background:#111;border:1px solid var(--border);border-radius:8px;font-size:0.74rem;color:var(--white);max-width:200px}
+.news-attach-chip img{width:36px;height:36px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.news-attach-chip .chip-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+.news-attach-chip .chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.news-attach-chip .chip-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 2px;line-height:1;flex-shrink:0}
+.news-attach-chip .chip-rm:hover{color:#ff6b6b}
+/* News card media */
+.news-images{display:grid;gap:6px;margin-top:12px}
+.news-images.c1{grid-template-columns:1fr}
+.news-images.c2{grid-template-columns:1fr 1fr}
+.news-images.c3,.news-images.c4{grid-template-columns:1fr 1fr}
+.news-img-wrap{border-radius:8px;overflow:hidden;background:#111;cursor:pointer;max-height:280px}
+.news-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s}
+.news-img-wrap:hover img{transform:scale(1.02)}
+.news-docs-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.news-doc-link{display:flex;align-items:center;gap:8px;padding:7px 12px;background:#111;border:1px solid var(--border);border-radius:8px;color:var(--muted);text-decoration:none;font-size:0.78rem;transition:all 0.2s;word-break:break-all}
+.news-doc-link:hover{border-color:var(--gold);color:var(--gold)}
+/* Code blocks in news body */
+.news-body{white-space:normal!important}
+.news-body p{margin:0 0 6px;white-space:pre-wrap;word-break:break-word}
+.news-code-block{margin:10px 0;border-radius:8px;overflow:hidden;border:1px solid #30363d}
+.news-code-header{display:flex;align-items:center;justify-content:space-between;background:#161b22;padding:5px 12px}
+.news-code-lang{font-family:'DM Mono',monospace;font-size:0.66rem;color:#8b949e;text-transform:uppercase;letter-spacing:0.1em}
+.news-code-copy{background:none;border:none;color:#8b949e;font-size:0.68rem;cursor:pointer;font-family:'DM Sans',sans-serif;padding:2px 6px;border-radius:4px;letter-spacing:0.04em}
+.news-code-copy:hover{color:var(--gold);background:rgba(232,184,75,0.1)}
+.news-code-pre{background:#0d1117;padding:14px;overflow-x:auto;margin:0}
+.news-code-pre code{font-family:'DM Mono',monospace;font-size:0.82rem;line-height:1.65;color:#e6edf3;display:block}
+/* Lightbox */
+.news-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.news-lightbox img{max-width:92vw;max-height:90vh;border-radius:8px;box-shadow:0 0 40px rgba(0,0,0,0.8)}
 @media(max-width:767px){
   .news-page{padding:20px 14px 32px}
   .news-compose-grid{grid-template-columns:1fr}
   .news-card-head{flex-direction:column}
   .news-card-actions{width:100%;justify-content:flex-end}
+  .news-images.c2,.news-images.c3,.news-images.c4{grid-template-columns:1fr 1fr}
 }
 
 /* ===== TRANSLATE PAGE ===== */
@@ -1537,6 +1574,18 @@ h1 span{color:var(--gold)}
 <label id="news-body-label">Inhalt</label>
 <textarea class="news-textarea body" id="news-body-input" placeholder="Schreibe hier deinen Artikel oder deine News..."></textarea>
 </div>
+<div class="news-field" style="margin-top:10px">
+<label style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em">Attachments</label>
+<div class="news-upload-area" id="news-upload-area"
+  onclick="document.getElementById('news-file-input').click()"
+  ondrop="handleNewsFileDrop(event)" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')">
+  <input type="file" id="news-file-input" multiple
+    accept="image/*,.pdf,.doc,.docx,.txt,.csv,.json,.xml,.js,.ts,.py,.html,.css,.md,.java,.cpp,.c,.rb,.go,.rs,.kt,.swift"
+    style="display:none" onchange="handleNewsFileSelect(this.files)">
+  <div class="news-upload-label">📎 <strong>Click or drop files</strong><br><span style="font-size:0.7rem">Images · PDF · Word · Code files · max 5 MB each</span></div>
+</div>
+<div class="news-attachments-preview" id="news-attachments-preview"></div>
+</div>
 <div class="news-compose-actions">
 <button class="news-btn primary" id="news-submit-btn" onclick="submitNewsPost()"><div class="btn-spinner"></div><span class="btn-label">Veröffentlichen</span></button>
 <button class="news-btn secondary" id="news-cancel-btn" onclick="cancelNewsEdit()" style="display:none">Abbrechen</button>
@@ -1929,6 +1978,7 @@ let currentRole = 'user'; // 'admin' | 'user'
 let newsFilter = 'all';
 let editingNewsId = null;
 let _newsPosts = [];
+let newsAttachments = []; // [{name, mimeType, data, preview}]
 let currentLang = 'de';
 let _appInited = false;
 let _staticUiBound = false;
@@ -4097,6 +4147,10 @@ function clearNewsForm(){
   if(body)body.value='';
   if(status){status.textContent='';status.className='news-status';}
   editingNewsId=null;
+  newsAttachments=[];
+  renderAttachmentsPreview();
+  const fi=document.getElementById('news-file-input');
+  if(fi)fi.value='';
   updateNewsComposerUi();
 }
 
@@ -4149,7 +4203,28 @@ function renderNewsPage(){
     return;
   }
 
-  list.innerHTML = items.map(item => `
+  list.innerHTML = items.map(item => {
+    const attachments = Array.isArray(item.attachments) ? item.attachments : [];
+    const images = attachments.filter(a=>a.mimeType && a.mimeType.startsWith('image/'));
+    const docs   = attachments.filter(a=>!a.mimeType || !a.mimeType.startsWith('image/'));
+
+    const imagesHtml = images.length ? `
+      <div class="news-images c${Math.min(images.length,4)}">
+        ${images.map((img,i)=>`
+          <div class="news-img-wrap" onclick="openNewsLightbox('${encodeURIComponent(img.data)}')">
+            <img src="${img.data}" alt="${escapeHtml(img.name||'image')}" loading="lazy">
+          </div>`).join('')}
+      </div>` : '';
+
+    const docsHtml = docs.length ? `
+      <div class="news-docs-row">
+        ${docs.map(doc=>`
+          <a class="news-doc-link" href="${doc.data}" download="${escapeHtml(doc.name||'file')}">
+            ${getDocIcon(doc.mimeType)} ${escapeHtml(doc.name||'file')}
+          </a>`).join('')}
+      </div>` : '';
+
+    return `
     <article class="news-card">
       <div class="news-card-head">
         <div class="news-meta">
@@ -4167,10 +4242,12 @@ function renderNewsPage(){
       </div>
       <div class="news-card-body">
         ${item.summary ? `<div class="news-summary">${escapeHtml(item.summary)}</div>` : ''}
-        <div class="news-body">${escapeHtml(item.body || '')}</div>
+        <div class="news-body">${renderNewsBody(item.body || '')}</div>
+        ${imagesHtml}
+        ${docsHtml}
       </div>
-    </article>
-  `).join('');
+    </article>`;
+  }).join('');
 }
 
 function escapeHtml(value){
@@ -4179,9 +4256,119 @@ function escapeHtml(value){
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;')
-    .replace(/\n/g,'<br>');
+    .replace(/'/g,'&#39;');
 }
+
+/* ---- News file upload ---- */
+function handleNewsFileSelect(files){
+  if(!files||!files.length) return;
+  processNewsFiles(Array.from(files));
+  document.getElementById('news-file-input').value='';
+}
+function handleNewsFileDrop(e){
+  e.preventDefault();
+  document.getElementById('news-upload-area').classList.remove('drag-over');
+  if(!e.dataTransfer.files.length) return;
+  processNewsFiles(Array.from(e.dataTransfer.files));
+}
+function processNewsFiles(files){
+  const MAX=5*1024*1024;
+  files.forEach(file=>{
+    if(file.size>MAX){showToast(`⚠️ ${file.name} exceeds 5 MB`);return;}
+    if(newsAttachments.length>=10){showToast('Max 10 attachments');return;}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      newsAttachments.push({name:file.name, mimeType:file.type, data:ev.target.result});
+      renderAttachmentsPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function removeNewsAttachment(idx){
+  newsAttachments.splice(idx,1);
+  renderAttachmentsPreview();
+}
+function renderAttachmentsPreview(){
+  const wrap=document.getElementById('news-attachments-preview');
+  if(!wrap) return;
+  if(!newsAttachments.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=newsAttachments.map((a,i)=>{
+    const isImg=a.mimeType&&a.mimeType.startsWith('image/');
+    const thumb=isImg?`<img src="${a.data}" alt="">`:`<span class="chip-icon">${getDocIcon(a.mimeType)}</span>`;
+    return `<div class="news-attach-chip">${thumb}<span class="chip-name" title="${escapeHtml(a.name)}">${escapeHtml(a.name)}</span><button class="chip-rm" onclick="removeNewsAttachment(${i})" title="Remove">×</button></div>`;
+  }).join('');
+}
+function getDocIcon(mime){
+  if(!mime) return '📄';
+  if(mime==='application/pdf') return '📕';
+  if(mime.includes('word')||mime.includes('document')) return '📘';
+  if(mime.includes('spreadsheet')||mime.includes('excel')) return '📗';
+  if(mime.includes('presentation')||mime.includes('powerpoint')) return '📙';
+  if(mime.includes('zip')||mime.includes('compressed')) return '🗜️';
+  if(mime.startsWith('text/')||mime.includes('json')||mime.includes('xml')) return '📄';
+  return '📎';
+}
+
+/* ---- News body renderer (code blocks + plain text) ---- */
+function renderNewsBody(raw){
+  if(!raw) return '';
+  // Split on ```lang ... ``` blocks
+  const parts=[];
+  const codeRe=/```(\w*)\n?([\s\S]*?)```/g;
+  let last=0, m;
+  while((m=codeRe.exec(raw))!==null){
+    if(m.index>last){
+      parts.push({type:'text', content:raw.slice(last,m.index)});
+    }
+    parts.push({type:'code', lang:(m[1]||'').toLowerCase(), content:m[2]});
+    last=m.index+m[0].length;
+  }
+  if(last<raw.length) parts.push({type:'text', content:raw.slice(last)});
+
+  return parts.map(part=>{
+    if(part.type==='text'){
+      // Escape HTML then restore line breaks as paragraphs
+      const escaped=part.content
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      return `<p style="white-space:pre-wrap;margin:0 0 4px">${escaped}</p>`;
+    }
+    // code block
+    const lang=part.lang||'plaintext';
+    const escaped=part.content
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const blockId='cb_'+Math.random().toString(36).slice(2,8);
+    return `<div class="news-code-block">
+      <div class="news-code-header">
+        <span class="news-code-lang">${lang}</span>
+        <button class="news-code-copy" onclick="copyCodeBlock('${blockId}')">Copy</button>
+      </div>
+      <div class="news-code-pre"><code id="${blockId}">${escaped}</code></div>
+    </div>`;
+  }).join('');
+}
+function copyCodeBlock(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const text=el.innerText||el.textContent||'';
+  navigator.clipboard.writeText(text).then(()=>showToast('✅ Copied!')).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('✅ Copied!');
+  });
+}
+
+/* ---- Lightbox ---- */
+function openNewsLightbox(encodedSrc){
+  const src=decodeURIComponent(encodedSrc);
+  const box=document.createElement('div');
+  box.className='news-lightbox';
+  box.innerHTML=`<img src="${src}" alt="Image">`;
+  box.onclick=()=>document.body.removeChild(box);
+  document.body.appendChild(box);
+}
+
 
 function setNewsFilter(filter, btn){
   newsFilter = filter;
@@ -4203,16 +4390,17 @@ async function submitNewsPost(){
   if(btn){btn.disabled=true;btn.classList.add('loading');}
 
   try{
+    const attachments = newsAttachments.map(a=>({name:a.name,mimeType:a.mimeType,data:a.data}));
     if(editingNewsId){
       const {error}=await _supa.from('news_posts').update({
-        title, type, summary, body, updated_at: new Date().toISOString()
+        title, type, summary, body, attachments, updated_at: new Date().toISOString()
       }).eq('id', editingNewsId);
       if(error) throw error;
       showToast(t('news_toast_updated'));
     }else{
       const id='post_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
       const {error}=await _supa.from('news_posts').insert({
-        id, title, type, summary, body,
+        id, title, type, summary, body, attachments,
         author_email: currentUser?.email || '',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -4238,6 +4426,9 @@ function editNewsPost(id){
   document.getElementById('news-type-select').value = item.type || 'article';
   document.getElementById('news-summary-input').value = item.summary || '';
   document.getElementById('news-body-input').value = item.body || '';
+  // Restore attachments
+  newsAttachments = Array.isArray(item.attachments) ? item.attachments.map(a=>({...a})) : [];
+  renderAttachmentsPreview();
   updateNewsComposerUi();
   switchPage('news');
   window.scrollTo({ top: 0, behavior: 'smooth' });
