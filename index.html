@@ -105,7 +105,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .nav-item::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity 0.18s}
 .nav-item.active::after{opacity:1}
 /* Label */
-.nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.18s;white-space:nowrap}
+.nav-label{font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);transition:color 0.2s;white-space:nowrap;text-align:center;width:100%;line-height:1.2;font-weight:500}
 .nav-item.active .nav-label{color:var(--gold)}
 /* NAV DRAWER OVERLAY */
 .nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -229,7 +229,7 @@ h1 span{color:var(--gold)}
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 24px;max-width:1148px;margin:0 auto}
 .stat-pill{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:10px}
-.stat-pill-icon{font-size:1.2rem}
+.stat-pill-icon{font-size:1.2rem;color:var(--gold);opacity:0.7;display:flex;align-items:center;justify-content:center;width:24px;flex-shrink:0}
 .stat-pill-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);line-height:1}
 .stat-pill-label{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
 
@@ -1572,7 +1572,7 @@ h1 span{color:var(--gold)}
 
 /* LANG FAB */
 /* LANG FAB */
-.lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
+.lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
 .lang-fab-btn:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(232,184,75,0.25);transform:scale(1.1)}
 .lang-fab-btn:active{transform:scale(0.92)}
 .lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
@@ -1787,7 +1787,8 @@ h1 span{color:var(--gold)}
         <!-- Forgot password link -->
         <a href="#" id="forgot-password-link" style="font-size:0.72rem;color:var(--gold);display:block;margin-top:6px;margin-bottom:8px;text-align:right">Passwort vergessen?</a>
         <!-- Google OAuth button -->
-        <button type="button" id="google-btn" class="google-btn"><span style="font-size:1rem">🔒</span> Mit Google anmelden</button>
+        <button type="button" id="google-btn" class="google-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Mit Google anmelden</button>
 <div class="login-error" id="auth-error"></div>
 </div>
 </div>
@@ -1833,14 +1834,14 @@ h1 span{color:var(--gold)}
 <!-- RENAME MODAL -->
 <div class="rename-modal" id="rename-modal">
 <div class="rename-box">
-<div class="rename-title"> Dokument bearbeiten</div>
+<div class="rename-title">Dokument bearbeiten</div>
 <input class="rename-input" id="rename-input" placeholder="Dokumentname..." type="text"/>
 <select class="rename-select" id="rename-cat">
-<option value="grammar"> Grammatik</option>
-<option value="vocabulary"> Vokabeln</option>
-<option value="exercise"> Übungen</option>
-<option value="exam"> Prüfung</option>
-<option value="other"> Sonstiges</option>
+<option value="grammar">Grammatik</option>
+<option value="vocabulary">Vokabeln</option>
+<option value="exercise">Übungen</option>
+<option value="exam">Prüfung</option>
+<option value="other">Sonstiges</option>
 </select>
 <div class="rename-actions">
 <button class="rename-btn cancel" onclick="closeRenameModal()">Abbrechen</button>
@@ -1895,12 +1896,12 @@ h1 span{color:var(--gold)}
       </button>
       <div class="notif-panel" id="notif-panel">
         <div class="notif-panel-head">
-          <span class="notif-panel-title">🔔 Notifications</span>
-          <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+          <span class="notif-panel-title" data-i18n="notif_panel_title">Benachrichtigungen</span>
+          <button class="notif-mark-read" onclick="markAllRead()" data-i18n="notif_mark_read">Alle gelesen</button>
         </div>
-        <div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
+        <div class="notif-list" id="notif-list"><div class="notif-empty" data-i18n="notif_empty">Keine Benachrichtigungen</div></div>
         <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer" data-i18n="notif_send_btn">Benachrichtigung senden</button>
         </div>
       </div>
     </div>
@@ -1977,10 +1978,22 @@ h1 span{color:var(--gold)}
 <div class="journey-bar" id="journey-bar"></div>
 </div>
 <div class="stats-row">
-<div class="stat-pill"><div class="stat-pill-icon">📚</div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">⏱</div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">✅</div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
-<div class="stat-pill"><div class="stat-pill-icon">🗓</div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
+<div class="stat-pill">
+  <div class="stat-pill-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+  </div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
+<div class="stat-pill">
+  <div class="stat-pill-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  </div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
+<div class="stat-pill">
+  <div class="stat-pill-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
+<div class="stat-pill">
+  <div class="stat-pill-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+  </div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
 </div>
 <div class="daily-section">
 <div class="section-title">Tägliche Aufgaben</div>
@@ -2010,9 +2023,9 @@ h1 span{color:var(--gold)}
 </header>
 <div class="pdf-page">
 <div class="storage-bar">
-<span class="storage-label">💾 Local</span>
+<span class="storage-label">Lokal</span>
 <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
-<span class="storage-info" id="storage-info">Chargement...</span>
+<span class="storage-info" id="storage-info">Wird geladen…</span>
 </div>
 <div class="docs-sync-row">
 <span class="docs-account" id="docs-account">—</span>
@@ -2035,17 +2048,19 @@ h1 span{color:var(--gold)}
 </div>
 <div class="pdf-upload-zone" id="upload-zone">
 <input accept=".pdf,application/pdf" id="pdf-input" multiple="" type="file"/>
-<div class="upload-icon">📄</div>
+<div class="upload-icon">
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.45"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+</div>
 <div class="upload-title">PDF hochladen</div>
 <div class="upload-sub">Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei</div>
 </div>
 <div class="pdf-categories">
 <button class="cat-btn active" data-cat="all">Alle</button>
-<button class="cat-btn" data-cat="grammar">📘 Grammatik</button>
-<button class="cat-btn" data-cat="vocabulary">📚 Vokabeln</button>
-<button class="cat-btn" data-cat="exercise">✏️ Übungen</button>
-<button class="cat-btn" data-cat="exam">📝 Prüfung</button>
-<button class="cat-btn" data-cat="other">📄 Sonstiges</button>
+<button class="cat-btn" data-cat="grammar">Grammatik</button>
+<button class="cat-btn" data-cat="vocabulary">Vokabeln</button>
+<button class="cat-btn" data-cat="exercise">Übungen</button>
+<button class="cat-btn" data-cat="exam">Prüfung</button>
+<button class="cat-btn" data-cat="other">Sonstiges</button>
 </div>
 <div class="pdf-grid" id="pdf-grid"></div>
 </div>
@@ -2054,12 +2069,14 @@ h1 span{color:var(--gold)}
 <div class="scanner-modal" id="scanner-modal">
   <div class="scanner-shell">
     <div class="scanner-header">
-      <span class="scanner-header-title">📷 Code Scanner</span>
+      <span class="scanner-header-title">Code Scanner</span>
       <button class="scanner-close-btn" onclick="closeScannerModal()">✕</button>
     </div>
     <div class="scanner-tabs">
-      <button class="scanner-tab active" id="tab-camera" onclick="switchScannerTab('camera')">📷 Camera</button>
-      <button class="scanner-tab" id="tab-image" onclick="switchScannerTab('image')">🖼 Upload Image</button>
+      <button class="scanner-tab active" id="tab-camera" onclick="switchScannerTab('camera')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:5px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8l-2 4h12z"/><circle cx="12" cy="13" r="3"/></svg>Kamera</button>
+      <button class="scanner-tab" id="tab-image" onclick="switchScannerTab('image')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:5px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Bild hochladen</button>
     </div>
     <div id="scanner-camera-panel">
       <div class="scanner-video-wrap" id="scanner-video-wrap">
@@ -2072,20 +2089,20 @@ h1 span{color:var(--gold)}
           </div>
         </div>
       </div>
-      <div class="scanner-hint" id="scanner-hint">Point the camera at a QR code or barcode</div>
+      <div class="scanner-hint" id="scanner-hint">Kamera auf einen QR-Code oder Barcode richten</div>
     </div>
     <div id="scanner-image-panel" style="display:none">
       <div style="padding:24px 18px;text-align:center">
         <label style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;color:var(--muted)">
-          <div style="font-size:2.8rem">🖼</div>
-          <span style="font-size:0.82rem">Tap to choose an image with a QR or barcode</span>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span style="font-size:0.82rem">Bild mit QR-Code oder Barcode auswählen</span>
           <input type="file" accept="image/*" class="scanner-upload-input" id="scanner-image-input" onchange="scanFromImage(event)"/>
         </label>
       </div>
-      <div class="scanner-hint">Supports QR codes, EAN, UPC, Code128 &amp; more</div>
+      <div class="scanner-hint">Unterstützt QR-Codes, EAN, UPC, Code128 &amp; mehr</div>
     </div>
     <div class="scanner-result-area" id="scanner-result-area">
-      <div class="scanner-result-label">✅ Code Detected</div>
+      <div class="scanner-result-label">Code erkannt</div>
       <div class="scanner-result-text" id="scanner-result-text"></div>
       <div class="scanner-result-actions" id="scanner-result-actions"></div>
     </div>
@@ -2115,42 +2132,42 @@ h1 span{color:var(--gold)}
 
 <!-- Stats chips row -->
 <div class="profile-stats-row" id="profile-stats-row" style="padding:0 20px">
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-weeks">0</div><div class="profile-stat-chip-label">Weeks</div></div>
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-streak">0</div><div class="profile-stat-chip-label">Streak</div></div>
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-progress">0%</div><div class="profile-stat-chip-label">Progress</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-weeks">0</div><div class="profile-stat-chip-label" data-i18n="profile_weeks">Wochen</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-streak">0</div><div class="profile-stat-chip-label" data-i18n="profile_streak">Serie</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-progress">0%</div><div class="profile-stat-chip-label" data-i18n="profile_progress">Fortschritt</div></div>
 </div>
 
 <div class="profile-body">
 <!-- Identity section -->
-<div class="profile-section-label">Identity</div>
+<div class="profile-section-label" data-i18n="profile_identity">Identität</div>
 <div class="profile-field">
-  <label>Display Name</label>
-  <input id="profile-name-input" maxlength="40" placeholder="How should we call you?" type="text" autocomplete="name"/>
-  <div class="input-hint">Shown in the header and your profile</div>
+  <label data-i18n="profile_display_name">Anzeigename</label>
+  <input id="profile-name-input" maxlength="40" placeholder="Wie sollen wir dich nennen?" type="text" autocomplete="name"/>
+  <div class="input-hint" data-i18n="profile_name_hint">Wird im Header und deinem Profil angezeigt</div>
 </div>
 <div class="profile-field">
-<label id="lbl-email">Email</label>
+<label id="lbl-email" data-i18n="profile_email">E-Mail</label>
 <input id="profile-email-input" maxlength="254" readonly="" type="email"/>
 </div>
 <div class="profile-divider"></div>
 <!-- Security section -->
-<div class="profile-section-label">Security</div>
+<div class="profile-section-label" data-i18n="profile_security">Sicherheit</div>
 <div class="profile-field">
-<label id="lbl-new-pwd">New password</label>
+<label id="lbl-new-pwd" data-i18n="profile_new_pwd">Neues Passwort</label>
 <input autocomplete="new-password" id="profile-pwd1" placeholder="••••••••" type="password"/>
 </div>
 <div class="profile-field">
-<label id="lbl-confirm-pwd">Confirm password</label>
+<label id="lbl-confirm-pwd" data-i18n="profile_confirm_pwd">Passwort bestätigen</label>
 <input autocomplete="new-password" id="profile-pwd2" placeholder="••••••••" type="password"/>
 </div>
 <div class="profile-msg" id="profile-msg"></div>
 <div class="profile-divider"></div>
 <!-- Notifications section -->
-<div class="profile-section-label">Notifications</div>
+<div class="profile-section-label" data-i18n="profile_notifications">Benachrichtigungen</div>
 <div class="profile-reminder-row">
 <div class="profile-reminder-info">
-<div class="profile-reminder-label" id="lbl-reminder">🔔 Streak reminder</div>
-<div class="profile-reminder-sub" id="lbl-reminder-sub">Notify me 2h before midnight if tasks aren't done</div>
+<div class="profile-reminder-label" id="lbl-reminder" data-i18n="profile_reminder_label">Serien-Erinnerung</div>
+<div class="profile-reminder-sub" id="lbl-reminder-sub" data-i18n="profile_reminder_sub">Erinnere mich 2 Stunden vor Mitternacht, wenn Aufgaben fehlen</div>
 </div>
 <button aria-checked="false" class="notif-toggle" id="notif-toggle" onclick="toggleReminderNotif()" role="switch">
 <span class="notif-toggle-thumb"></span>
@@ -2158,28 +2175,28 @@ h1 span{color:var(--gold)}
 </div>
 <div class="profile-reminder-status" id="notif-status"></div>
 <div class="profile-actions">
-<button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()">💾 Save changes</button>
+<button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()" data-i18n="profile_save">Änderungen speichern</button>
 <div class="profile-divider" style="margin:6px 0"></div>
-<button class="profile-btn danger" onclick="logout()">↩ Log out</button>
+<button class="profile-btn danger" onclick="logout()" data-i18n="profile_logout">Abmelden</button>
 </div>
 <!-- ADMIN PANEL -->
 <div id="admin-panel" style="display:none;margin-top:16px">
 <div class="profile-divider"></div>
-<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 10px;font-weight:600">👑 Admin — Gestion des rôles</div>
-<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">Entrez l'email de l'utilisateur pour changer son rôle.</div>
+<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 10px;font-weight:600">Admin — Rollenverwaltung</div>
+<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">E-Mail-Adresse eingeben, um die Nutzerrolle zu ändern.</div>
 <div class="profile-field">
-<label>Email utilisateur</label>
+<label>Nutzer-E-Mail</label>
 <input id="admin-target-email" placeholder="user@example.com" style="width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none" type="email"/>
 </div>
 <div style="display:flex;gap:8px;margin-top:8px">
-<button onclick="adminSetRole('user')" style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👤 Définir User</button>
-<button onclick="adminSetRole('admin')" style="flex:1;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:6px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👑 Définir Admin</button>
+<button onclick="adminSetRole('user')" style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">Nutzer setzen</button>
+<button onclick="adminSetRole('admin')" style="flex:1;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:6px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">Admin setzen</button>
 </div>
 <div id="admin-panel-msg" style="font-size:0.75rem;margin-top:8px;min-height:18px"></div>
 <div class="profile-divider" style="margin-top:12px"></div>
-<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Utilisateurs enregistrés</div>
-<div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Chargement...</div>
-<button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Rafraîchir</button>
+<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Registrierte Nutzer</div>
+<div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Wird geladen…</div>
+<button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Aktualisieren</button>
 </div>
 </div>
 </div>
@@ -2290,68 +2307,67 @@ h1 span{color:var(--gold)}
 <div class="admin-hero">
 <div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
 <div class="admin-hero-title">Admin <span>Dashboard</span></div>
-<div class="admin-hero-sub">User management &amp; signup stats</div>
+<div class="admin-hero-sub" data-i18n="admin_hero_sub">Nutzerverwaltung &amp; Anmeldestatistiken</div>
 </div>
 <!-- PENDING REQUESTS -->
-<div class="admin-section-title">⏳ Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
+<div class="admin-section-title" data-i18n="admin_pending_label">Ausstehende Zugriffsanfragen <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
 <div class="admin-users-wrap" style="margin-bottom:28px">
-<div id="admin-pending-list"><div class="admin-empty">Loading requests...</div></div>
+<div id="admin-pending-list"><div class="admin-empty">Wird geladen…</div></div>
 </div>
 <!-- STAT CARDS -->
 <div class="admin-stats-grid">
 <div class="admin-stat-card gold">
 <div class="admin-stat-num" id="admin-stat-total">—</div>
-<div class="admin-stat-label">Total Users</div>
-<div class="admin-stat-sub" id="admin-stat-total-sub">Loading...</div>
+<div class="admin-stat-label" data-i18n="admin_total_users">Nutzer gesamt</div>
+<div class="admin-stat-sub" id="admin-stat-total-sub">Wird geladen…</div>
 </div>
 <div class="admin-stat-card green">
 <div class="admin-stat-num" id="admin-stat-today">—</div>
-<div class="admin-stat-label">New Today</div>
-<div class="admin-stat-sub" id="admin-stat-today-sub">Loading...</div>
+<div class="admin-stat-label" data-i18n="admin_new_today">Heute neu</div>
+<div class="admin-stat-sub" id="admin-stat-today-sub">Wird geladen…</div>
 </div>
 <div class="admin-stat-card blue">
 <div class="admin-stat-num" id="admin-stat-week">—</div>
-<div class="admin-stat-label">This Week</div>
-<div class="admin-stat-sub" id="admin-stat-week-sub">Loading...</div>
+<div class="admin-stat-label" data-i18n="admin_this_week">Diese Woche</div>
+<div class="admin-stat-sub" id="admin-stat-week-sub">Wird geladen…</div>
 </div>
 <div class="admin-stat-card red">
 <div class="admin-stat-num" id="admin-stat-admins">—</div>
-<div class="admin-stat-label">Admins</div>
-<div class="admin-stat-sub" id="admin-stat-admins-sub">Loading...</div>
+<div class="admin-stat-label" data-i18n="admin_admins_label">Admins</div>
+<div class="admin-stat-sub" id="admin-stat-admins-sub">Wird geladen…</div>
 </div>
 </div>
 <!-- SIGNUPS CHART -->
-<div class="admin-section-title">Signups — Last 7 Days</div>
+<div class="admin-section-title" data-i18n="admin_chart_title">Anmeldungen — Letzte 7 Tage</div>
 <div class="admin-chart-wrap">
 <div class="admin-chart-bars" id="admin-chart-bars">
-<div class="admin-empty" style="width:100%">Loading chart...</div>
+<div class="admin-empty" style="width:100%">Wird geladen…</div>
 </div>
 </div>
 <!-- USERS TABLE -->
-<div class="admin-section-title">All Users</div>
+<div class="admin-section-title" data-i18n="admin_all_users">Alle Nutzer</div>
 <div class="admin-users-wrap">
 <div class="admin-users-toolbar">
-<input class="admin-search" id="admin-user-search" oninput="adminFilterUsers()" placeholder="🔍 Search by email..."/>
-<button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)">All</button>
-<button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">👑 Admin</button>
-<button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)">👤 Users</button>
-        <!-- New filter for pending users -->
-        <button class="admin-filter-btn" data-role="pending" onclick="adminSetFilter('pending',this)">🕒 Pending</button>
-<button class="admin-refresh-btn" onclick="loadAdminPage()">↻ Refresh</button>
+<input class="admin-search" id="admin-user-search" oninput="adminFilterUsers()" placeholder="E-Mail suchen…"/>
+<button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)" data-i18n="docs_all_cat">Alle</button>
+<button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">Admin</button>
+<button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)" data-i18n="admin_users_label">Nutzer</button>
+        <button class="admin-filter-btn" data-role="pending" onclick="adminSetFilter('pending',this)" data-i18n="admin_pending_short">Ausstehend</button>
+<button class="admin-refresh-btn" onclick="loadAdminPage()">↻ <span data-i18n="admin_refresh">Aktualisieren</span></button>
 </div>
 <div id="admin-users-list-full">
-<div class="admin-empty">Loading users...</div>
+<div class="admin-empty">Wird geladen…</div>
 </div>
 </div>
 <!-- ALL DOCUMENTS -->
-<div class="admin-section-title" style="margin-top:28px">📄 All User Documents</div>
+<div class="admin-section-title" style="margin-top:28px" data-i18n="admin_all_docs">Alle Nutzerdokumente</div>
 <div class="admin-users-wrap">
 <div class="admin-users-toolbar">
-<input class="admin-search" id="admin-doc-search" oninput="adminFilterDocs()" placeholder="🔍 Search by filename..."/>
-<button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ Refresh</button>
+<input class="admin-search" id="admin-doc-search" oninput="adminFilterDocs()" placeholder="Dateiname suchen…"/>
+<button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ <span data-i18n="admin_refresh">Aktualisieren</span></button>
 </div>
 <div id="admin-docs-list">
-<div class="admin-empty">Loading documents...</div>
+<div class="admin-empty">Wird geladen…</div>
 </div>
 </div>
 </div>
@@ -2478,12 +2494,12 @@ h1 span{color:var(--gold)}
 <!-- Mobile notification panel (full-width bottom sheet) -->
 <div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
 <div class="notif-panel-head" style="padding:14px 18px">
-<span class="notif-panel-title">🔔 Notifications</span>
-<button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+<span class="notif-panel-title" data-i18n="notif_panel_title">Benachrichtigungen</span>
+<button class="notif-mark-read" onclick="markAllRead()" data-i18n="notif_mark_read">Alle gelesen</button>
 </div>
-<div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
+<div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty" data-i18n="notif_empty">Keine Benachrichtigungen</div></div>
 <div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer" data-i18n="notif_send_btn">Benachrichtigung senden</button>
 </div>
 </div>
 <!-- LANGUAGE SWITCHER -->
@@ -2493,39 +2509,35 @@ h1 span{color:var(--gold)}
 <button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
 <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
 </div>
-    <!--
-      Added an extra emoji to the language button so it stands out more. The
-      original button only displayed a generic globe (🌐), which could be
-      confusing or easy to overlook. By appending a second emoji (🌍) we
-      signal clearly that this button relates to language and world selection.
-    -->
-    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐🌍</button>
+    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Sprache wechseln">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </button>
 </div>
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
 <div class="notif-modal">
 <div class="notif-modal-flag"></div>
 <div class="notif-modal-body">
-<div class="notif-modal-title">📣 Send <span>Notification</span></div>
+<div class="notif-modal-title" data-i18n="notif_modal_title">Benachrichtigung <span>senden</span></div>
 <div class="notif-field">
-<label>Target</label>
+<label data-i18n="notif_target_label">Empfänger</label>
 <select id="notif-target-select">
-<option value="all">🌍 All Users</option>
+<option value="all" data-i18n="notif_target_all">Alle Nutzer</option>
 </select>
 </div>
 <div class="notif-field">
-<label>Title</label>
-<input id="notif-title-input" placeholder="Notification title..." type="text"/>
+<label data-i18n="notif_title_label">Titel</label>
+<input id="notif-title-input" placeholder="Titel der Benachrichtigung..." type="text"/>
 </div>
 <div class="notif-field">
-<label>Message</label>
-<textarea id="notif-body-input" placeholder="Write your message here..."></textarea>
+<label data-i18n="notif_body_label">Nachricht</label>
+<textarea id="notif-body-input" placeholder="Nachricht hier eingeben..."></textarea>
 </div>
 <div class="notif-modal-actions">
-<button class="notif-cancel-btn" onclick="closeNotifModal()">Cancel</button>
+<button class="notif-cancel-btn" onclick="closeNotifModal()" data-i18n="notif_cancel">Abbrechen</button>
 <button class="notif-send-btn" id="notif-send-btn" onclick="sendNotification()">
 <div class="btn-spinner"></div>
-<span class="btn-label">Send</span>
+<span class="btn-label" data-i18n="notif_send">Senden</span>
 </button>
 </div>
 </div>
@@ -2542,7 +2554,7 @@ h1 span{color:var(--gold)}
   </header>
   <div style="max-width:700px;margin:0 auto;padding:10px 16px 0">
     <div style="display:flex;align-items:center;gap:8px;background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:8px;padding:9px 14px;font-size:0.73rem;color:var(--muted)">
-      <span style="font-size:1rem">🌐</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gold)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <span>B1-Wortschatz aus <a href="https://www.deutschforyou.com/wortschatz/b1" target="_blank" style="color:var(--gold);text-decoration:none">deutschforyou.com</a> — Berufe · Bewerbung · Umwelt · Gesellschaft · Gesundheit · Kommunikation</span>
     </div>
   </div>
@@ -2550,27 +2562,29 @@ h1 span{color:var(--gold)}
     <!-- Category filters -->
     <div class="vocab-topbar">
       <button class="vocab-cat-btn active" data-cat="all">Alle</button>
-      <button class="vocab-cat-btn" data-cat="berufe">💼 Berufe</button>
-      <button class="vocab-cat-btn" data-cat="bewerbung">📄 Bewerbung</button>
-      <button class="vocab-cat-btn" data-cat="umwelt">🌿 Umwelt</button>
-      <button class="vocab-cat-btn" data-cat="gesellschaft">🏛 Gesellschaft</button>
-      <button class="vocab-cat-btn" data-cat="gesundheit">🏥 Gesundheit</button>
-      <button class="vocab-cat-btn" data-cat="kommunikation">💬 Kommunikation</button>
+      <button class="vocab-cat-btn" data-cat="berufe">Berufe</button>
+      <button class="vocab-cat-btn" data-cat="bewerbung">Bewerbung</button>
+      <button class="vocab-cat-btn" data-cat="umwelt">Umwelt</button>
+      <button class="vocab-cat-btn" data-cat="gesellschaft">Gesellschaft</button>
+      <button class="vocab-cat-btn" data-cat="gesundheit">Gesundheit</button>
+      <button class="vocab-cat-btn" data-cat="kommunikation">Kommunikation</button>
     </div>
     <!-- Score + progress row -->
     <div class="vocab-score-row">
-      <div class="vocab-score-chip">✅ <span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
+      <div class="vocab-score-chip"><span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
       <div class="vocab-progress-bar"><div class="vocab-progress-fill" id="vocab-progress-fill"></div></div>
-      <button class="vocab-new-btn" onclick="newVocabRound()">↻ Nouveau</button>
+      <button class="vocab-new-btn" onclick="newVocabRound()" data-i18n="vocab_new_round">↻ Neue Runde</button>
     </div>
     <!-- Match grid -->
     <div class="match-grid" id="match-grid"></div>
     <!-- Finished screen -->
     <div class="vocab-finished" id="vocab-finished">
-      <div class="vocab-finished-icon">🎉</div>
-      <div class="vocab-finished-title">Parfait !</div>
-      <div class="vocab-finished-sub" id="vocab-finished-sub">Toutes les paires trouvées !</div>
-      <button class="vocab-finished-btn" onclick="newVocabRound()">↻ Nouveau round</button>
+      <div class="vocab-finished-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="vocab-finished-title" data-i18n="vocab_finished_title">Ausgezeichnet!</div>
+      <div class="vocab-finished-sub" id="vocab-finished-sub" data-i18n="vocab_finished_sub">Alle Paare gefunden!</div>
+      <button class="vocab-finished-btn" onclick="newVocabRound()" data-i18n="vocab_new_round_btn">↻ Neue Runde</button>
     </div>
   </div>
 </div>
@@ -2603,9 +2617,9 @@ h1 span{color:var(--gold)}
       </div>
     </div>
     <div class="listening-controls">
-      <button class="login-btn" id="listening-slow-btn">🐢 Langsam</button>
-      <button class="login-btn" id="listening-normal-btn">⚖ Normal</button>
-      <button class="login-btn" id="listening-fast-btn">🐇 Schnell</button>
+      <button class="login-btn" id="listening-slow-btn">Langsam</button>
+      <button class="login-btn" id="listening-normal-btn">Normal</button>
+      <button class="login-btn" id="listening-fast-btn">Schnell</button>
     </div>
   </div>
 </div>
@@ -3652,20 +3666,20 @@ if(document.getElementById('page-discussions') &&
 <div>
 <div class="quiz-config-label">Schwierigkeit</div>
 <select class="quiz-select" id="quiz-difficulty">
-<option value="auto">🤖 Auto (aus Fortschritt)</option>
-<option value="A1">A1 – Anfänger</option>
-<option value="A2">A2 – Grundlagen</option>
-<option value="B1">B1 – Mittelstufe</option>
+<option value="auto">Auto — aus Fortschritt</option>
+<option value="A1">A1 — Anfänger</option>
+<option value="A2">A2 — Grundlagen</option>
+<option value="B1">B1 — Mittelstufe</option>
 </select>
 </div>
 <div>
 <div class="quiz-config-label">Thema</div>
 <select class="quiz-select" id="quiz-topic">
-<option value="mixed">🎲 Gemischt</option>
-<option value="grammar">📘 Grammatik</option>
-<option value="vocabulary">📚 Vokabeln</option>
-<option value="reading">📖 Leseverständnis</option>
-<option value="wortschatz">🌐 Wortschatz B1 (DeutschForYou)</option>
+<option value="mixed">Gemischt</option>
+<option value="grammar">Grammatik</option>
+<option value="vocabulary">Vokabeln</option>
+<option value="reading">Leseverständnis</option>
+<option value="wortschatz">Wortschatz B1 — DeutschForYou</option>
 </select>
 </div>
 <div>
@@ -3677,7 +3691,7 @@ if(document.getElementById('page-discussions') &&
 </select>
 </div>
 <button class="quiz-gen-btn" id="quiz-gen-btn" onclick="generateQuiz()">
-<span id="quiz-gen-label">✨ Quiz starten</span>
+<span id="quiz-gen-label">Quiz starten</span>
 <div class="quiz-spinner" id="quiz-gen-spinner" style="display:none;width:18px;height:18px;border-width:2px"></div>
 </button>
 </div>
@@ -3694,7 +3708,9 @@ if(document.getElementById('page-discussions') &&
 </div>
 <div id="level-area">
 <div class="level-start-card">
-<div class="level-start-icon">🎯</div>
+<div class="level-start-icon">
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+</div>
 <div class="level-start-title">Wie gut ist dein Deutsch?</div>
 <div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
 <button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
@@ -3703,15 +3719,563 @@ if(document.getElementById('page-discussions') &&
 </div>
 </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="app.js"></script>
+<!-- ═══════════════════════════════════════════════════
+     TRANSLATION SYSTEM — DE · EN · AR
+     Provides natural, professional phrasing across all
+     three supported languages. Patches and extends any
+     translation keys already consumed by app.js.
+     ═══════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* ── Complete translation dictionary ── */
+window.TRANSLATIONS = {
+  de: {
+    /* Navigation */
+    nav_tracker:     'Tracker',
+    nav_docs:        'Dokumente',
+    nav_news:        'News',
+    nav_translate:   'Übersetzer',
+    nav_quiz:        'Quiz',
+    nav_vocab:       'Vokabeln',
+    nav_listen:      'Hören',
+    nav_level:       'Niveau',
+    nav_admin:       'Admin',
+    nav_alerts:      'Hinweise',
+    nav_profile:     'Profil',
+    nav_discussions: 'Diskussion',
+
+    /* Auth */
+    auth_login:           'Anmelden',
+    auth_register:        'Registrieren',
+    auth_email_label:     'E-Mail',
+    auth_name_label:      'Anzeigename',
+    auth_password_label:  'Passwort',
+    auth_confirm_pwd:     'Passwort bestätigen',
+    auth_forgot_pwd:      'Passwort vergessen?',
+    auth_google_btn:      'Mit Google anmelden',
+    auth_submit_login:    'Anmelden',
+    auth_submit_register: 'Registrieren',
+
+    /* Profile */
+    profile_identity:      'Identität',
+    profile_display_name:  'Anzeigename',
+    profile_name_hint:     'Wird im Header und deinem Profil angezeigt',
+    profile_email:         'E-Mail',
+    profile_security:      'Sicherheit',
+    profile_new_pwd:       'Neues Passwort',
+    profile_confirm_pwd:   'Passwort bestätigen',
+    profile_notifications: 'Benachrichtigungen',
+    profile_reminder_label:'Serien-Erinnerung',
+    profile_reminder_sub:  'Erinnerung 2 Stunden vor Mitternacht bei offenen Aufgaben',
+    profile_save:          'Änderungen speichern',
+    profile_logout:        'Abmelden',
+    profile_weeks:         'Wochen',
+    profile_streak:        'Serie',
+    profile_progress:      'Fortschritt',
+
+    /* Tracker */
+    stats_section_title:  'Statistiken',
+    suggest_section_title:'Empfehlungen',
+    loader_text:          'Verbindung…',
+
+    /* Notifications */
+    notif_panel_title: 'Benachrichtigungen',
+    notif_mark_read:   'Alle gelesen',
+    notif_empty:       'Keine Benachrichtigungen',
+    notif_send_btn:    'Benachrichtigung senden',
+    notif_modal_title: 'Benachrichtigung senden',
+    notif_target_label:'Empfänger',
+    notif_target_all:  'Alle Nutzer',
+    notif_title_label: 'Titel',
+    notif_body_label:  'Nachricht',
+    notif_cancel:      'Abbrechen',
+    notif_send:        'Senden',
+
+    /* Documents */
+    docs_search_placeholder: 'Dokument suchen…',
+    docs_upload_title:       'PDF hochladen',
+    docs_upload_sub:         'Lokal gespeichert · Offline verfügbar · Max 200 MB',
+    docs_all_cat:            'Alle',
+    docs_grammar:            'Grammatik',
+    docs_vocabulary:         'Vokabeln',
+    docs_exercise:           'Übungen',
+    docs_exam:               'Prüfung',
+    docs_other:              'Sonstiges',
+    docs_rename_title:       'Dokument bearbeiten',
+    docs_rename_cancel:      'Abbrechen',
+    docs_rename_save:        'Speichern',
+
+    /* Translator */
+    translate_placeholder:   'Wort oder Satz eingeben…',
+    translate_clear:         'Löschen',
+    translate_listen:        'Anhören',
+    translate_btn:           'Übersetzen',
+    translate_history_label: 'Verlauf',
+    translate_history_clear: 'Löschen',
+
+    /* Quiz */
+    quiz_difficulty_label: 'Schwierigkeit',
+    quiz_topic_label:      'Thema',
+    quiz_count_label:      'Fragen',
+    quiz_start_btn:        'Quiz starten',
+    quiz_opt_auto:         'Auto — aus Fortschritt',
+    quiz_opt_mixed:        'Gemischt',
+    quiz_opt_grammar:      'Grammatik',
+    quiz_opt_vocab:        'Vokabeln',
+    quiz_opt_reading:      'Leseverständnis',
+
+    /* Vocab trainer */
+    vocab_new_round:     'Neue Runde',
+    vocab_new_round_btn: 'Neue Runde',
+    vocab_finished_title:'Ausgezeichnet!',
+    vocab_finished_sub:  'Alle Paare gefunden!',
+
+    /* Listening */
+    speaking_btn: 'Sprechen',
+    speed_slow:   'Langsam',
+    speed_normal: 'Normal',
+    speed_fast:   'Schnell',
+
+    /* Level test */
+    level_hero_title: 'Niveau-Test',
+    level_hero_sub:   'Erkenne dein aktuelles Deutsch-Niveau',
+    level_start_title:'Wie gut ist dein Deutsch?',
+    level_start_btn:  'Test starten',
+
+    /* Scanner */
+    scanner_title:       'Code Scanner',
+    scanner_tab_camera:  'Kamera',
+    scanner_tab_image:   'Bild hochladen',
+    scanner_hint:        'Kamera auf einen QR-Code oder Barcode richten',
+    scanner_image_hint:  'Bild mit QR-Code oder Barcode auswählen',
+    scanner_result_label:'Code erkannt',
+    scanner_copy:        'Kopieren',
+    scanner_open:        'Öffnen',
+
+    /* Admin */
+    admin_role_management:  'Rollenverwaltung',
+    admin_role_desc:        'E-Mail-Adresse eingeben, um die Nutzerrolle zu ändern.',
+    admin_email_label:      'Nutzer-E-Mail',
+    admin_set_user:         'Nutzer setzen',
+    admin_set_admin:        'Admin setzen',
+    admin_registered_users: 'Registrierte Nutzer',
+    admin_refresh:          'Aktualisieren',
+    admin_loading:          'Wird geladen…',
+    admin_pending_label:    'Ausstehende Anfragen',
+    admin_all_users:        'Alle Nutzer',
+    admin_all_docs:         'Alle Nutzerdokumente',
+    admin_hero_sub:         'Nutzerverwaltung & Anmeldestatistiken',
+    admin_total_users:      'Nutzer gesamt',
+    admin_new_today:        'Heute neu',
+    admin_this_week:        'Diese Woche',
+    admin_admins_label:     'Admins',
+    admin_chart_title:      'Anmeldungen — Letzte 7 Tage',
+    admin_users_label:      'Nutzer',
+    admin_pending_short:    'Ausstehend',
+
+    /* General UI */
+    loading:   'Wird geladen…',
+    save:      'Speichern',
+    cancel:    'Abbrechen',
+    delete:    'Löschen',
+    close:     'Schließen',
+    confirm:   'Bestätigen',
+    back:      'Zurück',
+    search:    'Suchen',
+    offline_banner: 'Offline-Modus – Änderungen werden lokal gespeichert',
+  },
+
+  en: {
+    /* Navigation */
+    nav_tracker:     'Tracker',
+    nav_docs:        'Documents',
+    nav_news:        'News',
+    nav_translate:   'Translate',
+    nav_quiz:        'Quiz',
+    nav_vocab:       'Vocabulary',
+    nav_listen:      'Listening',
+    nav_level:       'Level Test',
+    nav_admin:       'Admin',
+    nav_alerts:      'Alerts',
+    nav_profile:     'Profile',
+    nav_discussions: 'Discuss',
+
+    /* Auth */
+    auth_login:           'Sign In',
+    auth_register:        'Register',
+    auth_email_label:     'Email',
+    auth_name_label:      'Display Name',
+    auth_password_label:  'Password',
+    auth_confirm_pwd:     'Confirm Password',
+    auth_forgot_pwd:      'Forgot password?',
+    auth_google_btn:      'Sign in with Google',
+    auth_submit_login:    'Sign In',
+    auth_submit_register: 'Create Account',
+
+    /* Profile */
+    profile_identity:      'Identity',
+    profile_display_name:  'Display Name',
+    profile_name_hint:     'Shown in the header and your profile',
+    profile_email:         'Email',
+    profile_security:      'Security',
+    profile_new_pwd:       'New Password',
+    profile_confirm_pwd:   'Confirm Password',
+    profile_notifications: 'Notifications',
+    profile_reminder_label:'Streak Reminder',
+    profile_reminder_sub:  'Notify me 2h before midnight if tasks are unfinished',
+    profile_save:          'Save Changes',
+    profile_logout:        'Sign Out',
+    profile_weeks:         'Weeks',
+    profile_streak:        'Streak',
+    profile_progress:      'Progress',
+
+    /* Tracker */
+    stats_section_title:  'Statistics',
+    suggest_section_title:'Recommendations',
+    loader_text:          'Connecting…',
+
+    /* Notifications */
+    notif_panel_title: 'Notifications',
+    notif_mark_read:   'Mark all read',
+    notif_empty:       'No notifications yet',
+    notif_send_btn:    'Send Notification',
+    notif_modal_title: 'Send Notification',
+    notif_target_label:'Recipient',
+    notif_target_all:  'All Users',
+    notif_title_label: 'Title',
+    notif_body_label:  'Message',
+    notif_cancel:      'Cancel',
+    notif_send:        'Send',
+
+    /* Documents */
+    docs_search_placeholder: 'Search documents…',
+    docs_upload_title:       'Upload PDF',
+    docs_upload_sub:         'Stored locally · Available offline · Max 200 MB',
+    docs_all_cat:            'All',
+    docs_grammar:            'Grammar',
+    docs_vocabulary:         'Vocabulary',
+    docs_exercise:           'Exercises',
+    docs_exam:               'Exam',
+    docs_other:              'Other',
+    docs_rename_title:       'Edit Document',
+    docs_rename_cancel:      'Cancel',
+    docs_rename_save:        'Save',
+
+    /* Translator */
+    translate_placeholder:   'Enter a word or sentence…',
+    translate_clear:         'Clear',
+    translate_listen:        'Listen',
+    translate_btn:           'Translate',
+    translate_history_label: 'History',
+    translate_history_clear: 'Clear',
+
+    /* Quiz */
+    quiz_difficulty_label: 'Difficulty',
+    quiz_topic_label:      'Topic',
+    quiz_count_label:      'Questions',
+    quiz_start_btn:        'Start Quiz',
+    quiz_opt_auto:         'Auto — based on progress',
+    quiz_opt_mixed:        'Mixed',
+    quiz_opt_grammar:      'Grammar',
+    quiz_opt_vocab:        'Vocabulary',
+    quiz_opt_reading:      'Reading Comprehension',
+
+    /* Vocab trainer */
+    vocab_new_round:     'New Round',
+    vocab_new_round_btn: 'New Round',
+    vocab_finished_title:'Excellent!',
+    vocab_finished_sub:  'All pairs found!',
+
+    /* Listening */
+    speaking_btn: 'Speak',
+    speed_slow:   'Slow',
+    speed_normal: 'Normal',
+    speed_fast:   'Fast',
+
+    /* Level test */
+    level_hero_title: 'Level Test',
+    level_hero_sub:   'Discover your current German level',
+    level_start_title:'How good is your German?',
+    level_start_btn:  'Start Test',
+
+    /* Scanner */
+    scanner_title:       'Code Scanner',
+    scanner_tab_camera:  'Camera',
+    scanner_tab_image:   'Upload Image',
+    scanner_hint:        'Point the camera at a QR code or barcode',
+    scanner_image_hint:  'Choose an image containing a QR code or barcode',
+    scanner_result_label:'Code detected',
+    scanner_copy:        'Copy',
+    scanner_open:        'Open',
+
+    /* Admin */
+    admin_role_management:  'Role Management',
+    admin_role_desc:        'Enter a user email address to change their role.',
+    admin_email_label:      'User Email',
+    admin_set_user:         'Set as User',
+    admin_set_admin:        'Set as Admin',
+    admin_registered_users: 'Registered Users',
+    admin_refresh:          'Refresh',
+    admin_loading:          'Loading…',
+    admin_pending_label:    'Pending Requests',
+    admin_all_users:        'All Users',
+    admin_all_docs:         'All User Documents',
+    admin_hero_sub:         'User management & signup statistics',
+    admin_total_users:      'Total Users',
+    admin_new_today:        'New Today',
+    admin_this_week:        'This Week',
+    admin_admins_label:     'Admins',
+    admin_chart_title:      'Signups — Last 7 Days',
+    admin_users_label:      'Users',
+    admin_pending_short:    'Pending',
+
+    /* General UI */
+    loading:   'Loading…',
+    save:      'Save',
+    cancel:    'Cancel',
+    delete:    'Delete',
+    close:     'Close',
+    confirm:   'Confirm',
+    back:      'Back',
+    search:    'Search',
+    offline_banner: 'Offline mode – changes saved locally',
+  },
+
+  ar: {
+    /* Navigation */
+    nav_tracker:     'المتتبع',
+    nav_docs:        'المستندات',
+    nav_news:        'الأخبار',
+    nav_translate:   'الترجمة',
+    nav_quiz:        'الاختبار',
+    nav_vocab:       'المفردات',
+    nav_listen:      'الاستماع',
+    nav_level:       'المستوى',
+    nav_admin:       'الإدارة',
+    nav_alerts:      'التنبيهات',
+    nav_profile:     'الملف',
+    nav_discussions: 'النقاش',
+
+    /* Auth */
+    auth_login:           'تسجيل الدخول',
+    auth_register:        'إنشاء حساب',
+    auth_email_label:     'البريد الإلكتروني',
+    auth_name_label:      'الاسم المعروض',
+    auth_password_label:  'كلمة المرور',
+    auth_confirm_pwd:     'تأكيد كلمة المرور',
+    auth_forgot_pwd:      'نسيت كلمة المرور؟',
+    auth_google_btn:      'الدخول عبر Google',
+    auth_submit_login:    'دخول',
+    auth_submit_register: 'إنشاء حساب',
+
+    /* Profile */
+    profile_identity:      'الهوية',
+    profile_display_name:  'الاسم المعروض',
+    profile_name_hint:     'يظهر في الرأس وملفك الشخصي',
+    profile_email:         'البريد الإلكتروني',
+    profile_security:      'الأمان',
+    profile_new_pwd:       'كلمة مرور جديدة',
+    profile_confirm_pwd:   'تأكيد كلمة المرور',
+    profile_notifications: 'الإشعارات',
+    profile_reminder_label:'تذكير السلسلة',
+    profile_reminder_sub:  'تذكير قبل منتصف الليل بساعتين إذا لم تكتمل المهام',
+    profile_save:          'حفظ التغييرات',
+    profile_logout:        'تسجيل الخروج',
+    profile_weeks:         'الأسابيع',
+    profile_streak:        'السلسلة',
+    profile_progress:      'التقدم',
+
+    /* Tracker */
+    stats_section_title:  'الإحصائيات',
+    suggest_section_title:'التوصيات',
+    loader_text:          'جارٍ الاتصال…',
+
+    /* Notifications */
+    notif_panel_title: 'الإشعارات',
+    notif_mark_read:   'تحديد الكل كمقروء',
+    notif_empty:       'لا توجد إشعارات بعد',
+    notif_send_btn:    'إرسال إشعار',
+    notif_modal_title: 'إرسال إشعار',
+    notif_target_label:'المستلم',
+    notif_target_all:  'جميع المستخدمين',
+    notif_title_label: 'العنوان',
+    notif_body_label:  'الرسالة',
+    notif_cancel:      'إلغاء',
+    notif_send:        'إرسال',
+
+    /* Documents */
+    docs_search_placeholder: 'ابحث عن مستند…',
+    docs_upload_title:       'رفع ملف PDF',
+    docs_upload_sub:         'محفوظ محلياً · متاح بدون إنترنت · الحد الأقصى 200 ميغابايت',
+    docs_all_cat:            'الكل',
+    docs_grammar:            'القواعد',
+    docs_vocabulary:         'المفردات',
+    docs_exercise:           'التمارين',
+    docs_exam:               'الامتحان',
+    docs_other:              'أخرى',
+    docs_rename_title:       'تعديل المستند',
+    docs_rename_cancel:      'إلغاء',
+    docs_rename_save:        'حفظ',
+
+    /* Translator */
+    translate_placeholder:   'أدخل كلمة أو جملة…',
+    translate_clear:         'مسح',
+    translate_listen:        'استمع',
+    translate_btn:           'ترجم',
+    translate_history_label: 'السجل',
+    translate_history_clear: 'مسح',
+
+    /* Quiz */
+    quiz_difficulty_label: 'المستوى',
+    quiz_topic_label:      'الموضوع',
+    quiz_count_label:      'الأسئلة',
+    quiz_start_btn:        'ابدأ الاختبار',
+    quiz_opt_auto:         'تلقائي — حسب التقدم',
+    quiz_opt_mixed:        'مختلط',
+    quiz_opt_grammar:      'القواعد',
+    quiz_opt_vocab:        'المفردات',
+    quiz_opt_reading:      'الفهم القرائي',
+
+    /* Vocab trainer */
+    vocab_new_round:     'جولة جديدة',
+    vocab_new_round_btn: 'جولة جديدة',
+    vocab_finished_title:'ممتاز!',
+    vocab_finished_sub:  'تم إيجاد جميع الأزواج!',
+
+    /* Listening */
+    speaking_btn: 'تحدث',
+    speed_slow:   'بطيء',
+    speed_normal: 'عادي',
+    speed_fast:   'سريع',
+
+    /* Level test */
+    level_hero_title: 'اختبار المستوى',
+    level_hero_sub:   'اكتشف مستواك الحالي في الألمانية',
+    level_start_title:'ما مستوى ألمانيتك؟',
+    level_start_btn:  'ابدأ الاختبار',
+
+    /* Scanner */
+    scanner_title:       'ماسح الرموز',
+    scanner_tab_camera:  'الكاميرا',
+    scanner_tab_image:   'رفع صورة',
+    scanner_hint:        'وجّه الكاميرا نحو رمز QR أو الباركود',
+    scanner_image_hint:  'اختر صورة تحتوي على رمز QR أو باركود',
+    scanner_result_label:'تم اكتشاف الرمز',
+    scanner_copy:        'نسخ',
+    scanner_open:        'فتح',
+
+    /* Admin */
+    admin_role_management:  'إدارة الأدوار',
+    admin_role_desc:        'أدخل البريد الإلكتروني لتغيير دور المستخدم.',
+    admin_email_label:      'بريد المستخدم',
+    admin_set_user:         'تعيين كمستخدم',
+    admin_set_admin:        'تعيين كمسؤول',
+    admin_registered_users: 'المستخدمون المسجلون',
+    admin_refresh:          'تحديث',
+    admin_loading:          'جارٍ التحميل…',
+    admin_pending_label:    'الطلبات المعلقة',
+    admin_all_users:        'جميع المستخدمين',
+    admin_all_docs:         'جميع مستندات المستخدمين',
+    admin_hero_sub:         'إدارة المستخدمين وإحصائيات التسجيل',
+    admin_total_users:      'إجمالي المستخدمين',
+    admin_new_today:        'جديد اليوم',
+    admin_this_week:        'هذا الأسبوع',
+    admin_admins_label:     'المسؤولون',
+    admin_chart_title:      'التسجيلات — آخر 7 أيام',
+    admin_users_label:      'المستخدمون',
+    admin_pending_short:    'معلق',
+
+    /* General UI */
+    loading:   'جارٍ التحميل…',
+    save:      'حفظ',
+    cancel:    'إلغاء',
+    delete:    'حذف',
+    close:     'إغلاق',
+    confirm:   'تأكيد',
+    back:      'رجوع',
+    search:    'بحث',
+    offline_banner: 'وضع عدم الاتصال – التغييرات محفوظة محلياً',
+  }
+};
+
+/* ── Apply translations to DOM ── */
+function applyTranslations(lang) {
+  var dict = window.TRANSLATIONS[lang];
+  if (!dict) return;
+
+  /* Text direction for Arabic */
+  var isRTL = lang === 'ar';
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+
+  /* data-i18n elements */
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) {
+      el.textContent = dict[key];
+    }
+  });
+
+  /* Placeholders */
+  var placeholderMap = {
+    'translate-input':    'translate_placeholder',
+    'docs-search':        'docs_search_placeholder',
+    'notes-area':         null,
+    'admin-user-search':  null,
+    'admin-doc-search':   null,
+  };
+  Object.keys(placeholderMap).forEach(function(id) {
+    var key = placeholderMap[id];
+    if (!key) return;
+    var el = document.getElementById(id);
+    if (el && dict[key]) el.placeholder = dict[key];
+  });
+
+  /* Loader text */
+  var loader = document.getElementById('loader-text');
+  if (loader && dict.loader_text) loader.textContent = dict.loader_text;
+
+  /* Offline banner */
+  var banner = document.getElementById('offline-banner');
+  if (banner && dict.offline_banner) banner.textContent = dict.offline_banner;
+
+  /* Active language button highlight */
+  ['lang-de','lang-en','lang-ar'].forEach(function(id) {
+    var btn = document.getElementById(id);
+    if (btn) btn.classList.remove('active');
+  });
+  var active = document.getElementById('lang-' + lang);
+  if (active) active.classList.add('active');
+
+  /* Persist choice */
+  try { localStorage.setItem('dt_lang', lang); } catch(e){}
+}
+
+/* ── Public API ── */
+window.setLang = function(lang) {
+  applyTranslations(lang);
+  /* Close the language menu if open */
+  var menu = document.getElementById('lang-fab-menu');
+  if (menu) menu.classList.remove('open');
+};
+
+/* ── Auto-apply on load ── */
+document.addEventListener('DOMContentLoaded', function() {
+  var saved;
+  try { saved = localStorage.getItem('dt_lang'); } catch(e){}
+  applyTranslations(saved || 'de');
+});
+})();
+</script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
-  <div class="avatar-emoji-title">Choose icon</div>
+  <div class="avatar-emoji-title" data-i18n-static="Wähle ein Symbol">Wähle ein Symbol</div>
   <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
-  <div class="avatar-emoji-title" style="margin-top:10px">Color</div>
+  <div class="avatar-emoji-title" style="margin-top:10px" data-i18n-static="Farbe">Farbe</div>
   <div class="avatar-color-row" id="avatar-color-row"></div>
 </div>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="app.js"></script>
