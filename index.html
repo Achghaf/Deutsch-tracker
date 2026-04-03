@@ -452,21 +452,27 @@ h1 span{color:var(--gold)}
 .notif-badge{position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;background:var(--red);color:#fff;border-radius:999px;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #111;display:none}
 .notif-badge.visible{display:flex}
 
-/* Notification dropdown panel */
-.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:340px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.6);z-index:9999;overflow:hidden;display:none}
+/* Notification dropdown panel — glassmorphism redesign */
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:360px;background:rgba(14,14,14,0.88);border:0.5px solid rgba(232,184,75,0.18);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,0.7),0 0 0 0.5px rgba(255,255,255,0.04) inset;z-index:9999;overflow:hidden;display:none;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .notif-panel.open{display:block}
-.notif-panel-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.notif-panel-head{padding:14px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025)}
 .notif-panel-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;color:var(--white)}
-.notif-mark-read{font-size:0.68rem;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0}
-.notif-mark-read:hover{color:var(--gold)}
+.notif-mark-read{font-size:0.68rem;color:rgba(232,184,75,0.7);cursor:pointer;background:transparent;border:0.5px solid rgba(232,184,75,0.28);border-radius:20px;padding:4px 11px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;transition:all 0.2s}
+.notif-mark-read:hover{color:var(--gold);border-color:var(--gold);background:rgba(232,184,75,0.08);box-shadow:0 0 10px rgba(232,184,75,0.18)}
 .notif-list{max-height:320px;overflow-y:auto}
-.notif-item{padding:12px 16px;border-bottom:1px solid rgba(42,42,42,0.5);cursor:default;transition:background 0.15s;position:relative}
+.notif-item{padding:13px 16px 13px 20px;border-bottom:0.5px solid rgba(255,255,255,0.05);cursor:default;transition:background 0.18s;position:relative}
 .notif-item:last-child{border-bottom:none}
-.notif-item.unread{background:rgba(232,184,75,0.05)}
-.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
-.notif-item-title{font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:3px}
-.notif-item-body{font-size:0.75rem;color:var(--muted);line-height:1.45}
-.notif-item-date{font-size:0.62rem;color:var(--muted);margin-top:5px;font-family:'DM Mono',monospace}
+.notif-item:hover{background:rgba(255,255,255,0.025)}
+.notif-item.unread{background:rgba(232,184,75,0.045)}
+.notif-item.unread:hover{background:rgba(232,184,75,0.07)}
+.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#e8b84b 0%,#b5832a 100%);border-radius:0 2px 2px 0}
+.notif-item-title{font-size:0.82rem;font-weight:500;color:var(--white);margin-bottom:4px;letter-spacing:0.01em}
+.notif-item.unread .notif-item-title{color:var(--gold);font-weight:600}
+.notif-item-body{font-size:0.74rem;color:rgba(245,240,232,0.38);line-height:1.5;margin-bottom:5px}
+.notif-item-date{font-size:0.61rem;color:rgba(245,240,232,0.22);margin-top:5px;font-family:'DM Mono',monospace;letter-spacing:0.03em}
+.notif-item-meta-row{display:flex;align-items:center;gap:8px}
+.notif-unread-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto;box-shadow:0 0 6px rgba(232,184,75,0.5)}
+.notif-read-label{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,240,232,0.2);padding:8px 16px 4px;font-family:'DM Mono',monospace}
 .notif-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:0.8rem}
 
 /* Admin send notification modal */
@@ -1896,8 +1902,11 @@ h1 span{color:var(--gold)}
           <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
         </div>
         <div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
-        <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+        <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)">
+          <button onclick="openNotifModal()" style="width:100%;padding:10px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:8px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 14px rgba(232,184,75,0.2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            Send Notification
+          </button>
         </div>
       </div>
     </div>
@@ -2465,14 +2474,17 @@ h1 span{color:var(--gold)}
 </div>
 </nav>
 <!-- Mobile notification panel (full-width bottom sheet) -->
-<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
-<div class="notif-panel-head" style="padding:14px 18px">
+<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:rgba(14,14,14,0.92);border-top:0.5px solid rgba(232,184,75,0.18);border-radius:16px 16px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,0.65);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)">
+<div class="notif-panel-head" style="padding:14px 18px;background:rgba(255,255,255,0.025);border-bottom:0.5px solid rgba(255,255,255,0.06)">
 <span class="notif-panel-title">🔔 Notifications</span>
 <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
 </div>
 <div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
-<div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+<div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)">
+<button onclick="openNotifModal()" style="width:100%;padding:10px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:8px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 14px rgba(232,184,75,0.2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+  Send Notification
+</button>
 </div>
 </div>
 <!-- LANGUAGE SWITCHER -->
