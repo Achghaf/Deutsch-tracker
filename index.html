@@ -452,24 +452,21 @@ h1 span{color:var(--gold)}
 .notif-badge{position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;background:var(--red);color:#fff;border-radius:999px;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #111;display:none}
 .notif-badge.visible{display:flex}
 
-/* Notification dropdown panel — glassmorphism redesign */
-.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:360px;background:rgba(14,14,14,0.88);border:0.5px solid rgba(232,184,75,0.18);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,0.7),0 0 0 0.5px rgba(255,255,255,0.04) inset;z-index:9999;overflow:hidden;display:none;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+/* Notification dropdown panel */
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:340px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.6);z-index:9999;overflow:hidden;display:none}
 .notif-panel.open{display:block}
-.notif-panel-head{padding:14px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025)}
+.notif-panel-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .notif-panel-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;color:var(--white)}
-.notif-mark-read{font-size:0.68rem;color:rgba(232,184,75,0.7);cursor:pointer;background:transparent;border:0.5px solid rgba(232,184,75,0.28);border-radius:20px;padding:4px 11px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;transition:all 0.2s}
-.notif-mark-read:hover{color:var(--gold);border-color:var(--gold);background:rgba(232,184,75,0.08);box-shadow:0 0 10px rgba(232,184,75,0.18)}
+.notif-mark-read{font-size:0.68rem;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0}
+.notif-mark-read:hover{color:var(--gold)}
 .notif-list{max-height:320px;overflow-y:auto}
-.notif-item{padding:13px 16px 13px 20px;border-bottom:0.5px solid rgba(255,255,255,0.05);cursor:default;transition:background 0.18s;position:relative}
+.notif-item{padding:12px 16px;border-bottom:1px solid rgba(42,42,42,0.5);cursor:default;transition:background 0.15s;position:relative}
 .notif-item:last-child{border-bottom:none}
-.notif-item:hover{background:rgba(255,255,255,0.025)}
-.notif-item.unread{background:rgba(232,184,75,0.045)}
-.notif-item.unread:hover{background:rgba(232,184,75,0.07)}
-.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#e8b84b 0%,#b5832a 100%);border-radius:0 2px 2px 0}
-.notif-item-title{font-size:0.82rem;font-weight:500;color:var(--white);margin-bottom:4px;letter-spacing:0.01em}
-.notif-item.unread .notif-item-title{color:var(--gold);font-weight:600}
-.notif-item-body{font-size:0.74rem;color:rgba(245,240,232,0.38);line-height:1.5;margin-bottom:5px}
-.notif-item-date{font-size:0.61rem;color:rgba(245,240,232,0.22);margin-top:5px;font-family:'DM Mono',monospace;letter-spacing:0.03em}
+.notif-item.unread{background:rgba(232,184,75,0.05)}
+.notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
+.notif-item-title{font-size:0.82rem;font-weight:600;color:var(--white);margin-bottom:3px}
+.notif-item-body{font-size:0.75rem;color:var(--muted);line-height:1.45}
+.notif-item-date{font-size:0.62rem;color:var(--muted);margin-top:5px;font-family:'DM Mono',monospace}
 .notif-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:0.8rem}
 
 /* Admin send notification modal */
@@ -495,25 +492,6 @@ h1 span{color:var(--gold)}
 
 /* Mobile notif bell */
 .mob-notif-wrap{position:relative;display:flex;align-items:center}
-
-/* Mobile notification drawer */
-#mob-notif-overlay{opacity:0}
-#mob-notif-overlay.open{opacity:1}
-#mob-notif-drawer{display:flex!important}
-#mob-notif-drawer.open{transform:translateX(0)!important}
-.mob-drawer-notif-item{position:relative;padding:14px 20px 14px 26px;border-bottom:0.5px solid rgba(255,255,255,0.05);transition:background 0.18s}
-.mob-drawer-notif-item:last-child{border-bottom:none}
-.mob-drawer-notif-item:hover{background:rgba(255,255,255,0.025)}
-.mob-drawer-notif-item.unread{background:rgba(232,184,75,0.045)}
-.mob-drawer-notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#e8b84b 0%,#b5832a 100%);border-radius:0 2px 2px 0}
-.mob-drawer-notif-title{font-size:0.85rem;font-weight:500;color:var(--white);margin-bottom:5px;letter-spacing:0.01em}
-.mob-drawer-notif-item.unread .mob-drawer-notif-title{color:var(--gold);font-weight:600}
-.mob-drawer-notif-body{font-size:0.75rem;color:rgba(245,240,232,0.38);line-height:1.55;margin-bottom:6px}
-.mob-drawer-notif-meta{display:flex;align-items:center;gap:8px}
-.mob-drawer-notif-time{font-size:0.6rem;color:rgba(245,240,232,0.22);font-family:'DM Mono',monospace;letter-spacing:0.03em}
-.mob-drawer-unread-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto;box-shadow:0 0 5px rgba(232,184,75,0.5)}
-.mob-drawer-read-label{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,240,232,0.2);padding:10px 20px 4px;font-family:'DM Mono',monospace}
-body.notif-drawer-open{overflow:hidden!important}
 
 /* PROFILE MODAL */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:700;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -1903,6 +1881,9 @@ body.notif-drawer-open{overflow:hidden!important}
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
+  <button class="desk-nav-item" data-page="discussions" onclick="switchPage('discussions')" aria-label="Discussions" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Diskussionen
+  </button>
   <button class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin
   </button>
@@ -1918,11 +1899,8 @@ body.notif-drawer-open{overflow:hidden!important}
           <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
         </div>
         <div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
-        <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)">
-          <button onclick="openNotifModal()" style="width:100%;padding:10px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:8px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 14px rgba(232,184,75,0.2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-            Send Notification
-          </button>
+        <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
+          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
         </div>
       </div>
     </div>
@@ -2451,6 +2429,14 @@ body.notif-drawer-open{overflow:hidden!important}
     </div>
     <div class="nav-label" data-i18n="nav_listen">Hören</div>
   </div>
+  <div class="nav-item" data-page="discussions" onclick="switchPage('discussions')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <div class="nav-label">Diskussion</div>
+  </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2471,7 +2457,7 @@ body.notif-drawer-open{overflow:hidden!important}
     </div>
     <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
-  <div class="nav-item" id="mob-notif-btn" onclick="openMobNotifDrawer()" style="position:relative">
+  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -2489,33 +2475,16 @@ body.notif-drawer-open{overflow:hidden!important}
   </div>
 </div>
 </nav>
-<!-- MOBILE NOTIFICATION DRAWER -->
-<div id="mob-notif-overlay" onclick="closeMobNotifDrawer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1400;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:opacity 0.3s;opacity:0"></div>
-<div id="mob-notif-drawer" style="display:none;position:fixed;top:0;right:0;bottom:0;width:min(100vw,420px);background:rgba(12,12,12,0.96);border-left:0.5px solid rgba(232,184,75,0.18);z-index:1401;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.22,1,0.36,1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
-  <!-- Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.025);flex-shrink:0">
-    <div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.1em;color:var(--white);line-height:1">Benachrichtigungen</div>
-      <div style="font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,184,75,0.5);margin-top:3px;font-family:'DM Mono',monospace">Notifications</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button onclick="markAllRead()" style="font-size:0.68rem;color:rgba(232,184,75,0.7);background:transparent;border:0.5px solid rgba(232,184,75,0.28);border-radius:20px;padding:5px 12px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#e8b84b';this.style.borderColor='#e8b84b';this.style.background='rgba(232,184,75,0.08)'" onmouseout="this.style.color='rgba(232,184,75,0.7)';this.style.borderColor='rgba(232,184,75,0.28)';this.style.background='transparent'">Mark all read</button>
-      <button onclick="closeMobNotifDrawer()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.12);color:var(--white);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0" onmouseover="this.style.background='rgba(204,31,31,0.15)';this.style.borderColor='rgba(204,31,31,0.4)';this.style.color='#ff6b6b'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='var(--white)'">✕</button>
-    </div>
-  </div>
-  <!-- German flag accent stripe -->
-  <div style="height:3px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%);flex-shrink:0"></div>
-  <!-- Scrollable notification list -->
-  <div id="mob-notif-drawer-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0">
-    <div style="padding:40px 20px;text-align:center;color:var(--muted);font-size:0.82rem">No notifications yet</div>
-  </div>
-  <!-- Send Notification button (admin only) -->
-  <div id="mob-notif-drawer-send" style="display:none;padding:16px 20px 24px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);flex-shrink:0">
-    <button onclick="openNotifModal()" style="width:100%;padding:15px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:12px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 18px rgba(232,184,75,0.22)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-      Send Notification
-    </button>
-  </div>
+<!-- Mobile notification panel (full-width bottom sheet) -->
+<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
+<div class="notif-panel-head" style="padding:14px 18px">
+<span class="notif-panel-title">🔔 Notifications</span>
+<button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+</div>
+<div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
+<div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
+<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+</div>
 </div>
 <!-- LANGUAGE SWITCHER -->
 <div class="lang-fab" id="lang-fab">
@@ -2645,6 +2614,1031 @@ body.notif-drawer-open{overflow:hidden!important}
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
+<!-- ═══════════════════════════════════════════════════════════
+     DISCUSSIONS PAGE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page" id="page-discussions">
+<div class="disc-root">
+
+  <!-- ── LEFT SIDEBAR ── -->
+  <aside class="disc-sidebar" id="disc-sidebar">
+    <div class="disc-sidebar-head">
+      <div class="disc-sidebar-title">
+        <span class="disc-sidebar-title-text">Diskussionen</span>
+        <span class="disc-unread-total" id="disc-unread-total" style="display:none">0</span>
+      </div>
+      <button class="disc-new-btn" onclick="discOpenNewChat()" title="Neue Unterhaltung">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+    <div class="disc-search-wrap">
+      <svg class="disc-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="disc-search-input" id="disc-search" placeholder="Suche oder starte Chat…" oninput="discFilterConvos(this.value)" autocomplete="off"/>
+    </div>
+    <!-- User directory (shown when searching) -->
+    <div class="disc-user-dir" id="disc-user-dir" style="display:none">
+      <div class="disc-dir-label">Nutzer</div>
+      <div id="disc-user-dir-list"></div>
+    </div>
+    <!-- Conversation list -->
+    <div class="disc-convo-list" id="disc-convo-list">
+      <div class="disc-empty-state">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <p>Noch keine Gespräche</p>
+        <span>Klicke + um zu starten</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── RIGHT CHAT WINDOW ── -->
+  <main class="disc-chat" id="disc-chat">
+    <!-- Empty state -->
+    <div class="disc-chat-empty" id="disc-chat-empty">
+      <div class="disc-chat-empty-inner">
+        <div class="disc-chat-empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 class="disc-chat-empty-title">Wähle ein Gespräch</h3>
+        <p class="disc-chat-empty-sub">Oder starte eine neue Unterhaltung mit dem + Button</p>
+        <button class="disc-start-btn" onclick="discOpenNewChat()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Neues Gespräch
+        </button>
+      </div>
+    </div>
+
+    <!-- Active chat -->
+    <div class="disc-chat-active" id="disc-chat-active" style="display:none">
+      <!-- Chat header -->
+      <div class="disc-chat-header">
+        <button class="disc-back-btn" id="disc-back-btn" onclick="discGoBack()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="disc-chat-avatar" id="disc-chat-avatar">?</div>
+        <div class="disc-chat-header-info">
+          <div class="disc-chat-header-name" id="disc-chat-header-name">—</div>
+          <div class="disc-chat-header-status" id="disc-chat-header-status">
+            <span class="disc-online-dot" id="disc-online-dot"></span>
+            <span id="disc-status-text">offline</span>
+          </div>
+        </div>
+        <button class="disc-header-menu-btn" onclick="discToggleMenu()" id="disc-header-menu-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+        </button>
+        <!-- Safety menu -->
+        <div class="disc-safety-menu" id="disc-safety-menu">
+          <button class="disc-safety-item" onclick="discReport()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Melden
+          </button>
+          <button class="disc-safety-item danger" onclick="discBlock()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            Blockieren
+          </button>
+          <div class="disc-safety-divider"></div>
+          <button class="disc-safety-item" onclick="discClearChat()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Chat leeren
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages area -->
+      <div class="disc-messages" id="disc-messages"></div>
+
+      <!-- Typing indicator -->
+      <div class="disc-typing-wrap" id="disc-typing-wrap" style="display:none">
+        <div class="disc-typing-bubble">
+          <span class="disc-typing-dot"></span>
+          <span class="disc-typing-dot"></span>
+          <span class="disc-typing-dot"></span>
+        </div>
+        <span class="disc-typing-label" id="disc-typing-label">schreibt…</span>
+      </div>
+
+      <!-- Emoji picker -->
+      <div class="disc-emoji-picker" id="disc-emoji-picker" style="display:none">
+        <div class="disc-emoji-grid" id="disc-emoji-grid"></div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="disc-input-bar">
+        <label class="disc-attach-btn" title="Datei anhängen">
+          <input type="file" id="disc-file-input" multiple accept="image/*,.pdf,.doc,.docx" onchange="discHandleFile(event)" style="display:none"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </label>
+        <button class="disc-emoji-btn" onclick="discToggleEmoji()" title="Emoji">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </button>
+        <div class="disc-input-wrap">
+          <textarea class="disc-textarea" id="disc-textarea" placeholder="Nachricht schreiben…" rows="1" onkeydown="discHandleKey(event)" oninput="discAutoResize(this); discSendTyping()"></textarea>
+        </div>
+        <button class="disc-send-btn" id="disc-send-btn" onclick="discSendMessage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+</div>
+</div><!-- end page-discussions -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     NEW CHAT MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="disc-modal-overlay" id="disc-new-modal" onclick="discCloseNewModal(event)">
+  <div class="disc-modal">
+    <div class="disc-modal-head">
+      <div class="disc-modal-title">Neues Gespräch</div>
+      <button class="disc-modal-close" onclick="discCloseNewModal()">✕</button>
+    </div>
+    <div class="disc-modal-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--muted)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="disc-modal-search" id="disc-modal-search" placeholder="Nutzer suchen…" oninput="discSearchUsers(this.value)" autocomplete="off"/>
+    </div>
+    <div class="disc-modal-users" id="disc-modal-users">
+      <div class="disc-modal-hint">Tippe um Nutzer zu suchen</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DISCUSSIONS CSS
+     ═══════════════════════════════════════════════════════════ -->
+<style>
+/* ── ROOT LAYOUT ── */
+#page-discussions{padding:0!important;height:calc(100vh - var(--nav-h) - env(safe-area-inset-bottom));overflow:hidden}
+@media(min-width:768px){#page-discussions{height:calc(100vh - 56px)}}
+.disc-root{display:flex;height:100%;overflow:hidden;position:relative}
+
+/* ── SIDEBAR ── */
+.disc-sidebar{
+  width:320px;flex-shrink:0;
+  display:flex;flex-direction:column;
+  background:rgba(14,14,14,0.95);
+  border-right:0.5px solid rgba(232,184,75,0.12);
+  height:100%;overflow:hidden;
+  transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);
+  position:relative;z-index:2;
+}
+.disc-sidebar-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 16px 12px;
+  border-bottom:0.5px solid rgba(255,255,255,0.05);
+  flex-shrink:0;
+}
+.disc-sidebar-title{display:flex;align-items:center;gap:10px}
+.disc-sidebar-title-text{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.08em;color:var(--white)}
+.disc-unread-total{background:var(--gold);color:#000;border-radius:20px;font-size:0.6rem;font-weight:700;padding:2px 7px;font-family:'DM Mono',monospace}
+.disc-new-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(232,184,75,0.1);border:0.5px solid rgba(232,184,75,0.35);
+  color:var(--gold);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;flex-shrink:0;
+}
+.disc-new-btn:hover{background:rgba(232,184,75,0.2);border-color:var(--gold);box-shadow:0 0 12px rgba(232,184,75,0.25);transform:scale(1.08)}
+.disc-new-btn:active{transform:scale(0.94)}
+
+/* Search */
+.disc-search-wrap{
+  position:relative;padding:10px 12px;flex-shrink:0;
+  border-bottom:0.5px solid rgba(255,255,255,0.04);
+}
+.disc-search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.disc-search-input{
+  width:100%;background:rgba(255,255,255,0.05);
+  border:0.5px solid rgba(255,255,255,0.08);border-radius:20px;
+  padding:9px 14px 9px 34px;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.82rem;
+  outline:none;transition:border-color 0.2s,background 0.2s;
+}
+.disc-search-input:focus{border-color:rgba(232,184,75,0.4);background:rgba(255,255,255,0.07)}
+.disc-search-input::placeholder{color:#444}
+
+/* User dir */
+.disc-user-dir{flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,0.04)}
+.disc-dir-label{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:8px 14px 4px;font-family:'DM Mono',monospace}
+
+/* Convo list */
+.disc-convo-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.disc-convo-list::-webkit-scrollbar{width:3px}
+.disc-convo-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.disc-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;gap:10px;color:var(--muted);text-align:center}
+.disc-empty-state p{font-size:0.88rem;font-weight:500;color:#555}
+.disc-empty-state span{font-size:0.72rem;color:#333}
+
+/* Convo row */
+.disc-convo-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;cursor:pointer;
+  transition:background 0.16s;position:relative;
+  border-bottom:0.5px solid rgba(255,255,255,0.03);
+}
+.disc-convo-row:hover{background:rgba(255,255,255,0.04)}
+.disc-convo-row.active{background:rgba(232,184,75,0.08);border-left:2.5px solid var(--gold)}
+.disc-convo-row.active .disc-convo-name{color:var(--gold)}
+.disc-convo-avatar{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#2a1f6e,#4a2d9c);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#f0e6ff;
+  position:relative;
+}
+.disc-convo-online{
+  position:absolute;bottom:1px;right:1px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--green);border:2px solid #0e0e0e;
+}
+.disc-convo-info{flex:1;min-width:0}
+.disc-convo-row-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.disc-convo-name{font-size:0.84rem;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.disc-convo-time{font-size:0.6rem;color:#444;font-family:'DM Mono',monospace;flex-shrink:0;margin-left:8px}
+.disc-convo-preview{font-size:0.72rem;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.disc-convo-unread{
+  min-width:18px;height:18px;border-radius:20px;
+  background:var(--gold);color:#000;
+  font-size:0.58rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 5px;flex-shrink:0;font-family:'DM Mono',monospace;
+}
+
+/* Dir row (user search result) */
+.disc-dir-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;cursor:pointer;
+  transition:background 0.15s;
+}
+.disc-dir-row:hover{background:rgba(232,184,75,0.06)}
+.disc-dir-avatar{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#1c3a4e,#2d6080);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:#b0d8f0;
+}
+.disc-dir-name{font-size:0.8rem;color:var(--white);font-weight:500}
+.disc-dir-email{font-size:0.65rem;color:var(--muted)}
+
+/* ── CHAT PANEL ── */
+.disc-chat{
+  flex:1;display:flex;flex-direction:column;
+  background:rgba(10,10,10,0.98);
+  position:relative;overflow:hidden;
+}
+
+/* Empty state */
+.disc-chat-empty{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.disc-chat-empty-inner{text-align:center;max-width:320px}
+.disc-chat-empty-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(232,184,75,0.07);border:0.5px solid rgba(232,184,75,0.18);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;color:rgba(232,184,75,0.4);
+}
+.disc-chat-empty-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.06em;color:var(--white);margin-bottom:8px}
+.disc-chat-empty-sub{font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.disc-start-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;
+  background:transparent;border:0.5px solid rgba(232,184,75,0.35);
+  border-radius:24px;color:var(--gold);
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
+  cursor:pointer;transition:all 0.22s;letter-spacing:0.04em;
+}
+.disc-start-btn:hover{background:rgba(232,184,75,0.1);border-color:var(--gold);box-shadow:0 0 16px rgba(232,184,75,0.2)}
+
+/* Chat header */
+.disc-chat-header{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;
+  background:rgba(18,18,18,0.95);
+  border-bottom:0.5px solid rgba(255,255,255,0.06);
+  flex-shrink:0;position:relative;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.disc-back-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);
+  color:var(--white);cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  transition:all 0.18s;flex-shrink:0;
+}
+.disc-back-btn:hover{background:rgba(232,184,75,0.1);border-color:rgba(232,184,75,0.4);color:var(--gold)}
+.disc-chat-avatar{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#2a1f6e,#4a2d9c);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:#f0e6ff;
+  border:1.5px solid rgba(232,184,75,0.3);
+}
+.disc-chat-header-info{flex:1;min-width:0}
+.disc-chat-header-name{font-size:0.9rem;font-weight:600;color:var(--white)}
+.disc-chat-header-status{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(--muted);margin-top:1px}
+.disc-online-dot{width:7px;height:7px;border-radius:50%;background:#444;display:inline-block;flex-shrink:0}
+.disc-online-dot.online{background:var(--green);box-shadow:0 0 5px rgba(61,186,110,0.6)}
+.disc-header-menu-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:transparent;border:0.5px solid rgba(255,255,255,0.08);
+  color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.18s;flex-shrink:0;
+}
+.disc-header-menu-btn:hover{border-color:rgba(232,184,75,0.4);color:var(--gold);background:rgba(232,184,75,0.07)}
+
+/* Safety menu */
+.disc-safety-menu{
+  position:absolute;top:calc(100% + 6px);right:14px;
+  background:rgba(16,16,16,0.97);
+  border:0.5px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:6px;
+  min-width:180px;z-index:100;
+  box-shadow:0 16px 48px rgba(0,0,0,0.7);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:none;animation:discMenuIn 0.18s ease;
+}
+.disc-safety-menu.open{display:block}
+@keyframes discMenuIn{from{opacity:0;transform:translateY(-6px) scale(0.97)}to{opacity:1;transform:none}}
+.disc-safety-item{
+  width:100%;display:flex;align-items:center;gap:9px;
+  padding:9px 12px;border-radius:8px;
+  background:transparent;border:none;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.8rem;
+  cursor:pointer;transition:background 0.15s;text-align:left;
+}
+.disc-safety-item:hover{background:rgba(255,255,255,0.06)}
+.disc-safety-item.danger{color:#ff6b6b}
+.disc-safety-item.danger:hover{background:rgba(204,31,31,0.12)}
+.disc-safety-divider{height:0.5px;background:rgba(255,255,255,0.07);margin:4px 8px}
+
+/* Messages area */
+.disc-messages{
+  flex:1;overflow-y:auto;padding:16px 18px;
+  display:flex;flex-direction:column;gap:6px;
+  -webkit-overflow-scrolling:touch;
+}
+.disc-messages::-webkit-scrollbar{width:3px}
+.disc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.07);border-radius:2px}
+
+/* Date separator */
+.disc-date-sep{
+  text-align:center;margin:12px 0 8px;
+  font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:#333;font-family:'DM Mono',monospace;
+  position:relative;
+}
+.disc-date-sep::before,.disc-date-sep::after{
+  content:'';position:absolute;top:50%;width:calc(50% - 50px);
+  height:0.5px;background:rgba(255,255,255,0.05);
+}
+.disc-date-sep::before{left:0}
+.disc-date-sep::after{right:0}
+
+/* Message bubbles */
+.disc-msg{
+  display:flex;align-items:flex-end;gap:8px;
+  max-width:74%;animation:discMsgIn 0.22s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes discMsgIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:none}}
+.disc-msg.sent{align-self:flex-end;flex-direction:row-reverse}
+.disc-msg.received{align-self:flex-start}
+.disc-msg-avatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#2a1f6e,#4a2d9c);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:0.65rem;color:#f0e6ff;
+  align-self:flex-end;
+}
+.disc-msg.sent .disc-msg-avatar{display:none}
+.disc-bubble-wrap{display:flex;flex-direction:column;gap:3px;max-width:100%}
+.disc-msg.sent .disc-bubble-wrap{align-items:flex-end}
+.disc-msg.received .disc-bubble-wrap{align-items:flex-start}
+.disc-bubble{
+  padding:10px 14px;border-radius:18px;
+  font-size:0.875rem;line-height:1.55;
+  word-break:break-word;position:relative;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+/* Sent — gold glassmorphic */
+.disc-msg.sent .disc-bubble{
+  background:rgba(232,184,75,0.18);
+  border:0.5px solid rgba(232,184,75,0.35);
+  color:var(--white);
+  border-radius:18px 18px 4px 18px;
+}
+/* Received — dark glassmorphic */
+.disc-msg.received .disc-bubble{
+  background:rgba(40,40,40,0.85);
+  border:0.5px solid rgba(255,255,255,0.08);
+  color:var(--white);
+  border-radius:18px 18px 18px 4px;
+}
+/* Image in bubble */
+.disc-bubble img{max-width:220px;border-radius:10px;display:block;margin-top:4px}
+.disc-bubble-file{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.06);border-radius:8px;padding:8px 10px;margin-top:4px;
+}
+.disc-bubble-file-name{font-size:0.75rem;color:var(--gold);text-decoration:none;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Receipt + time */
+.disc-msg-meta{display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#444;font-family:'DM Mono',monospace}
+.disc-msg.sent .disc-msg-meta{justify-content:flex-end}
+.disc-receipt{display:flex;align-items:center;color:#666}
+.disc-receipt.delivered{color:#888}
+.disc-receipt.read{color:var(--gold)}
+
+/* Typing indicator */
+.disc-typing-wrap{
+  display:flex;align-items:center;gap:8px;
+  padding:0 20px 8px;flex-shrink:0;
+}
+.disc-typing-bubble{
+  background:rgba(40,40,40,0.85);border:0.5px solid rgba(255,255,255,0.08);
+  border-radius:18px;padding:10px 14px;
+  display:flex;align-items:center;gap:4px;
+}
+.disc-typing-dot{
+  width:6px;height:6px;border-radius:50%;background:#666;
+  animation:discTypingBounce 1.2s infinite;
+}
+.disc-typing-dot:nth-child(2){animation-delay:0.2s}
+.disc-typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes discTypingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);background:var(--gold)}}
+.disc-typing-label{font-size:0.65rem;color:#444;font-family:'DM Mono',monospace;letter-spacing:0.04em}
+
+/* Emoji picker */
+.disc-emoji-picker{
+  position:absolute;bottom:68px;left:0;right:0;
+  background:rgba(14,14,14,0.97);
+  border-top:0.5px solid rgba(255,255,255,0.07);
+  padding:10px 12px;z-index:10;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  animation:discMenuIn 0.2s ease;
+}
+.disc-emoji-grid{
+  display:flex;flex-wrap:wrap;gap:2px;max-height:160px;overflow-y:auto;
+}
+.disc-emoji-btn-item{
+  width:36px;height:36px;border:none;background:transparent;
+  font-size:1.2rem;cursor:pointer;border-radius:8px;
+  transition:background 0.14s;display:flex;align-items:center;justify-content:center;
+}
+.disc-emoji-btn-item:hover{background:rgba(255,255,255,0.08)}
+
+/* Input bar */
+.disc-input-bar{
+  display:flex;align-items:flex-end;gap:8px;
+  padding:12px 14px 14px;
+  background:rgba(14,14,14,0.98);
+  border-top:0.5px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
+}
+.disc-attach-btn,.disc-emoji-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);
+  color:#666;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.18s;
+}
+.disc-attach-btn:hover,.disc-emoji-btn:hover{
+  border-color:rgba(232,184,75,0.4);color:var(--gold);
+  background:rgba(232,184,75,0.07);
+}
+.disc-input-wrap{
+  flex:1;background:rgba(255,255,255,0.05);
+  border:0.5px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:8px 14px;
+  transition:border-color 0.2s;
+}
+.disc-input-wrap:focus-within{border-color:rgba(232,184,75,0.4)}
+.disc-textarea{
+  width:100%;background:transparent;border:none;
+  color:var(--white);font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;line-height:1.5;resize:none;outline:none;
+  max-height:120px;overflow-y:auto;-webkit-appearance:none;
+}
+.disc-textarea::placeholder{color:#333}
+.disc-send-btn{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:rgba(232,184,75,0.15);
+  border:0.5px solid rgba(232,184,75,0.4);
+  color:var(--gold);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.disc-send-btn:hover{
+  background:var(--gold);color:#000;
+  box-shadow:0 0 18px rgba(232,184,75,0.4);
+  transform:scale(1.08);
+}
+.disc-send-btn:active{transform:scale(0.94)}
+
+/* ── NEW CHAT MODAL ── */
+.disc-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.disc-modal-overlay.open{display:flex}
+.disc-modal{
+  width:100%;max-width:440px;
+  background:rgba(14,14,14,0.97);
+  border:0.5px solid rgba(232,184,75,0.18);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,0.8);
+  animation:discMenuIn 0.22s ease;
+}
+.disc-modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:0.5px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.025);
+}
+.disc-modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.08em;color:var(--white)}
+.disc-modal-close{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);
+  color:var(--muted);cursor:pointer;font-size:0.85rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.18s;
+}
+.disc-modal-close:hover{background:rgba(204,31,31,0.15);border-color:rgba(204,31,31,0.4);color:#ff6b6b}
+.disc-modal-search-wrap{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;border-bottom:0.5px solid rgba(255,255,255,0.05);
+}
+.disc-modal-search{
+  flex:1;background:transparent;border:none;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;
+  outline:none;
+}
+.disc-modal-search::placeholder{color:#333}
+.disc-modal-users{max-height:360px;overflow-y:auto;padding:8px 0}
+.disc-modal-hint{font-size:0.75rem;color:#333;text-align:center;padding:24px;font-family:'DM Mono',monospace}
+.disc-modal-user-row{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;cursor:pointer;transition:background 0.15s;
+}
+.disc-modal-user-row:hover{background:rgba(232,184,75,0.07)}
+.disc-modal-u-avatar{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#1a2f4a,#2d5070);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:#8cc8f0;
+}
+.disc-modal-u-name{font-size:0.84rem;font-weight:600;color:var(--white)}
+.disc-modal-u-email{font-size:0.65rem;color:var(--muted)}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:767px){
+  .disc-sidebar{
+    width:100%;position:absolute;top:0;left:0;bottom:0;
+    transform:translateX(0);
+  }
+  .disc-sidebar.hidden{transform:translateX(-100%)}
+  .disc-chat{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    transform:translateX(100%);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);
+  }
+  .disc-chat.shown{transform:translateX(0)}
+  .disc-back-btn{display:flex!important}
+  .disc-msg{max-width:88%}
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DISCUSSIONS JAVASCRIPT
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+/* ── State ── */
+var DISC = {
+  currentConvoId: null,
+  convos: {},          // id → { id, name, email, initials, messages[], unread, online }
+  typingTimer: null,
+  typingTimeout: null,
+  emojiOpen: false,
+  menuOpen: false,
+  myName: 'Ich',
+  myInitials: 'ME',
+  supabase: null,
+  channel: null,
+};
+
+var EMOJIS = ['😊','😂','❤️','👍','🎉','🔥','✅','💡','📚','🇩🇪','🌟','😍','🙌','💪','🤔','😅','👏','🥳','😎','🤩','💬','📖','✏️','🎯','⭐','🏆','😄','🤗','💭','🗣️','📝','🌈','🎵','🙏','👋','💯','🚀','⚡','🌍','🎓'];
+
+/* ── Init ── */
+function discInit(){
+  buildEmojiGrid();
+  // Wire up outside click for safety menu
+  document.addEventListener('click', function(e){
+    var menu = document.getElementById('disc-safety-menu');
+    var btn  = document.getElementById('disc-header-menu-btn');
+    if(menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)){
+      menu.classList.remove('open');
+      DISC.menuOpen = false;
+    }
+    // Close emoji picker
+    var picker = document.getElementById('disc-emoji-picker');
+    var emojiBtn = document.querySelector('.disc-emoji-btn');
+    if(picker && DISC.emojiOpen && !picker.contains(e.target) && emojiBtn && !emojiBtn.contains(e.target)){
+      picker.style.display = 'none';
+      DISC.emojiOpen = false;
+    }
+  });
+  // Demo conversations
+  addDemoConvos();
+}
+
+function buildEmojiGrid(){
+  var grid = document.getElementById('disc-emoji-grid');
+  if(!grid) return;
+  grid.innerHTML = EMOJIS.map(function(e){
+    return '<button class="disc-emoji-btn-item" onclick="discInsertEmoji(\''+e+'\')">'+e+'</button>';
+  }).join('');
+}
+
+function addDemoConvos(){
+  var demos = [
+    {id:'demo1',name:'Anna Schmidt',email:'anna@example.com',initials:'AS',online:true,
+     messages:[
+       {id:'m1',text:'Hallo! Wie läuft das Lernen?',sent:false,time:discTimeStr(-120),status:'read'},
+       {id:'m2',text:'Sehr gut! Ich habe heute Kapitel 3 abgeschlossen 📚',sent:true,time:discTimeStr(-110),status:'read'},
+       {id:'m3',text:'Super! Hast du die Grammatik-Übungen gemacht?',sent:false,time:discTimeStr(-100),status:'read'},
+     ]},
+    {id:'demo2',name:'Markus Weber',email:'markus@example.com',initials:'MW',online:false,
+     messages:[
+       {id:'m4',text:'Kannst du mir mit dem Konjunktiv helfen?',sent:false,time:discTimeStr(-1440),status:'read'},
+       {id:'m5',text:'Natürlich! Was genau verstehst du nicht?',sent:true,time:discTimeStr(-1430),status:'delivered'},
+     ]},
+    {id:'demo3',name:'Léa Dupont',email:'lea@example.com',initials:'LD',online:true,
+     messages:[
+       {id:'m6',text:'Ich lerne auch Deutsch, wir können zusammen üben!',sent:false,time:discTimeStr(-2880),status:'read'},
+     ]},
+  ];
+  demos.forEach(function(c){ DISC.convos[c.id] = c; });
+  renderConvoList();
+}
+
+function discTimeStr(offsetMinutes){
+  var d = new Date(Date.now() + offsetMinutes*60000);
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
+/* ── Render conversation list ── */
+window.discFilterConvos = function(q){
+  renderConvoList(q);
+  var dir = document.getElementById('disc-user-dir');
+  if(q && q.trim()){ dir.style.display='block'; renderUserDir(q); }
+  else { dir.style.display='none'; }
+};
+
+function renderConvoList(filter){
+  var list = document.getElementById('disc-convo-list');
+  var ids = Object.keys(DISC.convos);
+  var f = (filter||'').toLowerCase().trim();
+  var filtered = ids.filter(function(id){
+    if(!f) return true;
+    var c = DISC.convos[id];
+    return c.name.toLowerCase().includes(f) || c.email.toLowerCase().includes(f);
+  });
+  if(!filtered.length){
+    list.innerHTML = '<div class="disc-empty-state"><p>Keine Gespräche gefunden</p></div>';
+    return;
+  }
+  list.innerHTML = filtered.map(function(id){
+    var c = DISC.convos[id];
+    var last = c.messages[c.messages.length-1];
+    var preview = last ? (last.sent?'Du: ':'')+last.text : '';
+    var unread = (c.unread||0);
+    return '<div class="disc-convo-row'+(DISC.currentConvoId===id?' active':'')+'" onclick="discOpenConvo(\''+id+'\')">'+
+      '<div class="disc-convo-avatar">'+c.initials+(c.online?'<div class="disc-convo-online"></div>':'')+'</div>'+
+      '<div class="disc-convo-info">'+
+        '<div class="disc-convo-row-top">'+
+          '<span class="disc-convo-name">'+escH(c.name)+'</span>'+
+          '<span class="disc-convo-time">'+(last?last.time:'')+'</span>'+
+        '</div>'+
+        '<div class="disc-convo-preview">'+escH(preview.slice(0,60))+'</div>'+
+      '</div>'+
+      (unread?'<div class="disc-convo-unread">'+unread+'</div>':'')+
+    '</div>';
+  }).join('');
+}
+
+/* ── Open convo ── */
+window.discOpenConvo = function(id){
+  DISC.currentConvoId = id;
+  var c = DISC.convos[id];
+  if(!c) return;
+  c.unread = 0;
+  // Header
+  document.getElementById('disc-chat-avatar').textContent = c.initials;
+  document.getElementById('disc-chat-header-name').textContent = c.name;
+  var dot = document.getElementById('disc-online-dot');
+  var statusTxt = document.getElementById('disc-status-text');
+  if(c.online){ dot.className='disc-online-dot online'; statusTxt.textContent='online'; }
+  else { dot.className='disc-online-dot'; statusTxt.textContent='offline'; }
+  // Show chat, hide empty
+  document.getElementById('disc-chat-empty').style.display='none';
+  document.getElementById('disc-chat-active').style.display='flex';
+  document.getElementById('disc-chat-active').style.flexDirection='column';
+  document.getElementById('disc-chat-active').style.flex='1';
+  document.getElementById('disc-chat-active').style.height='100%';
+  renderMessages(c);
+  renderConvoList();
+  // Mobile: slide chat in
+  if(window.innerWidth<768){
+    document.getElementById('disc-sidebar').classList.add('hidden');
+    document.getElementById('disc-chat').classList.add('shown');
+  }
+  // Simulate typing after 1.5s
+  setTimeout(function(){
+    if(DISC.currentConvoId===id) showTyping(c.name);
+    setTimeout(function(){
+      if(DISC.currentConvoId===id){
+        hideTyping();
+        var replies = [
+          'Das klingt toll! 🎉',
+          'Weiter so, du schaffst das! 💪',
+          'Ich lerne auch fleißig!',
+          'Hast du heute Vokabeln geübt?',
+          'Die Grammatik ist manchmal schwierig...',
+        ];
+        var txt = replies[Math.floor(Math.random()*replies.length)];
+        addMessage(id,{id:'auto_'+Date.now(),text:txt,sent:false,time:discTimeStr(0),status:'read'});
+      }
+    },3000);
+  },2000);
+};
+
+function renderMessages(c){
+  var area = document.getElementById('disc-messages');
+  if(!c.messages.length){ area.innerHTML='<div class="disc-date-sep">Heute</div>'; return; }
+  var html = '<div class="disc-date-sep">Heute</div>';
+  c.messages.forEach(function(m){
+    html += renderBubble(m, c);
+  });
+  area.innerHTML = html;
+  area.scrollTop = area.scrollHeight;
+}
+
+function renderBubble(m, c){
+  var receiptHTML = '';
+  if(m.sent){
+    if(m.status==='read') receiptHTML='<span class="disc-receipt read">'+checkDouble()+'</span>';
+    else if(m.status==='delivered') receiptHTML='<span class="disc-receipt delivered">'+checkDouble()+'</span>';
+    else receiptHTML='<span class="disc-receipt">'+checkSingle()+'</span>';
+  }
+  var avatarHTML = m.sent?'':'<div class="disc-msg-avatar">'+(c?c.initials:'?')+'</div>';
+  var content = escH(m.text);
+  if(m.imageUrl) content += '<img src="'+escH(m.imageUrl)+'" alt=""/>';
+  if(m.fileName) content += '<div class="disc-bubble-file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><a class="disc-bubble-file-name" href="#">'+escH(m.fileName)+'</a></div>';
+  return '<div class="disc-msg '+(m.sent?'sent':'received')+'">'+
+    avatarHTML+
+    '<div class="disc-bubble-wrap">'+
+      '<div class="disc-bubble">'+content+'</div>'+
+      '<div class="disc-msg-meta">'+m.time+' '+receiptHTML+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function checkDouble(){ return '<svg width="14" height="9" viewBox="0 0 18 11" fill="currentColor"><path d="M1 5.5L5.5 10L17 1"/><path d="M5 5.5L9.5 10L17 1" opacity="0.6"/></svg>'; }
+function checkSingle(){ return '<svg width="12" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 5 5 9 13 1"/></svg>'; }
+
+function addMessage(convoId, msg){
+  var c = DISC.convos[convoId];
+  if(!c) return;
+  c.messages.push(msg);
+  if(DISC.currentConvoId===convoId){
+    var area = document.getElementById('disc-messages');
+    var tmp = document.createElement('div');
+    tmp.innerHTML = renderBubble(msg, c);
+    while(tmp.firstChild) area.appendChild(tmp.firstChild);
+    area.scrollTop = area.scrollHeight;
+  } else {
+    c.unread = (c.unread||0)+1;
+  }
+  renderConvoList();
+}
+
+/* ── Send message ── */
+window.discSendMessage = function(){
+  var ta = document.getElementById('disc-textarea');
+  var text = ta.value.trim();
+  if(!text || !DISC.currentConvoId) return;
+  var msg = {id:'msg_'+Date.now(),text:text,sent:true,time:discTimeStr(0),status:'sent'};
+  addMessage(DISC.currentConvoId, msg);
+  ta.value=''; ta.style.height=''; ta.style.height=ta.scrollHeight+'px';
+  // Upgrade to delivered
+  setTimeout(function(){ msg.status='delivered'; refreshLastBubble(); },800);
+  setTimeout(function(){ msg.status='read'; refreshLastBubble(); },2200);
+};
+
+function refreshLastBubble(){
+  // Re-render last sent message receipt
+  var c = DISC.convos[DISC.currentConvoId];
+  if(!c) return;
+  var msgs = document.querySelectorAll('#disc-messages .disc-msg.sent');
+  if(!msgs.length) return;
+  var last = msgs[msgs.length-1];
+  var meta = last.querySelector('.disc-msg-meta');
+  var lastMsg = c.messages.filter(function(m){return m.sent}).slice(-1)[0];
+  if(meta && lastMsg){
+    var receiptHTML = '';
+    if(lastMsg.status==='read') receiptHTML='<span class="disc-receipt read">'+checkDouble()+'</span>';
+    else if(lastMsg.status==='delivered') receiptHTML='<span class="disc-receipt delivered">'+checkDouble()+'</span>';
+    else receiptHTML='<span class="disc-receipt">'+checkSingle()+'</span>';
+    meta.innerHTML = lastMsg.time+' '+receiptHTML;
+  }
+}
+
+window.discHandleKey = function(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); discSendMessage(); }
+};
+
+window.discAutoResize = function(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+};
+
+/* ── Typing ── */
+window.discSendTyping = function(){};
+
+function showTyping(name){
+  var wrap = document.getElementById('disc-typing-wrap');
+  var lbl  = document.getElementById('disc-typing-label');
+  if(!wrap) return;
+  lbl.textContent = name+' schreibt…';
+  wrap.style.display='flex';
+  var area = document.getElementById('disc-messages');
+  if(area) area.scrollTop = area.scrollHeight;
+}
+function hideTyping(){
+  var wrap = document.getElementById('disc-typing-wrap');
+  if(wrap) wrap.style.display='none';
+}
+
+/* ── Emoji ── */
+window.discToggleEmoji = function(){
+  var picker = document.getElementById('disc-emoji-picker');
+  DISC.emojiOpen = !DISC.emojiOpen;
+  picker.style.display = DISC.emojiOpen?'block':'none';
+};
+window.discInsertEmoji = function(emoji){
+  var ta = document.getElementById('disc-textarea');
+  var pos = ta.selectionStart||ta.value.length;
+  ta.value = ta.value.slice(0,pos)+emoji+ta.value.slice(pos);
+  ta.focus();
+  var p = pos+emoji.length;
+  ta.setSelectionRange(p,p);
+  var picker = document.getElementById('disc-emoji-picker');
+  picker.style.display='none'; DISC.emojiOpen=false;
+};
+
+/* ── File attach ── */
+window.discHandleFile = function(e){
+  var files = e.target.files;
+  if(!files||!DISC.currentConvoId) return;
+  Array.from(files).forEach(function(f){
+    var msg = {id:'f_'+Date.now(),text:'',sent:true,time:discTimeStr(0),status:'sent'};
+    if(f.type.startsWith('image/')){
+      var reader = new FileReader();
+      reader.onload = function(ev){ msg.imageUrl=ev.target.result; addMessage(DISC.currentConvoId,msg); };
+      reader.readAsDataURL(f);
+    } else {
+      msg.fileName = f.name;
+      addMessage(DISC.currentConvoId, msg);
+    }
+  });
+  e.target.value='';
+};
+
+/* ── Safety menu ── */
+window.discToggleMenu = function(){
+  var menu = document.getElementById('disc-safety-menu');
+  DISC.menuOpen = !DISC.menuOpen;
+  menu.classList.toggle('open', DISC.menuOpen);
+};
+window.discReport = function(){
+  document.getElementById('disc-safety-menu').classList.remove('open');
+  DISC.menuOpen=false;
+  if(typeof showToast==='function') showToast('Gemeldet — Danke für dein Feedback');
+  else alert('Nutzer gemeldet');
+};
+window.discBlock = function(){
+  document.getElementById('disc-safety-menu').classList.remove('open');
+  DISC.menuOpen=false;
+  if(!DISC.currentConvoId) return;
+  if(confirm('Möchtest du diesen Nutzer wirklich blockieren?')){
+    delete DISC.convos[DISC.currentConvoId];
+    DISC.currentConvoId=null;
+    document.getElementById('disc-chat-empty').style.display='flex';
+    document.getElementById('disc-chat-active').style.display='none';
+    renderConvoList();
+    if(typeof showToast==='function') showToast('Nutzer blockiert');
+  }
+};
+window.discClearChat = function(){
+  document.getElementById('disc-safety-menu').classList.remove('open');
+  DISC.menuOpen=false;
+  if(!DISC.currentConvoId) return;
+  DISC.convos[DISC.currentConvoId].messages=[];
+  document.getElementById('disc-messages').innerHTML='<div class="disc-date-sep">Heute</div>';
+};
+
+/* ── New chat modal ── */
+window.discOpenNewChat = function(){
+  var modal = document.getElementById('disc-new-modal');
+  modal.classList.add('open');
+  document.getElementById('disc-modal-search').value='';
+  document.getElementById('disc-modal-users').innerHTML='<div class="disc-modal-hint">Tippe um Nutzer zu suchen</div>';
+  setTimeout(function(){ document.getElementById('disc-modal-search').focus(); },100);
+};
+window.discCloseNewModal = function(e){
+  if(e && e.target!==document.getElementById('disc-new-modal')) return;
+  document.getElementById('disc-new-modal').classList.remove('open');
+};
+window.discSearchUsers = function(q){
+  var box = document.getElementById('disc-modal-users');
+  if(!q||!q.trim()){ box.innerHTML='<div class="disc-modal-hint">Tippe um Nutzer zu suchen</div>'; return; }
+  // Mock user directory
+  var users=[
+    {name:'Anna Schmidt',email:'anna@example.com',initials:'AS'},
+    {name:'Markus Weber',email:'markus@example.com',initials:'MW'},
+    {name:'Léa Dupont',email:'lea@example.com',initials:'LD'},
+    {name:'Carlos Ruiz',email:'carlos@example.com',initials:'CR'},
+    {name:'Yuki Tanaka',email:'yuki@example.com',initials:'YT'},
+    {name:'Fatima El-Amin',email:'fatima@example.com',initials:'FE'},
+  ];
+  var f=q.toLowerCase();
+  var results=users.filter(function(u){ return u.name.toLowerCase().includes(f)||u.email.includes(f); });
+  if(!results.length){ box.innerHTML='<div class="disc-modal-hint">Kein Nutzer gefunden</div>'; return; }
+  box.innerHTML=results.map(function(u){
+    return '<div class="disc-modal-user-row" onclick="discStartChat(\''+escH(u.name)+'\',\''+escH(u.email)+'\',\''+u.initials+'\')">'+
+      '<div class="disc-modal-u-avatar">'+u.initials+'</div>'+
+      '<div><div class="disc-modal-u-name">'+escH(u.name)+'</div><div class="disc-modal-u-email">'+escH(u.email)+'</div></div>'+
+    '</div>';
+  }).join('');
+};
+window.discStartChat = function(name,email,initials){
+  document.getElementById('disc-new-modal').classList.remove('open');
+  // Find existing convo or create
+  var existing = Object.values(DISC.convos).find(function(c){ return c.email===email; });
+  if(existing){ discOpenConvo(existing.id); return; }
+  var id='convo_'+Date.now();
+  DISC.convos[id]={id:id,name:name,email:email,initials:initials,online:Math.random()>0.5,messages:[],unread:0};
+  renderConvoList();
+  discOpenConvo(id);
+};
+
+/* ── Mobile back ── */
+window.discGoBack = function(){
+  DISC.currentConvoId=null;
+  document.getElementById('disc-sidebar').classList.remove('hidden');
+  document.getElementById('disc-chat').classList.remove('shown');
+  document.getElementById('disc-chat-empty').style.display='flex';
+  document.getElementById('disc-chat-active').style.display='none';
+};
+
+/* ── User dir in sidebar ── */
+function renderUserDir(q){
+  var list = document.getElementById('disc-user-dir-list');
+  var users=[
+    {name:'Anna Schmidt',email:'anna@example.com',initials:'AS'},
+    {name:'Markus Weber',email:'markus@example.com',initials:'MW'},
+    {name:'Léa Dupont',email:'lea@example.com',initials:'LD'},
+    {name:'Carlos Ruiz',email:'carlos@example.com',initials:'CR'},
+  ];
+  var f=q.toLowerCase();
+  var results=users.filter(function(u){ return u.name.toLowerCase().includes(f)||u.email.includes(f); });
+  list.innerHTML=results.map(function(u){
+    return '<div class="disc-dir-row" onclick="discStartChat(\''+escH(u.name)+'\',\''+escH(u.email)+'\',\''+u.initials+'\')">'+
+      '<div class="disc-dir-avatar">'+u.initials+'</div>'+
+      '<div><div class="disc-dir-name">'+escH(u.name)+'</div><div class="disc-dir-email">'+escH(u.email)+'</div></div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ── Utils ── */
+function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ── Hook into page switch ── */
+var _origSwitch = window.switchPage;
+window.switchPage = function(page){
+  if(typeof _origSwitch==='function') _origSwitch(page);
+  if(page==='discussions') setTimeout(discInit,50);
+};
+
+/* Auto-init if discussions is somehow already active */
+if(document.getElementById('page-discussions') && document.getElementById('page-discussions').classList.contains('active')){
+  discInit();
+}
+})();
+</script>
+
 <!-- QUIZ PAGE -->
 <div class="page" id="page-quiz">
 <div class="quiz-page">
@@ -2710,106 +3704,6 @@ body.notif-drawer-open{overflow:hidden!important}
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
-
-<script>
-/* ===== NOTIFICATION PANEL LOGIC ===== */
-
-/* Desktop: toggle dropdown panel (only on ≥768px) */
-function toggleNotifPanel(){
-  if(window.innerWidth < 768){ openMobNotifDrawer(); return; }
-  const panel = document.getElementById('notif-panel');
-  if(!panel) return;
-  const isOpen = panel.classList.contains('open');
-  if(isOpen){ panel.classList.remove('open'); }
-  else{
-    panel.classList.add('open');
-    // sync list content to drawer list
-    syncNotifLists();
-    // close on outside click
-    setTimeout(()=>{
-      function outsideClick(e){
-        if(!panel.contains(e.target) && e.target.id !== 'desk-notif-btn'){
-          panel.classList.remove('open');
-          document.removeEventListener('click', outsideClick);
-        }
-      }
-      document.addEventListener('click', outsideClick);
-    }, 10);
-  }
-}
-
-/* Mobile: slide-over drawer */
-function openMobNotifDrawer(){
-  const overlay = document.getElementById('mob-notif-overlay');
-  const drawer  = document.getElementById('mob-notif-drawer');
-  if(!overlay || !drawer) return;
-  syncNotifLists();
-  // show elements
-  overlay.style.display = 'block';
-  drawer.style.display  = 'flex';
-  document.body.classList.add('notif-drawer-open');
-  // force reflow then animate
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      overlay.classList.add('open');
-      drawer.classList.add('open');
-    });
-  });
-  // show send button for admins
-  const sendRow = document.getElementById('mob-notif-drawer-send');
-  const adminSendRow = document.getElementById('admin-notif-send-row');
-  if(sendRow && adminSendRow && adminSendRow.style.display !== 'none'){
-    sendRow.style.display = 'block';
-  }
-}
-
-function closeMobNotifDrawer(){
-  const overlay = document.getElementById('mob-notif-overlay');
-  const drawer  = document.getElementById('mob-notif-drawer');
-  if(!overlay || !drawer) return;
-  overlay.classList.remove('open');
-  drawer.classList.remove('open');
-  document.body.classList.remove('notif-drawer-open');
-  setTimeout(()=>{
-    overlay.style.display = 'none';
-    drawer.style.display  = 'none';
-  }, 370);
-}
-
-/* Sync notification items from the desktop list (#notif-list) into the mobile drawer */
-function syncNotifLists(){
-  const src  = document.getElementById('notif-list');
-  const dest = document.getElementById('mob-notif-drawer-list');
-  if(!src || !dest) return;
-  // Mirror content, converting class names for the drawer style
-  dest.innerHTML = src.innerHTML
-    .replace(/class="notif-item/g,    'class="mob-drawer-notif-item')
-    .replace(/class="notif-item-title/g,  'class="mob-drawer-notif-title')
-    .replace(/class="notif-item-body/g,   'class="mob-drawer-notif-body')
-    .replace(/class="notif-item-date/g,   'class="mob-drawer-notif-time')
-    .replace(/class="notif-read-label/g,  'class="mob-drawer-read-label')
-    .replace(/class="notif-unread-dot/g,  'class="mob-drawer-unread-dot');
-}
-
-/* Keep badge counts in sync between desktop and mobile badge elements */
-(function patchBadgeSync(){
-  const orig = document.createElement; // noop — we hook via MutationObserver
-  const desktopBadge = document.getElementById('notif-badge');
-  const mobBadge     = document.getElementById('mob-notif-badge');
-  if(!desktopBadge || !mobBadge) return;
-  const obs = new MutationObserver(()=>{
-    mobBadge.textContent  = desktopBadge.textContent;
-    mobBadge.className    = desktopBadge.className;
-    mobBadge.style.cssText = desktopBadge.style.cssText;
-  });
-  obs.observe(desktopBadge, { childList:true, characterData:true, subtree:true, attributes:true });
-})();
-
-/* Close drawer on Escape key */
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeMobNotifDrawer();
-});
-</script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
