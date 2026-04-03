@@ -386,6 +386,9 @@ h1 span{color:var(--gold)}
 
 /* DESKTOP NAV */
 .desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
+.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
+.desk-nav-item:hover{color:var(--white)}
 .desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
 
 /* RESPONSIVE */
@@ -1451,9 +1454,9 @@ h1 span{color:var(--gold)}
 .desk-nav-item:hover::after{width:80%}
 .desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold);background:linear-gradient(180deg,transparent 60%,rgba(232,184,75,0.06) 100%)}
 .desk-nav-item.active::after{width:100%;background:linear-gradient(90deg,transparent,rgba(232,184,75,0.6),transparent)}
-.desk-nav-item svg{opacity:0.55;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s,background 0.2s;background:rgba(255,255,255,0.06);border-radius:5px;padding:3px;box-sizing:content-box}
-.desk-nav-item:hover svg{opacity:0.8;transform:scale(1.05);background:rgba(255,255,255,0.1)}
-.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.5));transform:scale(1.05);background:rgba(232,184,75,0.15)}
+.desk-nav-item svg{opacity:0.45;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s}
+.desk-nav-item:hover svg{opacity:0.75;transform:scale(1.1)}
+.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.6));transform:scale(1.05)}
 
 /* GHOST BUTTONS */
 .reset-btn,.logout-btn{position:relative;overflow:hidden;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;border-radius:6px;transition:border-color 0.2s,color 0.2s,background 0.2s,transform 0.15s;min-height:36px}
@@ -1561,8 +1564,6 @@ h1 span{color:var(--gold)}
 /* LANG FAB */
 /* LANG FAB */
 .lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
-.spinning-earth{animation:earthSpin 8s linear infinite;color:var(--gold);filter:drop-shadow(0 0 4px rgba(232,184,75,0.35))}
-@keyframes earthSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .lang-fab-btn:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(232,184,75,0.25);transform:scale(1.1)}
 .lang-fab-btn:active{transform:scale(0.92)}
 .lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
@@ -2030,8 +2031,6 @@ h1 span{color:var(--gold)}
 <div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Chargement...</div>
 <button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Rafraîchir</button>
 </div>
-<div style="padding:12px 16px 16px">
-  <button onclick="closeProfileModal()" style="width:100%;padding:11px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.borderColor='rgba(255,255,255,0.25)';this.style.color='var(--white)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'">✕ Fermer</button>
 </div>
 </div>
 </div>
@@ -2259,7 +2258,7 @@ h1 span{color:var(--gold)}
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+    <div class="nav-label">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
     <div class="nav-icon">
@@ -2268,7 +2267,7 @@ h1 span{color:var(--gold)}
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
+    <div class="nav-label">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
     <div class="nav-icon">
@@ -2278,7 +2277,7 @@ h1 span{color:var(--gold)}
         <path d="M4 12a8 8 0 0 1 16 0"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_listening">Hören</div>
+    <div class="nav-label">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
     <div class="nav-icon">
@@ -2287,7 +2286,7 @@ h1 span{color:var(--gold)}
         <polyline points="17 6 23 6 23 12"></polyline>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_level">Niveau</div>
+    <div class="nav-label">Niveau</div>
   </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
@@ -2342,15 +2341,7 @@ h1 span{color:var(--gold)}
       confusing or easy to overlook. By appending a second emoji (🌍) we
       signal clearly that this button relates to language and world selection.
     -->
-    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">
-      <svg class="spinning-earth" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M2 12h20"/>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        <path d="M6 5.5C7.5 7 9.5 8 12 8s4.5-1 6-2.5" stroke-opacity="0.5"/>
-        <path d="M6 18.5C7.5 17 9.5 16 12 16s4.5 1 6 2.5" stroke-opacity="0.5"/>
-      </svg>
-    </button>
+    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐🌍</button>
 </div>
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
@@ -2530,177 +2521,6 @@ h1 span{color:var(--gold)}
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
-    <script>
-    /* ── I18N NAV PATCH ────────────────────────────────────────────────────
-       Ensures Vocabulaire and Écoute nav labels translate when setLang() is
-       called. Patches window.setLang to also update any data-i18n elements
-       that app.js may have missed.
-    ── ─────────────────────────────────────────────────────────────────────*/
-    (function(){
-      var NAV_TRANSLATIONS = {
-        de: { nav_vocab:'Vokabeln', nav_listening:'Hören', nav_quiz:'Quiz', nav_level:'Niveau', nav_tracker:'Tracker', nav_docs:'Dokumente', nav_news:'News', nav_translate:'Übersetzer' },
-        en: { nav_vocab:'Vocabulary', nav_listening:'Listening', nav_quiz:'Quiz', nav_level:'Level', nav_tracker:'Tracker', nav_docs:'Documents', nav_news:'News', nav_translate:'Translator' },
-        ar: { nav_vocab:'المفردات', nav_listening:'الاستماع', nav_quiz:'اختبار', nav_level:'المستوى', nav_tracker:'المتتبع', nav_docs:'الملفات', nav_news:'الأخبار', nav_translate:'المترجم' }
-      };
-
-      function applyNavTranslations(lang){
-        var map = NAV_TRANSLATIONS[lang] || NAV_TRANSLATIONS['de'];
-        document.querySelectorAll('[data-i18n]').forEach(function(el){
-          var key = el.getAttribute('data-i18n');
-          if(map[key] !== undefined) el.textContent = map[key];
-        });
-      }
-
-      // Patch setLang after app.js loads
-      window.addEventListener('load', function(){
-        var origSetLang = window.setLang;
-        window.setLang = function(lang){
-          if(origSetLang) origSetLang(lang);
-          applyNavTranslations(lang);
-        };
-        // Also apply for the currently stored language
-        var stored = localStorage.getItem('lang') || 'de';
-        applyNavTranslations(stored);
-      });
-    })();
-       Replaces the broken streak logic from app.js.
-       Rules:
-         • Completing at least 1 task on day 1 → streak = 1
-         • Complete at least 1 task the next consecutive day → streak + 1
-         • Miss a day → streak resets to 0 (then completing a task → 1)
-         • Unchecking all tasks of today does NOT reduce streak (day still counts)
-         • Uses localStorage keys: streak_count, streak_last_date
-    ── ─────────────────────────────────────────────────────────────────────*/
-    (function(){
-      var STREAK_KEY  = 'streak_count';
-      var LAST_KEY    = 'streak_last_date';
-      var AWARDED_KEY = 'streak_awarded_today'; // "YYYY-MM-DD" if already awarded today
-
-      function todayStr(){
-        var d = new Date();
-        return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-      }
-
-      function daysBetween(a, b){
-        // a, b are "YYYY-MM-DD" strings; returns b - a in whole days
-        var da = new Date(a), db = new Date(b);
-        return Math.round((db - da) / 86400000);
-      }
-
-      function getStreak(){ return parseInt(localStorage.getItem(STREAK_KEY)||'0',10); }
-      function getLastDate(){ return localStorage.getItem(LAST_KEY)||''; }
-      function getAwardedDate(){ return localStorage.getItem(AWARDED_KEY)||''; }
-
-      function awardStreakForToday(){
-        var today = todayStr();
-        if(getAwardedDate() === today) return; // already awarded today, skip
-
-        var last  = getLastDate();
-        var count = getStreak();
-
-        if(!last){
-          // First ever task completion
-          count = 1;
-        } else {
-          var diff = daysBetween(last, today);
-          if(diff === 0){
-            // same day, already handled (awardedDate guard above), but just in case
-            return;
-          } else if(diff === 1){
-            // Consecutive day
-            count = count + 1;
-          } else {
-            // Missed days — reset
-            count = 1;
-          }
-        }
-
-        localStorage.setItem(STREAK_KEY, count);
-        localStorage.setItem(LAST_KEY, today);
-        localStorage.setItem(AWARDED_KEY, today);
-        updateStreakUI(count);
-      }
-
-      function syncStreakOnLoad(){
-        // On load: if last date is more than 1 day ago, streak is broken
-        var today = todayStr();
-        var last  = getLastDate();
-        var count = getStreak();
-
-        if(last && daysBetween(last, today) > 1){
-          count = 0;
-          localStorage.setItem(STREAK_KEY, 0);
-          // keep last_date so we don't award incorrectly
-        }
-
-        // If already awarded today, show current streak as-is
-        updateStreakUI(count);
-      }
-
-      function updateStreakUI(count){
-        var el = document.getElementById('stat-streak');
-        if(el) el.textContent = count;
-
-        // Update profile modal streak if open
-        var ps = document.getElementById('ps-streak');
-        if(ps) ps.textContent = count;
-
-        // Update streak bar (out of 7 days)
-        var fill = document.getElementById('streak-bar-fill');
-        var label = document.getElementById('streak-tasks-label');
-        var counter = document.getElementById('streak-counter');
-
-        // The bar tracks daily tasks completed today (keep app.js behaviour),
-        // but also reflect the streak count in the number display
-        if(fill){
-          var pct = Math.min(100, (count / 7) * 100);
-          // Only override if streak is shown — don't break daily bar
-        }
-
-        if(counter){
-          counter.classList.remove('at-risk','complete');
-          if(count >= 3) counter.classList.add('complete');
-        }
-      }
-
-      // Watch for any task-card click (event delegation on body)
-      function onTaskClick(e){
-        var card = e.target.closest('.task-card');
-        if(!card) return;
-
-        // Wait a tick so app.js can toggle the .done class first
-        setTimeout(function(){
-          // Check if ANY task is now done today
-          var anyDone = document.querySelector('#daily-grid .task-card.done');
-          if(anyDone){
-            awardStreakForToday();
-          }
-        }, 50);
-      }
-
-      // Also watch week-row checkboxes (weekly tasks can also count)
-      function onWeekClick(e){
-        var row = e.target.closest('.week-row');
-        if(!row) return;
-        setTimeout(function(){
-          var anyDone = document.querySelector('#daily-grid .task-card.done');
-          if(anyDone) awardStreakForToday();
-        }, 50);
-      }
-
-      document.addEventListener('DOMContentLoaded', function(){
-        syncStreakOnLoad();
-        document.body.addEventListener('click', onTaskClick, true);
-        document.body.addEventListener('click', onWeekClick, true);
-      });
-
-      // Also run syncStreak after app.js may have initialized
-      window.addEventListener('load', function(){
-        setTimeout(syncStreakOnLoad, 600);
-      });
-
-    })();
-    </script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
