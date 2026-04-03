@@ -1597,6 +1597,144 @@ h1 span{color:var(--gold)}
 #page-listening .listening-controls button{position:relative;overflow:hidden;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 #page-listening .listening-controls button:hover{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08);transform:translateY(-1px)}
 #page-listening .listening-controls button:active{transform:scale(0.95)}
+
+/* ============================================================
+   GLOW BUTTON EFFECT — adapted to gold theme
+   Targets: quiz-gen-btn, level-start-btn, vocab-finished-btn,
+            quiz-retry-btn, level-restart-btn, login-btn
+   ============================================================ */
+@keyframes glow-gold {
+  0%   { background-position: 0 0; }
+  50%  { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* We apply the glow to a shared class that wraps the common big CTA buttons */
+.quiz-gen-btn,
+.level-start-btn,
+.vocab-finished-btn {
+  position: relative;
+  z-index: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  /* Override background to dark so the glow shows through */
+  background: #141414 !important;
+  color: var(--gold) !important;
+  box-shadow: none !important;
+  transition: color 0.2s, transform 0.18s, opacity 0.18s !important;
+}
+
+/* The animated rainbow-but-gold glow halo */
+.quiz-gen-btn::before,
+.level-start-btn::before,
+.vocab-finished-btn::before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #e8b84b,
+    #f5d78e,
+    #cc1f1f,
+    #e8b84b,
+    #b5832a,
+    #f0c84a,
+    #cc8800,
+    #e8b84b,
+    #e8b84b
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(6px);
+  -webkit-filter: blur(6px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glow-gold 8s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+  opacity: 0.85;
+}
+
+/* Solid dark backing so text is readable */
+.quiz-gen-btn::after,
+.level-start-btn::after,
+.vocab-finished-btn::after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #141414;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+/* Keep the shimmer overlay from interfering */
+.quiz-gen-btn .btn-shimmer,
+.level-start-btn .btn-shimmer,
+.vocab-finished-btn .btn-shimmer { display: none !important; }
+
+.quiz-gen-btn:hover::before,
+.level-start-btn:hover::before,
+.vocab-finished-btn:hover::before {
+  opacity: 1;
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}
+
+.quiz-gen-btn:hover,
+.level-start-btn:hover,
+.vocab-finished-btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.quiz-gen-btn:active,
+.level-start-btn:active,
+.vocab-finished-btn:active {
+  transform: scale(0.96) !important;
+}
+
+.quiz-gen-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: default !important;
+  transform: none !important;
+}
+.quiz-gen-btn:disabled::before { animation-play-state: paused; opacity: 0.3; }
+
+/* Spinner inside quiz-gen-btn stays visible */
+.quiz-gen-btn #quiz-gen-spinner { position: relative; z-index: 1; }
+.quiz-gen-btn #quiz-gen-label  { position: relative; z-index: 1; }
+
+/* level-start-btn & vocab-finished-btn inner text always on top */
+.level-start-btn > *,
+.vocab-finished-btn > * { position: relative; z-index: 1; }
+
+/* Subtle secondary glow for quiz-retry-btn (outline style) */
+.quiz-retry-btn {
+  position: relative;
+  overflow: visible;
+}
+.quiz-retry-btn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #e8b84b, #f5d78e, #cc8800, #e8b84b);
+  background-size: 300%;
+  z-index: -1;
+  filter: blur(5px);
+  opacity: 0;
+  animation: glow-gold 6s linear infinite;
+  transition: opacity 0.3s;
+}
+.quiz-retry-btn:hover::before { opacity: 0.7; }
 </style>
 <script>
 (function(){
