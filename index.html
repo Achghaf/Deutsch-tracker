@@ -98,8 +98,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Emoji icon */
 .nav-icon{font-size:1.55rem;line-height:1;transition:transform 0.18s,filter 0.18s;filter:grayscale(0.4) opacity(0.55)}
 .nav-item.active .nav-icon{filter:grayscale(0) opacity(1);transform:scale(1.15) translateY(-1px)}
-/* When using SVG icons instead of emojis, scale the SVGs to match the original emoji size. The parent
-   .nav-icon element still controls filter/transform. */
+/* SVG icons — sized to match the nav icon container. The parent
+   .nav-icon element controls filter/transform for active state. */
 .nav-icon svg{width:1.55rem;height:1.55rem;display:block;}
 /* Active indicator dot */
 .nav-item::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity 0.18s}
@@ -122,7 +122,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .nav-drawer-item:active{transform:scale(0.95);background:rgba(255,255,255,0.04)}
 .nav-drawer-item.active{border-color:var(--gold);background:rgba(232,184,75,0.08)}
 .nav-drawer-item.active .nav-drawer-item-label{color:var(--gold)}
-.nav-drawer-item-icon{font-size:1.35rem;flex-shrink:0;line-height:1;width:26px;text-align:center;color:var(--muted)}
+.nav-drawer-item-icon{flex-shrink:0;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted)}.nav-drawer-item-icon svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none}
 .nav-drawer-item.active .nav-drawer-item-icon{color:var(--gold)}
 .nav-drawer-item-label{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.06em;color:var(--white);line-height:1.2;display:block}
 .nav-drawer-item-sub{font-size:0.58rem;color:var(--muted);margin-top:2px;display:block;letter-spacing:0.04em}
@@ -2356,7 +2356,7 @@ h1 span{color:var(--gold)}
 <!-- Bottom nav bar -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
-  <!-- Replace emoji icons with consistent Feather-style SVGs -->
+  <!-- Bottom nav — Feather-style SVG icons, uniform across all items -->
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2405,7 +2405,7 @@ h1 span{color:var(--gold)}
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
       </svg>
     </div>
-    <div class="nav-label">Quiz</div>
+    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
   </div>
   <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
     <div class="nav-icon">
@@ -2414,7 +2414,7 @@ h1 span{color:var(--gold)}
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-    <div class="nav-label">Vokabeln</div>
+    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
   </div>
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
     <div class="nav-icon">
@@ -2424,7 +2424,7 @@ h1 span{color:var(--gold)}
         <path d="M4 12a8 8 0 0 1 16 0"></path>
       </svg>
     </div>
-    <div class="nav-label">Hören</div>
+    <div class="nav-label" data-i18n="nav_listen">Hören</div>
   </div>
   <div class="nav-item" data-page="level" onclick="switchPage('level')">
     <div class="nav-icon">
@@ -2433,7 +2433,7 @@ h1 span{color:var(--gold)}
         <polyline points="17 6 23 6 23 12"></polyline>
       </svg>
     </div>
-    <div class="nav-label">Niveau</div>
+    <div class="nav-label" data-i18n="nav_level">Niveau</div>
   </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
@@ -2444,7 +2444,7 @@ h1 span{color:var(--gold)}
         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
       </svg>
     </div>
-    <div class="nav-label">Admin</div>
+    <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative">
@@ -2454,13 +2454,13 @@ h1 span{color:var(--gold)}
       </svg>
       <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
-    <div class="nav-label">Alerts</div>
+    <div class="nav-label" data-i18n="nav_alerts">Alerts</div>
   </div>
   <div class="nav-item" id="mob-profile-nav-item" onclick="openProfileModal()" style="display:none">
     <div class="nav-icon" style="display:flex;align-items:center;justify-content:center">
       <div class="mob-profile-circle" id="mob-profile-btn">?</div>
     </div>
-    <div class="nav-label">Profil</div>
+    <div class="nav-label" data-i18n="nav_profile">Profil</div>
   </div>
 </div>
 </nav>
