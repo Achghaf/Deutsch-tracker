@@ -496,6 +496,25 @@ h1 span{color:var(--gold)}
 /* Mobile notif bell */
 .mob-notif-wrap{position:relative;display:flex;align-items:center}
 
+/* Mobile notification drawer */
+#mob-notif-overlay{opacity:0}
+#mob-notif-overlay.open{opacity:1}
+#mob-notif-drawer{display:flex!important}
+#mob-notif-drawer.open{transform:translateX(0)!important}
+.mob-drawer-notif-item{position:relative;padding:14px 20px 14px 26px;border-bottom:0.5px solid rgba(255,255,255,0.05);transition:background 0.18s}
+.mob-drawer-notif-item:last-child{border-bottom:none}
+.mob-drawer-notif-item:hover{background:rgba(255,255,255,0.025)}
+.mob-drawer-notif-item.unread{background:rgba(232,184,75,0.045)}
+.mob-drawer-notif-item.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#e8b84b 0%,#b5832a 100%);border-radius:0 2px 2px 0}
+.mob-drawer-notif-title{font-size:0.85rem;font-weight:500;color:var(--white);margin-bottom:5px;letter-spacing:0.01em}
+.mob-drawer-notif-item.unread .mob-drawer-notif-title{color:var(--gold);font-weight:600}
+.mob-drawer-notif-body{font-size:0.75rem;color:rgba(245,240,232,0.38);line-height:1.55;margin-bottom:6px}
+.mob-drawer-notif-meta{display:flex;align-items:center;gap:8px}
+.mob-drawer-notif-time{font-size:0.6rem;color:rgba(245,240,232,0.22);font-family:'DM Mono',monospace;letter-spacing:0.03em}
+.mob-drawer-unread-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto;box-shadow:0 0 5px rgba(232,184,75,0.5)}
+.mob-drawer-read-label{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,240,232,0.2);padding:10px 20px 4px;font-family:'DM Mono',monospace}
+body.notif-drawer-open{overflow:hidden!important}
+
 /* PROFILE MODAL */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:700;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .profile-modal.open{display:flex}
@@ -2452,7 +2471,7 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
-  <div class="nav-item" id="mob-notif-btn" onclick="toggleNotifPanel()" style="position:relative">
+  <div class="nav-item" id="mob-notif-btn" onclick="openMobNotifDrawer()" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -2470,6 +2489,34 @@ h1 span{color:var(--gold)}
   </div>
 </div>
 </nav>
+<!-- MOBILE NOTIFICATION DRAWER -->
+<div id="mob-notif-overlay" onclick="closeMobNotifDrawer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1400;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:opacity 0.3s;opacity:0"></div>
+<div id="mob-notif-drawer" style="display:none;position:fixed;top:0;right:0;bottom:0;width:min(100vw,420px);background:rgba(12,12,12,0.96);border-left:0.5px solid rgba(232,184,75,0.18);z-index:1401;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.22,1,0.36,1);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.025);flex-shrink:0">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.1em;color:var(--white);line-height:1">Benachrichtigungen</div>
+      <div style="font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,184,75,0.5);margin-top:3px;font-family:'DM Mono',monospace">Notifications</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button onclick="markAllRead()" style="font-size:0.68rem;color:rgba(232,184,75,0.7);background:transparent;border:0.5px solid rgba(232,184,75,0.28);border-radius:20px;padding:5px 12px;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#e8b84b';this.style.borderColor='#e8b84b';this.style.background='rgba(232,184,75,0.08)'" onmouseout="this.style.color='rgba(232,184,75,0.7)';this.style.borderColor='rgba(232,184,75,0.28)';this.style.background='transparent'">Mark all read</button>
+      <button onclick="closeMobNotifDrawer()" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.12);color:var(--white);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0" onmouseover="this.style.background='rgba(204,31,31,0.15)';this.style.borderColor='rgba(204,31,31,0.4)';this.style.color='#ff6b6b'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='var(--white)'">✕</button>
+    </div>
+  </div>
+  <!-- German flag accent stripe -->
+  <div style="height:3px;background:linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%);flex-shrink:0"></div>
+  <!-- Scrollable notification list -->
+  <div id="mob-notif-drawer-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0">
+    <div style="padding:40px 20px;text-align:center;color:var(--muted);font-size:0.82rem">No notifications yet</div>
+  </div>
+  <!-- Send Notification button (admin only) -->
+  <div id="mob-notif-drawer-send" style="display:none;padding:16px 20px 24px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);flex-shrink:0">
+    <button onclick="openNotifModal()" style="width:100%;padding:15px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:12px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 18px rgba(232,184,75,0.22)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Send Notification
+    </button>
+  </div>
+</div>
 <!-- LANGUAGE SWITCHER -->
 <div class="lang-fab" id="lang-fab">
 <div class="lang-fab-menu" id="lang-fab-menu">
@@ -2663,6 +2710,106 @@ h1 span{color:var(--gold)}
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
+
+<script>
+/* ===== NOTIFICATION PANEL LOGIC ===== */
+
+/* Desktop: toggle dropdown panel (only on ≥768px) */
+function toggleNotifPanel(){
+  if(window.innerWidth < 768){ openMobNotifDrawer(); return; }
+  const panel = document.getElementById('notif-panel');
+  if(!panel) return;
+  const isOpen = panel.classList.contains('open');
+  if(isOpen){ panel.classList.remove('open'); }
+  else{
+    panel.classList.add('open');
+    // sync list content to drawer list
+    syncNotifLists();
+    // close on outside click
+    setTimeout(()=>{
+      function outsideClick(e){
+        if(!panel.contains(e.target) && e.target.id !== 'desk-notif-btn'){
+          panel.classList.remove('open');
+          document.removeEventListener('click', outsideClick);
+        }
+      }
+      document.addEventListener('click', outsideClick);
+    }, 10);
+  }
+}
+
+/* Mobile: slide-over drawer */
+function openMobNotifDrawer(){
+  const overlay = document.getElementById('mob-notif-overlay');
+  const drawer  = document.getElementById('mob-notif-drawer');
+  if(!overlay || !drawer) return;
+  syncNotifLists();
+  // show elements
+  overlay.style.display = 'block';
+  drawer.style.display  = 'flex';
+  document.body.classList.add('notif-drawer-open');
+  // force reflow then animate
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      overlay.classList.add('open');
+      drawer.classList.add('open');
+    });
+  });
+  // show send button for admins
+  const sendRow = document.getElementById('mob-notif-drawer-send');
+  const adminSendRow = document.getElementById('admin-notif-send-row');
+  if(sendRow && adminSendRow && adminSendRow.style.display !== 'none'){
+    sendRow.style.display = 'block';
+  }
+}
+
+function closeMobNotifDrawer(){
+  const overlay = document.getElementById('mob-notif-overlay');
+  const drawer  = document.getElementById('mob-notif-drawer');
+  if(!overlay || !drawer) return;
+  overlay.classList.remove('open');
+  drawer.classList.remove('open');
+  document.body.classList.remove('notif-drawer-open');
+  setTimeout(()=>{
+    overlay.style.display = 'none';
+    drawer.style.display  = 'none';
+  }, 370);
+}
+
+/* Sync notification items from the desktop list (#notif-list) into the mobile drawer */
+function syncNotifLists(){
+  const src  = document.getElementById('notif-list');
+  const dest = document.getElementById('mob-notif-drawer-list');
+  if(!src || !dest) return;
+  // Mirror content, converting class names for the drawer style
+  dest.innerHTML = src.innerHTML
+    .replace(/class="notif-item/g,    'class="mob-drawer-notif-item')
+    .replace(/class="notif-item-title/g,  'class="mob-drawer-notif-title')
+    .replace(/class="notif-item-body/g,   'class="mob-drawer-notif-body')
+    .replace(/class="notif-item-date/g,   'class="mob-drawer-notif-time')
+    .replace(/class="notif-read-label/g,  'class="mob-drawer-read-label')
+    .replace(/class="notif-unread-dot/g,  'class="mob-drawer-unread-dot');
+}
+
+/* Keep badge counts in sync between desktop and mobile badge elements */
+(function patchBadgeSync(){
+  const orig = document.createElement; // noop — we hook via MutationObserver
+  const desktopBadge = document.getElementById('notif-badge');
+  const mobBadge     = document.getElementById('mob-notif-badge');
+  if(!desktopBadge || !mobBadge) return;
+  const obs = new MutationObserver(()=>{
+    mobBadge.textContent  = desktopBadge.textContent;
+    mobBadge.className    = desktopBadge.className;
+    mobBadge.style.cssText = desktopBadge.style.cssText;
+  });
+  obs.observe(desktopBadge, { childList:true, characterData:true, subtree:true, attributes:true });
+})();
+
+/* Close drawer on Escape key */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeMobNotifDrawer();
+});
+</script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
