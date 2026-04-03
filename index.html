@@ -470,9 +470,6 @@ h1 span{color:var(--gold)}
 .notif-item.unread .notif-item-title{color:var(--gold);font-weight:600}
 .notif-item-body{font-size:0.74rem;color:rgba(245,240,232,0.38);line-height:1.5;margin-bottom:5px}
 .notif-item-date{font-size:0.61rem;color:rgba(245,240,232,0.22);margin-top:5px;font-family:'DM Mono',monospace;letter-spacing:0.03em}
-.notif-item-meta-row{display:flex;align-items:center;gap:8px}
-.notif-unread-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-left:auto;box-shadow:0 0 6px rgba(232,184,75,0.5)}
-.notif-read-label{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,240,232,0.2);padding:8px 16px 4px;font-family:'DM Mono',monospace}
 .notif-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:0.8rem}
 
 /* Admin send notification modal */
@@ -2455,7 +2452,7 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
-  <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
+  <div class="nav-item" id="mob-notif-btn" onclick="toggleNotifPanel()" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -2473,20 +2470,6 @@ h1 span{color:var(--gold)}
   </div>
 </div>
 </nav>
-<!-- Mobile notification panel (full-width bottom sheet) -->
-<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:rgba(14,14,14,0.92);border-top:0.5px solid rgba(232,184,75,0.18);border-radius:16px 16px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,0.65);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)">
-<div class="notif-panel-head" style="padding:14px 18px;background:rgba(255,255,255,0.025);border-bottom:0.5px solid rgba(255,255,255,0.06)">
-<span class="notif-panel-title">🔔 Notifications</span>
-<button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
-</div>
-<div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
-<div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:0.5px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)">
-<button onclick="openNotifModal()" style="width:100%;padding:10px;background:transparent;border:0.5px solid rgba(232,184,75,0.35);border-radius:8px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.22s" onmouseover="this.style.background='rgba(232,184,75,0.1)';this.style.borderColor='#e8b84b';this.style.boxShadow='0 0 14px rgba(232,184,75,0.2)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(232,184,75,0.35)';this.style.boxShadow='none'">
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-  Send Notification
-</button>
-</div>
-</div>
 <!-- LANGUAGE SWITCHER -->
 <div class="lang-fab" id="lang-fab">
 <div class="lang-fab-menu" id="lang-fab-menu">
