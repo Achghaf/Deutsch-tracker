@@ -385,7 +385,7 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(5){animation-delay:0.2s}
 
 /* DESKTOP NAV */
-.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
+.desktop-nav{display:none;background:#0e0e0e;border-bottom:1px solid rgba(42,42,42,0.6);padding:0 12px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto;gap:2px}
 .desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
 .desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
 .desk-nav-item:hover{color:var(--white)}
@@ -1447,16 +1447,25 @@ h1 span{color:var(--gold)}
 .nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
 
-/* DESKTOP NAV */
-.desk-nav-item{position:relative;display:inline-flex;flex-direction:row;align-items:center;gap:7px;padding:0 18px;height:56px;border:none;border-bottom:2.5px solid transparent;background:transparent;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:0.92rem;letter-spacing:0.13em;color:var(--muted);transition:color 0.2s,border-color 0.2s,background 0.2s;overflow:hidden;white-space:nowrap;border-radius:0;appearance:none;-webkit-appearance:none}
-.desk-nav-item::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:2.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:translateX(-50%);transition:width 0.28s cubic-bezier(0.34,1.56,0.64,1);border-radius:2px 2px 0 0}
-.desk-nav-item:hover{color:var(--white);background:rgba(255,255,255,0.035)}
-.desk-nav-item:hover::after{width:80%}
-.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold);background:linear-gradient(180deg,transparent 60%,rgba(232,184,75,0.06) 100%)}
-.desk-nav-item.active::after{width:100%;background:linear-gradient(90deg,transparent,rgba(232,184,75,0.6),transparent)}
-.desk-nav-item svg{opacity:0.45;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s}
-.desk-nav-item:hover svg{opacity:0.75;transform:scale(1.1)}
-.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.6));transform:scale(1.05)}
+/* DESKTOP NAV — Glowing button style */
+@keyframes glow-nav {
+  0%   { background-position: 0 0; }
+  50%  { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+.desk-nav-item{position:relative;z-index:0;display:inline-flex;flex-direction:row;align-items:center;gap:7px;padding:0 18px;height:44px;margin:6px 4px;border:none;outline:none;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:0.13em;color:var(--muted);background:#141414;border-radius:8px;white-space:nowrap;appearance:none;-webkit-appearance:none;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:color 0.2s,transform 0.18s;overflow:visible}
+.desk-nav-item::before{content:"";background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc1f1f,#e8b84b,#b5832a,#f0c84a,#cc8800,#e8b84b,#e8b84b);position:absolute;top:-2px;left:-2px;background-size:400%;z-index:-1;filter:blur(5px);-webkit-filter:blur(5px);width:calc(100% + 4px);height:calc(100% + 4px);animation:glow-nav 8s linear infinite;border-radius:8px;opacity:0;transition:opacity 0.3s ease-in-out}
+.desk-nav-item::after{content:"";position:absolute;z-index:-1;width:100%;height:100%;background:#141414;left:0;top:0;border-radius:8px;transition:background 0.2s}
+.desk-nav-item:hover{color:var(--white);transform:translateY(-1px)}
+.desk-nav-item:hover::before{opacity:0.7;filter:blur(6px);-webkit-filter:blur(6px)}
+.desk-nav-item:hover::after{background:#1c1c1c}
+.desk-nav-item.active{color:var(--gold)}
+.desk-nav-item.active::before{opacity:1;filter:blur(6px);-webkit-filter:blur(6px)}
+.desk-nav-item.active::after{background:#141414}
+.desk-nav-item:active{transform:scale(0.95)!important}
+.desk-nav-item svg{position:relative;z-index:1;opacity:0.45;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s}
+.desk-nav-item:hover svg{opacity:0.8;transform:scale(1.1)}
+.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 4px rgba(232,184,75,0.7))}
 
 /* GHOST BUTTONS */
 .reset-btn,.logout-btn{position:relative;overflow:hidden;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;border-radius:6px;transition:border-color 0.2s,color 0.2s,background 0.2s,transform 0.15s;min-height:36px}
