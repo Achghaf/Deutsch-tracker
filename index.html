@@ -215,6 +215,58 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block}
 
+/* ══════════════════════════════════════════════════════
+   UNIFIED PAGE TITLE SYSTEM
+   Every page has exactly ONE <h1 class="page-title">.
+   It is centred, gold, Bebas Neue — no duplicates allowed.
+   The hero-divs on Quiz / Level / Admin are removed;
+   they now rely solely on this shared header bar.
+   ══════════════════════════════════════════════════════ */
+@keyframes titleReveal{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.page-title-bar{
+  width:100%;
+  padding:28px 16px 16px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.page-title-bar .flag-stripe{
+  position:absolute;top:0;left:0;right:0;height:4px;
+  /* flag-stripe already has its own background rule */
+}
+.page-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.8rem,6vw,3rem);
+  letter-spacing:0.06em;
+  line-height:1.05;
+  color:#D4AF37;          /* Gold — single source of truth */
+  margin:0;
+  display:block;
+}
+/* Entrance animation fires whenever the page becomes .active */
+.page.active .page-title{
+  animation:titleReveal 0.35s cubic-bezier(0.22,1,0.36,1) both;
+}
+.page-title .title-sub{
+  display:block;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.72rem;
+  font-weight:400;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:5px;
+}
+/* Light-mode gold */
+[data-theme="light"] .page-title{color:#c89428}
+[data-theme="light"] .page-title-bar{border-color:var(--border);}
+
+/* Remove old <header> styles that only applied to pages now using page-title-bar */
+/* The global header rule is kept for any remaining <header> elements */
 /* ===== BOTTOM NAV — scrollable emoji tabs ===== */
 :root{--nav-h:62px}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
@@ -1177,8 +1229,7 @@ h1 span{color:var(--gold)}
 /* ADMIN PAGE */
 .admin-page{padding:0 16px 40px;max-width:1100px;margin:0 auto}
 .admin-hero{padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:28px}
-.admin-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:0.05em;line-height:1}
-.admin-hero-title span{color:var(--gold)}
+.quiz-hero-sub,.level-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .admin-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .admin-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
 .admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 16px;position:relative;overflow:hidden}
@@ -1249,9 +1300,7 @@ h1 span{color:var(--gold)}
 /* ===== QUIZ PAGE ===== */
 .quiz-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
 .quiz-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.quiz-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
-.quiz-hero-title span{color:var(--gold)}
-.quiz-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+/* quiz-hero-title, level-hero-title replaced by .page-title */
 .quiz-config{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .quiz-config-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
 .quiz-select{background:#111;border:1px solid var(--border);border-radius:5px;padding:8px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;cursor:pointer}
@@ -1288,9 +1337,7 @@ h1 span{color:var(--gold)}
 /* ===== LEVEL PAGE ===== */
 .level-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
 .level-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.level-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
-.level-hero-title span{color:var(--gold)}
-.level-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+/* level-hero-title, level-hero-sub replaced by .page-title */
 .level-start-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px;text-align:center;margin-bottom:20px}
 .level-start-icon{font-size:3rem;margin-bottom:12px}
 .level-start-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.05em;color:var(--white);margin-bottom:8px}
@@ -2125,24 +2172,20 @@ h1 span{color:var(--gold)}
 
 <!-- TRACKER PAGE -->
 <div class="page active" id="page-tracker">
-<header>
-<div class="flag-stripe"></div>
-<div class="header-inner">
-<div>
-<h1>Mein Ziel:<br/><span>Deutsch B1</span></h1>
-<p style="font-size:0.72rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title">Tracker
+    <span class="title-sub">5-Monats-Lernplan · Von Null zu B1</span>
+  </h1>
+  <div class="header-actions" style="justify-content:center;margin-top:12px">
+    <div class="header-meta" style="align-items:center;flex-direction:row;gap:10px">
+      <div class="level-badge">B1 NIVEAU</div>
+      <div class="today-label" id="today-label"></div>
+      <div id="user-header-name" class="user-name-header" style="font-size:0.8rem;color:var(--gold);"></div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+  </div>
 </div>
-<div class="header-actions">
-<div class="header-meta">
-<div class="level-badge">B1 NIVEAU</div>
-<div class="today-label" id="today-label"></div>
-        <div id="user-header-name" class="user-name-header" style="font-size:0.8rem;color:var(--gold);"></div>
-</div>
-
-<button class="reset-btn" onclick="resetAll()">↺ Reset</button>
-</div>
-</div>
-</header>
 <div class="overall-section">
 <div class="overall-inner">
 <div class="big-stat"><div class="num" id="stat-weeks">0</div><div class="label">Wochen</div></div>
@@ -2224,12 +2267,12 @@ h1 span{color:var(--gold)}
 </div>
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
-<header>
-<div class="flag-stripe"></div>
-<div class="header-inner">
-<h1><span>Dokumente</span></h1>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title">Documents
+    <span class="title-sub">Lokale PDFs · Offline verfügbar</span>
+  </h1>
 </div>
-</header>
 <div class="pdf-page">
 <div class="storage-bar">
 <span class="storage-label">Lokal</span>
@@ -2412,16 +2455,13 @@ h1 span{color:var(--gold)}
 </div>
 <!-- NEWS PAGE -->
 <div class="page" id="page-news">
-<header>
-<div class="flag-stripe"></div>
-<div class="header-inner">
-<h1><span id="news-page-title">Artikel &amp; News</span></h1>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title" id="news-page-title">News
+    <span class="title-sub" id="news-page-sub">Artikel &amp; Updates veröffentlichen</span>
+  </h1>
 </div>
-</header>
 <div class="news-page">
-<div class="news-header">
-<p id="news-page-sub">Eigene Artikel und Updates veröffentlichen</p>
-</div>
 <div class="news-composer">
 <div class="news-compose-grid">
 <div class="news-field">
@@ -2463,12 +2503,12 @@ h1 span{color:var(--gold)}
 </div>
 <!-- TRANSLATE PAGE -->
 <div class="page" id="page-translate">
-<header>
-<div class="flag-stripe"></div>
-<div class="header-inner">
-<h1><span id="translate-page-title">Übersetzer</span></h1>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title" id="translate-page-title">Translator
+    <span class="title-sub">Deutsch · Englisch · Arabisch</span>
+  </h1>
 </div>
-</header>
 <div class="translate-page">
 
   <!-- Input panel -->
@@ -2512,12 +2552,13 @@ h1 span{color:var(--gold)}
 </div>
 <!-- ADMIN PAGE -->
 <div class="page" id="page-admin">
-<div class="admin-page">
-<div class="admin-hero">
-<div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
-<div class="admin-hero-title">Admin <span>Dashboard</span></div>
-<div class="admin-hero-sub" data-i18n="admin_hero_sub">Nutzerverwaltung &amp; Anmeldestatistiken</div>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title">Admin
+    <span class="title-sub" data-i18n="admin_hero_sub">Nutzerverwaltung &amp; Anmeldestatistiken</span>
+  </h1>
 </div>
+<div class="admin-page">
 <!-- PENDING REQUESTS -->
 <div class="admin-section-title" data-i18n="admin_pending_label">Ausstehende Zugriffsanfragen <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
 <div class="admin-users-wrap" style="margin-bottom:28px">
@@ -2748,12 +2789,12 @@ h1 span{color:var(--gold)}
 <!-- Supabase -->
 <!-- Vocabulary Trainer Page — Match Pairs -->
 <div class="page" id="page-vocab">
-  <header>
+  <div class="page-title-bar">
     <div class="flag-stripe"></div>
-    <div class="header-inner">
-      <h1><span id="vocab-title">Vokabeltrainer</span></h1>
-    </div>
-  </header>
+    <h1 class="page-title"><span id="vocab-title">Vokabeln</span>
+      <span class="title-sub">B1-Wortschatz · Match Pairs</span>
+    </h1>
+  </div>
   <div style="max-width:700px;margin:0 auto;padding:10px 16px 0">
     <div style="display:flex;align-items:center;gap:8px;background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:8px;padding:9px 14px;font-size:0.73rem;color:var(--muted)">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gold)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -2792,12 +2833,12 @@ h1 span{color:var(--gold)}
 </div>
 <!-- Listening Practice Page -->
 <div class="page" id="page-listening">
-  <header>
+  <div class="page-title-bar">
     <div class="flag-stripe"></div>
-    <div class="header-inner">
-      <h1><span id="listening-title">Hörverständnis</span></h1>
-    </div>
-  </header>
+    <h1 class="page-title"><span id="listening-title">Hören</span>
+      <span class="title-sub">Hörverständnis · Aussprache</span>
+    </h1>
+  </div>
   <div class="listening-container">
     <div class="sentence" id="listening-sentence"></div>
     <div class="translation hidden" id="listening-translation"></div>
@@ -4001,12 +4042,13 @@ if(document.getElementById('page-discussions') &&
 
 <!-- QUIZ PAGE -->
 <div class="page" id="page-quiz">
-<div class="quiz-page">
-<div class="quiz-hero">
-<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
-<div class="quiz-hero-title">KI-<span>Quiz</span></div>
-<div class="quiz-hero-sub">KI-generierte Fragen basierend auf deinem Fortschritt</div>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title">Quiz
+    <span class="title-sub">KI-generierte Fragen · Adaptiv</span>
+  </h1>
 </div>
+<div class="quiz-page">
 <div class="quiz-config">
 <div>
 <div class="quiz-config-label">Schwierigkeit</div>
@@ -4045,12 +4087,13 @@ if(document.getElementById('page-discussions') &&
 </div>
 <!-- LEVEL PAGE -->
 <div class="page" id="page-level">
-<div class="level-page">
-<div class="level-hero">
-<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
-<div class="level-hero-title">Niveau-<span>Test</span></div>
-<div class="level-hero-sub">Erkenne dein aktuelles Deutsch-Niveau</div>
+<div class="page-title-bar">
+  <div class="flag-stripe"></div>
+  <h1 class="page-title">Niveau
+    <span class="title-sub">Erkenne dein aktuelles Deutsch-Niveau</span>
+  </h1>
 </div>
+<div class="level-page">
 <div id="level-area">
 <div class="level-start-card">
 <div class="level-start-icon">
