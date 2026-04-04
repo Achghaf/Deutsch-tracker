@@ -2,7 +2,7 @@
 
 <html lang="de">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -13,7 +13,142 @@
 <title>Mein Ziel: Deutsch B1</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
-:root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px}
+:root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px;--theme-transition:background 0.3s ease,color 0.3s ease,border-color 0.3s ease,box-shadow 0.3s ease}
+
+/* ══════════════════════════════════════════
+   LIGHT MODE — overrides every dark token
+   ══════════════════════════════════════════ */
+[data-theme="light"]{
+  --black:#f0ece3;
+  --white:#1a1a1a;
+  --mid:#e8e3da;
+  --card:#ffffff;
+  --border:#d8d2c8;
+  --muted:#7a7067;
+  --gold:#c89428;
+  /* keep accent colours the same */
+  --red:#cc1f1f;
+  --green:#2ea05a;
+  --blue:#2563eb;
+  --m1:#4668b0;
+  --m2:#9a6a1c;
+  --m3:#2a8f60;
+  --m4:#cc1f1f;
+  --m5:#7228a8;
+}
+
+/* Smooth theme transition on every element */
+*,[data-theme="light"] *{transition:var(--theme-transition)}
+
+/* Body background + text */
+[data-theme="light"] body{background:#f0ece3;color:#1a1a1a}
+
+/* Grid pattern: dark lines on light bg */
+[data-theme="light"] body::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='rgba(0,0,0,0.04)' stroke-width='1'/%3E%3C/svg%3E")
+}
+
+/* Nav bars */
+[data-theme="light"] .bottom-nav,[data-theme="light"] .desktop-nav{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .nav-label{color:#7a7067}
+[data-theme="light"] .nav-item.active .nav-label{color:var(--gold)}
+
+/* Desktop nav buttons */
+[data-theme="light"] .desk-nav-item{background:#f5f0e8;color:#7a7067}
+[data-theme="light"] .desk-nav-item::after{background:#f5f0e8}
+[data-theme="light"] .desk-nav-item:hover::after{background:#ece7de}
+[data-theme="light"] .desk-nav-item.active{color:var(--gold)}
+[data-theme="light"] .desk-nav-item.active::after{background:#f0e8d4}
+
+/* Cards, modals, panels */
+[data-theme="light"] .login-box,[data-theme="light"] .confirm-box{background:rgba(255,255,255,0.95);border-color:rgba(200,148,40,0.2)}
+[data-theme="light"] .login-screen{background-color:#e8e3da}
+[data-theme="light"] .month-card,[data-theme="light"] .task-card,[data-theme="light"] .stat-pill{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .notes-box{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .notes-box textarea{color:#1a1a1a}
+[data-theme="light"] .notes-box textarea::placeholder{color:#b0a898}
+[data-theme="light"] .notif-panel,[data-theme="light"] .profile-sheet{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .pdf-modal,[data-theme="light"] .rename-modal{background:#fff}
+[data-theme="light"] .rename-box{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .notif-modal{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .nav-drawer{background:#f5f0e8;border-color:#d8d2c8}
+[data-theme="light"] .nav-drawer-item{background:rgba(0,0,0,0.03);border-color:#d8d2c8}
+[data-theme="light"] .scanner-shell{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .profile-modal{background:rgba(0,0,0,0.45)}
+
+/* Inputs */
+[data-theme="light"] .login-field input,[data-theme="light"] .profile-field input,
+[data-theme="light"] .notif-field input,[data-theme="light"] .notif-field textarea,
+[data-theme="light"] .notif-field select,[data-theme="light"] .rename-input,
+[data-theme="light"] .rename-select,[data-theme="light"] .admin-search,
+[data-theme="light"] .docs-search-input,[data-theme="light"] #listening-input,
+[data-theme="light"] .disc-textarea,[data-theme="light"] .disc-search-input{
+  background:#f5f1eb;border-color:#ccc6bb;color:#1a1a1a
+}
+[data-theme="light"] .login-field input::placeholder,[data-theme="light"] .profile-field input::placeholder{color:#b0a898}
+
+/* Header */
+[data-theme="light"] header{background:#f0ece3;border-color:#d8d2c8}
+[data-theme="light"] h1{color:#1a1a1a}
+
+/* Discussions sidebar */
+[data-theme="light"] .disc-sidebar{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .disc-user-row:hover{background:rgba(0,0,0,0.03)}
+[data-theme="light"] .disc-convo-row:hover{background:rgba(0,0,0,0.03)}
+[data-theme="light"] .disc-bubble{background:#ede9e2;color:#1a1a1a}
+[data-theme="light"] .disc-msg.sent .disc-bubble{background:rgba(200,148,40,0.2);color:#1a1a1a}
+[data-theme="light"] .disc-chat,[data-theme="light"] .disc-messages{background:#f7f3ec}
+[data-theme="light"] .disc-input-bar{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .disc-chat-header{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .disc-safety-menu{background:#fff;border-color:#d8d2c8}
+
+/* Admin page */
+[data-theme="light"] .admin-page{background:#f0ece3}
+[data-theme="light"] .admin-stat-card{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .admin-users-wrap{background:#fff;border:1px solid #d8d2c8;border-radius:8px}
+[data-theme="light"] .admin-chart-wrap{background:#fff;border-color:#d8d2c8}
+
+/* Misc UI */
+[data-theme="light"] .user-badge{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .streak-counter{background:rgba(200,148,40,0.06);border-color:#d8d2c8}
+[data-theme="light"] .profile-stat-chip{background:#f5f0e8;border-color:#d8d2c8}
+[data-theme="light"] .profile-banner{background:linear-gradient(135deg,rgba(200,148,40,0.12) 0%,rgba(91,126,201,0.09) 50%,rgba(204,31,31,0.07) 100%)}
+[data-theme="light"] .profile-btn.secondary{background:rgba(0,0,0,0.05);border-color:#d8d2c8;color:#555}
+[data-theme="light"] .week-row:hover{background:rgba(0,0,0,0.03)}
+[data-theme="light"] .match-card{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .match-card.de{background:rgba(70,104,176,0.08);border-color:rgba(70,104,176,0.25);color:#1a1a1a}
+[data-theme="light"] .match-card.en{background:rgba(154,106,28,0.08);border-color:rgba(154,106,28,0.25);color:#2a1f00}
+[data-theme="light"] .pdf-upload-zone{border-color:#ccc6bb;background:rgba(0,0,0,0.02)}
+[data-theme="light"] .storage-bar{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .docs-toolbar{background:#f5f0e8}
+
+/* App loader */
+[data-theme="light"] .app-loader{background:#f0ece3}
+[data-theme="light"] .big-spinner{border-color:#d8d2c8;border-top-color:var(--gold)}
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle{
+  position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 14px);
+  right:14px;z-index:1500;
+  width:40px;height:40px;border-radius:50%;
+  background:#1e1e1e;border:1px solid #3a3a3a;
+  color:#e8b84b;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,0.35);
+  transition:background 0.25s,border-color 0.25s,transform 0.18s,box-shadow 0.25s;
+  will-change:transform;
+  flex-shrink:0;
+}
+.theme-toggle:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(232,184,75,0.3);border-color:var(--gold)}
+.theme-toggle:active{transform:scale(0.92)}
+[data-theme="light"] .theme-toggle{background:#fff;border-color:#d8d2c8;color:#c89428;box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+[data-theme="light"] .theme-toggle:hover{box-shadow:0 6px 22px rgba(200,148,40,0.25)}
+/* Sun icon shown in dark mode (click → go light) */
+.theme-toggle .icon-sun{display:block}
+.theme-toggle .icon-moon{display:none}
+[data-theme="light"] .theme-toggle .icon-sun{display:none}
+[data-theme="light"] .theme-toggle .icon-moon{display:block}
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));background:var(--black)}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='rgba(255,255,255,0.012)' stroke-width='1'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none;z-index:0;will-change:auto}
@@ -1574,6 +1709,27 @@ h1 span{color:var(--gold)}
 /* MODAL */
 .modal-close-btn{width:34px;height:34px;border-radius:8px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);color:#D4AF37 !important;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1000;position:relative;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 .modal-close-btn:hover{background:rgba(212,175,55,0.18);border-color:#D4AF37;transform:scale(1.1) rotate(90deg)}
+
+/* ── UNIVERSAL CLOSE BUTTON RULE ──
+   Every close/dismiss button in the app:
+   .modal-close-btn, .scanner-close-btn, .profile-close,
+   .disc-sidebar-close, and any future .close-btn
+   All forced: gold colour, z-index 1000, pointer cursor */
+.close-btn,
+.modal-close-btn,
+.scanner-close-btn,
+.profile-close,
+.disc-sidebar-close{
+  color:#D4AF37 !important;
+  z-index:1000 !important;
+  cursor:pointer !important;
+  position:relative;
+}
+.close-btn:hover,
+.disc-sidebar-close:hover{
+  color:#f5d27e !important;
+  background:rgba(212,175,55,0.15);
+}
 .page-nav-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);padding:7px 16px;border-radius:7px;cursor:pointer;font-size:0.82rem;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 .page-nav-btn:hover{background:rgba(232,184,75,0.08);border-color:rgba(232,184,75,0.4);color:var(--gold);transform:translateY(-1px)}
 .page-nav-btn:disabled{opacity:0.25;cursor:default;transform:none}
@@ -2687,6 +2843,10 @@ h1 span{color:var(--gold)}
         <span class="disc-sidebar-title-text">Diskussionen</span>
         <span class="disc-unread-total" id="disc-unread-total" style="display:none">0</span>
       </div>
+      <!-- Mobile-only close button — hides the sidebar drawer -->
+      <button class="disc-sidebar-close close-btn" id="disc-sidebar-close-btn" onclick="discCloseSidebar()" aria-label="Sidebar schließen" title="Schließen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
     <div class="disc-search-wrap">
       <svg class="disc-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -2703,7 +2863,7 @@ h1 span{color:var(--gold)}
     <div class="disc-convo-list" id="disc-convo-list" style="display:flex;flex-direction:column">
       <div class="disc-empty-state" id="disc-recent-empty">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.25"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <p>Noch keine Gespraeche</p>
+        <p>Noch keine Gespräche</p>
         <span>Tippe "Alle Nutzer" um zu starten</span>
       </div>
     </div>
@@ -2720,8 +2880,8 @@ h1 span{color:var(--gold)}
         <div class="disc-chat-empty-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
-        <h3 class="disc-chat-empty-title">Waehle einen Nutzer</h3>
-        <p class="disc-chat-empty-sub">Klicke auf einen Nutzer links, um ein Gespraech zu starten</p>
+        <h3 class="disc-chat-empty-title">Wähle einen Nutzer</h3>
+        <p class="disc-chat-empty-sub">Klicke auf einen Nutzer links, um ein Gespräch zu starten</p>
       </div>
     </div>
 
@@ -3198,10 +3358,40 @@ h1 span{color:var(--gold)}
 .disc-send-btn:active{transform:scale(0.94)}
 
 /* ── MOBILE ── */
+/* Sidebar close X — hidden on desktop, shown on mobile */
+.disc-sidebar-close{
+  display:none;
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(212,175,55,0.08);
+  border:1px solid rgba(212,175,55,0.3);
+  color:#D4AF37 !important;
+  cursor:pointer !important;
+  z-index:1000 !important;
+  align-items:center;justify-content:center;
+  flex-shrink:0;margin-left:auto;
+  transition:background 0.18s,transform 0.18s;
+  position:relative;
+}
+.disc-sidebar-close:hover{background:rgba(212,175,55,0.18);transform:scale(1.08) rotate(90deg)}
+.disc-sidebar-close:active{transform:scale(0.92)}
+
 @media(max-width:767px){
-  .disc-sidebar{width:100%;position:absolute;top:0;left:0;bottom:0;transform:translateX(0)}
+  /* Full-screen drawer */
+  .disc-sidebar{
+    width:100%;position:absolute;top:0;left:0;bottom:0;
+    transform:translateX(0);
+    z-index:10;
+  }
   .disc-sidebar.hidden{transform:translateX(-100%)}
-  .disc-chat{position:absolute;top:0;left:0;right:0;bottom:0;transform:translateX(100%);transition:transform 0.32s cubic-bezier(0.22,1,0.36,1)}
+  /* Show the X close button on mobile */
+  .disc-sidebar-close{display:flex}
+  /* Sidebar head: space-between so title and X sit at edges */
+  .disc-sidebar-head{justify-content:space-between}
+  .disc-chat{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    transform:translateX(100%);
+    transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);
+  }
   .disc-chat.shown{transform:translateX(0)}
   .disc-back-btn{display:flex!important}
   .disc-msg{max-width:86%}
@@ -3319,7 +3509,7 @@ function addDemoConvos(){
     id:'c1', userId:'u1', name:u1.name, initials:u1.initials,
     isAdmin:u1.isAdmin, online:u1.online,
     messages:[
-      {id:'m1',text:'Hallo! Wie laeuft das Lernen?',sent:false,time:tStr(-120),status:'read'},
+      {id:'m1',text:'Hallo! Wie läuft das Lernen?',sent:false,time:tStr(-120),status:'read'},
       {id:'m2',text:'Sehr gut! Kapitel 3 ist geschafft',sent:true,time:tStr(-110),status:'read'},
       {id:'m3',text:'Super! Hast du die Grammatik-Uebungen gemacht?',sent:false,time:tStr(-100),status:'read'},
     ], unread:0
@@ -3591,7 +3781,7 @@ window.discOpenConvo = function(id){
     setTimeout(function(){
       if(DISC.currentConvoId !== id) return;
       hideTyping();
-      var replies = ['Das klingt super!','Weiter so, du schaffst das!','Ich lerne auch fleissig!','Hast du heute Vokabeln geubt?','Die Grammatik ist manchmal schwierig...'];
+      var replies = ['Das klingt super!','Weiter so, du schaffst das!','Ich lerne auch fleißig!','Hast du heute Vokabeln geübt?','Die Grammatik ist manchmal schwierig...'];
       addMessage(id,{id:'a_'+Date.now(),text:replies[Math.floor(Math.random()*replies.length)],sent:false,time:tStr(0),status:'read'});
     }, 2800);
   }, 1800);
@@ -3750,7 +3940,7 @@ window.discBlock = function(){
   document.getElementById('disc-safety-menu').classList.remove('open');
   DISC.menuOpen=false;
   if(!DISC.currentConvoId) return;
-  if(confirm('Moechtest du diesen Nutzer wirklich blockieren?')){
+  if(confirm('Möchtest du diesen Nutzer wirklich blockieren?')){
     delete DISC.convos[DISC.currentConvoId];
     DISC.currentConvoId=null;
     document.getElementById('disc-chat-empty').style.display='flex';
@@ -3774,6 +3964,20 @@ window.discGoBack = function(){
   document.getElementById('disc-chat').classList.remove('shown');
   document.getElementById('disc-chat-empty').style.display='flex';
   document.getElementById('disc-chat-active').style.display='none';
+};
+
+/* ── Close sidebar drawer (mobile X button) ── */
+window.discCloseSidebar = function(){
+  var sidebar = document.getElementById('disc-sidebar');
+  var chat    = document.getElementById('disc-chat');
+  if(DISC.currentConvoId){
+    /* Convo is open: slide chat panel into view */
+    if(sidebar) sidebar.classList.add('hidden');
+    if(chat)    chat.classList.add('shown');
+  } else {
+    /* No active convo: just close the drawer (navigate back to page) */
+    if(sidebar) sidebar.classList.add('hidden');
+  }
 };
 
 /* ── Util ── */
@@ -4547,23 +4751,33 @@ document.addEventListener('DOMContentLoaded', function() {
     window.currentPage = currentPage;
   };
 
-  /* ── 6. Notification panel toggle helpers ── */
+  /* ── 6. Notification panel toggle helpers ──
+     Both the desktop bell (desk-notif-btn) and mobile bell (mob-notif-btn)
+     ONLY toggle the single header dropdown #notif-panel.
+     No other notification section exists. ── */
+  function _toggleHeaderNotifPanel() {
+    /* Prefer app.js toggleNotifPanel if available (handles badge resets etc.) */
+    if (typeof window.toggleNotifPanel === 'function') {
+      window.toggleNotifPanel();
+      return;
+    }
+    /* Fallback: toggle the header dropdown directly */
+    var p = document.getElementById('notif-panel');
+    if (!p) return;
+    var isOpen = p.classList.contains('open');
+    /* Close all overlays first (prevents double-open edge cases) */
+    closeAllOverlays();
+    if (!isOpen) p.classList.add('open');
+  }
+
   window.mobToggleNotif = function (e) {
     if (e) e.stopPropagation();
-    if (typeof window.toggleNotifPanel === 'function') {
-      window.toggleNotifPanel();
-    } else {
-      var p = document.getElementById('notif-panel');
-      if (p) p.classList.toggle('open');
-    }
+    _toggleHeaderNotifPanel();
   };
+
+  /* Legacy alias — some older app.js code may call toggleNotifications() */
   window.toggleNotifications = function () {
-    if (typeof window.toggleNotifPanel === 'function') {
-      window.toggleNotifPanel();
-    } else {
-      var p = document.getElementById('notif-panel');
-      if (p) p.classList.toggle('open');
-    }
+    _toggleHeaderNotifPanel();
   };
 
   /* ── 7. Boot: sync nav to whichever page is .active in the HTML ── */
@@ -4585,3 +4799,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
 })();
 </script>
+
+<!-- ══════════════════════════════════════════
+     THEME TOGGLE BUTTON + PERSISTENCE SCRIPT
+     ══════════════════════════════════════════ -->
+<button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle theme">
+  <!-- Sun (visible in dark mode → click to go light) -->
+  <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+  <!-- Moon (visible in light mode → click to go dark) -->
+  <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<script>
+(function(){
+  'use strict';
+
+  var STORAGE_KEY = 'dt_theme';
+
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    /* Update meta theme-color for browser chrome */
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.content = theme === 'light' ? '#f0ece3' : '#0e0e0e';
+  }
+
+  /* Boot — restore saved preference or respect OS setting */
+  (function boot(){
+    var saved;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch(e){}
+    if(saved === 'light' || saved === 'dark'){
+      applyTheme(saved);
+    } else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
+      applyTheme('light');
+    }
+    /* default stays dark — no attribute needed */
+  })();
+
+  /* Toggle */
+  window.toggleTheme = function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = (current === 'light') ? 'dark' : 'light';
+    applyTheme(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch(e){}
+  };
+
+  /* Sync with OS preference changes */
+  try {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e){
+      var hasSaved;
+      try { hasSaved = localStorage.getItem(STORAGE_KEY); } catch(err){}
+      if(!hasSaved) applyTheme(e.matches ? 'light' : 'dark');
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
