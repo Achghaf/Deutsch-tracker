@@ -384,10 +384,12 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(4){animation-delay:0.15s}
 .month-card:nth-child(5){animation-delay:0.2s}
 
-/* DESKTOP NAV — layout shell only; visual style is in the Gold-Glow block further below */
-.desktop-nav{display:none;background:#0e0e0e;border-bottom:1px solid rgba(42,42,42,0.6);padding:0 10px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto;gap:0;overflow-x:auto;scrollbar-width:none}
-.desktop-nav::-webkit-scrollbar{display:none}
-.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;z-index:261}
+/* DESKTOP NAV */
+.desktop-nav{display:none;background:#0e0e0e;border-bottom:1px solid rgba(42,42,42,0.6);padding:0 12px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto;gap:2px}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
+.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
+.desk-nav-item:hover{color:var(--white)}
+.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
 
 /* RESPONSIVE */
 @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
@@ -1445,68 +1447,23 @@ h1 span{color:var(--gold)}
 .nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
 
-/* DESKTOP NAV — Gold Glow buttons (hardware-accelerated) */
-@keyframes glow-nav{0%{background-position:0 0}50%{background-position:400% 0}100%{background-position:0 0}}
-.desk-nav-item{
-  /* Layout */
-  position:relative;z-index:0;
-  display:inline-flex;flex-direction:row;align-items:center;gap:7px;
-  padding:0 16px;height:44px;margin:5px 3px;
-  flex-shrink:0;white-space:nowrap;
-  /* Typography */
-  font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:0.13em;
-  color:var(--muted);
-  /* Shape */
-  border:none;outline:none;border-radius:8px;
-  background:#141414;overflow:visible;
-  /* Interaction */
-  cursor:pointer;
-  appearance:none;-webkit-appearance:none;
-  user-select:none;-webkit-user-select:none;
-  touch-action:manipulation;
-  /* Transitions — transform on GPU via will-change */
-  transition:color 0.2s,transform 0.18s;
-  will-change:transform;
+/* DESKTOP NAV — Glowing button style */
+@keyframes glow-nav {
+  0%   { background-position: 0 0; }
+  50%  { background-position: 400% 0; }
+  100% { background-position: 0 0; }
 }
-/* Animated gold-glow halo — behind the button */
-.desk-nav-item::before{
-  content:"";
-  position:absolute;top:-2px;left:-2px;
-  width:calc(100% + 4px);height:calc(100% + 4px);
-  border-radius:8px;z-index:-1;
-  background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc1f1f,#e8b84b,#b5832a,#f0c84a,#cc8800,#e8b84b);
-  background-size:400%;
-  animation:glow-nav 8s linear infinite;
-  filter:blur(5px);-webkit-filter:blur(5px);
-  opacity:0;
-  transition:opacity 0.28s ease-in-out;
-  will-change:opacity;
-}
-/* Solid fill layer — sits above halo, below content */
-.desk-nav-item::after{
-  content:"";
-  position:absolute;inset:0;
-  border-radius:8px;z-index:-1;
-  background:#141414;
-  transition:background 0.2s;
-}
-/* Hover state */
+.desk-nav-item{position:relative;z-index:0;display:inline-flex;flex-direction:row;align-items:center;gap:7px;padding:0 18px;height:44px;margin:6px 4px;border:none;outline:none;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:0.13em;color:var(--muted);background:#141414;border-radius:8px;white-space:nowrap;appearance:none;-webkit-appearance:none;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:color 0.2s,transform 0.18s;overflow:visible}
+.desk-nav-item::before{content:"";background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc1f1f,#e8b84b,#b5832a,#f0c84a,#cc8800,#e8b84b,#e8b84b);position:absolute;top:-2px;left:-2px;background-size:400%;z-index:-1;filter:blur(5px);-webkit-filter:blur(5px);width:calc(100% + 4px);height:calc(100% + 4px);animation:glow-nav 8s linear infinite;border-radius:8px;opacity:0;transition:opacity 0.3s ease-in-out}
+.desk-nav-item::after{content:"";position:absolute;z-index:-1;width:100%;height:100%;background:#141414;left:0;top:0;border-radius:8px;transition:background 0.2s}
 .desk-nav-item:hover{color:var(--white);transform:translateY(-1px)}
-.desk-nav-item:hover::before{opacity:0.65;filter:blur(6px);-webkit-filter:blur(6px)}
+.desk-nav-item:hover::before{opacity:0.7;filter:blur(6px);-webkit-filter:blur(6px)}
 .desk-nav-item:hover::after{background:#1c1c1c}
-/* Active/current page — persistent gold glow */
 .desk-nav-item.active{color:var(--gold)}
 .desk-nav-item.active::before{opacity:1;filter:blur(6px);-webkit-filter:blur(6px)}
 .desk-nav-item.active::after{background:#141414}
-/* Press */
 .desk-nav-item:active{transform:scale(0.95)!important}
-/* SVG icon */
-.desk-nav-item svg{
-  position:relative;z-index:1;
-  opacity:0.45;flex-shrink:0;
-  transition:opacity 0.2s,filter 0.2s,transform 0.2s;
-  will-change:transform,opacity;
-}
+.desk-nav-item svg{position:relative;z-index:1;opacity:0.45;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s}
 .desk-nav-item:hover svg{opacity:0.8;transform:scale(1.1)}
 .desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 4px rgba(232,184,75,0.7))}
 
@@ -1893,24 +1850,28 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- DESKTOP NAV -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Übersetzer  7.News  8.Dokumente  9.Diskussionen  10.Admin -->
 <nav class="desktop-nav" id="desktop-nav">
-  <!-- 1. Tracker -->
   <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg> Tracker
   </button>
-  <!-- 2. Quiz -->
+  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Dokumente
+  </button>
+  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Übersetzer" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer
+  </button>
+  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
+  </button>
   <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
   </button>
-  <!-- 3. Vokabeln -->
   <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
     <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
     </svg> Vokabeln
   </button>
-  <!-- 4. Hören -->
   <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
     <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
       <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
@@ -1918,27 +1879,12 @@ h1 span{color:var(--gold)}
       <path d="M4 12a8 8 0 0 1 16 0"></path>
     </svg> Hören
   </button>
-  <!-- 5. Niveau -->
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
-  <!-- 6. Übersetzer -->
-  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Übersetzer" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer
-  </button>
-  <!-- 7. News -->
-  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
-  </button>
-  <!-- 8. Dokumente -->
-  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Dokumente
-  </button>
-  <!-- 9. Diskussionen -->
-  <button class="desk-nav-item" data-page="discussions" onclick="switchPage('discussions')" aria-label="Diskussionen" type="button">
+  <button class="desk-nav-item" data-page="discussions" onclick="switchPage('discussions')" aria-label="Discussions" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Diskussionen
   </button>
-  <!-- 10. Admin (hidden until role confirmed) -->
   <button class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin
   </button>
@@ -2427,10 +2373,9 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- Bottom nav bar -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Übersetzer  7.News  8.Dokumente  9.Diskussionen  10.Admin  +Notif +Profile -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
-  <!-- 1. Tracker -->
+  <!-- Bottom nav — Feather-style SVG icons, uniform across all items -->
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2441,60 +2386,15 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
   </div>
-  <!-- 2. Quiz -->
-  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
-  <!-- 3. Vokabeln -->
-  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
-  </div>
-  <!-- 4. Hören -->
-  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
-        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
-        <path d="M4 12a8 8 0 0 1 16 0"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_listen">Hören</div>
-  </div>
-  <!-- 5. Niveau -->
-  <div class="nav-item" data-page="level" onclick="switchPage('level')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-        <polyline points="17 6 23 6 23 12"></polyline>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_level">Niveau</div>
-  </div>
-  <!-- 6. Übersetzer -->
-  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="2" y1="12" x2="22" y2="12"></line>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
-  </div>
-  <!-- 7. News -->
   <div class="nav-item" data-page="news" onclick="switchPage('news')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2506,26 +2406,62 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
-  <!-- 8. Dokumente -->
-  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
-  <!-- 9. Diskussionen -->
+  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+  </div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
+  </div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+        <path d="M4 12a8 8 0 0 1 16 0"></path>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_listen">Hören</div>
+  </div>
   <div class="nav-item" data-page="discussions" onclick="switchPage('discussions')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
     </div>
-    <div class="nav-label">Diskussionen</div>
+    <div class="nav-label">Diskussion</div>
   </div>
-  <!-- 10. Admin (hidden until role confirmed) -->
+  <div class="nav-item" data-page="level" onclick="switchPage('level')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_level">Niveau</div>
+  </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2537,7 +2473,6 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
-  <!-- Notifications bell -->
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2548,7 +2483,6 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_alerts">Alerts</div>
   </div>
-  <!-- Profile (hidden until logged in) -->
   <div class="nav-item" id="mob-profile-nav-item" onclick="openProfileModal()" style="display:none">
     <div class="nav-icon" style="display:flex;align-items:center;justify-content:center">
       <div class="mob-profile-circle" id="mob-profile-btn">?</div>
@@ -3770,7 +3704,12 @@ function esc(s){
     .replace(/"/g,'&quot;');
 }
 
-/* ── switchPage hook absorbed by the Page-Switch State Manager (end of file) ── */
+/* ── Hook into switchPage ── */
+var _origSwitch = window.switchPage;
+window.switchPage = function(page){
+  if(typeof _origSwitch==='function') _origSwitch(page);
+  if(page==='discussions') setTimeout(discInit, 40);
+};
 
 /* Auto-init if page is active on load */
 if(document.getElementById('page-discussions') &&
@@ -4406,167 +4345,29 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="app.js"></script>
 <script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   PAGE-SWITCH STATE MANAGER
-   Single source of truth for all page transitions.
-   Responsibilities:
-     • currentPage variable tracks the active page at all times
-     • showPage(id) — Hide All / Show One, scroll reset, overlay cleanup
-     • syncNav(id)  — stamps .active on both desktop + mobile nav items
-     • Overlay cleanup: closes notif panel, safety menus, emoji pickers
-     • Discussions: lazy-inits discInit() on first visit
-     • Wraps window.switchPage so app.js calls pass through this manager
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function () {
-  'use strict';
-
-  /* ── 1. State ── */
-  var currentPage = 'tracker'; /* single source of truth */
-
-  /* All page IDs registered in the HTML */
-  var PAGE_IDS = [
-    'tracker','quiz','vocab','listening','level',
-    'translate','news','pdf','discussions','admin'
-  ];
-
-  /* ── 2. Overlay cleanup ── */
-  function closeAllOverlays() {
-    /* Notification dropdown */
-    var notifPanel = document.getElementById('notif-panel');
-    if (notifPanel) notifPanel.classList.remove('open');
-
-    /* Safety / context menu inside Discussions */
-    var safetyMenu = document.getElementById('disc-safety-menu');
-    if (safetyMenu) safetyMenu.classList.remove('open');
-
-    /* Emoji picker inside Discussions */
-    var emojiPicker = document.getElementById('disc-emoji-picker');
-    if (emojiPicker) emojiPicker.style.display = 'none';
-
-    /* Nav drawer (mobile) */
-    var navDrawer = document.querySelector('.nav-drawer');
-    var navOverlay = document.querySelector('.nav-drawer-overlay');
-    if (navDrawer)  navDrawer.classList.remove('open');
-    if (navOverlay) navOverlay.classList.remove('open');
-
-    /* Language FAB menu */
-    var langMenu = document.getElementById('lang-fab-menu');
-    if (langMenu) langMenu.classList.remove('open');
-  }
-
-  /* ── 3. Nav sync — stamps .active on both navs ── */
-  function syncNav(pageId) {
-    /* Desktop nav buttons */
-    document.querySelectorAll('.desk-nav-item[data-page]').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-page') === pageId);
-    });
-    /* Mobile nav items */
-    document.querySelectorAll('.nav-item[data-page]').forEach(function (item) {
-      item.classList.toggle('active', item.getAttribute('data-page') === pageId);
-    });
-  }
-
-  /* ── 4. Core Hide-All / Show-One ── */
-  function showPage(pageId) {
-    /* Guard: no-op if already on this page */
-    if (pageId === currentPage &&
-        document.getElementById('page-' + pageId) &&
-        document.getElementById('page-' + pageId).classList.contains('active')) {
-      return;
-    }
-
-    /* Validate page exists */
-    var target = document.getElementById('page-' + pageId);
-    if (!target) {
-      console.warn('[PageManager] Unknown page:', pageId);
-      return;
-    }
-
-    /* Hide every registered page */
-    PAGE_IDS.forEach(function (id) {
-      var el = document.getElementById('page-' + id);
-      if (el) el.classList.remove('active');
-    });
-
-    /* Show target page */
-    target.classList.add('active');
-
-    /* Reset scroll — both window and the page element itself */
-    window.scrollTo(0, 0);
-    target.scrollTop = 0;
-
-    /* Close all open overlays */
-    closeAllOverlays();
-
-    /* Update state */
-    currentPage = pageId;
-
-    /* Sync nav highlighting */
-    syncNav(pageId);
-
-    /* Lazy-init Discussions on first visit */
-    if (pageId === 'discussions' && typeof discInit === 'function') {
-      setTimeout(discInit, 40);
-    }
-
-    /* Dispatch a custom event so app.js hooks can listen */
-    try {
-      document.dispatchEvent(new CustomEvent('pageChanged', { detail: { page: pageId } }));
-    } catch (e) {}
-  }
-
-  /* ── 5. Public API ── */
-  window.currentPage = currentPage;
-  window.showPage    = showPage;
-
-  /* Override window.switchPage — wraps whatever app.js set */
-  var _appSwitch = window.switchPage;
-  window.switchPage = function (pageId) {
-    /* Let app.js do its own internal work first (XP saves, etc.) */
-    if (typeof _appSwitch === 'function') {
-      try { _appSwitch(pageId); } catch (e) {}
-    }
-    /* Then our manager takes over the DOM */
-    showPage(pageId);
-    /* Keep exported currentPage in sync */
-    window.currentPage = currentPage;
-  };
-
-  /* ── 6. Notification panel toggle helpers ── */
-  window.mobToggleNotif = function (e) {
-    if (e) e.stopPropagation();
-    if (typeof window.toggleNotifPanel === 'function') {
+/* ── Notification override: all toggle paths → header dropdown only ── */
+(function(){
+  /* Override mobToggleNotif — mobile bell nav item now opens the header dropdown */
+  window.mobToggleNotif = function(e){
+    if(e) e.stopPropagation();
+    /* Always delegate to the header toggleNotifPanel */
+    if(typeof window.toggleNotifPanel === 'function'){
       window.toggleNotifPanel();
     } else {
-      var p = document.getElementById('notif-panel');
-      if (p) p.classList.toggle('open');
+      /* Fallback: manually toggle the header dropdown */
+      var panel = document.getElementById('notif-panel');
+      if(panel) panel.classList.toggle('open');
     }
   };
-  window.toggleNotifications = function () {
-    if (typeof window.toggleNotifPanel === 'function') {
+
+  /* Ensure toggleNotifications (alias used in some places) also only triggers header panel */
+  window.toggleNotifications = function(){
+    if(typeof window.toggleNotifPanel === 'function'){
       window.toggleNotifPanel();
     } else {
-      var p = document.getElementById('notif-panel');
-      if (p) p.classList.toggle('open');
+      var panel = document.getElementById('notif-panel');
+      if(panel) panel.classList.toggle('open');
     }
   };
-
-  /* ── 7. Boot: sync nav to whichever page is .active in the HTML ── */
-  document.addEventListener('DOMContentLoaded', function () {
-    var bootPage = 'tracker';
-    PAGE_IDS.forEach(function (id) {
-      var el = document.getElementById('page-' + id);
-      if (el && el.classList.contains('active')) bootPage = id;
-    });
-    currentPage = bootPage;
-    window.currentPage = bootPage;
-    syncNav(bootPage);
-
-    /* If Discussions is the boot page, init it */
-    if (bootPage === 'discussions' && typeof discInit === 'function') {
-      setTimeout(discInit, 40);
-    }
-  });
-
 })();
 </script>
