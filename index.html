@@ -1850,24 +1850,28 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- DESKTOP NAV -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Übersetzer  7.News  8.Dokumente  9.Diskussionen  10.Admin -->
 <nav class="desktop-nav" id="desktop-nav">
-  <!-- 1. Tracker -->
   <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg> Tracker
   </button>
-  <!-- 2. Quiz -->
+  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Dokumente
+  </button>
+  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Übersetzer" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer
+  </button>
+  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
+  </button>
   <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
   </button>
-  <!-- 3. Vokabeln -->
   <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
     <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
     </svg> Vokabeln
   </button>
-  <!-- 4. Hören -->
   <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
     <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
       <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
@@ -1875,27 +1879,12 @@ h1 span{color:var(--gold)}
       <path d="M4 12a8 8 0 0 1 16 0"></path>
     </svg> Hören
   </button>
-  <!-- 5. Niveau -->
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
-  <!-- 6. Übersetzer -->
-  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Übersetzer" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer
-  </button>
-  <!-- 7. News -->
-  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
-  </button>
-  <!-- 8. Dokumente -->
-  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Dokumente
-  </button>
-  <!-- 9. Diskussionen -->
-  <button class="desk-nav-item" data-page="discussions" onclick="switchPage('discussions')" aria-label="Diskussionen" type="button">
+  <button class="desk-nav-item" data-page="discussions" onclick="switchPage('discussions')" aria-label="Discussions" type="button">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Diskussionen
   </button>
-  <!-- 10. Admin (hidden until role confirmed) -->
   <button class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
     <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin
   </button>
@@ -2384,10 +2373,9 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- Bottom nav bar -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Übersetzer  7.News  8.Dokumente  9.Diskussionen  10.Admin  +Notif +Profile -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
-  <!-- 1. Tracker -->
+  <!-- Bottom nav — Feather-style SVG icons, uniform across all items -->
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2398,60 +2386,15 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
   </div>
-  <!-- 2. Quiz -->
-  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
-  <!-- 3. Vokabeln -->
-  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
-  </div>
-  <!-- 4. Hören -->
-  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
-        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
-        <path d="M4 12a8 8 0 0 1 16 0"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_listen">Hören</div>
-  </div>
-  <!-- 5. Niveau -->
-  <div class="nav-item" data-page="level" onclick="switchPage('level')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-        <polyline points="17 6 23 6 23 12"></polyline>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_level">Niveau</div>
-  </div>
-  <!-- 6. Übersetzer -->
-  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="2" y1="12" x2="22" y2="12"></line>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
-  </div>
-  <!-- 7. News -->
   <div class="nav-item" data-page="news" onclick="switchPage('news')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2463,26 +2406,62 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
-  <!-- 8. Dokumente -->
-  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
-  <!-- 9. Diskussionen -->
+  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+  </div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
+  </div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+        <path d="M4 12a8 8 0 0 1 16 0"></path>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_listen">Hören</div>
+  </div>
   <div class="nav-item" data-page="discussions" onclick="switchPage('discussions')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
     </div>
-    <div class="nav-label">Diskussionen</div>
+    <div class="nav-label">Diskussion</div>
   </div>
-  <!-- 10. Admin (hidden until role confirmed) -->
+  <div class="nav-item" data-page="level" onclick="switchPage('level')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+    </div>
+    <div class="nav-label" data-i18n="nav_level">Niveau</div>
+  </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2494,7 +2473,6 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_admin">Admin</div>
   </div>
-  <!-- Notifications bell -->
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2505,7 +2483,6 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_alerts">Alerts</div>
   </div>
-  <!-- Profile (hidden until logged in) -->
   <div class="nav-item" id="mob-profile-nav-item" onclick="openProfileModal()" style="display:none">
     <div class="nav-icon" style="display:flex;align-items:center;justify-content:center">
       <div class="mob-profile-circle" id="mob-profile-btn">?</div>
