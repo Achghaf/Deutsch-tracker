@@ -1924,11 +1924,40 @@ h1 span{color:var(--gold)}
   box-shadow:0 0 20px rgba(232,184,75,0.35) !important;
 }
 
+/* ── PAGE BUTTONS — apply admin-style treatment to all standard pages ── */
+@keyframes page-pulse{
+  0%,100%{box-shadow:0 0 8px rgba(232,184,75,0.18),inset 0 0 10px rgba(232,184,75,0.07)}
+  50%{box-shadow:0 0 16px rgba(232,184,75,0.28),inset 0 0 16px rgba(232,184,75,0.12)}
+}
+.desk-nav-page{
+  background:rgba(232,184,75,0.07) !important;
+  border-color:rgba(232,184,75,0.35) !important;
+  color:#d4a83a !important;
+  animation:page-pulse 3s ease-in-out infinite;
+}
+.desk-nav-page::after{background:rgba(232,184,75,0.05) !important}
+.desk-nav-page:hover{
+  background:rgba(232,184,75,0.14) !important;
+  border-color:rgba(232,184,75,0.7) !important;
+  color:#e8b84b !important;
+  animation:none;
+}
+.desk-nav-page.active{
+  background:rgba(232,184,75,0.16) !important;
+  border-color:#e8b84b !important;
+  color:#e8b84b !important;
+  animation:none;
+  box-shadow:0 0 20px rgba(232,184,75,0.35) !important;
+}
+
 /* Light-mode adjustments */
 [data-theme="light"] .desk-nav-item{border-color:rgba(200,148,40,0.2) !important}
 [data-theme="light"] .desk-nav-item:hover{border-color:rgba(200,148,40,0.5) !important;color:#c89428 !important}
 [data-theme="light"] .desk-nav-item.active{border-color:rgba(200,148,40,0.75) !important;color:#c89428 !important}
 [data-theme="light"] .desk-nav-admin{background:rgba(200,148,40,0.06) !important;border-color:rgba(200,148,40,0.3) !important;color:#a07820 !important}
+
+/* Light-mode adjustments for page buttons */
+[data-theme="light"] .desk-nav-page{background:rgba(200,148,40,0.06) !important;border-color:rgba(200,148,40,0.3) !important;color:#a07820 !important}
 
 /* GHOST BUTTONS */
 .reset-btn,.logout-btn{position:relative;overflow:hidden;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;border-radius:6px;transition:border-color 0.2s,color 0.2s,background 0.2s,transform 0.15s;min-height:36px}
@@ -2344,50 +2373,49 @@ h1 span{color:var(--gold)}
   <div class="desk-nav-center">
 
   <!-- 1. Tracker -->
-  <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
+  <button class="desk-nav-item active desk-nav-page" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>
     <span class="desk-nav-label" data-i18n="nav_tracker">Tracker</span>
   </button>
 
   <!-- 2. Quiz — interactive study tool -->
-  <button class="desk-nav-item desk-nav-study" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
+  <button class="desk-nav-item desk-nav-study desk-nav-page" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
     <span class="desk-nav-label" data-i18n="nav_quiz">Quiz</span>
   </button>
 
   <!-- 3. Vokabeln -->
-  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
+  <button class="desk-nav-item desk-nav-page" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
     <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    <!-- Updated nav label to match data-page and translation -->
     <span class="desk-nav-label" data-i18n="nav_vocab">Vocab</span>
   </button>
 
   <!-- 4. Hören — interactive study tool -->
-  <button class="desk-nav-item desk-nav-study" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
+  <button class="desk-nav-item desk-nav-study desk-nav-page" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
     <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v4a2 2 0 0 0 2 2h2"/><path d="M18 12v4a2 2 0 0 1-2 2h-2"/><path d="M4 12a8 8 0 0 1 16 0"/></svg>
     <span class="desk-nav-label" data-i18n="nav_listen">Hören</span>
   </button>
 
   <!-- 5. Niveau -->
-  <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
+  <button class="desk-nav-item desk-nav-page" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     <span class="desk-nav-label" data-i18n="nav_level">Niveau</span>
   </button>
 
   <!-- 6. Translator -->
-  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Translator" type="button">
+  <button class="desk-nav-item desk-nav-page" data-page="translate" onclick="switchPage('translate')" aria-label="Translator" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
     <span class="desk-nav-label" data-i18n="nav_translate">Translator</span>
   </button>
 
   <!-- 7. News -->
-  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
+  <button class="desk-nav-item desk-nav-page" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
     <span class="desk-nav-label" data-i18n="nav_news">News</span>
   </button>
 
   <!-- 8. Dokumente -->
-  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
+  <button class="desk-nav-item desk-nav-page" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg>
     <span class="desk-nav-label" data-i18n="nav_docs">Dokumente</span>
   </button>
@@ -2942,7 +2970,6 @@ h1 span{color:var(--gold)}
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-    <!-- Updated nav label to match data-page and translation -->
     <div class="nav-label" data-i18n="nav_vocab">Vocab</div>
   </div>
   <!-- 4. Hören -->
@@ -4403,7 +4430,7 @@ window.TRANSLATIONS = {
     nav_news:        'News',
     nav_translate:   'Translator',
     nav_quiz:        'Quiz',
-    nav_vocab:       'Vocab',
+    nav_vocab:       'Vokabeln',
     nav_listen:      'Hören',
     nav_level:       'Niveau',
     nav_admin:       'Admin',
@@ -4559,7 +4586,7 @@ window.TRANSLATIONS = {
     nav_news:        'News',
     nav_translate:   'Translator',
     nav_quiz:        'Quiz',
-    nav_vocab:       'Vokabeln',
+    nav_vocab:       'Vocab',
     nav_listen:      'Hören',
     nav_level:       'Niveau',
     nav_admin:       'Admin',
