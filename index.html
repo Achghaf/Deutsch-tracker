@@ -572,9 +572,158 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(5){animation-delay:0.2s}
 
 /* DESKTOP NAV — layout shell only; visual style is in the Gold-Glow block further below */
-.desktop-nav{display:none;background:#0e0e0e;border-bottom:1px solid rgba(42,42,42,0.6);padding:0 10px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto;gap:0;overflow-x:auto;scrollbar-width:none}
+.desktop-nav{
+  display:none;
+  /* Glassmorphism header: semi-transparent dark backdrop with blur and subtle border */
+  background:rgba(16,16,16,0.82);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  padding:0 16px;
+  position:sticky;
+  top:0;
+  z-index:260;
+  align-items:center;
+  pointer-events:auto;
+  gap:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
 .desktop-nav::-webkit-scrollbar{display:none}
-.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;z-index:261}
+.desk-nav-right{
+  /* Utility zone: notification, theme, language and profile icons aligned to the right */
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+  position:relative;
+  z-index:261;
+}
+
+/* Header layout helpers */
+.desk-nav-left{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  margin-right:20px;
+}
+.desk-nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem;
+  letter-spacing:0.06em;
+  color:var(--gold);
+  user-select:none;
+}
+.desk-nav-center{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:1;
+  justify-content:center;
+  overflow-x:auto;
+}
+.desk-nav-center::-webkit-scrollbar{display:none}
+
+/* Override theme toggle positioning when inside the desktop header */
+.desktop-nav .theme-toggle{
+  position:relative;
+  bottom:auto;
+  right:auto;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:rgba(20,20,20,0.8);
+  color:var(--gold);
+  box-shadow:none;
+  padding:0;
+}
+.desktop-nav .theme-toggle:hover{
+  transform:scale(1.05);
+  border-color:var(--gold);
+}
+[data-theme="light"] .desktop-nav .theme-toggle{
+  background:#fff;
+  border-color:#d8d2c8;
+  color:#c89428;
+}
+
+/* Override language selector for desktop header */
+.desktop-nav .lang-fab{
+  position:relative;
+  bottom:auto;
+  left:auto;
+  right:auto;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+}
+.desktop-nav .lang-fab-btn{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:rgba(20,20,20,0.8);
+  color:var(--gold);
+  font-size:1.05rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:none;
+  padding:0;
+}
+.desktop-nav .lang-fab-btn:hover{
+  transform:scale(1.05);
+  border-color:var(--gold);
+}
+[data-theme="light"] .desktop-nav .lang-fab-btn{
+  background:#fff;
+  border-color:#d8d2c8;
+  color:#c89428;
+}
+.desktop-nav .lang-fab-menu{
+  position:absolute;
+  top:calc(100% + 6px);
+  right:0;
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  background:rgba(20,20,20,0.92);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.6);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  z-index:100;
+}
+.desktop-nav .lang-fab-menu.open{display:flex}
+.desktop-nav .lang-fab-option{
+  padding:6px 10px;
+  border-radius:6px;
+  background:transparent;
+  color:var(--muted);
+  font-size:0.75rem;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  white-space:nowrap;
+  border:none;
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.desktop-nav .lang-fab-option:hover{
+  background:rgba(232,184,75,0.1);
+  color:var(--white);
+}
+.desktop-nav .lang-fab-option.active{
+  background:rgba(232,184,75,0.15);
+  color:var(--gold);
+  font-weight:600;
+}
 
 /* RESPONSIVE */
 @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
@@ -2175,6 +2324,12 @@ h1 span{color:var(--gold)}
 <!-- DESKTOP NAV -->
 <!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Translator  7.News  8.Dokumente  9.Admin -->
 <nav class="desktop-nav" id="desktop-nav">
+  <!-- Header left: site logo / wordmark -->
+  <div class="desk-nav-left">
+    <span class="desk-nav-logo">Deutsch B1</span>
+  </div>
+  <!-- Header center: primary navigation -->
+  <div class="desk-nav-center">
   <!-- 1. Tracker -->
   <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>
@@ -2220,6 +2375,8 @@ h1 span{color:var(--gold)}
     <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     <span class="desk-nav-label" data-i18n="nav_admin">Admin</span>
   </button>
+  </div>
+  <!-- Header right: utility zone (notifications, theme, language, profile) -->
   <div class="desk-nav-right">
     <div style="position:relative">
       <button class="notif-btn" id="desk-notif-btn" onclick="toggleNotifPanel()" title="Notifications">
@@ -2236,6 +2393,36 @@ h1 span{color:var(--gold)}
           <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer" data-i18n="notif_send_btn">Benachrichtigung senden</button>
         </div>
       </div>
+    </div>
+    <!-- Theme toggle button (relocated from bottom corner) -->
+    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle theme">
+      <!-- Sun (visible in dark mode → click to go light) -->
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <!-- Moon (visible in light mode → click to go dark) -->
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <!-- Language selector dropdown (relocated from bottom FAB) -->
+    <div class="lang-fab" id="lang-fab">
+      <div class="lang-fab-menu" id="lang-fab-menu">
+        <button class="lang-fab-option active" id="lang-de" onclick="setLang('de')">🇩🇪</button>
+        <button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧</button>
+        <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦</button>
+      </div>
+      <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Sprache wechseln" aria-label="Language">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
     </div>
     <button class="profile-icon-btn" id="desk-profile-btn" onclick="openProfileModal()" title="Profile" style="display:none">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2821,17 +3008,7 @@ h1 span{color:var(--gold)}
 </div>
 </nav>
 <!-- Mobile notification panel removed — notifications handled exclusively by header dropdown (#notif-panel) -->
-<!-- LANGUAGE SWITCHER -->
-<div class="lang-fab" id="lang-fab">
-<div class="lang-fab-menu" id="lang-fab-menu">
-<button class="lang-fab-option active" id="lang-de" onclick="setLang('de')">🇩🇪 Deutsch</button>
-<button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
-<button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
-</div>
-    <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Sprache wechseln">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </button>
-</div>
+<!-- Removed floating language switcher (relocated to header) -->
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
 <div class="notif-modal">
@@ -4928,27 +5105,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
-<!-- ══════════════════════════════════════════
-     THEME TOGGLE BUTTON + PERSISTENCE SCRIPT
-     ══════════════════════════════════════════ -->
-<button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle theme">
-  <!-- Sun (visible in dark mode → click to go light) -->
-  <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1" x2="12" y2="3"/>
-    <line x1="12" y1="21" x2="12" y2="23"/>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-    <line x1="1" y1="12" x2="3" y2="12"/>
-    <line x1="21" y1="12" x2="23" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-  </svg>
-  <!-- Moon (visible in light mode → click to go dark) -->
-  <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>
-</button>
+<!-- Removed floating theme toggle (relocated to header) -->
 
 <script>
 (function(){
