@@ -2336,6 +2336,72 @@ button:active,
 .flashcard.swipe-right {
   animation: swipe-right 0.6s ease forwards;
 }
+
+/* Info button & modal for vocabulary page */
+.vocab-info-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.vocab-info-btn:hover {
+  color: var(--white);
+}
+.vocab-info-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.vocab-info-overlay.visible {
+  display: flex;
+}
+.vocab-info-modal {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 100%;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.vocab-info-modal h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--gold);
+}
+.vocab-info-modal p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: var(--white);
+}
+.vocab-info-modal .vocab-info-close {
+  padding: 8px 16px;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
 </style>
 <script>
 (function(){
@@ -3130,6 +3196,8 @@ button:active,
     <div class="flag-stripe"></div>
     <div class="header-inner">
       <h1><span id="vocab-title">Vokabeltrainer</span></h1>
+      <!-- Info button to show usage instructions -->
+      <button class="vocab-info-btn" onclick="showVocabInfo()" title="Info">ℹ</button>
     </div>
   </header>
   <div class="vocab-container">
@@ -3193,6 +3261,40 @@ button:active,
       </div>
       <button class="flashcard-next-btn">Nächste</button>
     </section>
+
+    <!-- Match-pairs game (legacy) to keep functionality -->
+    <div class="vocab-wrap" id="vocab-wrap">
+      <div class="vocab-topbar">
+        <button class="vocab-cat-btn active" data-cat="all">Alle</button>
+        <button class="vocab-cat-btn" data-cat="recent">Neu</button>
+        <button class="vocab-cat-btn" data-cat="difficult">Schwer</button>
+        <button class="vocab-new-btn" id="vocab-new-btn">Neu starten</button>
+      </div>
+      <div class="vocab-score-row">
+        <div class="vocab-score-chip">Richtig: <span id="vocab-correct-count">0</span></div>
+        <div class="vocab-score-chip">Runde: <span id="vocab-round-num">0</span></div>
+      </div>
+      <div class="vocab-progress-bar">
+        <div class="vocab-progress-fill" id="vocab-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="match-grid" id="match-grid"></div>
+      <div class="vocab-finished" id="vocab-finished">
+        <div class="vocab-finished-icon">🎉</div>
+        <div class="vocab-finished-title">Geschafft!</div>
+        <div class="vocab-finished-sub">Du hast alle Paare gefunden.</div>
+        <button class="vocab-finished-btn" id="vocab-finished-btn">Erneut</button>
+      </div>
+    </div>
+  </div>
+  <!-- Vocabulary info overlay -->
+  <div class="vocab-info-overlay" id="vocab-info-overlay" onclick="hideVocabInfo(event)">
+    <div class="vocab-info-modal">
+      <h3>Anleitung</h3>
+      <p>Nutze die Suchleiste und Filter, um nach Wörtern zu suchen. Klicke auf die Karten
+      im Bereich “Word of the Day” oder in den Kategorien, um die Übersetzungen anzuzeigen. In der Schnellwiederholung kannst du die Karten
+      nach links wischen, um sie als gemeistert zu markieren, oder nach rechts, um sie später zu lernen. Nutze die Schaltflächen unten für deine Auswahl.</p>
+      <button class="vocab-info-close" onclick="hideVocabInfo(event)">Schließen</button>
+    </div>
   </div>
 </div>
 <!-- Listening Practice Page -->
@@ -4325,6 +4427,24 @@ if(document.getElementById('page-discussions') && document.getElementById('page-
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="app.js"></script>
+
+    <!-- Vocab info modal handlers -->
+    <script>
+      function showVocabInfo() {
+        var overlay = document.getElementById('vocab-info-overlay');
+        if (overlay) {
+          overlay.classList.add('visible');
+        }
+      }
+      function hideVocabInfo(event) {
+        var overlay = document.getElementById('vocab-info-overlay');
+        if (!overlay) return;
+        // Only hide when clicking overlay background or close button
+        if (!event || event.target === overlay || event.target.classList.contains('vocab-info-close')) {
+          overlay.classList.remove('visible');
+        }
+      }
+    </script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
