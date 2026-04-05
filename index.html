@@ -615,9 +615,80 @@ button:active,
 .quiz-gen-btn:active{
   transform:scale(0.96);
 }
+
+/*
+   Header redesign for centered titles across pages.
+   These styles center the content of page headers such as the tracker, PDF, news,
+   quiz, level hero, and translate sections. They use flexbox to stack the
+   elements vertically and ensure titles and subtitles are centered even in RTL
+   layouts. A subtle radial background adds depth to the header area.
+*/
+.tracker-header,
+.pdf-header,
+.news-header,
+.quiz-header,
+.quiz-hero,
+.level-hero,
+.translate-header{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  text-align:center !important;
+  position:relative;
+  background:radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+}
+.tracker-header .flag-stripe,
+.pdf-header .flag-stripe,
+.news-header .flag-stripe,
+.quiz-header .flag-stripe,
+.quiz-hero .flag-stripe,
+.level-hero .flag-stripe,
+.translate-header .flag-stripe{
+  align-self:center;
+  margin-bottom:12px;
+}
+
+.tracker-header h1,
+.pdf-header h1,
+.news-header h1,
+.quiz-header h1,
+.quiz-hero-title,
+.level-hero-title,
+.translate-header h1{
+  font-family:'Bebas Neue',sans-serif !important;
+  font-size:2.8rem !important;
+  letter-spacing:0.05em !important;
+  margin:0;
+}
+
+.tracker-header h1 span,
+.pdf-header h1 span,
+.news-header h1 span,
+.quiz-header h1 span,
+.quiz-hero-title span,
+.level-hero-title span,
+.translate-header h1 span{
+  text-shadow:0 0 15px rgba(232,184,75,0.4);
+}
+
+/* Subtitles below the main titles */
+.tracker-sub,
+.level-hero-sub,
+.news-header p,
+.quiz-hero-sub,
+.pdf-header-sub,
+.translate-header-sub{
+  font-size:0.9rem !important;
+  color:var(--muted) !important;
+  max-width:400px !important;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:8px;
+  text-align:center;
+}
 .lang-fab-menu{display:none;flex-direction:column;gap:4px;background:#111;border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 4px 20px rgba(0,0,0,0.6)}
 .lang-fab-menu.open{display:flex}
-@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}}
+@media(min-width:768px){.months-grid{grid-template-columns:repeat(2,1fr)}.toast{bottom:24px}}
 
 /* PROFILE ICON BUTTON
    Redesigned the profile button to better match the site's gold accent colour.
