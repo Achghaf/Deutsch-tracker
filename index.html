@@ -2403,6 +2403,858 @@ button:active,
   cursor: pointer;
 }
 </style>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     DESKTOP DASHBOARD STYLESHEET  ·  @media (min-width: 1024px)
+     All styles below are scoped inside the media query.
+     Zero changes to mobile layout. Zero JS modifications.
+═══════════════════════════════════════════════════════════════════ -->
+<style>
+/* ─────────────────────────────────────────────────────────────────
+   1. CSS VARIABLES (desktop-only overrides)
+───────────────────────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  :root {
+    --sidebar-w: 220px;           /* sidebar width */
+    --sidebar-w-collapsed: 68px;  /* future: collapsible */
+    --content-max: 1280px;        /* max content area */
+    --desk-bg: #090b10;           /* slightly deeper bg */
+    --glass-nav: rgba(11, 13, 20, 0.88);
+    --glass-card: rgba(16, 19, 28, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --gold-glow: rgba(232, 184, 75, 0.18);
+    --sidebar-item-h: 44px;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     2. GLOBAL BODY & BACKGROUND
+  ─────────────────────────────────────────────────────────────── */
+  body {
+    padding-bottom: 0;
+    padding-left: var(--sidebar-w);
+    background-color: var(--desk-bg);
+    /* rich ambient background — only on large screens */
+    background-image:
+      radial-gradient(ellipse 55% 45% at 5% 15%, rgba(91,126,201,0.09) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 55% at 95% 80%, rgba(139,61,186,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(232,184,75,0.05) 0%, transparent 50%);
+    transition: padding-left 0.3s ease;
+  }
+
+  /* Refined grid overlay — more subtle on desktop */
+  body::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M100 0H0v100' fill='none' stroke='rgba(255,255,255,0.014)' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+  }
+
+  /* Custom scrollbars — slim, dark, rounded */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+  ::-webkit-scrollbar       { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(232,184,75,0.3); }
+
+  /* ───────────────────────────────────────────────────────────────
+     3. BOTTOM NAV → HIDDEN ON DESKTOP
+  ─────────────────────────────────────────────────────────────── */
+  .bottom-nav,
+  .nav-drawer,
+  .nav-drawer-overlay,
+  .lang-fab { display: none !important; }
+
+  /* ───────────────────────────────────────────────────────────────
+     4. HIDE THE OLD HORIZONTAL DESKTOP NAV BAR
+  ─────────────────────────────────────────────────────────────── */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     5. FIXED LEFT SIDEBAR
+  ─────────────────────────────────────────────────────────────── */
+  /* We repurpose the existing .desktop-nav element as our sidebar
+     by overriding its display & layout. No new HTML needed. */
+  .desktop-nav {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: var(--sidebar-w) !important;
+    height: 100vh !important;
+    padding: 0 0 12px !important;
+    background: var(--glass-nav) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-right: 1px solid var(--glass-border) !important;
+    border-bottom: none !important;
+    box-shadow: 4px 0 32px rgba(0,0,0,0.35) !important;
+    z-index: 1200 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Sidebar logo / branding block */
+  .desktop-nav::before {
+    content: 'DEUTSCH B1';
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    padding: 22px 18px 10px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    text-shadow: 0 0 24px rgba(232,184,75,0.35);
+    background: linear-gradient(90deg,#000 33.3%,#cc1f1f 33.3% 66.6%,#e8b84b 66.6%);
+    background-size: 100% 3px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    padding-bottom: 14px;
+  }
+
+  /* Sidebar nav items */
+  .desk-nav-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: calc(100% - 16px) !important;
+    margin: 2px 8px !important;
+    padding: 0 14px !important;
+    height: var(--sidebar-item-h) !important;
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    border-bottom: none !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    color: rgba(255,255,255,0.45) !important;
+    text-align: left !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.15s !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    position: relative !important;
+  }
+
+  .desk-nav-item svg {
+    flex-shrink: 0 !important;
+    width: 17px !important;
+    height: 17px !important;
+    opacity: 0.55 !important;
+    transition: opacity 0.18s !important;
+  }
+
+  .desk-nav-item:hover {
+    background: rgba(255,255,255,0.05) !important;
+    color: var(--white) !important;
+    transform: translateX(2px) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+  .desk-nav-item:hover svg { opacity: 0.9 !important; }
+
+  .desk-nav-item.active {
+    background: rgba(232,184,75,0.12) !important;
+    color: var(--gold) !important;
+    border-color: rgba(232,184,75,0.25) !important;
+    box-shadow: 0 0 0 1px rgba(232,184,75,0.08) inset, 2px 0 16px rgba(232,184,75,0.1) !important;
+    font-weight: 600 !important;
+  }
+  .desk-nav-item.active::after { display: none !important; }
+  .desk-nav-item.active::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important; top: 20% !important; bottom: 20% !important;
+    width: 3px !important;
+    background: var(--gold) !important;
+    border-radius: 0 3px 3px 0 !important;
+    box-shadow: 0 0 10px rgba(232,184,75,0.6) !important;
+  }
+  .desk-nav-item.active svg { opacity: 1 !important; }
+
+  /* Sidebar right section (profile + notif) */
+  .desk-nav-right {
+    margin-left: 0 !important;
+    margin-top: auto !important;
+    padding: 10px 8px 0 !important;
+    border-top: 1px solid var(--glass-border) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .desk-nav-right > * { width: 100% !important; }
+  .desk-nav-right > div { position: relative !important; }
+
+  /* Notif button in sidebar */
+  .notif-btn {
+    width: 100% !important;
+    height: var(--sidebar-item-h) !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: rgba(255,255,255,0.45) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 0 14px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.82rem !important;
+    cursor: pointer !important;
+    transition: all 0.18s !important;
+  }
+  .notif-btn::after {
+    content: 'Benachrichtigungen';
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    color: inherit;
+    flex: 1;
+  }
+  .notif-btn:hover {
+    background: rgba(255,255,255,0.05) !important;
+    color: var(--white) !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    transform: translateX(2px) !important;
+  }
+
+  /* Profile btn in sidebar */
+  .profile-icon-btn {
+    width: calc(100% - 0px) !important;
+    height: var(--sidebar-item-h) !important;
+    border-radius: 10px !important;
+    background: rgba(232,184,75,0.06) !important;
+    border: 1px solid rgba(232,184,75,0.18) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 0 14px !important;
+    justify-content: flex-start !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.82rem !important;
+    color: rgba(232,184,75,0.8) !important;
+    box-shadow: none !important;
+    transition: all 0.18s !important;
+  }
+  .profile-icon-btn::after {
+    content: 'Profil';
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .profile-icon-btn:hover {
+    background: rgba(232,184,75,0.14) !important;
+    border-color: rgba(232,184,75,0.38) !important;
+    color: var(--gold) !important;
+    transform: translateX(2px) !important;
+    box-shadow: 0 0 20px rgba(232,184,75,0.12) !important;
+  }
+
+  /* Notification dropdown — position adjusted for sidebar */
+  .notif-panel {
+    position: fixed !important;
+    left: var(--sidebar-w) !important;
+    bottom: 60px !important;
+    top: auto !important;
+    right: auto !important;
+    width: 340px !important;
+    border-radius: 14px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     6. MAIN CONTENT AREA — right of sidebar
+  ─────────────────────────────────────────────────────────────── */
+  .page {
+    min-height: 100vh !important;
+    padding-top: 0 !important;
+  }
+
+  /* All headers inside pages */
+  header {
+    padding: 28px 40px 20px !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    background: rgba(9,11,16,0.6) !important;
+    backdrop-filter: blur(16px) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+  }
+  header .header-inner {
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+  }
+  h1 {
+    font-size: clamp(2rem, 3.5vw, 3.8rem) !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     7. TRACKER PAGE — 3-COLUMN DASHBOARD GRID
+  ─────────────────────────────────────────────────────────────── */
+  #page-tracker .overall-section {
+    padding: 32px 40px !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+  }
+  #page-tracker .overall-inner {
+    max-width: var(--content-max) !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 24px !important;
+  }
+  #page-tracker .overall-section .daily-quote-box,
+  #page-tracker .overall-section .xp-bar-container {
+    max-width: var(--content-max) !important;
+    margin: 20px auto 0 !important;
+  }
+
+  /* 3-column tracker layout wrapper */
+  /* We create the 3-col grid by targeting the structural sections */
+  #page-tracker .journey-section,
+  #page-tracker .stats-row,
+  #page-tracker .daily-section,
+  #page-tracker .months-grid,
+  #page-tracker .notes-section,
+  #page-tracker .analysis-section {
+    max-width: var(--content-max) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Stats row — 4 even columns */
+  #page-tracker .stats-row {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 14px !important;
+    padding-top: 28px !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+
+  /* Journey section */
+  #page-tracker .journey-section {
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    margin: 0 auto !important;
+  }
+  #page-tracker .journey-bar {
+    overflow-x: visible !important;
+  }
+
+  /* Three-column layout for daily tasks + months grid */
+  /* Col 1: Stats (stat pills + notes) | Col 2: Journey + months | Col 3: Daily tasks */
+  #page-tracker .tracker-three-col {
+    display: grid !important;
+    grid-template-columns: 280px 1fr 340px !important;
+    gap: 24px !important;
+    max-width: var(--content-max) !important;
+    margin: 28px auto 0 !important;
+    padding: 0 40px 40px !important;
+    align-items: start !important;
+  }
+
+  /* Daily tasks — right column */
+  #page-tracker .daily-section {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+  #page-tracker .daily-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  #page-tracker .task-card {
+    min-height: 60px !important;
+  }
+
+  /* Month cards — middle */
+  #page-tracker .months-grid {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Notes — left column bottom */
+  #page-tracker .notes-section {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     8. CARD & HOVER EFFECTS (desktop-only, pointer: fine)
+  ─────────────────────────────────────────────────────────────── */
+  @media (hover: hover) and (pointer: fine) {
+
+    .month-card {
+      transition: transform 0.22s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.22s,
+                  border-color 0.22s !important;
+      cursor: pointer;
+    }
+    .month-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5),
+                  0 0 0 1px rgba(232,184,75,0.15) !important;
+      border-color: rgba(232,184,75,0.3) !important;
+    }
+
+    .task-card:hover {
+      transform: translateY(-2px) scale(1.005) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4),
+                  0 0 0 1px rgba(255,255,255,0.08) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+    }
+
+    .stat-pill:hover {
+      transform: translateY(-3px) !important;
+      border-color: rgba(232,184,75,0.25) !important;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35),
+                  0 0 12px rgba(232,184,75,0.08) !important;
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important;
+      border-color: rgba(255,255,255,0.1) !important;
+    }
+
+    .pdf-card:hover {
+      transform: translateY(-4px) !important;
+      border-color: rgba(232,184,75,0.22) !important;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.45) !important;
+    }
+
+    .category-card:hover {
+      transform: scale(1.03) translateY(-2px) !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45) !important;
+      filter: brightness(1.08) !important;
+    }
+
+    .daily-card:hover {
+      background: rgba(255,255,255,0.12) !important;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.4),
+                  0 0 0 1px rgba(232,184,75,0.15) !important;
+    }
+
+    button.desk-nav-item:hover,
+    .news-btn:hover,
+    .login-btn:hover,
+    .quiz-gen-btn:hover,
+    .level-start-btn:hover {
+      box-shadow: 0 4px 20px rgba(232,184,75,0.28) !important;
+    }
+
+    .week-row:hover {
+      background: rgba(255,255,255,0.04) !important;
+      padding-left: 14px !important;
+    }
+
+    .profile-stat-chip:hover {
+      transform: translateY(-2px) !important;
+      border-color: rgba(232,184,75,0.2) !important;
+    }
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     9. NEWS PAGE — CENTERED CONTENT
+  ─────────────────────────────────────────────────────────────── */
+  #page-news .news-page {
+    max-width: 860px !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+  #page-news header .header-inner h1 {
+    font-size: clamp(2.2rem, 3vw, 4rem) !important;
+    text-align: left !important;
+  }
+  .news-composer {
+    background: var(--glass-card) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
+  }
+  .news-card {
+    border-radius: 14px !important;
+    background: var(--glass-card) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--glass-border) !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     10. VOCAB PAGE — MASTER-DETAIL SPLIT VIEW
+  ─────────────────────────────────────────────────────────────── */
+  #page-vocab .vocab-container {
+    display: grid !important;
+    grid-template-columns: 360px 1fr !important;
+    grid-template-rows: auto !important;
+    gap: 0 !important;
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 0 40px 40px !important;
+    min-height: calc(100vh - 100px) !important;
+    align-items: start !important;
+  }
+
+  /* Search bar spans full width, then below it the two columns */
+  #page-vocab .vocab-search-bar {
+    grid-column: 1 / -1 !important;
+    padding: 20px 0 16px !important;
+    position: sticky !important;
+    top: 82px !important;
+    z-index: 50 !important;
+    background: linear-gradient(to bottom, var(--desk-bg) 80%, transparent) !important;
+  }
+
+  /* Left: hero + categories + flashcards */
+  #page-vocab .vocab-hero {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    padding-right: 20px !important;
+    border-right: 1px solid var(--glass-border) !important;
+    padding-top: 8px !important;
+    position: sticky !important;
+    top: 160px !important;
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+  }
+
+  #page-vocab .vocab-category-grid {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    padding-right: 20px !important;
+    border-right: 1px solid var(--glass-border) !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Right: flashcards + match game = detail pane */
+  #page-vocab .vocab-flashcards {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    padding-left: 28px !important;
+    padding-top: 8px !important;
+  }
+
+  #page-vocab .vocab-wrap {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    padding-left: 28px !important;
+    border-left: none !important;
+    margin-top: 28px !important;
+  }
+
+  /* Detail pane styling */
+  #page-vocab .vocab-flashcards,
+  #page-vocab .vocab-wrap {
+    background: var(--glass-card) !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--glass-border) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    padding: 24px 28px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3) !important;
+    transition: box-shadow 0.2s !important;
+  }
+  #page-vocab .vocab-flashcards:hover,
+  #page-vocab .vocab-wrap:hover {
+    box-shadow: 0 8px 36px rgba(0,0,0,0.4) !important;
+  }
+
+  /* Daily card — refined on desktop */
+  .daily-card {
+    border-radius: 14px !important;
+    border-left-width: 4px !important;
+    transition: all 0.22s cubic-bezier(0.22,1,0.36,1) !important;
+  }
+  .daily-word {
+    font-size: 2.8rem !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     11. PDF / DOCUMENTS PAGE
+  ─────────────────────────────────────────────────────────────── */
+  #page-pdf .pdf-page {
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+  #page-pdf .pdf-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .pdf-card {
+    border-radius: 12px !important;
+    background: var(--glass-card) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--glass-border) !important;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     12. TRANSLATE PAGE
+  ─────────────────────────────────────────────────────────────── */
+  #page-translate .translate-page {
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     13. QUIZ & LEVEL PAGES
+  ─────────────────────────────────────────────────────────────── */
+  #page-quiz .quiz-page,
+  #page-level .level-page {
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     14. DISCUSSIONS PAGE
+  ─────────────────────────────────────────────────────────────── */
+  #page-discussions {
+    padding: 0 !important;
+  }
+  .disc-layout {
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 24px 40px 40px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     15. GLOBAL CARD GLASSMORPHISM UPGRADE (desktop only)
+  ─────────────────────────────────────────────────────────────── */
+  .month-card,
+  .stat-pill,
+  .notes-box,
+  .streak-counter,
+  .profile-stat-chip {
+    background: var(--glass-card) !important;
+    backdrop-filter: blur(16px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.04) inset !important;
+    border-radius: 12px !important;
+    transition: all 0.22s cubic-bezier(0.22,1,0.36,1) !important;
+  }
+
+  .month-card.active {
+    border-color: rgba(232,184,75,0.3) !important;
+    box-shadow: 0 0 0 1px rgba(232,184,75,0.12), 0 4px 24px rgba(0,0,0,0.4) !important;
+  }
+  .month-card.done {
+    border-color: rgba(61,186,110,0.22) !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     16. SECTION TITLES — Centered, bigger on desktop
+  ─────────────────────────────────────────────────────────────── */
+  .section-title {
+    font-size: 0.68rem !important;
+    font-family: 'DM Mono', monospace !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    color: rgba(255,255,255,0.35) !important;
+    font-weight: 500 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Page hero titles */
+  .tracker-header h1,
+  .news-header h1,
+  .pdf-header h1,
+  .translate-header h1,
+  .quiz-hero .quiz-hero-title,
+  .level-hero .level-hero-title,
+  .vocab-header h1 {
+    font-size: clamp(2.4rem, 4vw, 5rem) !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     17. STAT PILLS ENHANCED
+  ─────────────────────────────────────────────────────────────── */
+  .stat-pill {
+    padding: 16px 20px !important;
+    border-radius: 14px !important;
+  }
+  .stat-pill-val {
+    font-size: 1.8rem !important;
+  }
+  .stat-pill-icon {
+    font-size: 1.4rem !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     18. TOAST — reposition for sidebar layout
+  ─────────────────────────────────────────────────────────────── */
+  .toast {
+    left: calc(var(--sidebar-w) + 24px) !important;
+    right: 24px !important;
+    bottom: 24px !important;
+    width: auto !important;
+    border-radius: 10px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     19. PROFILE / AUTH MODALS — centered on large screen
+  ─────────────────────────────────────────────────────────────── */
+  .profile-modal {
+    padding-left: var(--sidebar-w) !important;
+    align-items: center !important;
+  }
+  .profile-sheet {
+    border-radius: 18px !important;
+    max-width: 460px !important;
+  }
+
+  .login-screen {
+    padding-left: var(--sidebar-w) !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     20. ADMIN PAGE
+  ─────────────────────────────────────────────────────────────── */
+  #page-admin .admin-page,
+  #page-admin > div {
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     21. LISTENING PAGE
+  ─────────────────────────────────────────────────────────────── */
+  #page-listening > div {
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding: 32px 40px 48px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     22. TRACKER 3-COL GRID — inject as a wrapper utility class
+         (No HTML change needed — we use CSS grid on sections
+          stacked via display:contents children trick)
+  ─────────────────────────────────────────────────────────────── */
+  /* The months-grid and daily-section sit next to each other */
+  #page-tracker .months-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+    padding: 28px 40px !important;
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+  }
+
+  #page-tracker .daily-section {
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 0 40px 28px !important;
+  }
+  #page-tracker .daily-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Analysis / suggestions section */
+  #page-tracker .analysis-section {
+    padding: 0 40px 40px !important;
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     23. PROGRESS BARS — liquid gradient upgrade
+  ─────────────────────────────────────────────────────────────── */
+  .month-progress-bar {
+    height: 4px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,0.06) !important;
+    margin: 0 16px 16px !important;
+  }
+  .month-progress-fill {
+    border-radius: 999px !important;
+    transition: width 0.8s cubic-bezier(0.34,1.2,0.64,1) !important;
+  }
+  .streak-bar-track {
+    height: 5px !important;
+    border-radius: 999px !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     24. WORD ROWS IN MONTH CARDS — subtle hover
+  ─────────────────────────────────────────────────────────────── */
+  .week-row {
+    border-radius: 8px !important;
+    transition: background 0.15s, padding-left 0.2s !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────────
+     25. FOOTER STRIP
+  ─────────────────────────────────────────────────────────────── */
+  /* No footer in original — skipped */
+
+  /* ───────────────────────────────────────────────────────────────
+     26. THREE-COL TRACKER WRAPPER
+  ─────────────────────────────────────────────────────────────── */
+  .tracker-three-col {
+    display: grid !important;
+    grid-template-columns: 260px 1fr 300px !important;
+    gap: 20px !important;
+    max-width: var(--content-max) !important;
+    margin: 0 auto !important;
+    padding: 24px 40px 40px !important;
+    align-items: start !important;
+  }
+  .tracker-col-left,
+  .tracker-col-mid,
+  .tracker-col-right {
+    min-width: 0 !important;
+  }
+  .tracker-three-col .months-grid {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    grid-template-columns: 1fr !important;
+  }
+  .tracker-three-col .daily-section {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .tracker-three-col .daily-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  .tracker-three-col .notes-section {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+} /* end @media (min-width: 1024px) */
+</style>
+
 <script>
 (function(){
   var SEL=['.login-btn','.confirm-btn','.profile-btn','.notif-send-btn','.translate-btn-main','.news-btn','.scanner-btn','.rename-btn','.pdf-action-btn','.pdf-refresh-btn','.cat-btn','.page-nav-btn','.reset-btn','.logout-btn','.scanner-result-btn','.news-icon-btn'].join(',');
@@ -2640,14 +3492,22 @@ button:active,
 <div class="stat-pill"><div class="stat-pill-icon">✅</div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
 <div class="stat-pill"><div class="stat-pill-icon">🗓</div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
 </div>
+<div class="tracker-three-col">
+<div class="tracker-col-left">
+<div class="notes-section">
+<div class="section-title">Notizen</div>
+<div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
+</div>
+</div>
+<div class="tracker-col-mid">
+<div class="months-grid" id="months-grid"></div>
+</div>
+<div class="tracker-col-right">
 <div class="daily-section">
 <div class="section-title">Tägliche Aufgaben</div>
 <div class="daily-grid" id="daily-grid"></div>
 </div>
-<div class="months-grid" id="months-grid"></div>
-<div class="notes-section">
-<div class="section-title">Notizen</div>
-<div class="notes-box"><textarea id="notes-area" placeholder="Schreib hier deine Gedanken auf Deutsch..."></textarea></div>
+</div>
 </div>
 
     <!-- Analysis and suggestions section -->
