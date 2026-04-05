@@ -2035,6 +2035,307 @@ button:active,
   transition: opacity 0.3s;
 }
 .quiz-retry-btn:hover::before { opacity: 0.7; }
+
+/* ===== VOCABULARY PAGE ===== */
+/* Vocabulary page: search bar, hero card, category grid, flashcards */
+.vocab-container {
+  padding: 0 16px 40px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+/* Sticky search bar */
+.vocab-search-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+.vocab-search-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.vocab-search-icon {
+  color: var(--gold);
+}
+.vocab-search-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+}
+.vocab-filter-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 4px;
+}
+.vocab-filter-pill {
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.vocab-filter-pill.active,
+.vocab-filter-pill:hover {
+  background: rgba(232, 184, 75, 0.15);
+  border-color: rgba(232, 184, 75, 0.35);
+  color: var(--gold);
+}
+
+/* Daily Discovery hero */
+.vocab-hero {
+  margin-bottom: 24px;
+}
+.daily-card {
+  position: relative;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border-left: 6px solid var(--gold);
+  backdrop-filter: blur(12px);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.daily-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.daily-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.daily-badge {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(232, 184, 75, 0.6);
+}
+.daily-pronunciation {
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.daily-translation {
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.daily-card .hidden {
+  display: none;
+}
+
+/* Category grid */
+.vocab-category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.category-card {
+  position: relative;
+  padding: 20px 16px;
+  border-radius: 12px;
+  color: var(--white);
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.category-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.05em;
+}
+.progress-ring {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--gold) calc(var(--progress) * 100%),
+    rgba(255, 255, 255, 0.15) 0%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--white);
+}
+.category-card[data-cat='essentials'] {
+  background: linear-gradient(135deg, var(--m1), var(--m2));
+}
+.category-card[data-cat='work'] {
+  background: linear-gradient(135deg, var(--m3), var(--m4));
+}
+.category-card[data-cat='travel'] {
+  background: linear-gradient(135deg, var(--m4), var(--m5));
+}
+.category-card[data-cat='grammar'] {
+  background: linear-gradient(135deg, var(--m2), var(--m3));
+}
+
+/* Flashcards section */
+.vocab-flashcards {
+  margin-bottom: 40px;
+}
+.flashcards-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.flashcard-deck {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  margin-bottom: 16px;
+  perspective: 1000px;
+}
+.flashcard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+.flashcard-front {
+  text-align: center;
+}
+.flashcard-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.flashcard-pron {
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.flashcard-translation {
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.flashcard .hidden {
+  display: none;
+}
+.flashcard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.flashcard-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.flashcard-btn.mastered {
+  background: rgba(61, 186, 110, 0.2);
+  color: var(--green);
+  border: 1px solid rgba(61, 186, 110, 0.5);
+}
+.flashcard-btn.mastered:hover {
+  background: rgba(61, 186, 110, 0.3);
+}
+.flashcard-btn.learning {
+  background: rgba(204, 31, 31, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(204, 31, 31, 0.4);
+}
+.flashcard-btn.learning:hover {
+  background: rgba(204, 31, 31, 0.25);
+}
+.flashcard-next-btn {
+  width: 100%;
+  padding: 10px 0;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.flashcard-next-btn:hover {
+  box-shadow: 0 4px 10px rgba(232, 184, 75, 0.35);
+}
+.flashcard-next-btn:active {
+  transform: scale(0.97);
+}
+
+/* Swipe animations for flashcards */
+@keyframes swipe-left {
+  from { transform: translateX(0) rotate(0deg); opacity: 1; }
+  to   { transform: translateX(-100%) rotate(-15deg); opacity: 0; }
+}
+@keyframes swipe-right {
+  from { transform: translateX(0) rotate(0deg); opacity: 1; }
+  to   { transform: translateX(100%) rotate(15deg); opacity: 0; }
+}
+.flashcard.swipe-left {
+  animation: swipe-left 0.6s ease forwards;
+}
+.flashcard.swipe-right {
+  animation: swipe-right 0.6s ease forwards;
+}
 </style>
 <script>
 (function(){
@@ -2825,44 +3126,73 @@ button:active,
 <!-- Supabase -->
 <!-- Vocabulary Trainer Page — Match Pairs -->
 <div class="page" id="page-vocab">
-  <header>
+  <header class="vocab-header">
     <div class="flag-stripe"></div>
     <div class="header-inner">
       <h1><span id="vocab-title">Vokabeltrainer</span></h1>
     </div>
   </header>
-  <div style="max-width:700px;margin:0 auto;padding:10px 16px 0">
-    <div style="display:flex;align-items:center;gap:8px;background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:8px;padding:9px 14px;font-size:0.73rem;color:var(--muted)">
-      <span style="font-size:1rem">🌐</span>
-      <span>B1-Wortschatz aus <a href="https://www.deutschforyou.com/wortschatz/b1" target="_blank" style="color:var(--gold);text-decoration:none">deutschforyou.com</a> — Berufe · Bewerbung · Umwelt · Gesellschaft · Gesundheit · Kommunikation</span>
+  <div class="vocab-container">
+    <!-- Sticky search and filter bar -->
+    <div class="vocab-search-bar">
+      <div class="vocab-search-input">
+        <svg class="vocab-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" class="vocab-search-field" placeholder="Wort suchen…" />
+      </div>
+      <div class="vocab-filter-pills">
+        <button class="vocab-filter-pill active" data-filter="all">Alle</button>
+        <button class="vocab-filter-pill" data-filter="recent">Neu</button>
+        <button class="vocab-filter-pill" data-filter="difficult">Schwer</button>
+      </div>
     </div>
-  </div>
-  <div class="vocab-wrap">
-    <!-- Category filters -->
-    <div class="vocab-topbar">
-      <button class="vocab-cat-btn active" data-cat="all">Alle</button>
-      <button class="vocab-cat-btn" data-cat="berufe">💼 Berufe</button>
-      <button class="vocab-cat-btn" data-cat="bewerbung">📄 Bewerbung</button>
-      <button class="vocab-cat-btn" data-cat="umwelt">🌿 Umwelt</button>
-      <button class="vocab-cat-btn" data-cat="gesellschaft">🏛 Gesellschaft</button>
-      <button class="vocab-cat-btn" data-cat="gesundheit">🏥 Gesundheit</button>
-      <button class="vocab-cat-btn" data-cat="kommunikation">💬 Kommunikation</button>
-    </div>
-    <!-- Score + progress row -->
-    <div class="vocab-score-row">
-      <div class="vocab-score-chip">✅ <span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
-      <div class="vocab-progress-bar"><div class="vocab-progress-fill" id="vocab-progress-fill"></div></div>
-      <button class="vocab-new-btn" onclick="newVocabRound()">↻ Nouveau</button>
-    </div>
-    <!-- Match grid -->
-    <div class="match-grid" id="match-grid"></div>
-    <!-- Finished screen -->
-    <div class="vocab-finished" id="vocab-finished">
-      <div class="vocab-finished-icon">🎉</div>
-      <div class="vocab-finished-title">Parfait !</div>
-      <div class="vocab-finished-sub" id="vocab-finished-sub">Toutes les paires trouvées !</div>
-      <button class="vocab-finished-btn" onclick="newVocabRound()">↻ Nouveau round</button>
-    </div>
+
+    <!-- Daily Discovery Hero -->
+    <section class="vocab-hero">
+      <div class="daily-card">
+        <h2 class="daily-word">Wort<span class="daily-badge"></span></h2>
+        <div class="daily-pronunciation">[pʁoˈnɔn&#8239;si̯aːʦjɔn]</div>
+        <div class="daily-translation hidden">Übersetzung</div>
+      </div>
+    </section>
+
+    <!-- Category Grid -->
+    <section class="vocab-category-grid">
+      <div class="category-card" data-cat="essentials">
+        <div class="category-title">Essentials</div>
+        <div class="progress-ring" style="--progress: 0.3;">30%</div>
+      </div>
+      <div class="category-card" data-cat="work">
+        <div class="category-title">Beruf</div>
+        <div class="progress-ring" style="--progress: 0.6;">60%</div>
+      </div>
+      <div class="category-card" data-cat="travel">
+        <div class="category-title">Reise</div>
+        <div class="progress-ring" style="--progress: 0.1;">10%</div>
+      </div>
+      <div class="category-card" data-cat="grammar">
+        <div class="category-title">Grammatik</div>
+        <div class="progress-ring" style="--progress: 0.8;">80%</div>
+      </div>
+    </section>
+
+    <!-- Quick Review Flashcards -->
+    <section class="vocab-flashcards">
+      <h2 class="flashcards-title">Schnell Wiederholen</h2>
+      <div class="flashcard-deck">
+        <div class="flashcard">
+          <div class="flashcard-front">
+            <div class="flashcard-word">Wort</div>
+            <div class="flashcard-pron">[pʁoˈnɔn si̯aːʦjɔn]</div>
+            <div class="flashcard-translation hidden">Übersetzung</div>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-actions">
+        <button class="flashcard-btn mastered">Gelernt</button>
+        <button class="flashcard-btn learning">Lernen</button>
+      </div>
+      <button class="flashcard-next-btn">Nächste</button>
+    </section>
   </div>
 </div>
 <!-- Listening Practice Page -->
