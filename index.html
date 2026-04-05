@@ -1695,6 +1695,80 @@ h1 span{color:var(--gold)}
 .desk-nav-item:hover svg{opacity:0.85;transform:scale(1.12)}
 .desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.8))}
 
+/* ── DESK NAV LABEL — isolated span so i18n never touches the SVG ── */
+.desk-nav-label{
+  position:relative;z-index:1;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.84rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  line-height:1;
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+/* Gold border on every nav button — consistent visual language */
+.desk-nav-item{
+  border:1px solid rgba(232,184,75,0.18) !important;
+}
+.desk-nav-item:hover{
+  border-color:rgba(232,184,75,0.55) !important;
+  color:#e8b84b !important;
+}
+.desk-nav-item.active{
+  border-color:rgba(232,184,75,0.75) !important;
+  color:#e8b84b !important;
+}
+
+/* ── STUDY TOOLS (Quiz, Hören) — high-contrast active Gold glow ── */
+.desk-nav-study.active{
+  color:#e8b84b !important;
+  border-color:rgba(232,184,75,0.9) !important;
+  box-shadow:
+    0 0 0 1px rgba(232,184,75,0.35),
+    0 0 18px rgba(232,184,75,0.30),
+    inset 0 0 12px rgba(232,184,75,0.08) !important;
+}
+.desk-nav-study.active::before{opacity:1 !important;filter:blur(8px) !important}
+.desk-nav-study.active .desk-nav-label{
+  text-shadow:0 0 12px rgba(232,184,75,0.7);
+}
+.desk-nav-study.active svg{
+  filter:drop-shadow(0 0 7px rgba(232,184,75,1)) !important;
+}
+
+/* ── ADMIN BUTTON — subtle gold background to signal management role ── */
+@keyframes admin-pulse{
+  0%,100%{box-shadow:0 0 8px rgba(232,184,75,0.18),inset 0 0 10px rgba(232,184,75,0.07)}
+  50%{box-shadow:0 0 16px rgba(232,184,75,0.28),inset 0 0 16px rgba(232,184,75,0.12)}
+}
+.desk-nav-admin{
+  background:rgba(232,184,75,0.07) !important;
+  border-color:rgba(232,184,75,0.35) !important;
+  color:#d4a83a !important;
+  animation:admin-pulse 3s ease-in-out infinite;
+}
+.desk-nav-admin::after{background:rgba(232,184,75,0.05) !important}
+.desk-nav-admin:hover{
+  background:rgba(232,184,75,0.14) !important;
+  border-color:rgba(232,184,75,0.7) !important;
+  color:#e8b84b !important;
+  animation:none;
+}
+.desk-nav-admin.active{
+  background:rgba(232,184,75,0.16) !important;
+  border-color:#e8b84b !important;
+  color:#e8b84b !important;
+  animation:none;
+  box-shadow:0 0 20px rgba(232,184,75,0.35) !important;
+}
+
+/* Light-mode adjustments */
+[data-theme="light"] .desk-nav-item{border-color:rgba(200,148,40,0.2) !important}
+[data-theme="light"] .desk-nav-item:hover{border-color:rgba(200,148,40,0.5) !important;color:#c89428 !important}
+[data-theme="light"] .desk-nav-item.active{border-color:rgba(200,148,40,0.75) !important;color:#c89428 !important}
+[data-theme="light"] .desk-nav-admin{background:rgba(200,148,40,0.06) !important;border-color:rgba(200,148,40,0.3) !important;color:#a07820 !important}
+
 /* GHOST BUTTONS */
 .reset-btn,.logout-btn{position:relative;overflow:hidden;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;border-radius:6px;transition:border-color 0.2s,color 0.2s,background 0.2s,transform 0.15s;min-height:36px}
 .reset-btn:hover,.logout-btn:hover{border-color:var(--red);color:#ff6b6b;background:rgba(204,31,31,0.06);transform:translateY(-1px)}
@@ -2103,46 +2177,48 @@ h1 span{color:var(--gold)}
 <nav class="desktop-nav" id="desktop-nav">
   <!-- 1. Tracker -->
   <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg> Tracker
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_tracker">Tracker</span>
   </button>
-  <!-- 2. Quiz -->
-  <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
+  <!-- 2. Quiz — interactive study tool: high-contrast active glow -->
+  <button class="desk-nav-item desk-nav-study" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_quiz">Quiz</span>
   </button>
   <!-- 3. Vokabeln -->
   <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
-    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-    </svg> Vokabeln
+    <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_vocab">Vokabeln</span>
   </button>
-  <!-- 4. Hören -->
-  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
-    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
-      <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
-      <path d="M4 12a8 8 0 0 1 16 0"></path>
-    </svg> Hören
+  <!-- 4. Hören — interactive study tool: high-contrast active glow -->
+  <button class="desk-nav-item desk-nav-study" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
+    <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v4a2 2 0 0 0 2 2h2"/><path d="M18 12v4a2 2 0 0 1-2 2h-2"/><path d="M4 12a8 8 0 0 1 16 0"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_listen">Hören</span>
   </button>
   <!-- 5. Niveau -->
   <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_level">Niveau</span>
   </button>
   <!-- 6. Translator -->
   <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Translator" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Translator
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_translate">Translator</span>
   </button>
   <!-- 7. News -->
   <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_news">News</span>
   </button>
-  <!-- 8. Documents -->
-  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Documents" type="button">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Documents
+  <!-- 8. Dokumente -->
+  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_docs">Dokumente</span>
   </button>
-  <!-- 9. Admin (hidden until role confirmed) -->
-  <button class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
-    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin
+  <!-- 9. Admin — management tool: subtle gold glow background -->
+  <button class="desk-nav-item desk-nav-admin" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
+    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span class="desk-nav-label" data-i18n="nav_admin">Admin</span>
   </button>
   <div class="desk-nav-right">
     <div style="position:relative">
@@ -2623,7 +2699,7 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- Bottom nav bar -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Translator  7.News  8.Documents  9.Admin  +Notif +Profile -->
+<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Translator  7.News  8.Dokumente  9.Admin  +Notif +Profile -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
   <!-- 1. Tracker -->
@@ -2710,7 +2786,7 @@ h1 span{color:var(--gold)}
         <polyline points="14 2 14 8 20 8"></polyline>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_docs">Documents</div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
   <!-- 9. Admin (hidden until role confirmed) -->
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
@@ -4120,11 +4196,11 @@ if(document.getElementById('page-discussions') &&
 /* ── Complete translation dictionary ── */
 window.TRANSLATIONS = {
   de: {
-    /* Navigation */
+    /* Navigation — exact labels per spec */
     nav_tracker:     'Tracker',
     nav_docs:        'Dokumente',
     nav_news:        'News',
-    nav_translate:   'Übersetzer',
+    nav_translate:   'Translator',
     nav_quiz:        'Quiz',
     nav_vocab:       'Vokabeln',
     nav_listen:      'Hören',
@@ -4280,11 +4356,11 @@ window.TRANSLATIONS = {
     nav_tracker:     'Tracker',
     nav_docs:        'Documents',
     nav_news:        'News',
-    nav_translate:   'Translate',
+    nav_translate:   'Translator',
     nav_quiz:        'Quiz',
-    nav_vocab:       'Vocabulary',
-    nav_listen:      'Listening',
-    nav_level:       'Level Test',
+    nav_vocab:       'Vokabeln',
+    nav_listen:      'Hören',
+    nav_level:       'Niveau',
     nav_admin:       'Admin',
     nav_alerts:      'Alerts',
     nav_profile:     'Profile',
@@ -4598,10 +4674,19 @@ function applyTranslations(lang) {
   document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
 
-  /* data-i18n elements */
+  /* data-i18n elements — set textContent ONLY on leaf nodes that have no
+     child elements (e.g. <span>, <div class="nav-label">, <label>).
+     Buttons and containers that also hold SVG icons are intentionally
+     skipped here to prevent the icon from being wiped out. */
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
-    if (dict[key] !== undefined) {
+    if (dict[key] === undefined) return;
+    /* Skip if this element has child ELEMENT nodes (e.g. a button with an svg) */
+    var hasChildElements = false;
+    for (var i = 0; i < el.childNodes.length; i++) {
+      if (el.childNodes[i].nodeType === 1) { hasChildElements = true; break; }
+    }
+    if (!hasChildElements) {
       el.textContent = dict[key];
     }
   });
