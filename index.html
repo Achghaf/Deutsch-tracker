@@ -49,7 +49,7 @@
 }
 
 /* Nav bars */
-[data-theme="light"] .bottom-nav,[data-theme="light"] .desktop-nav{background:#fff;border-color:#d8d2c8}
+[data-theme="light"] .bottom-nav,[data-theme="light"] .desktop-nav{background:#fff;border-color:rgba(212,175,55,0.3)}
 [data-theme="light"] .nav-label{color:#7a7067}
 [data-theme="light"] .nav-item.active .nav-label{color:var(--gold)}
 
@@ -243,7 +243,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   font-size:clamp(1.8rem,6vw,3rem);
   letter-spacing:0.06em;
   line-height:1.05;
-  color:#D4AF37;          /* Gold — single source of truth */
+  /* Apply a gold gradient to page titles */
+  background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc8800,#e8b84b);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:#D4AF37;
   margin:0;
   display:block;
 }
@@ -262,14 +266,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   margin-top:5px;
 }
 /* Light-mode gold */
-[data-theme="light"] .page-title{color:#c89428}
+[data-theme="light"] .page-title{
+  /* Keep the same gradient styling for titles in light mode */
+  background:linear-gradient(45deg,#d4af37,#f0c56a,#c9941e,#d4af37);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:#c89428;
+}
 [data-theme="light"] .page-title-bar{border-color:var(--border);}
 
 /* Remove old <header> styles that only applied to pages now using page-title-bar */
 /* The global header rule is kept for any remaining <header> elements */
 /* ===== BOTTOM NAV — scrollable emoji tabs ===== */
 :root{--nav-h:62px}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:rgba(16,16,16,0.86);border-top:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
 /* Scroll track — takes full width inside the nav */
 .bottom-nav-track{display:flex;align-items:flex-start;padding-top:6px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;width:100%;scroll-snap-type:x proximity}
 .bottom-nav-track::-webkit-scrollbar{display:none}
@@ -574,11 +584,11 @@ h1 span{color:var(--gold)}
 /* DESKTOP NAV — layout shell only; visual style is in the Gold-Glow block further below */
 .desktop-nav{
   display:none;
-  /* Glassmorphism header: semi-transparent dark backdrop with blur and subtle border */
+  /* Glassmorphism header: semi-transparent dark backdrop with blur and subtle gold border */
   background:rgba(16,16,16,0.82);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(212,175,55,0.3);
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
   padding:0 16px;
   position:sticky;
   top:0;
@@ -2363,13 +2373,9 @@ h1 span{color:var(--gold)}
   <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Translator" type="button">
     <span class="desk-nav-emoji">🌐</span>
   </button>
-  <!-- 7. Vokabeln (was News) -->
-  <!-- Changed this nav button to open the vocabulary page instead of the unused News page.
-       Keeping the original Vokabeln entry above ensures there are two access points for the vocab trainer,
-       which matches the user's request to see Vokabeln where News used to be. -->
-  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
-    <!-- books icon to represent vocabulary -->
-    <span class="desk-nav-emoji">📚</span>
+  <!-- 7. News -->
+  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
+    <span class="desk-nav-emoji">📰</span>
   </button>
   <!-- 8. Dokumente -->
   <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
@@ -2957,16 +2963,17 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_translate">Translator</div>
   </div>
-  <!-- 7. Vokabeln (was News) -->
-  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+  <!-- 7. News -->
+  <div class="nav-item" data-page="news" onclick="switchPage('news')">
     <div class="nav-icon">
-      <!-- icon reused from the existing vocabulary nav item (#3) -->
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        <path d="M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16z"></path>
+        <path d="M16 21H2a2 2 0 0 1-2-2V9"></path>
+        <line x1="6" y1="10" x2="16" y2="10"></line>
+        <line x1="6" y1="14" x2="16" y2="14"></line>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
+    <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
   <!-- 8. Documents -->
   <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
