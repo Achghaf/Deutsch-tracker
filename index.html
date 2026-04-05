@@ -941,8 +941,11 @@ button:active,
 }
 
 /* ===== TRANSLATE PAGE — Enhanced Design ===== */
+/* Removed page-specific header and title overrides to allow global header styles to apply properly. */
+/*
 #page-translate header{background:transparent;border-bottom:none;padding:28px 16px 0}
 #page-translate h1{font-size:clamp(1.8rem,6vw,3rem)}
+*/
 
 .translate-page{
   position:relative;
@@ -2203,7 +2206,7 @@ button:active,
 
 <!-- TRACKER PAGE -->
 <div class="page active" id="page-tracker">
-<header>
+<header class="tracker-header">
 <div class="flag-stripe"></div>
 <div class="header-inner">
 <div>
@@ -2290,7 +2293,7 @@ button:active,
 </div>
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
-<header>
+<header class="pdf-header">
 <div class="flag-stripe"></div>
 <div class="header-inner">
 <h1><span>Dokumente</span></h1>
@@ -2474,7 +2477,7 @@ button:active,
 </div>
 <!-- NEWS PAGE -->
 <div class="page" id="page-news">
-<header>
+<header class="news-header">
 <div class="flag-stripe"></div>
 <div class="header-inner">
 <h1><span id="news-page-title">Artikel &amp; News</span></h1>
@@ -2525,7 +2528,7 @@ button:active,
 </div>
 <!-- TRANSLATE PAGE -->
 <div class="page" id="page-translate">
-<header>
+<header class="translate-header">
 <div class="flag-stripe"></div>
 <div class="header-inner">
 <h1><span id="translate-page-title">Übersetzer</span></h1>
