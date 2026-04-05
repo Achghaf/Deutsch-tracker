@@ -2,7 +2,7 @@
 
 <html lang="de">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -13,142 +13,7 @@
 <title>Mein Ziel: Deutsch B1</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
-:root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px;--theme-transition:background 0.3s ease,color 0.3s ease,border-color 0.3s ease,box-shadow 0.3s ease}
-
-/* ══════════════════════════════════════════
-   LIGHT MODE — overrides every dark token
-   ══════════════════════════════════════════ */
-[data-theme="light"]{
-  --black:#f0ece3;
-  --white:#1a1a1a;
-  --mid:#e8e3da;
-  --card:#ffffff;
-  --border:#d8d2c8;
-  --muted:#7a7067;
-  --gold:#c89428;
-  /* keep accent colours the same */
-  --red:#cc1f1f;
-  --green:#2ea05a;
-  --blue:#2563eb;
-  --m1:#4668b0;
-  --m2:#9a6a1c;
-  --m3:#2a8f60;
-  --m4:#cc1f1f;
-  --m5:#7228a8;
-}
-
-/* Smooth theme transition on every element */
-*,[data-theme="light"] *{transition:var(--theme-transition)}
-
-/* Body background + text */
-[data-theme="light"] body{background:#f0ece3;color:#1a1a1a}
-
-/* Grid pattern: dark lines on light bg */
-[data-theme="light"] body::before{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='rgba(0,0,0,0.04)' stroke-width='1'/%3E%3C/svg%3E")
-}
-
-/* Nav bars */
-[data-theme="light"] .bottom-nav,[data-theme="light"] .desktop-nav{background:#fff;border-color:rgba(212,175,55,0.3)}
-[data-theme="light"] .nav-label{color:#7a7067}
-[data-theme="light"] .nav-item.active .nav-label{color:var(--gold)}
-
-/* Desktop nav buttons */
-[data-theme="light"] .desk-nav-item{background:#f5f0e8;color:#7a7067}
-[data-theme="light"] .desk-nav-item::after{background:#f5f0e8}
-[data-theme="light"] .desk-nav-item:hover::after{background:#ece7de}
-[data-theme="light"] .desk-nav-item.active{color:var(--gold)}
-[data-theme="light"] .desk-nav-item.active::after{background:#f0e8d4}
-
-/* Cards, modals, panels */
-[data-theme="light"] .login-box,[data-theme="light"] .confirm-box{background:rgba(255,255,255,0.95);border-color:rgba(200,148,40,0.2)}
-[data-theme="light"] .login-screen{background-color:#e8e3da}
-[data-theme="light"] .month-card,[data-theme="light"] .task-card,[data-theme="light"] .stat-pill{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .notes-box{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .notes-box textarea{color:#1a1a1a}
-[data-theme="light"] .notes-box textarea::placeholder{color:#b0a898}
-[data-theme="light"] .notif-panel,[data-theme="light"] .profile-sheet{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .pdf-modal,[data-theme="light"] .rename-modal{background:#fff}
-[data-theme="light"] .rename-box{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .notif-modal{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .nav-drawer{background:#f5f0e8;border-color:#d8d2c8}
-[data-theme="light"] .nav-drawer-item{background:rgba(0,0,0,0.03);border-color:#d8d2c8}
-[data-theme="light"] .scanner-shell{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .profile-modal{background:rgba(0,0,0,0.45)}
-
-/* Inputs */
-[data-theme="light"] .login-field input,[data-theme="light"] .profile-field input,
-[data-theme="light"] .notif-field input,[data-theme="light"] .notif-field textarea,
-[data-theme="light"] .notif-field select,[data-theme="light"] .rename-input,
-[data-theme="light"] .rename-select,[data-theme="light"] .admin-search,
-[data-theme="light"] .docs-search-input,[data-theme="light"] #listening-input,
-[data-theme="light"] .disc-textarea,[data-theme="light"] .disc-search-input{
-  background:#f5f1eb;border-color:#ccc6bb;color:#1a1a1a
-}
-[data-theme="light"] .login-field input::placeholder,[data-theme="light"] .profile-field input::placeholder{color:#b0a898}
-
-/* Header */
-[data-theme="light"] header{background:#f0ece3;border-color:#d8d2c8}
-[data-theme="light"] h1{color:#1a1a1a}
-
-/* Discussions sidebar */
-[data-theme="light"] .disc-sidebar{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .disc-user-row:hover{background:rgba(0,0,0,0.03)}
-[data-theme="light"] .disc-convo-row:hover{background:rgba(0,0,0,0.03)}
-[data-theme="light"] .disc-bubble{background:#ede9e2;color:#1a1a1a}
-[data-theme="light"] .disc-msg.sent .disc-bubble{background:rgba(200,148,40,0.2);color:#1a1a1a}
-[data-theme="light"] .disc-chat,[data-theme="light"] .disc-messages{background:#f7f3ec}
-[data-theme="light"] .disc-input-bar{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .disc-chat-header{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .disc-safety-menu{background:#fff;border-color:#d8d2c8}
-
-/* Admin page */
-[data-theme="light"] .admin-page{background:#f0ece3}
-[data-theme="light"] .admin-stat-card{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .admin-users-wrap{background:#fff;border:1px solid #d8d2c8;border-radius:8px}
-[data-theme="light"] .admin-chart-wrap{background:#fff;border-color:#d8d2c8}
-
-/* Misc UI */
-[data-theme="light"] .user-badge{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .streak-counter{background:rgba(200,148,40,0.06);border-color:#d8d2c8}
-[data-theme="light"] .profile-stat-chip{background:#f5f0e8;border-color:#d8d2c8}
-[data-theme="light"] .profile-banner{background:linear-gradient(135deg,rgba(200,148,40,0.12) 0%,rgba(91,126,201,0.09) 50%,rgba(204,31,31,0.07) 100%)}
-[data-theme="light"] .profile-btn.secondary{background:rgba(0,0,0,0.05);border-color:#d8d2c8;color:#555}
-[data-theme="light"] .week-row:hover{background:rgba(0,0,0,0.03)}
-[data-theme="light"] .match-card{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .match-card.de{background:rgba(70,104,176,0.08);border-color:rgba(70,104,176,0.25);color:#1a1a1a}
-[data-theme="light"] .match-card.en{background:rgba(154,106,28,0.08);border-color:rgba(154,106,28,0.25);color:#2a1f00}
-[data-theme="light"] .pdf-upload-zone{border-color:#ccc6bb;background:rgba(0,0,0,0.02)}
-[data-theme="light"] .storage-bar{background:#fff;border-color:#d8d2c8}
-[data-theme="light"] .docs-toolbar{background:#f5f0e8}
-
-/* App loader */
-[data-theme="light"] .app-loader{background:#f0ece3}
-[data-theme="light"] .big-spinner{border-color:#d8d2c8;border-top-color:var(--gold)}
-
-/* ── THEME TOGGLE BUTTON ── */
-.theme-toggle{
-  position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 14px);
-  right:14px;z-index:1500;
-  width:40px;height:40px;border-radius:50%;
-  background:#1e1e1e;border:1px solid #3a3a3a;
-  color:#e8b84b;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(0,0,0,0.35);
-  transition:background 0.25s,border-color 0.25s,transform 0.18s,box-shadow 0.25s;
-  will-change:transform;
-  flex-shrink:0;
-}
-.theme-toggle:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(232,184,75,0.3);border-color:var(--gold)}
-.theme-toggle:active{transform:scale(0.92)}
-[data-theme="light"] .theme-toggle{background:#fff;border-color:#d8d2c8;color:#c89428;box-shadow:0 4px 16px rgba(0,0,0,0.12)}
-[data-theme="light"] .theme-toggle:hover{box-shadow:0 6px 22px rgba(200,148,40,0.25)}
-/* Sun icon shown in dark mode (click → go light) */
-.theme-toggle .icon-sun{display:block}
-.theme-toggle .icon-moon{display:none}
-[data-theme="light"] .theme-toggle .icon-sun{display:none}
-[data-theme="light"] .theme-toggle .icon-moon{display:block}
-
+:root{--black:#0e0e0e;--white:#f5f0e8;--gold:#e8b84b;--red:#cc1f1f;--mid:#1e1e1e;--card:#161616;--border:#2a2a2a;--muted:#555;--green:#3dba6e;--blue:#3a82f7;--m1:#5b7ec9;--m2:#b5832a;--m3:#3aaa74;--m4:#cc1f1f;--m5:#8b3dba;--nav-h:56px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));background:var(--black)}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='rgba(255,255,255,0.012)' stroke-width='1'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none;z-index:0;will-change:auto}
@@ -215,71 +80,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block}
 
-/* ══════════════════════════════════════════════════════
-   UNIFIED PAGE TITLE SYSTEM
-   Every page has exactly ONE <h1 class="page-title">.
-   It is centred, gold, Bebas Neue — no duplicates allowed.
-   The hero-divs on Quiz / Level / Admin are removed;
-   they now rely solely on this shared header bar.
-   ══════════════════════════════════════════════════════ */
-@keyframes titleReveal{
-  from{opacity:0;transform:translateY(-8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.page-title-bar{
-  width:100%;
-  padding:28px 16px 16px;
-  text-align:center;
-  border-bottom:1px solid var(--border);
-  position:relative;
-  overflow:hidden;
-}
-.page-title-bar .flag-stripe{
-  position:absolute;top:0;left:0;right:0;height:4px;
-  /* flag-stripe already has its own background rule */
-}
-.page-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(1.8rem,6vw,3rem);
-  letter-spacing:0.06em;
-  line-height:1.05;
-  /* Apply a gold gradient to page titles */
-  background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc8800,#e8b84b);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  color:#D4AF37;
-  margin:0;
-  display:block;
-}
-/* Entrance animation fires whenever the page becomes .active */
-.page.active .page-title{
-  animation:titleReveal 0.35s cubic-bezier(0.22,1,0.36,1) both;
-}
-.page-title .title-sub{
-  display:block;
-  font-family:'DM Sans',sans-serif;
-  font-size:0.72rem;
-  font-weight:400;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-top:5px;
-}
-/* Light-mode gold */
-[data-theme="light"] .page-title{
-  /* Keep the same gradient styling for titles in light mode */
-  background:linear-gradient(45deg,#d4af37,#f0c56a,#c9941e,#d4af37);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  color:#c89428;
-}
-[data-theme="light"] .page-title-bar{border-color:var(--border);}
-
-/* Remove old <header> styles that only applied to pages now using page-title-bar */
-/* The global header rule is kept for any remaining <header> elements */
 /* ===== BOTTOM NAV — scrollable emoji tabs ===== */
 :root{--nav-h:62px}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:rgba(16,16,16,0.86);border-top:1px solid rgba(212,175,55,0.3);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + env(safe-area-inset-bottom));background:#111;border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:1202;padding-bottom:env(safe-area-inset-bottom);overflow:hidden}
 /* Scroll track — takes full width inside the nav */
 .bottom-nav-track{display:flex;align-items:flex-start;padding-top:6px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;width:100%;scroll-snap-type:x proximity}
 .bottom-nav-track::-webkit-scrollbar{display:none}
@@ -295,14 +98,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* Emoji icon */
 .nav-icon{font-size:1.55rem;line-height:1;transition:transform 0.18s,filter 0.18s;filter:grayscale(0.4) opacity(0.55)}
 .nav-item.active .nav-icon{filter:grayscale(0) opacity(1);transform:scale(1.15) translateY(-1px)}
-/* SVG icons — sized to match the nav icon container. The parent
-   .nav-icon element controls filter/transform for active state. */
+/* When using SVG icons instead of emojis, scale the SVGs to match the original emoji size. The parent
+   .nav-icon element still controls filter/transform. */
 .nav-icon svg{width:1.55rem;height:1.55rem;display:block;}
 /* Active indicator dot */
 .nav-item::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;transition:opacity 0.18s}
 .nav-item.active::after{opacity:1}
 /* Label */
-.nav-label{font-size:0.52rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);transition:color 0.2s;white-space:nowrap;text-align:center;width:100%;line-height:1.2;font-weight:500}
+.nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.18s;white-space:nowrap}
 .nav-item.active .nav-label{color:var(--gold)}
 /* NAV DRAWER OVERLAY */
 .nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -319,7 +122,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .nav-drawer-item:active{transform:scale(0.95);background:rgba(255,255,255,0.04)}
 .nav-drawer-item.active{border-color:var(--gold);background:rgba(232,184,75,0.08)}
 .nav-drawer-item.active .nav-drawer-item-label{color:var(--gold)}
-.nav-drawer-item-icon{flex-shrink:0;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted)}.nav-drawer-item-icon svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none}
+.nav-drawer-item-icon{font-size:1.35rem;flex-shrink:0;line-height:1;width:26px;text-align:center;color:var(--muted)}
 .nav-drawer-item.active .nav-drawer-item-icon{color:var(--gold)}
 .nav-drawer-item-label{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.06em;color:var(--white);line-height:1.2;display:block}
 .nav-drawer-item-sub{font-size:0.58rem;color:var(--muted);margin-top:2px;display:block;letter-spacing:0.04em}
@@ -426,7 +229,7 @@ h1 span{color:var(--gold)}
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 24px;max-width:1148px;margin:0 auto}
 .stat-pill{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:10px}
-.stat-pill-icon{font-size:1.2rem;color:var(--gold);opacity:0.7;display:flex;align-items:center;justify-content:center;width:24px;flex-shrink:0}
+.stat-pill-icon{font-size:1.2rem}
 .stat-pill-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);line-height:1}
 .stat-pill-label{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
 
@@ -449,8 +252,8 @@ h1 span{color:var(--gold)}
 .scanner-shell{width:100%;max-width:440px;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
 .scanner-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
 .scanner-header-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.08em;color:var(--gold)}
-.scanner-close-btn{background:transparent;border:none;color:#D4AF37 !important;font-size:24px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color 0.2s;z-index:1000;position:relative}
-.scanner-close-btn:hover{color:#f5d27e !important}
+.scanner-close-btn{background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color 0.2s}
+.scanner-close-btn:hover{color:var(--white)}
 .scanner-video-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;overflow:hidden}
 .scanner-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
 .scanner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
@@ -539,7 +342,7 @@ h1 span{color:var(--gold)}
 .pdf-modal.open{display:flex}
 .pdf-modal-header{padding:12px 16px;background:#111;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
 .pdf-modal-title{flex:1;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.modal-close-btn{background:transparent;border:1px solid rgba(212,175,55,0.4);color:#D4AF37 !important;width:34px;height:34px;border-radius:4px;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1000;position:relative}
+.modal-close-btn{background:transparent;border:1px solid var(--border);color:var(--white);width:32px;height:32px;border-radius:4px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pdf-modal-controls{padding:10px 16px;background:#0d0d0d;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
 .page-nav-btn{background:var(--card);border:1px solid var(--border);color:var(--white);padding:6px 14px;border-radius:4px;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
 .page-nav-btn:disabled{opacity:0.3;cursor:default}
@@ -581,161 +384,12 @@ h1 span{color:var(--gold)}
 .month-card:nth-child(4){animation-delay:0.15s}
 .month-card:nth-child(5){animation-delay:0.2s}
 
-/* DESKTOP NAV — layout shell only; visual style is in the Gold-Glow block further below */
-.desktop-nav{
-  display:none;
-  /* Glassmorphism header: semi-transparent dark backdrop with blur and subtle gold border */
-  background:rgba(16,16,16,0.82);
-  border-bottom:1px solid rgba(212,175,55,0.3);
-  backdrop-filter:blur(15px);
-  -webkit-backdrop-filter:blur(15px);
-  padding:0 16px;
-  position:sticky;
-  top:0;
-  z-index:260;
-  align-items:center;
-  pointer-events:auto;
-  gap:0;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-.desktop-nav::-webkit-scrollbar{display:none}
-.desk-nav-right{
-  /* Utility zone: notification, theme, language and profile icons aligned to the right */
-  margin-left:auto;
-  display:flex;
-  align-items:center;
-  gap:15px;
-  flex-shrink:0;
-  position:relative;
-  z-index:261;
-}
-
-/* Header layout helpers */
-.desk-nav-left{
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  margin-right:20px;
-}
-.desk-nav-logo{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.4rem;
-  letter-spacing:0.06em;
-  color:var(--gold);
-  user-select:none;
-}
-.desk-nav-center{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex:1;
-  justify-content:center;
-  overflow-x:auto;
-}
-.desk-nav-center::-webkit-scrollbar{display:none}
-
-/* .desk-nav-emoji removed — buttons now use SVG icons + .desk-nav-label text spans */
-
-/* Override theme toggle positioning when inside the desktop header */
-.desktop-nav .theme-toggle{
-  position:relative;
-  bottom:auto;
-  right:auto;
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:rgba(20,20,20,0.8);
-  color:var(--gold);
-  box-shadow:none;
-  padding:0;
-}
-.desktop-nav .theme-toggle:hover{
-  transform:scale(1.05);
-  border-color:var(--gold);
-}
-[data-theme="light"] .desktop-nav .theme-toggle{
-  background:#fff;
-  border-color:#d8d2c8;
-  color:#c89428;
-}
-
-/* Override language selector for desktop header */
-.desktop-nav .lang-fab{
-  position:relative;
-  bottom:auto;
-  left:auto;
-  right:auto;
-  margin:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.desktop-nav .lang-fab-btn{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:rgba(20,20,20,0.8);
-  color:var(--gold);
-  font-size:1.05rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  box-shadow:none;
-  padding:0;
-}
-.desktop-nav .lang-fab-btn:hover{
-  transform:scale(1.05);
-  border-color:var(--gold);
-}
-[data-theme="light"] .desktop-nav .lang-fab-btn{
-  background:#fff;
-  border-color:#d8d2c8;
-  color:#c89428;
-}
-.desktop-nav .lang-fab-menu{
-  position:absolute;
-  top:calc(100% + 6px);
-  right:0;
-  display:none;
-  flex-direction:column;
-  gap:4px;
-  background:rgba(20,20,20,0.92);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.6);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  z-index:100;
-}
-.desktop-nav .lang-fab-menu.open{display:flex}
-.desktop-nav .lang-fab-option{
-  padding:6px 10px;
-  border-radius:6px;
-  background:transparent;
-  color:var(--muted);
-  font-size:0.75rem;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  white-space:nowrap;
-  border:none;
-  cursor:pointer;
-  transition:all 0.15s;
-}
-.desktop-nav .lang-fab-option:hover{
-  background:rgba(232,184,75,0.1);
-  color:var(--white);
-}
-.desktop-nav .lang-fab-option.active{
-  background:rgba(232,184,75,0.15);
-  color:var(--gold);
-  font-weight:600;
-}
+/* DESKTOP NAV */
+.desktop-nav{display:none;background:#111;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:260;align-items:center;pointer-events:auto}
+.desk-nav-item{padding:14px 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;background:transparent;border:none;appearance:none;-webkit-appearance:none;pointer-events:auto;position:relative;z-index:261}
+.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold)}
+.desk-nav-item:hover{color:var(--white)}
+.desk-nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative;z-index:261}
 
 /* RESPONSIVE */
 @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr)}.daily-grid{grid-template-columns:repeat(4,1fr)}.toast{left:auto;width:auto;min-width:260px}}
@@ -878,8 +532,8 @@ h1 span{color:var(--gold)}
 .profile-name{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.05em;line-height:1.1;color:var(--white)}
 .profile-role-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.25)}
 .profile-email-small{font-size:0.68rem;color:var(--muted);margin-top:3px;word-break:break-all;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}
-.profile-close{background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);color:#D4AF37 !important;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;align-self:flex-start;margin-top:4px;z-index:1000;position:relative}
-.profile-close:hover{background:rgba(212,175,55,0.18);border-color:#D4AF37;color:#f5d27e !important}
+.profile-close{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;align-self:flex-start;margin-top:4px}
+.profile-close:hover{background:rgba(255,255,255,0.1);border-color:var(--white);color:var(--white)}
 .profile-body{padding:18px 20px 24px;overflow-y:auto;max-height:calc(80vh - 160px)}
 /* Section labels */
 .profile-section-label{font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:8px}
@@ -1390,7 +1044,8 @@ h1 span{color:var(--gold)}
 /* ADMIN PAGE */
 .admin-page{padding:0 16px 40px;max-width:1100px;margin:0 auto}
 .admin-hero{padding:32px 0 24px;border-bottom:1px solid var(--border);margin-bottom:28px}
-.quiz-hero-sub,.level-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+.admin-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:0.05em;line-height:1}
+.admin-hero-title span{color:var(--gold)}
 .admin-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .admin-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
 .admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 16px;position:relative;overflow:hidden}
@@ -1461,7 +1116,9 @@ h1 span{color:var(--gold)}
 /* ===== QUIZ PAGE ===== */
 .quiz-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
 .quiz-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-/* quiz-hero-title, level-hero-title replaced by .page-title */
+.quiz-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
+.quiz-hero-title span{color:var(--gold)}
+.quiz-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .quiz-config{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .quiz-config-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
 .quiz-select{background:#111;border:1px solid var(--border);border-radius:5px;padding:8px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;cursor:pointer}
@@ -1498,7 +1155,9 @@ h1 span{color:var(--gold)}
 /* ===== LEVEL PAGE ===== */
 .level-page{padding:0 16px 40px;max-width:700px;margin:0 auto}
 .level-hero{padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
-/* level-hero-title, level-hero-sub replaced by .page-title */
+.level-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:0.05em}
+.level-hero-title span{color:var(--gold)}
+.level-hero-sub{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
 .level-start-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px;text-align:center;margin-bottom:20px}
 .level-start-icon{font-size:3rem;margin-bottom:12px}
 .level-start-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.05em;color:var(--white);margin-bottom:8px}
@@ -1788,176 +1447,16 @@ h1 span{color:var(--gold)}
 .nav-label{font-size:0.55rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
 .nav-item.active .nav-label{color:var(--gold)}
 
-/* DESKTOP NAV — Gold Glow buttons (hardware-accelerated) */
-@keyframes glow-nav{0%{background-position:0 0}50%{background-position:400% 0}100%{background-position:0 0}}
-.desk-nav-item{
-  /* Layout */
-  position:relative;z-index:0;
-  display:inline-flex;flex-direction:row;align-items:center;gap:7px;
-  padding:0 16px;height:44px;margin:5px 3px;
-  flex-shrink:0;white-space:nowrap;
-  /* Typography */
-  font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:0.13em;
-  color:var(--muted);
-  /* Shape */
-  border:none;outline:none;border-radius:8px;
-  background:#141414;overflow:visible;
-  /* Interaction */
-  cursor:pointer;
-  appearance:none;-webkit-appearance:none;
-  user-select:none;-webkit-user-select:none;
-  touch-action:manipulation;
-  /* Transitions — transform on GPU via will-change */
-  transition:color 0.2s,transform 0.18s,box-shadow 0.2s;
-  will-change:transform,box-shadow;
-}
-/* Animated gold-glow halo — behind the button */
-.desk-nav-item::before{
-  content:"";
-  position:absolute;top:-2px;left:-2px;
-  width:calc(100% + 4px);height:calc(100% + 4px);
-  border-radius:10px;z-index:-1;
-  background:linear-gradient(45deg,#e8b84b,#f5d78e,#cc1f1f,#e8b84b,#b5832a,#f0c84a,#cc8800,#e8b84b);
-  background-size:400%;
-  animation:glow-nav 6s linear infinite;
-  filter:blur(6px);-webkit-filter:blur(6px);
-  opacity:0;
-  transition:opacity 0.25s ease-in-out;
-  will-change:opacity,filter;
-}
-/* Solid fill layer — sits above halo, below content */
-.desk-nav-item::after{
-  content:"";
-  position:absolute;inset:0;
-  border-radius:8px;z-index:-1;
-  background:#141414;
-  transition:background 0.2s;
-}
-/* Hover state — Gold Glow activates */
-.desk-nav-item:hover{color:var(--white);transform:translateY(-1px);box-shadow:0 4px 20px rgba(232,184,75,0.15)}
-.desk-nav-item:hover::before{opacity:0.75;filter:blur(7px);-webkit-filter:blur(7px)}
-.desk-nav-item:hover::after{background:#1c1c1c}
-/* Active/current page — persistent full Gold Glow */
-.desk-nav-item.active{
-  color:var(--gold);
-  box-shadow:0 0 0 1px rgba(232,184,75,0.3),0 4px 24px rgba(232,184,75,0.2);
-}
-.desk-nav-item.active::before{opacity:1;filter:blur(7px);-webkit-filter:blur(7px)}
-.desk-nav-item.active::after{background:#181410}
-/* Press */
-.desk-nav-item:active{transform:scale(0.95)!important;box-shadow:none!important}
-/* SVG icon */
-.desk-nav-item svg{
-  position:relative;z-index:1;
-  opacity:0.45;flex-shrink:0;
-  transition:opacity 0.2s,filter 0.2s,transform 0.2s;
-  will-change:transform,opacity;
-}
-.desk-nav-item:hover svg{opacity:0.85;transform:scale(1.12)}
-.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.8))}
-
-/* ── DESK NAV LABEL — isolated span so i18n never touches the SVG ── */
-.desk-nav-label{
-  position:relative;z-index:1;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:0.84rem;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  line-height:1;
-  pointer-events:none;
-  white-space:nowrap;
-}
-
-/* Gold border on every nav button — consistent visual language */
-.desk-nav-item{
-  border:1px solid rgba(232,184,75,0.18) !important;
-}
-.desk-nav-item:hover{
-  border-color:rgba(232,184,75,0.55) !important;
-  color:#e8b84b !important;
-}
-.desk-nav-item.active{
-  border-color:rgba(232,184,75,0.75) !important;
-  color:#e8b84b !important;
-}
-
-/* ── STUDY TOOLS (Quiz, Hören) — high-contrast active Gold glow ── */
-.desk-nav-study.active{
-  color:#e8b84b !important;
-  border-color:rgba(232,184,75,0.9) !important;
-  box-shadow:
-    0 0 0 1px rgba(232,184,75,0.35),
-    0 0 18px rgba(232,184,75,0.30),
-    inset 0 0 12px rgba(232,184,75,0.08) !important;
-}
-.desk-nav-study.active::before{opacity:1 !important;filter:blur(8px) !important}
-.desk-nav-study.active .desk-nav-label{
-  text-shadow:0 0 12px rgba(232,184,75,0.7);
-}
-.desk-nav-study.active svg{
-  filter:drop-shadow(0 0 7px rgba(232,184,75,1)) !important;
-}
-
-/* ── ADMIN BUTTON — subtle gold background to signal management role ── */
-@keyframes admin-pulse{
-  0%,100%{box-shadow:0 0 8px rgba(232,184,75,0.18),inset 0 0 10px rgba(232,184,75,0.07)}
-  50%{box-shadow:0 0 16px rgba(232,184,75,0.28),inset 0 0 16px rgba(232,184,75,0.12)}
-}
-.desk-nav-admin{
-  background:rgba(232,184,75,0.07) !important;
-  border-color:rgba(232,184,75,0.35) !important;
-  color:#d4a83a !important;
-  animation:admin-pulse 3s ease-in-out infinite;
-}
-.desk-nav-admin::after{background:rgba(232,184,75,0.05) !important}
-.desk-nav-admin:hover{
-  background:rgba(232,184,75,0.14) !important;
-  border-color:rgba(232,184,75,0.7) !important;
-  color:#e8b84b !important;
-  animation:none;
-}
-.desk-nav-admin.active{
-  background:rgba(232,184,75,0.16) !important;
-  border-color:#e8b84b !important;
-  color:#e8b84b !important;
-  animation:none;
-  box-shadow:0 0 20px rgba(232,184,75,0.35) !important;
-}
-
-/* ── PAGE BUTTONS — apply admin-style treatment to all standard pages ── */
-@keyframes page-pulse{
-  0%,100%{box-shadow:0 0 8px rgba(232,184,75,0.18),inset 0 0 10px rgba(232,184,75,0.07)}
-  50%{box-shadow:0 0 16px rgba(232,184,75,0.28),inset 0 0 16px rgba(232,184,75,0.12)}
-}
-.desk-nav-page{
-  background:rgba(232,184,75,0.07) !important;
-  border-color:rgba(232,184,75,0.35) !important;
-  color:#d4a83a !important;
-  animation:page-pulse 3s ease-in-out infinite;
-}
-.desk-nav-page::after{background:rgba(232,184,75,0.05) !important}
-.desk-nav-page:hover{
-  background:rgba(232,184,75,0.14) !important;
-  border-color:rgba(232,184,75,0.7) !important;
-  color:#e8b84b !important;
-  animation:none;
-}
-.desk-nav-page.active{
-  background:rgba(232,184,75,0.16) !important;
-  border-color:#e8b84b !important;
-  color:#e8b84b !important;
-  animation:none;
-  box-shadow:0 0 20px rgba(232,184,75,0.35) !important;
-}
-
-/* Light-mode adjustments */
-[data-theme="light"] .desk-nav-item{border-color:rgba(200,148,40,0.2) !important}
-[data-theme="light"] .desk-nav-item:hover{border-color:rgba(200,148,40,0.5) !important;color:#c89428 !important}
-[data-theme="light"] .desk-nav-item.active{border-color:rgba(200,148,40,0.75) !important;color:#c89428 !important}
-[data-theme="light"] .desk-nav-admin{background:rgba(200,148,40,0.06) !important;border-color:rgba(200,148,40,0.3) !important;color:#a07820 !important}
-
-/* Light-mode adjustments for page buttons */
-[data-theme="light"] .desk-nav-page{background:rgba(200,148,40,0.06) !important;border-color:rgba(200,148,40,0.3) !important;color:#a07820 !important}
+/* DESKTOP NAV */
+.desk-nav-item{position:relative;display:inline-flex;flex-direction:row;align-items:center;gap:7px;padding:0 18px;height:56px;border:none;border-bottom:2.5px solid transparent;background:transparent;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:0.92rem;letter-spacing:0.13em;color:var(--muted);transition:color 0.2s,border-color 0.2s,background 0.2s;overflow:hidden;white-space:nowrap;border-radius:0;appearance:none;-webkit-appearance:none}
+.desk-nav-item::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:2.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:translateX(-50%);transition:width 0.28s cubic-bezier(0.34,1.56,0.64,1);border-radius:2px 2px 0 0}
+.desk-nav-item:hover{color:var(--white);background:rgba(255,255,255,0.035)}
+.desk-nav-item:hover::after{width:80%}
+.desk-nav-item.active{color:var(--gold);border-bottom-color:var(--gold);background:linear-gradient(180deg,transparent 60%,rgba(232,184,75,0.06) 100%)}
+.desk-nav-item.active::after{width:100%;background:linear-gradient(90deg,transparent,rgba(232,184,75,0.6),transparent)}
+.desk-nav-item svg{opacity:0.45;flex-shrink:0;transition:opacity 0.2s,filter 0.2s,transform 0.2s}
+.desk-nav-item:hover svg{opacity:0.75;transform:scale(1.1)}
+.desk-nav-item.active svg{opacity:1;filter:drop-shadow(0 0 5px rgba(232,184,75,0.6));transform:scale(1.05)}
 
 /* GHOST BUTTONS */
 .reset-btn,.logout-btn{position:relative;overflow:hidden;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;border-radius:6px;transition:border-color 0.2s,color 0.2s,background 0.2s,transform 0.15s;min-height:36px}
@@ -2006,8 +1505,8 @@ h1 span{color:var(--gold)}
 .scanner-btn:hover::after{animation:btn-shimmer 0.6s ease forwards}
 .scanner-btn:active{transform:scale(0.96)}
 .scanner-btn svg{flex-shrink:0}
-.scanner-close-btn{width:34px;height:34px;border-radius:8px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);color:#D4AF37 !important;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1000;position:relative;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
-.scanner-close-btn:hover{background:rgba(212,175,55,0.18);border-color:#D4AF37;transform:scale(1.1) rotate(90deg)}
+.scanner-close-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
+.scanner-close-btn:hover{background:rgba(204,31,31,0.12);border-color:rgba(204,31,31,0.4);color:#ff6b6b;transform:scale(1.1) rotate(90deg)}
 .scanner-result-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.03);color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 .scanner-result-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
 .scanner-result-btn.primary{background:rgba(232,184,75,0.1);border-color:rgba(232,184,75,0.4);color:var(--gold)}
@@ -2018,29 +1517,8 @@ h1 span{color:var(--gold)}
 .scanner-tab:hover:not(.active){color:var(--white)}
 
 /* MODAL */
-.modal-close-btn{width:34px;height:34px;border-radius:8px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);color:#D4AF37 !important;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1000;position:relative;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
-.modal-close-btn:hover{background:rgba(212,175,55,0.18);border-color:#D4AF37;transform:scale(1.1) rotate(90deg)}
-
-/* ── UNIVERSAL CLOSE BUTTON RULE ──
-   Every close/dismiss button in the app:
-   .modal-close-btn, .scanner-close-btn, .profile-close,
-   .disc-sidebar-close, and any future .close-btn
-   All forced: gold colour, z-index 1000, pointer cursor */
-.close-btn,
-.modal-close-btn,
-.scanner-close-btn,
-.profile-close,
-.disc-sidebar-close{
-  color:#D4AF37 !important;
-  z-index:1000 !important;
-  cursor:pointer !important;
-  position:relative;
-}
-.close-btn:hover,
-.disc-sidebar-close:hover{
-  color:#f5d27e !important;
-  background:rgba(212,175,55,0.15);
-}
+.modal-close-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
+.modal-close-btn:hover{background:rgba(204,31,31,0.12);border-color:rgba(204,31,31,0.4);color:#ff6b6b;transform:scale(1.1) rotate(90deg)}
 .page-nav-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);padding:7px 16px;border-radius:7px;cursor:pointer;font-size:0.82rem;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 .page-nav-btn:hover{background:rgba(232,184,75,0.08);border-color:rgba(232,184,75,0.4);color:var(--gold);transform:translateY(-1px)}
 .page-nav-btn:disabled{opacity:0.25;cursor:default;transform:none}
@@ -2085,7 +1563,7 @@ h1 span{color:var(--gold)}
 
 /* LANG FAB */
 /* LANG FAB */
-.lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
+.lang-fab-btn{width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,0.95);border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px)}
 .lang-fab-btn:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(232,184,75,0.25);transform:scale(1.1)}
 .lang-fab-btn:active{transform:scale(0.92)}
 .lang-fab-option{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all 0.15s;letter-spacing:0.04em}
@@ -2119,144 +1597,6 @@ h1 span{color:var(--gold)}
 #page-listening .listening-controls button{position:relative;overflow:hidden;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
 #page-listening .listening-controls button:hover{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,0.08);transform:translateY(-1px)}
 #page-listening .listening-controls button:active{transform:scale(0.95)}
-
-/* ============================================================
-   GLOW BUTTON EFFECT — adapted to gold theme
-   Targets: quiz-gen-btn, level-start-btn, vocab-finished-btn,
-            quiz-retry-btn, level-restart-btn, login-btn
-   ============================================================ */
-@keyframes glow-gold {
-  0%   { background-position: 0 0; }
-  50%  { background-position: 400% 0; }
-  100% { background-position: 0 0; }
-}
-
-/* We apply the glow to a shared class that wraps the common big CTA buttons */
-.quiz-gen-btn,
-.level-start-btn,
-.vocab-finished-btn {
-  position: relative;
-  z-index: 0;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  border-radius: 10px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  /* Override background to dark so the glow shows through */
-  background: #141414 !important;
-  color: var(--gold) !important;
-  box-shadow: none !important;
-  transition: color 0.2s, transform 0.18s, opacity 0.18s !important;
-}
-
-/* The animated rainbow-but-gold glow halo */
-.quiz-gen-btn::before,
-.level-start-btn::before,
-.vocab-finished-btn::before {
-  content: "";
-  background: linear-gradient(
-    45deg,
-    #e8b84b,
-    #f5d78e,
-    #cc1f1f,
-    #e8b84b,
-    #b5832a,
-    #f0c84a,
-    #cc8800,
-    #e8b84b,
-    #e8b84b
-  );
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(6px);
-  -webkit-filter: blur(6px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glow-gold 8s linear infinite;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 10px;
-  opacity: 0.85;
-}
-
-/* Solid dark backing so text is readable */
-.quiz-gen-btn::after,
-.level-start-btn::after,
-.vocab-finished-btn::after {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #141414;
-  left: 0;
-  top: 0;
-  border-radius: 10px;
-}
-
-/* Keep the shimmer overlay from interfering */
-.quiz-gen-btn .btn-shimmer,
-.level-start-btn .btn-shimmer,
-.vocab-finished-btn .btn-shimmer { display: none !important; }
-
-.quiz-gen-btn:hover::before,
-.level-start-btn:hover::before,
-.vocab-finished-btn:hover::before {
-  opacity: 1;
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-}
-
-.quiz-gen-btn:hover,
-.level-start-btn:hover,
-.vocab-finished-btn:hover {
-  transform: translateY(-1px) !important;
-}
-
-.quiz-gen-btn:active,
-.level-start-btn:active,
-.vocab-finished-btn:active {
-  transform: scale(0.96) !important;
-}
-
-.quiz-gen-btn:disabled {
-  opacity: 0.4 !important;
-  cursor: default !important;
-  transform: none !important;
-}
-.quiz-gen-btn:disabled::before { animation-play-state: paused; opacity: 0.3; }
-
-/* Spinner inside quiz-gen-btn stays visible */
-.quiz-gen-btn #quiz-gen-spinner { position: relative; z-index: 1; }
-.quiz-gen-btn #quiz-gen-label  { position: relative; z-index: 1; }
-
-/* level-start-btn & vocab-finished-btn inner text always on top */
-.level-start-btn > *,
-.vocab-finished-btn > * { position: relative; z-index: 1; }
-
-/* Subtle secondary glow for quiz-retry-btn (outline style) */
-.quiz-retry-btn {
-  position: relative;
-  overflow: visible;
-}
-.quiz-retry-btn::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 8px;
-  background: linear-gradient(45deg, #e8b84b, #f5d78e, #cc8800, #e8b84b);
-  background-size: 300%;
-  z-index: -1;
-  filter: blur(5px);
-  opacity: 0;
-  animation: glow-gold 6s linear infinite;
-  transition: opacity 0.3s;
-}
-.quiz-retry-btn:hover::before { opacity: 0.7; }
 </style>
 <script>
 (function(){
@@ -2300,8 +1640,7 @@ h1 span{color:var(--gold)}
         <!-- Forgot password link -->
         <a href="#" id="forgot-password-link" style="font-size:0.72rem;color:var(--gold);display:block;margin-top:6px;margin-bottom:8px;text-align:right">Passwort vergessen?</a>
         <!-- Google OAuth button -->
-        <button type="button" id="google-btn" class="google-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Mit Google anmelden</button>
+        <button type="button" id="google-btn" class="google-btn"><span style="font-size:1rem">🔒</span> Mit Google anmelden</button>
 <div class="login-error" id="auth-error"></div>
 </div>
 </div>
@@ -2347,14 +1686,14 @@ h1 span{color:var(--gold)}
 <!-- RENAME MODAL -->
 <div class="rename-modal" id="rename-modal">
 <div class="rename-box">
-<div class="rename-title">Dokument bearbeiten</div>
+<div class="rename-title">✏️ Dokument bearbeiten</div>
 <input class="rename-input" id="rename-input" placeholder="Dokumentname..." type="text"/>
 <select class="rename-select" id="rename-cat">
-<option value="grammar">Grammatik</option>
-<option value="vocabulary">Vokabeln</option>
-<option value="exercise">Übungen</option>
-<option value="exam">Prüfung</option>
-<option value="other">Sonstiges</option>
+<option value="grammar">📘 Grammatik</option>
+<option value="vocabulary">📚 Vokabeln</option>
+<option value="exercise">✏️ Übungen</option>
+<option value="exam">📝 Prüfung</option>
+<option value="other">📄 Sonstiges</option>
 </select>
 <div class="rename-actions">
 <button class="rename-btn cancel" onclick="closeRenameModal()">Abbrechen</button>
@@ -2363,71 +1702,41 @@ h1 span{color:var(--gold)}
 </div>
 </div>
 <!-- DESKTOP NAV -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Translator  7.News  8.Dokumente  9.Admin -->
 <nav class="desktop-nav" id="desktop-nav">
-  <!-- Header left: site logo / wordmark -->
-  <div class="desk-nav-left">
-    <span class="desk-nav-logo">Deutsch B1</span>
-  </div>
-  <!-- Header center: primary navigation -->
-  <div class="desk-nav-center">
-
-  <!-- 1. Tracker -->
-  <button class="desk-nav-item active desk-nav-page" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_tracker">Tracker</span>
+  <button class="desk-nav-item active" data-page="tracker" onclick="switchPage('tracker')" aria-label="Tracker" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><rect height="18" rx="2" width="18" x="3" y="3"/><path d="M7 16V12M12 16V8M17 16v-4"/></svg> Tracker
   </button>
-
-  <!-- 2. Quiz — interactive study tool -->
-  <button class="desk-nav-item desk-nav-study desk-nav-page" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_quiz">Quiz</span>
+  <button class="desk-nav-item" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg> Dokumente
   </button>
-
-  <!-- 3. Vokabeln -->
-  <button class="desk-nav-item desk-nav-page" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
-    <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_vocab">Vocab</span>
+  <button class="desk-nav-item" data-page="translate" onclick="switchPage('translate')" aria-label="Übersetzer" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Übersetzer
   </button>
-
-  <!-- 4. Hören — interactive study tool -->
-  <button class="desk-nav-item desk-nav-study desk-nav-page" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
-    <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v4a2 2 0 0 0 2 2h2"/><path d="M18 12v4a2 2 0 0 1-2 2h-2"/><path d="M4 12a8 8 0 0 1 16 0"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_listen">Hören</span>
+  <button class="desk-nav-item" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg> News
   </button>
-
-  <!-- 5. Niveau -->
-  <button class="desk-nav-item desk-nav-page" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_level">Niveau</span>
+  <button class="desk-nav-item" data-page="quiz" onclick="switchPage('quiz')" aria-label="Quiz" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg> Quiz
   </button>
-
-  <!-- 6. Translator -->
-  <button class="desk-nav-item desk-nav-page" data-page="translate" onclick="switchPage('translate')" aria-label="Translator" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_translate">Translator</span>
+  <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
+    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+    </svg> Vokabeln
   </button>
-
-  <!-- 7. News -->
-  <button class="desk-nav-item desk-nav-page" data-page="news" onclick="switchPage('news')" aria-label="News" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_news">News</span>
+  <button class="desk-nav-item" data-page="listening" onclick="switchPage('listening')" aria-label="Hören" type="button">
+    <svg fill="none" height="16" width="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+      <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+      <path d="M4 12a8 8 0 0 1 16 0"></path>
+    </svg> Hören
   </button>
-
-  <!-- 8. Dokumente -->
-  <button class="desk-nav-item desk-nav-page" data-page="pdf" onclick="switchPage('pdf')" aria-label="Dokumente" type="button">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" x2="15" y1="13" y2="13"/><line x1="9" x2="15" y1="17" y2="17"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_docs">Dokumente</span>
+  <button class="desk-nav-item" data-page="level" onclick="switchPage('level')" aria-label="Niveau" type="button">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Niveau
   </button>
-
-  <!-- 9. Admin — management tool, hidden until role confirmed -->
-  <button class="desk-nav-item desk-nav-admin" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
-    <svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_admin">Admin</span>
+  <button class="desk-nav-item" data-page="admin" id="desk-admin-nav" onclick="switchPage('admin')" aria-label="Admin" type="button" style="display:none">
+    <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Admin
   </button>
-
-  </div>
-  <!-- Header right: utility zone (notifications, theme, language, profile) -->
   <div class="desk-nav-right">
     <div style="position:relative">
       <button class="notif-btn" id="desk-notif-btn" onclick="toggleNotifPanel()" title="Notifications">
@@ -2436,44 +1745,14 @@ h1 span{color:var(--gold)}
       </button>
       <div class="notif-panel" id="notif-panel">
         <div class="notif-panel-head">
-          <span class="notif-panel-title" data-i18n="notif_panel_title">Benachrichtigungen</span>
-          <button class="notif-mark-read" onclick="markAllRead()" data-i18n="notif_mark_read">Alle gelesen</button>
+          <span class="notif-panel-title">🔔 Notifications</span>
+          <button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
         </div>
-        <div class="notif-list" id="notif-list"><div class="notif-empty" data-i18n="notif_empty">Keine Benachrichtigungen</div></div>
+        <div class="notif-list" id="notif-list"><div class="notif-empty">No notifications yet</div></div>
         <div id="admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
-          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer" data-i18n="notif_send_btn">Benachrichtigung senden</button>
+          <button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
         </div>
       </div>
-    </div>
-    <!-- Theme toggle button (relocated from bottom corner) -->
-    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle theme">
-      <!-- Sun (visible in dark mode → click to go light) -->
-      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="5"/>
-        <line x1="12" y1="1" x2="12" y2="3"/>
-        <line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/>
-        <line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
-      <!-- Moon (visible in light mode → click to go dark) -->
-      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-    </button>
-    <!-- Language selector dropdown (relocated from bottom FAB) -->
-    <div class="lang-fab" id="lang-fab">
-      <div class="lang-fab-menu" id="lang-fab-menu">
-        <button class="lang-fab-option active" id="lang-de" onclick="setLang('de')">🇩🇪</button>
-        <button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧</button>
-        <button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦</button>
-      </div>
-      <button class="lang-fab-btn" onclick="toggleLangMenu()" title="Sprache wechseln" aria-label="Language">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      </button>
     </div>
     <button class="profile-icon-btn" id="desk-profile-btn" onclick="openProfileModal()" title="Profile" style="display:none">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2486,20 +1765,24 @@ h1 span{color:var(--gold)}
 
 <!-- TRACKER PAGE -->
 <div class="page active" id="page-tracker">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title">Tracker
-    <span class="title-sub">5-Monats-Lernplan · Von Null zu B1</span>
-  </h1>
-  <div class="header-actions" style="justify-content:center;margin-top:12px">
-    <div class="header-meta" style="align-items:center;flex-direction:row;gap:10px">
-      <div class="level-badge">B1 NIVEAU</div>
-      <div class="today-label" id="today-label"></div>
-      <div id="user-header-name" class="user-name-header" style="font-size:0.8rem;color:var(--gold);"></div>
-    </div>
-    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
-  </div>
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<div>
+<h1>Mein Ziel:<br/><span>Deutsch B1</span></h1>
+<p style="font-size:0.72rem;color:var(--muted);margin-top:8px;letter-spacing:0.08em;text-transform:uppercase;">5-Monats-Lernplan · Von Null zu B1</p>
 </div>
+<div class="header-actions">
+<div class="header-meta">
+<div class="level-badge">B1 NIVEAU</div>
+<div class="today-label" id="today-label"></div>
+        <div id="user-header-name" class="user-name-header" style="font-size:0.8rem;color:var(--gold);"></div>
+</div>
+
+<button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+</div>
+</div>
+</header>
 <div class="overall-section">
 <div class="overall-inner">
 <div class="big-stat"><div class="num" id="stat-weeks">0</div><div class="label">Wochen</div></div>
@@ -2544,22 +1827,10 @@ h1 span{color:var(--gold)}
 <div class="journey-bar" id="journey-bar"></div>
 </div>
 <div class="stats-row">
-<div class="stat-pill">
-  <div class="stat-pill-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-  </div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
-<div class="stat-pill">
-  <div class="stat-pill-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-  </div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
-<div class="stat-pill">
-  <div class="stat-pill-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-  </div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
-<div class="stat-pill">
-  <div class="stat-pill-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-  </div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
+<div class="stat-pill"><div class="stat-pill-icon">📚</div><div><div class="stat-pill-val" id="stat-vocab">0</div><div class="stat-pill-label">Vokabeln</div></div></div>
+<div class="stat-pill"><div class="stat-pill-icon">⏱</div><div><div class="stat-pill-val" id="stat-hours">0</div><div class="stat-pill-label">Stunden</div></div></div>
+<div class="stat-pill"><div class="stat-pill-icon">✅</div><div><div class="stat-pill-val" id="stat-tasks">0</div><div class="stat-pill-label">Heute</div></div></div>
+<div class="stat-pill"><div class="stat-pill-icon">🗓</div><div><div class="stat-pill-val" id="stat-days-left">140</div><div class="stat-pill-label">Tage noch</div></div></div>
 </div>
 <div class="daily-section">
 <div class="section-title">Tägliche Aufgaben</div>
@@ -2581,17 +1852,17 @@ h1 span{color:var(--gold)}
 </div>
 <!-- PDF PAGE -->
 <div class="page" id="page-pdf">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title">DOKUMENTE
-    <span class="title-sub">Lokale PDFs · Offline verfügbar</span>
-  </h1>
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1><span>Dokumente</span></h1>
 </div>
+</header>
 <div class="pdf-page">
 <div class="storage-bar">
-<span class="storage-label">Lokal</span>
+<span class="storage-label">💾 Local</span>
 <div class="storage-track"><div class="storage-fill" id="storage-fill" style="width:0%"></div></div>
-<span class="storage-info" id="storage-info">Wird geladen…</span>
+<span class="storage-info" id="storage-info">Chargement...</span>
 </div>
 <div class="docs-sync-row">
 <span class="docs-account" id="docs-account">—</span>
@@ -2614,19 +1885,17 @@ h1 span{color:var(--gold)}
 </div>
 <div class="pdf-upload-zone" id="upload-zone">
 <input accept=".pdf,application/pdf" id="pdf-input" multiple="" type="file"/>
-<div class="upload-icon">
-  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.45"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-</div>
+<div class="upload-icon">📄</div>
 <div class="upload-title">PDF hochladen</div>
 <div class="upload-sub">Lokal gespeichert · Offline verfügbar · Max 200 MB pro Datei</div>
 </div>
 <div class="pdf-categories">
 <button class="cat-btn active" data-cat="all">Alle</button>
-<button class="cat-btn" data-cat="grammar">Grammatik</button>
-<button class="cat-btn" data-cat="vocabulary">Vokabeln</button>
-<button class="cat-btn" data-cat="exercise">Übungen</button>
-<button class="cat-btn" data-cat="exam">Prüfung</button>
-<button class="cat-btn" data-cat="other">Sonstiges</button>
+<button class="cat-btn" data-cat="grammar">📘 Grammatik</button>
+<button class="cat-btn" data-cat="vocabulary">📚 Vokabeln</button>
+<button class="cat-btn" data-cat="exercise">✏️ Übungen</button>
+<button class="cat-btn" data-cat="exam">📝 Prüfung</button>
+<button class="cat-btn" data-cat="other">📄 Sonstiges</button>
 </div>
 <div class="pdf-grid" id="pdf-grid"></div>
 </div>
@@ -2635,14 +1904,12 @@ h1 span{color:var(--gold)}
 <div class="scanner-modal" id="scanner-modal">
   <div class="scanner-shell">
     <div class="scanner-header">
-      <span class="scanner-header-title">Code Scanner</span>
+      <span class="scanner-header-title">📷 Code Scanner</span>
       <button class="scanner-close-btn" onclick="closeScannerModal()">✕</button>
     </div>
     <div class="scanner-tabs">
-      <button class="scanner-tab active" id="tab-camera" onclick="switchScannerTab('camera')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:5px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8l-2 4h12z"/><circle cx="12" cy="13" r="3"/></svg>Kamera</button>
-      <button class="scanner-tab" id="tab-image" onclick="switchScannerTab('image')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:5px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Bild hochladen</button>
+      <button class="scanner-tab active" id="tab-camera" onclick="switchScannerTab('camera')">📷 Camera</button>
+      <button class="scanner-tab" id="tab-image" onclick="switchScannerTab('image')">🖼 Upload Image</button>
     </div>
     <div id="scanner-camera-panel">
       <div class="scanner-video-wrap" id="scanner-video-wrap">
@@ -2655,20 +1922,20 @@ h1 span{color:var(--gold)}
           </div>
         </div>
       </div>
-      <div class="scanner-hint" id="scanner-hint">Kamera auf einen QR-Code oder Barcode richten</div>
+      <div class="scanner-hint" id="scanner-hint">Point the camera at a QR code or barcode</div>
     </div>
     <div id="scanner-image-panel" style="display:none">
       <div style="padding:24px 18px;text-align:center">
         <label style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;color:var(--muted)">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span style="font-size:0.82rem">Bild mit QR-Code oder Barcode auswählen</span>
+          <div style="font-size:2.8rem">🖼</div>
+          <span style="font-size:0.82rem">Tap to choose an image with a QR or barcode</span>
           <input type="file" accept="image/*" class="scanner-upload-input" id="scanner-image-input" onchange="scanFromImage(event)"/>
         </label>
       </div>
-      <div class="scanner-hint">Unterstützt QR-Codes, EAN, UPC, Code128 &amp; mehr</div>
+      <div class="scanner-hint">Supports QR codes, EAN, UPC, Code128 &amp; more</div>
     </div>
     <div class="scanner-result-area" id="scanner-result-area">
-      <div class="scanner-result-label">Code erkannt</div>
+      <div class="scanner-result-label">✅ Code Detected</div>
       <div class="scanner-result-text" id="scanner-result-text"></div>
       <div class="scanner-result-actions" id="scanner-result-actions"></div>
     </div>
@@ -2698,42 +1965,42 @@ h1 span{color:var(--gold)}
 
 <!-- Stats chips row -->
 <div class="profile-stats-row" id="profile-stats-row" style="padding:0 20px">
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-weeks">0</div><div class="profile-stat-chip-label" data-i18n="profile_weeks">Wochen</div></div>
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-streak">0</div><div class="profile-stat-chip-label" data-i18n="profile_streak">Serie</div></div>
-  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-progress">0%</div><div class="profile-stat-chip-label" data-i18n="profile_progress">Fortschritt</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-weeks">0</div><div class="profile-stat-chip-label">Weeks</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-streak">0</div><div class="profile-stat-chip-label">Streak</div></div>
+  <div class="profile-stat-chip"><div class="profile-stat-chip-val" id="ps-progress">0%</div><div class="profile-stat-chip-label">Progress</div></div>
 </div>
 
 <div class="profile-body">
 <!-- Identity section -->
-<div class="profile-section-label" data-i18n="profile_identity">Identität</div>
+<div class="profile-section-label">Identity</div>
 <div class="profile-field">
-  <label data-i18n="profile_display_name">Anzeigename</label>
-  <input id="profile-name-input" maxlength="40" placeholder="Wie sollen wir dich nennen?" type="text" autocomplete="name"/>
-  <div class="input-hint" data-i18n="profile_name_hint">Wird im Header und deinem Profil angezeigt</div>
+  <label>Display Name</label>
+  <input id="profile-name-input" maxlength="40" placeholder="How should we call you?" type="text" autocomplete="name"/>
+  <div class="input-hint">Shown in the header and your profile</div>
 </div>
 <div class="profile-field">
-<label id="lbl-email" data-i18n="profile_email">E-Mail</label>
+<label id="lbl-email">Email</label>
 <input id="profile-email-input" maxlength="254" readonly="" type="email"/>
 </div>
 <div class="profile-divider"></div>
 <!-- Security section -->
-<div class="profile-section-label" data-i18n="profile_security">Sicherheit</div>
+<div class="profile-section-label">Security</div>
 <div class="profile-field">
-<label id="lbl-new-pwd" data-i18n="profile_new_pwd">Neues Passwort</label>
+<label id="lbl-new-pwd">New password</label>
 <input autocomplete="new-password" id="profile-pwd1" placeholder="••••••••" type="password"/>
 </div>
 <div class="profile-field">
-<label id="lbl-confirm-pwd" data-i18n="profile_confirm_pwd">Passwort bestätigen</label>
+<label id="lbl-confirm-pwd">Confirm password</label>
 <input autocomplete="new-password" id="profile-pwd2" placeholder="••••••••" type="password"/>
 </div>
 <div class="profile-msg" id="profile-msg"></div>
 <div class="profile-divider"></div>
 <!-- Notifications section -->
-<div class="profile-section-label" data-i18n="profile_notifications">Benachrichtigungen</div>
+<div class="profile-section-label">Notifications</div>
 <div class="profile-reminder-row">
 <div class="profile-reminder-info">
-<div class="profile-reminder-label" id="lbl-reminder" data-i18n="profile_reminder_label">Serien-Erinnerung</div>
-<div class="profile-reminder-sub" id="lbl-reminder-sub" data-i18n="profile_reminder_sub">Erinnere mich 2 Stunden vor Mitternacht, wenn Aufgaben fehlen</div>
+<div class="profile-reminder-label" id="lbl-reminder">🔔 Streak reminder</div>
+<div class="profile-reminder-sub" id="lbl-reminder-sub">Notify me 2h before midnight if tasks aren't done</div>
 </div>
 <button aria-checked="false" class="notif-toggle" id="notif-toggle" onclick="toggleReminderNotif()" role="switch">
 <span class="notif-toggle-thumb"></span>
@@ -2741,41 +2008,44 @@ h1 span{color:var(--gold)}
 </div>
 <div class="profile-reminder-status" id="notif-status"></div>
 <div class="profile-actions">
-<button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()" data-i18n="profile_save">Änderungen speichern</button>
+<button class="profile-btn primary" id="profile-save-btn" onclick="saveProfileChanges()">💾 Save changes</button>
 <div class="profile-divider" style="margin:6px 0"></div>
-<button class="profile-btn danger" onclick="logout()" data-i18n="profile_logout">Abmelden</button>
+<button class="profile-btn danger" onclick="logout()">↩ Log out</button>
 </div>
 <!-- ADMIN PANEL -->
 <div id="admin-panel" style="display:none;margin-top:16px">
 <div class="profile-divider"></div>
-<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 10px;font-weight:600">Admin — Rollenverwaltung</div>
-<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">E-Mail-Adresse eingeben, um die Nutzerrolle zu ändern.</div>
+<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin:12px 0 10px;font-weight:600">👑 Admin — Gestion des rôles</div>
+<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">Entrez l'email de l'utilisateur pour changer son rôle.</div>
 <div class="profile-field">
-<label>Nutzer-E-Mail</label>
+<label>Email utilisateur</label>
 <input id="admin-target-email" placeholder="user@example.com" style="width:100%;background:#111;border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none" type="email"/>
 </div>
 <div style="display:flex;gap:8px;margin-top:8px">
-<button onclick="adminSetRole('user')" style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">Nutzer setzen</button>
-<button onclick="adminSetRole('admin')" style="flex:1;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:6px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">Admin setzen</button>
+<button onclick="adminSetRole('user')" style="flex:1;padding:9px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👤 Définir User</button>
+<button onclick="adminSetRole('admin')" style="flex:1;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:6px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer">👑 Définir Admin</button>
 </div>
 <div id="admin-panel-msg" style="font-size:0.75rem;margin-top:8px;min-height:18px"></div>
 <div class="profile-divider" style="margin-top:12px"></div>
-<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Registrierte Nutzer</div>
-<div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Wird geladen…</div>
-<button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Aktualisieren</button>
+<div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Utilisateurs enregistrés</div>
+<div id="admin-users-list" style="font-size:0.76rem;color:var(--muted)">Chargement...</div>
+<button onclick="adminLoadUsers()" style="margin-top:8px;padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.72rem;cursor:pointer">↻ Rafraîchir</button>
 </div>
 </div>
 </div>
 </div>
 <!-- NEWS PAGE -->
 <div class="page" id="page-news">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title" id="news-page-title">News
-    <span class="title-sub" id="news-page-sub">Artikel &amp; Updates veröffentlichen</span>
-  </h1>
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1><span id="news-page-title">Artikel &amp; News</span></h1>
 </div>
+</header>
 <div class="news-page">
+<div class="news-header">
+<p id="news-page-sub">Eigene Artikel und Updates veröffentlichen</p>
+</div>
 <div class="news-composer">
 <div class="news-compose-grid">
 <div class="news-field">
@@ -2817,12 +2087,12 @@ h1 span{color:var(--gold)}
 </div>
 <!-- TRANSLATE PAGE -->
 <div class="page" id="page-translate">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title" id="translate-page-title">Translator
-    <span class="title-sub">Deutsch · Englisch · Arabisch</span>
-  </h1>
+<header>
+<div class="flag-stripe"></div>
+<div class="header-inner">
+<h1><span id="translate-page-title">Übersetzer</span></h1>
 </div>
+</header>
 <div class="translate-page">
 
   <!-- Input panel -->
@@ -2866,81 +2136,80 @@ h1 span{color:var(--gold)}
 </div>
 <!-- ADMIN PAGE -->
 <div class="page" id="page-admin">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title">Admin
-    <span class="title-sub" data-i18n="admin_hero_sub">Nutzerverwaltung &amp; Anmeldestatistiken</span>
-  </h1>
-</div>
 <div class="admin-page">
+<div class="admin-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:20px;border-radius:2px"></div>
+<div class="admin-hero-title">Admin <span>Dashboard</span></div>
+<div class="admin-hero-sub">User management &amp; signup stats</div>
+</div>
 <!-- PENDING REQUESTS -->
-<div class="admin-section-title" data-i18n="admin_pending_label">Ausstehende Zugriffsanfragen <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
+<div class="admin-section-title">⏳ Pending Access Requests <span id="pending-count-badge" style="font-size:0.75rem;background:var(--red);color:white;border-radius:20px;padding:2px 10px;margin-left:8px;display:none"></span></div>
 <div class="admin-users-wrap" style="margin-bottom:28px">
-<div id="admin-pending-list"><div class="admin-empty">Wird geladen…</div></div>
+<div id="admin-pending-list"><div class="admin-empty">Loading requests...</div></div>
 </div>
 <!-- STAT CARDS -->
 <div class="admin-stats-grid">
 <div class="admin-stat-card gold">
 <div class="admin-stat-num" id="admin-stat-total">—</div>
-<div class="admin-stat-label" data-i18n="admin_total_users">Nutzer gesamt</div>
-<div class="admin-stat-sub" id="admin-stat-total-sub">Wird geladen…</div>
+<div class="admin-stat-label">Total Users</div>
+<div class="admin-stat-sub" id="admin-stat-total-sub">Loading...</div>
 </div>
 <div class="admin-stat-card green">
 <div class="admin-stat-num" id="admin-stat-today">—</div>
-<div class="admin-stat-label" data-i18n="admin_new_today">Heute neu</div>
-<div class="admin-stat-sub" id="admin-stat-today-sub">Wird geladen…</div>
+<div class="admin-stat-label">New Today</div>
+<div class="admin-stat-sub" id="admin-stat-today-sub">Loading...</div>
 </div>
 <div class="admin-stat-card blue">
 <div class="admin-stat-num" id="admin-stat-week">—</div>
-<div class="admin-stat-label" data-i18n="admin_this_week">Diese Woche</div>
-<div class="admin-stat-sub" id="admin-stat-week-sub">Wird geladen…</div>
+<div class="admin-stat-label">This Week</div>
+<div class="admin-stat-sub" id="admin-stat-week-sub">Loading...</div>
 </div>
 <div class="admin-stat-card red">
 <div class="admin-stat-num" id="admin-stat-admins">—</div>
-<div class="admin-stat-label" data-i18n="admin_admins_label">Admins</div>
-<div class="admin-stat-sub" id="admin-stat-admins-sub">Wird geladen…</div>
+<div class="admin-stat-label">Admins</div>
+<div class="admin-stat-sub" id="admin-stat-admins-sub">Loading...</div>
 </div>
 </div>
 <!-- SIGNUPS CHART -->
-<div class="admin-section-title" data-i18n="admin_chart_title">Anmeldungen — Letzte 7 Tage</div>
+<div class="admin-section-title">Signups — Last 7 Days</div>
 <div class="admin-chart-wrap">
 <div class="admin-chart-bars" id="admin-chart-bars">
-<div class="admin-empty" style="width:100%">Wird geladen…</div>
+<div class="admin-empty" style="width:100%">Loading chart...</div>
 </div>
 </div>
 <!-- USERS TABLE -->
-<div class="admin-section-title" data-i18n="admin_all_users">Alle Nutzer</div>
+<div class="admin-section-title">All Users</div>
 <div class="admin-users-wrap">
 <div class="admin-users-toolbar">
-<input class="admin-search" id="admin-user-search" oninput="adminFilterUsers()" placeholder="E-Mail suchen…"/>
-<button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)" data-i18n="docs_all_cat">Alle</button>
-<button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">Admin</button>
-<button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)" data-i18n="admin_users_label">Nutzer</button>
-        <button class="admin-filter-btn" data-role="pending" onclick="adminSetFilter('pending',this)" data-i18n="admin_pending_short">Ausstehend</button>
-<button class="admin-refresh-btn" onclick="loadAdminPage()">↻ <span data-i18n="admin_refresh">Aktualisieren</span></button>
+<input class="admin-search" id="admin-user-search" oninput="adminFilterUsers()" placeholder="🔍 Search by email..."/>
+<button class="admin-filter-btn active" data-role="all" onclick="adminSetFilter('all',this)">All</button>
+<button class="admin-filter-btn" data-role="admin" onclick="adminSetFilter('admin',this)">👑 Admin</button>
+<button class="admin-filter-btn" data-role="user" onclick="adminSetFilter('user',this)">👤 Users</button>
+        <!-- New filter for pending users -->
+        <button class="admin-filter-btn" data-role="pending" onclick="adminSetFilter('pending',this)">🕒 Pending</button>
+<button class="admin-refresh-btn" onclick="loadAdminPage()">↻ Refresh</button>
 </div>
 <div id="admin-users-list-full">
-<div class="admin-empty">Wird geladen…</div>
+<div class="admin-empty">Loading users...</div>
 </div>
 </div>
 <!-- ALL DOCUMENTS -->
-<div class="admin-section-title" style="margin-top:28px" data-i18n="admin_all_docs">Alle Nutzerdokumente</div>
+<div class="admin-section-title" style="margin-top:28px">📄 All User Documents</div>
 <div class="admin-users-wrap">
 <div class="admin-users-toolbar">
-<input class="admin-search" id="admin-doc-search" oninput="adminFilterDocs()" placeholder="Dateiname suchen…"/>
-<button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ <span data-i18n="admin_refresh">Aktualisieren</span></button>
+<input class="admin-search" id="admin-doc-search" oninput="adminFilterDocs()" placeholder="🔍 Search by filename..."/>
+<button class="admin-refresh-btn" onclick="adminLoadDocs()">↻ Refresh</button>
 </div>
 <div id="admin-docs-list">
-<div class="admin-empty">Wird geladen…</div>
+<div class="admin-empty">Loading documents...</div>
 </div>
 </div>
 </div>
 </div>
 <!-- Bottom nav bar -->
-<!-- Order: 1.Tracker  2.Quiz  3.Vokabeln  4.Hören  5.Niveau  6.Translator  7.News  8.Dokumente  9.Admin  +Notif +Profile -->
 <nav class="bottom-nav" id="bottom-nav">
 <div class="bottom-nav-track" id="bottom-nav-track">
-  <!-- 1. Tracker -->
+  <!-- Replace emoji icons with consistent Feather-style SVGs -->
   <div class="nav-item active" data-page="tracker" onclick="switchPage('tracker')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2951,60 +2220,15 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_tracker">Tracker</div>
   </div>
-  <!-- 2. Quiz -->
-  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_quiz">Quiz</div>
+    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
   </div>
-  <!-- 3. Vokabeln -->
-  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vocab</div>
-  </div>
-  <!-- 4. Hören -->
-  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
-        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
-        <path d="M4 12a8 8 0 0 1 16 0"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_listen">Hören</div>
-  </div>
-  <!-- 5. Niveau -->
-  <div class="nav-item" data-page="level" onclick="switchPage('level')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-        <polyline points="17 6 23 6 23 12"></polyline>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_level">Niveau</div>
-  </div>
-  <!-- 6. Translator -->
-  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
-    <div class="nav-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="2" y1="12" x2="22" y2="12"></line>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-      </svg>
-    </div>
-    <div class="nav-label" data-i18n="nav_translate">Translator</div>
-  </div>
-  <!-- 7. News -->
   <div class="nav-item" data-page="news" onclick="switchPage('news')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3016,17 +2240,54 @@ h1 span{color:var(--gold)}
     </div>
     <div class="nav-label" data-i18n="nav_news">News</div>
   </div>
-  <!-- 8. Documents -->
-  <div class="nav-item" data-page="pdf" onclick="switchPage('pdf')">
+  <div class="nav-item" data-page="translate" onclick="switchPage('translate')">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_docs">Dokumente</div>
+    <div class="nav-label" data-i18n="nav_translate">Übersetzer</div>
   </div>
-  <!-- 9. Admin (hidden until role confirmed) -->
+  <div class="nav-item" data-page="quiz" onclick="switchPage('quiz')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    <div class="nav-label">Quiz</div>
+  </div>
+  <div class="nav-item" data-page="vocab" onclick="switchPage('vocab')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
+    <div class="nav-label">Vokabeln</div>
+  </div>
+  <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v4a2 2 0 0 0 2 2h2"></path>
+        <path d="M18 12v4a2 2 0 0 1-2 2h-2"></path>
+        <path d="M4 12a8 8 0 0 1 16 0"></path>
+      </svg>
+    </div>
+    <div class="nav-label">Hören</div>
+  </div>
+  <div class="nav-item" data-page="level" onclick="switchPage('level')">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+        <polyline points="17 6 23 6 23 12"></polyline>
+      </svg>
+    </div>
+    <div class="nav-label">Niveau</div>
+  </div>
   <div class="nav-item" data-page="admin" id="mob-admin-nav" onclick="switchPage('admin')" style="display:none">
     <div class="nav-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3036,9 +2297,8 @@ h1 span{color:var(--gold)}
         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_admin">Admin</div>
+    <div class="nav-label">Admin</div>
   </div>
-  <!-- Notifications bell -->
   <div class="nav-item" id="mob-notif-btn" onclick="mobToggleNotif(event)" style="position:relative">
     <div class="nav-icon" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3047,44 +2307,61 @@ h1 span{color:var(--gold)}
       </svg>
       <span class="notif-badge" id="mob-notif-badge" style="top:-5px;right:-5px"></span>
     </div>
-    <div class="nav-label" data-i18n="nav_alerts">Alerts</div>
+    <div class="nav-label">Alerts</div>
   </div>
-  <!-- Profile (hidden until logged in) -->
   <div class="nav-item" id="mob-profile-nav-item" onclick="openProfileModal()" style="display:none">
     <div class="nav-icon" style="display:flex;align-items:center;justify-content:center">
       <div class="mob-profile-circle" id="mob-profile-btn">?</div>
     </div>
-    <div class="nav-label" data-i18n="nav_profile">Profil</div>
+    <div class="nav-label">Profil</div>
   </div>
 </div>
 </nav>
-<!-- Mobile notification panel removed — notifications handled exclusively by header dropdown (#notif-panel) -->
-<!-- Removed floating language switcher (relocated to header) -->
+<!-- Mobile notification panel (full-width bottom sheet) -->
+<div id="mob-notif-panel" style="display:none;position:fixed;bottom:calc(56px + env(safe-area-inset-bottom));left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:1300;max-height:70vh;overflow:hidden;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
+<div class="notif-panel-head" style="padding:14px 18px">
+<span class="notif-panel-title">🔔 Notifications</span>
+<button class="notif-mark-read" onclick="markAllRead()">Mark all read</button>
+</div>
+<div class="notif-list" id="mob-notif-list" style="overflow-y:auto;flex:1"><div class="notif-empty">No notifications yet</div></div>
+<div id="mob-admin-notif-send-row" style="display:none;padding:10px 16px;border-top:1px solid var(--border)">
+<button onclick="openNotifModal()" style="width:100%;padding:9px;background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);border-radius:7px;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.08em;cursor:pointer">📣 Send Notification</button>
+</div>
+</div>
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-fab" id="lang-fab">
+<div class="lang-fab-menu" id="lang-fab-menu">
+<button class="lang-fab-option active" id="lang-de" onclick="setLang('de')">🇩🇪 Deutsch</button>
+<button class="lang-fab-option" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
+<button class="lang-fab-option" id="lang-ar" onclick="setLang('ar')">🇸🇦 العربية</button>
+</div>
+<button class="lang-fab-btn" onclick="toggleLangMenu()" title="Language">🌐</button>
+</div>
 <!-- NOTIFICATION SEND MODAL -->
 <div class="notif-modal-overlay" id="notif-modal-overlay" onclick="closeNotifModal(event)">
 <div class="notif-modal">
 <div class="notif-modal-flag"></div>
 <div class="notif-modal-body">
-<div class="notif-modal-title" data-i18n="notif_modal_title">Benachrichtigung <span>senden</span></div>
+<div class="notif-modal-title">📣 Send <span>Notification</span></div>
 <div class="notif-field">
-<label data-i18n="notif_target_label">Empfänger</label>
+<label>Target</label>
 <select id="notif-target-select">
-<option value="all" data-i18n="notif_target_all">Alle Nutzer</option>
+<option value="all">🌍 All Users</option>
 </select>
 </div>
 <div class="notif-field">
-<label data-i18n="notif_title_label">Titel</label>
-<input id="notif-title-input" placeholder="Titel der Benachrichtigung..." type="text"/>
+<label>Title</label>
+<input id="notif-title-input" placeholder="Notification title..." type="text"/>
 </div>
 <div class="notif-field">
-<label data-i18n="notif_body_label">Nachricht</label>
-<textarea id="notif-body-input" placeholder="Nachricht hier eingeben..."></textarea>
+<label>Message</label>
+<textarea id="notif-body-input" placeholder="Write your message here..."></textarea>
 </div>
 <div class="notif-modal-actions">
-<button class="notif-cancel-btn" onclick="closeNotifModal()" data-i18n="notif_cancel">Abbrechen</button>
+<button class="notif-cancel-btn" onclick="closeNotifModal()">Cancel</button>
 <button class="notif-send-btn" id="notif-send-btn" onclick="sendNotification()">
 <div class="btn-spinner"></div>
-<span class="btn-label" data-i18n="notif_send">Senden</span>
+<span class="btn-label">Send</span>
 </button>
 </div>
 </div>
@@ -3093,15 +2370,15 @@ h1 span{color:var(--gold)}
 <!-- Supabase -->
 <!-- Vocabulary Trainer Page — Match Pairs -->
 <div class="page" id="page-vocab">
-  <div class="page-title-bar">
+  <header>
     <div class="flag-stripe"></div>
-    <h1 class="page-title"><span id="vocab-title">Vokabeln</span>
-      <span class="title-sub">B1-Wortschatz · Match Pairs</span>
-    </h1>
-  </div>
+    <div class="header-inner">
+      <h1><span id="vocab-title">Vokabeltrainer</span></h1>
+    </div>
+  </header>
   <div style="max-width:700px;margin:0 auto;padding:10px 16px 0">
     <div style="display:flex;align-items:center;gap:8px;background:rgba(232,184,75,0.07);border:1px solid rgba(232,184,75,0.2);border-radius:8px;padding:9px 14px;font-size:0.73rem;color:var(--muted)">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--gold)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span style="font-size:1rem">🌐</span>
       <span>B1-Wortschatz aus <a href="https://www.deutschforyou.com/wortschatz/b1" target="_blank" style="color:var(--gold);text-decoration:none">deutschforyou.com</a> — Berufe · Bewerbung · Umwelt · Gesellschaft · Gesundheit · Kommunikation</span>
     </div>
   </div>
@@ -3109,53 +2386,51 @@ h1 span{color:var(--gold)}
     <!-- Category filters -->
     <div class="vocab-topbar">
       <button class="vocab-cat-btn active" data-cat="all">Alle</button>
-      <button class="vocab-cat-btn" data-cat="berufe">Berufe</button>
-      <button class="vocab-cat-btn" data-cat="bewerbung">Bewerbung</button>
-      <button class="vocab-cat-btn" data-cat="umwelt">Umwelt</button>
-      <button class="vocab-cat-btn" data-cat="gesellschaft">Gesellschaft</button>
-      <button class="vocab-cat-btn" data-cat="gesundheit">Gesundheit</button>
-      <button class="vocab-cat-btn" data-cat="kommunikation">Kommunikation</button>
+      <button class="vocab-cat-btn" data-cat="berufe">💼 Berufe</button>
+      <button class="vocab-cat-btn" data-cat="bewerbung">📄 Bewerbung</button>
+      <button class="vocab-cat-btn" data-cat="umwelt">🌿 Umwelt</button>
+      <button class="vocab-cat-btn" data-cat="gesellschaft">🏛 Gesellschaft</button>
+      <button class="vocab-cat-btn" data-cat="gesundheit">🏥 Gesundheit</button>
+      <button class="vocab-cat-btn" data-cat="kommunikation">💬 Kommunikation</button>
     </div>
     <!-- Score + progress row -->
     <div class="vocab-score-row">
-      <div class="vocab-score-chip"><span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
+      <div class="vocab-score-chip">✅ <span id="vocab-matched">0</span>&nbsp;/ <span id="vocab-total">0</span></div>
       <div class="vocab-progress-bar"><div class="vocab-progress-fill" id="vocab-progress-fill"></div></div>
-      <button class="vocab-new-btn" onclick="newVocabRound()" data-i18n="vocab_new_round">↻ Neue Runde</button>
+      <button class="vocab-new-btn" onclick="newVocabRound()">↻ Nouveau</button>
     </div>
     <!-- Match grid -->
     <div class="match-grid" id="match-grid"></div>
     <!-- Finished screen -->
     <div class="vocab-finished" id="vocab-finished">
-      <div class="vocab-finished-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <div class="vocab-finished-title" data-i18n="vocab_finished_title">Ausgezeichnet!</div>
-      <div class="vocab-finished-sub" id="vocab-finished-sub" data-i18n="vocab_finished_sub">Alle Paare gefunden!</div>
-      <button class="vocab-finished-btn" onclick="newVocabRound()" data-i18n="vocab_new_round_btn">↻ Neue Runde</button>
+      <div class="vocab-finished-icon">🎉</div>
+      <div class="vocab-finished-title">Parfait !</div>
+      <div class="vocab-finished-sub" id="vocab-finished-sub">Toutes les paires trouvées !</div>
+      <button class="vocab-finished-btn" onclick="newVocabRound()">↻ Nouveau round</button>
     </div>
   </div>
 </div>
 <!-- Listening Practice Page -->
 <div class="page" id="page-listening">
-  <div class="page-title-bar">
+  <header>
     <div class="flag-stripe"></div>
-    <h1 class="page-title"><span id="listening-title">Hören</span>
-      <span class="title-sub">Hörverständnis · Aussprache</span>
-    </h1>
-  </div>
+    <div class="header-inner">
+      <h1><span id="listening-title">Hörverständnis</span></h1>
+    </div>
+  </header>
   <div class="listening-container">
     <div class="sentence" id="listening-sentence"></div>
     <div class="translation hidden" id="listening-translation"></div>
     <div class="listening-controls">
-      <button class="login-btn" id="listening-play-btn">&#9654; Audio</button>
-      <button class="login-btn" id="listening-show-btn">Übersetzung</button>
+      <button class="login-btn" id="listening-play-btn">▶ Audio</button>
+      <button class="login-btn" id="listening-show-btn">👁 Übersetzung</button>
     </div>
     <input id="listening-input" placeholder="Tippe, was du gehört hast..." type="text" />
     <div class="listening-controls">
       <button class="login-btn" id="listening-submit-btn">✓ Überprüfen</button>
     </div>
     <div class="listening-controls">
-      <button class="login-btn" id="listening-speak-btn" data-i18n="speaking_btn">Sprechen</button>
+      <button class="login-btn" id="listening-speak-btn" data-i18n="speaking_btn">🎤 Sprechen</button>
     </div>
     <div class="xp-bar-container">
       <div class="xp-bar-label"><span id="listening-score-label">Richtige Antworten:</span> <span id="listening-score">0</span></div>
@@ -3164,9 +2439,9 @@ h1 span{color:var(--gold)}
       </div>
     </div>
     <div class="listening-controls">
-      <button class="login-btn" id="listening-slow-btn">Langsam</button>
-      <button class="login-btn" id="listening-normal-btn">Normal</button>
-      <button class="login-btn" id="listening-fast-btn">Schnell</button>
+      <button class="login-btn" id="listening-slow-btn">🐢 Langsam</button>
+      <button class="login-btn" id="listening-normal-btn">⚖ Normal</button>
+      <button class="login-btn" id="listening-fast-btn">🐇 Schnell</button>
     </div>
   </div>
 </div>
@@ -3175,1202 +2450,32 @@ h1 span{color:var(--gold)}
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-<!-- ═══════════════════════════════════════════════════════════
-     DISCUSSIONS PAGE
-     ═══════════════════════════════════════════════════════════ -->
-<div class="page" id="page-discussions">
-<div class="disc-root">
-
-  <!-- ── LEFT SIDEBAR ── -->
-  <aside class="disc-sidebar" id="disc-sidebar">
-    <div class="disc-sidebar-head">
-      <div class="disc-sidebar-title">
-        <span class="disc-sidebar-title-text">Diskussionen</span>
-        <span class="disc-unread-total" id="disc-unread-total" style="display:none">0</span>
-      </div>
-      <!-- Mobile-only close button — hides the sidebar drawer -->
-      <button class="disc-sidebar-close close-btn" id="disc-sidebar-close-btn" onclick="discCloseSidebar()" aria-label="Sidebar schließen" title="Schließen">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="disc-search-wrap">
-      <svg class="disc-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="disc-search-input" id="disc-search" placeholder="Nutzer suchen..." oninput="discFilterUsers(this.value)" autocomplete="off"/>
-    </div>
-
-    <!-- Tabs: Recent | All Users -->
-    <div class="disc-tabs">
-      <button class="disc-tab active" id="disc-tab-recent" onclick="discSwitchTab('recent')">Zuletzt</button>
-      <button class="disc-tab" id="disc-tab-all" onclick="discSwitchTab('all')">Alle Nutzer</button>
-    </div>
-
-    <!-- Recent conversations -->
-    <div class="disc-convo-list" id="disc-convo-list" style="display:flex;flex-direction:column">
-      <div class="disc-empty-state" id="disc-recent-empty">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.25"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <p>Noch keine Gespräche</p>
-        <span>Tippe "Alle Nutzer" um zu starten</span>
-      </div>
-    </div>
-
-    <!-- All users directory -->
-    <div class="disc-user-list" id="disc-user-list" style="display:none;flex:1;overflow-y:auto"></div>
-  </aside>
-
-  <!-- ── RIGHT CHAT WINDOW ── -->
-  <main class="disc-chat" id="disc-chat">
-    <!-- Empty state -->
-    <div class="disc-chat-empty" id="disc-chat-empty">
-      <div class="disc-chat-empty-inner">
-        <div class="disc-chat-empty-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <h3 class="disc-chat-empty-title">Wähle einen Nutzer</h3>
-        <p class="disc-chat-empty-sub">Klicke auf einen Nutzer links, um ein Gespräch zu starten</p>
-      </div>
-    </div>
-
-    <!-- Active chat -->
-    <div class="disc-chat-active" id="disc-chat-active" style="display:none">
-      <!-- Chat header -->
-      <div class="disc-chat-header">
-        <button class="disc-back-btn" id="disc-back-btn" onclick="discGoBack()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <div class="disc-chat-avatar" id="disc-chat-avatar">?</div>
-        <div class="disc-chat-header-info">
-          <div class="disc-chat-header-name" id="disc-chat-header-name"></div>
-          <div class="disc-chat-header-status">
-            <span class="disc-status-dot" id="disc-header-status-dot"></span>
-            <span id="disc-status-text">offline</span>
-            <span class="disc-header-role-pill" id="disc-header-role-pill" style="display:none"></span>
-          </div>
-        </div>
-        <button class="disc-header-menu-btn" onclick="discToggleMenu()" id="disc-header-menu-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-        </button>
-        <!-- Safety menu -->
-        <div class="disc-safety-menu" id="disc-safety-menu">
-          <button class="disc-safety-item" onclick="discReport()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Melden
-          </button>
-          <button class="disc-safety-item danger" onclick="discBlock()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-            Blockieren
-          </button>
-          <div class="disc-safety-divider"></div>
-          <button class="disc-safety-item" onclick="discClearChat()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-            Chat leeren
-          </button>
-        </div>
-      </div>
-
-      <!-- Messages -->
-      <div class="disc-messages" id="disc-messages"></div>
-
-      <!-- Typing indicator -->
-      <div class="disc-typing-wrap" id="disc-typing-wrap" style="display:none">
-        <div class="disc-typing-bubble">
-          <span class="disc-typing-dot"></span>
-          <span class="disc-typing-dot"></span>
-          <span class="disc-typing-dot"></span>
-        </div>
-        <span class="disc-typing-label" id="disc-typing-label">schreibt...</span>
-      </div>
-
-      <!-- Emoji picker -->
-      <div class="disc-emoji-picker" id="disc-emoji-picker" style="display:none">
-        <div class="disc-emoji-grid" id="disc-emoji-grid"></div>
-      </div>
-
-      <!-- Input bar -->
-      <div class="disc-input-bar">
-        <label class="disc-attach-btn" title="Datei anhaengen">
-          <input type="file" id="disc-file-input" multiple accept="image/*,.pdf,.doc,.docx" onchange="discHandleFile(event)" style="display:none"/>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-        </label>
-        <button class="disc-emoji-btn" onclick="discToggleEmoji()" title="Emoji">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-        </button>
-        <div class="disc-input-wrap">
-          <textarea class="disc-textarea" id="disc-textarea" placeholder="Nachricht schreiben..." rows="1" onkeydown="discHandleKey(event)" oninput="discAutoResize(this)"></textarea>
-        </div>
-        <button class="disc-send-btn" id="disc-send-btn" onclick="discSendMessage()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-    </div>
-  </main>
-
-</div>
-</div><!-- end page-discussions -->
-
-<!-- ═══════════════════════════════════════════════════════════
-     DISCUSSIONS CSS
-     ═══════════════════════════════════════════════════════════ -->
-<style>
-/* ── ROOT LAYOUT ── */
-#page-discussions{padding:0!important;height:calc(100vh - var(--nav-h) - env(safe-area-inset-bottom));overflow:hidden}
-@media(min-width:768px){#page-discussions{height:calc(100vh - 56px)}}
-.disc-root{display:flex;height:100%;overflow:hidden;position:relative}
-
-/* ── SIDEBAR ── */
-.disc-sidebar{
-  width:300px;flex-shrink:0;display:flex;flex-direction:column;
-  background:rgba(13,13,13,0.98);
-  border-right:0.5px solid rgba(232,184,75,0.14);
-  height:100%;overflow:hidden;
-  transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);
-  position:relative;z-index:2;
-}
-.disc-sidebar-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 16px 10px;
-  border-bottom:0.5px solid rgba(255,255,255,0.05);flex-shrink:0;
-}
-.disc-sidebar-title{display:flex;align-items:center;gap:10px}
-.disc-sidebar-title-text{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.08em;color:var(--white)}
-.disc-unread-total{background:var(--gold);color:#000;border-radius:20px;font-size:0.58rem;font-weight:700;padding:2px 7px;font-family:'DM Mono',monospace}
-
-/* Search */
-.disc-search-wrap{position:relative;padding:10px 12px;flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,0.04)}
-.disc-search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:#444;pointer-events:none}
-.disc-search-input{
-  width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.08);
-  border-radius:20px;padding:9px 14px 9px 34px;
-  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;
-  transition:border-color 0.2s,background 0.2s;-webkit-appearance:none;
-}
-.disc-search-input:focus{border-color:rgba(232,184,75,0.4);background:rgba(255,255,255,0.07)}
-.disc-search-input::placeholder{color:#333}
-
-/* Tabs */
-.disc-tabs{display:flex;border-bottom:0.5px solid rgba(255,255,255,0.06);flex-shrink:0}
-.disc-tab{
-  flex:1;padding:9px 8px;background:transparent;border:none;
-  font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
-  color:#444;cursor:pointer;transition:all 0.2s;position:relative;
-}
-.disc-tab.active{color:var(--gold)}
-.disc-tab.active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--gold);border-radius:2px 2px 0 0}
-.disc-tab:hover:not(.active){color:#888}
-
-/* Convo / user lists */
-.disc-convo-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.disc-convo-list::-webkit-scrollbar,.disc-user-list::-webkit-scrollbar{width:3px}
-.disc-convo-list::-webkit-scrollbar-thumb,.disc-user-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.07);border-radius:2px}
-.disc-user-list{overflow-y:auto;-webkit-overflow-scrolling:touch}
-
-.disc-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:10px;color:var(--muted);text-align:center}
-.disc-empty-state p{font-size:0.84rem;font-weight:500;color:#444}
-.disc-empty-state span{font-size:0.7rem;color:#2a2a2a}
-
-/* Section labels inside lists */
-.disc-list-section-label{
-  font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;
-  color:#2d2d2d;padding:10px 14px 4px;
-  font-family:'DM Mono',monospace;border-bottom:0.5px solid rgba(255,255,255,0.03);
-}
-
-/* ── USER ROW (All Users tab) ── */
-.disc-user-row{
-  display:flex;align-items:center;gap:11px;
-  padding:11px 14px;cursor:pointer;
-  transition:background 0.16s;position:relative;
-  border-bottom:0.5px solid rgba(255,255,255,0.03);
-}
-.disc-user-row:hover{background:rgba(255,255,255,0.04)}
-.disc-user-row:active{background:rgba(232,184,75,0.06)}
-
-/* Avatar with role border */
-.disc-user-avatar{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:1rem;
-  position:relative;
-  background:linear-gradient(135deg,#1e1e30,#2e2848);
-  color:#c8bef8;
-  border:1.5px solid rgba(255,255,255,0.1);
-}
-/* Admin avatar — gold ring */
-.disc-user-avatar.is-admin{
-  background:linear-gradient(135deg,#2a1f0a,#4a3512);
-  color:#f5d78e;
-  border:1.5px solid rgba(232,184,75,0.6);
-  box-shadow:0 0 10px rgba(232,184,75,0.18),0 0 0 2px rgba(232,184,75,0.08);
-}
-/* Status dot on avatar */
-.disc-status-pip{
-  position:absolute;bottom:1px;right:1px;
-  width:10px;height:10px;border-radius:50%;
-  border:2px solid #0d0d0d;background:#333;
-}
-.disc-status-pip.online{
-  background:#3dba6e;
-  box-shadow:0 0 0 2px rgba(61,186,110,0.25),0 0 6px rgba(61,186,110,0.5);
-  animation:discOnlinePulse 2.5s ease-in-out infinite;
-}
-@keyframes discOnlinePulse{
-  0%,100%{box-shadow:0 0 0 2px rgba(61,186,110,0.25),0 0 6px rgba(61,186,110,0.5)}
-  50%{box-shadow:0 0 0 3px rgba(61,186,110,0.15),0 0 10px rgba(61,186,110,0.7)}
-}
-.disc-user-info{flex:1;min-width:0}
-
-/* Name row: name text + inline status dot */
-.disc-user-name{
-  font-size:0.83rem;font-weight:600;
-  display:flex;align-items:center;gap:6px;
-  margin-bottom:3px;
-  /* overflow handled per-child */
-}
-.disc-user-name-text{
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  flex:1;min-width:0;
-}
-/* Admin names → Gold, regular names → White (set via JS) */
-.disc-user-name.is-admin .disc-user-name-text{ color:#D4AF37; }
-.disc-user-name.is-user  .disc-user-name-text{ color:#FFFFFF; }
-
-/* Inline status dot next to name */
-.disc-name-dot{
-  width:7px;height:7px;border-radius:50%;flex-shrink:0;
-  background:#7f8c8d; /* offline default */
-  transition:background 0.3s;
-}
-.disc-name-dot.online{
-  background:#27ae60;
-  animation:nameDotPulse 2.2s ease-in-out infinite;
-}
-@keyframes nameDotPulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,0.5)}
-  50%{box-shadow:0 0 0 4px rgba(39,174,96,0)}
-}
-
-.disc-user-meta{display:flex;align-items:center;gap:6px}
-.disc-user-status-txt{font-size:0.62rem;color:#444;font-family:'DM Mono',monospace}
-.disc-user-status-txt.online{color:#3dba6e}
-
-/* Role badge */
-.disc-role-badge{
-  display:inline-flex;align-items:center;gap:3px;
-  font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  padding:2px 7px;border-radius:20px;font-family:'DM Mono',monospace;flex-shrink:0;
-}
-.disc-role-badge.admin{
-  background:rgba(232,184,75,0.15);color:var(--gold);
-  border:0.5px solid rgba(232,184,75,0.4);
-}
-.disc-role-badge.user{
-  background:rgba(255,255,255,0.06);color:#888;
-  border:0.5px solid rgba(255,255,255,0.1);
-}
-
-/* ── CONVO ROW (Recent tab) ── */
-.disc-convo-row{
-  display:flex;align-items:center;gap:11px;
-  padding:11px 14px;cursor:pointer;
-  transition:background 0.16s;position:relative;
-  border-bottom:0.5px solid rgba(255,255,255,0.03);
-}
-.disc-convo-row:hover{background:rgba(255,255,255,0.04)}
-.disc-convo-row.active{background:rgba(232,184,75,0.07);border-left:2.5px solid var(--gold);padding-left:12px}
-.disc-convo-row.active .disc-convo-name{color:var(--gold)}
-.disc-convo-avatar{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:1rem;
-  position:relative;background:linear-gradient(135deg,#1e1e30,#2e2848);color:#c8bef8;
-  border:1.5px solid rgba(255,255,255,0.1);
-}
-.disc-convo-avatar.is-admin{
-  background:linear-gradient(135deg,#2a1f0a,#4a3512);color:#f5d78e;
-  border:1.5px solid rgba(232,184,75,0.5);
-  box-shadow:0 0 8px rgba(232,184,75,0.15);
-}
-.disc-convo-info{flex:1;min-width:0}
-.disc-convo-row-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
-.disc-convo-name{font-size:0.83rem;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.disc-convo-time{font-size:0.6rem;color:#383838;font-family:'DM Mono',monospace;flex-shrink:0;margin-left:8px}
-.disc-convo-preview{font-size:0.71rem;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.disc-convo-unread{
-  min-width:18px;height:18px;border-radius:20px;
-  background:var(--gold);color:#000;font-size:0.58rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  padding:0 5px;flex-shrink:0;font-family:'DM Mono',monospace;
-}
-
-/* ── CHAT PANEL ── */
-.disc-chat{flex:1;display:flex;flex-direction:column;background:rgba(10,10,10,0.98);position:relative;overflow:hidden}
-
-/* Empty state */
-.disc-chat-empty{flex:1;display:flex;align-items:center;justify-content:center;padding:24px}
-.disc-chat-empty-inner{text-align:center;max-width:300px}
-.disc-chat-empty-icon{
-  width:76px;height:76px;border-radius:50%;
-  background:rgba(232,184,75,0.06);border:0.5px solid rgba(232,184,75,0.16);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 20px;color:rgba(232,184,75,0.35);
-}
-.disc-chat-empty-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;color:var(--white);margin-bottom:8px}
-.disc-chat-empty-sub{font-size:0.76rem;color:#444;line-height:1.65}
-
-/* Chat header */
-.disc-chat-header{
-  display:flex;align-items:center;gap:12px;padding:13px 16px;
-  background:rgba(16,16,16,0.97);
-  border-bottom:0.5px solid rgba(255,255,255,0.06);
-  flex-shrink:0;position:relative;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-}
-.disc-back-btn{
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);
-  color:var(--white);cursor:pointer;display:none;align-items:center;justify-content:center;
-  transition:all 0.18s;flex-shrink:0;
-}
-.disc-back-btn:hover{background:rgba(232,184,75,0.1);border-color:rgba(232,184,75,0.4);color:var(--gold)}
-.disc-chat-avatar{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:0.9rem;
-  background:linear-gradient(135deg,#1e1e30,#2e2848);color:#c8bef8;
-  border:1.5px solid rgba(255,255,255,0.1);
-}
-.disc-chat-avatar.is-admin{
-  background:linear-gradient(135deg,#2a1f0a,#4a3512);color:#f5d78e;
-  border:1.5px solid rgba(232,184,75,0.55);
-  box-shadow:0 0 10px rgba(232,184,75,0.2);
-}
-.disc-chat-header-info{flex:1;min-width:0}
-.disc-chat-header-name{font-size:0.88rem;font-weight:600;color:var(--white)}
-.disc-chat-header-status{display:flex;align-items:center;gap:5px;margin-top:2px;flex-wrap:wrap}
-/* Status dot in header */
-.disc-status-dot{
-  width:7px;height:7px;border-radius:50%;background:#333;
-  display:inline-block;flex-shrink:0;transition:background 0.3s,box-shadow 0.3s;
-}
-.disc-status-dot.online{
-  background:#3dba6e;
-  box-shadow:0 0 0 2px rgba(61,186,110,0.2),0 0 6px rgba(61,186,110,0.55);
-  animation:discOnlinePulse 2.5s ease-in-out infinite;
-}
-#disc-status-text{font-size:0.64rem;color:#444;font-family:'DM Mono',monospace}
-.disc-header-role-pill{
-  font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  padding:2px 7px;border-radius:20px;font-family:'DM Mono',monospace;
-}
-.disc-header-role-pill.admin{
-  background:rgba(232,184,75,0.14);color:var(--gold);border:0.5px solid rgba(232,184,75,0.38);
-}
-.disc-header-role-pill.user{
-  background:rgba(255,255,255,0.06);color:#777;border:0.5px solid rgba(255,255,255,0.1);
-}
-
-/* Header menu btn */
-.disc-header-menu-btn{
-  width:32px;height:32px;border-radius:50%;
-  background:transparent;border:0.5px solid rgba(255,255,255,0.08);
-  color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all 0.18s;flex-shrink:0;position:relative;z-index:10;
-}
-.disc-header-menu-btn:hover{border-color:rgba(232,184,75,0.4);color:var(--gold);background:rgba(232,184,75,0.07)}
-
-/* Safety menu */
-.disc-safety-menu{
-  position:absolute;top:calc(100% + 6px);right:12px;
-  background:rgba(14,14,14,0.98);border:0.5px solid rgba(255,255,255,0.1);
-  border-radius:12px;padding:6px;min-width:175px;
-  z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.8);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  display:none;animation:discMenuIn 0.18s ease;
-}
-.disc-safety-menu.open{display:block}
-@keyframes discMenuIn{from{opacity:0;transform:translateY(-6px) scale(0.97)}to{opacity:1;transform:none}}
-.disc-safety-item{
-  width:100%;display:flex;align-items:center;gap:9px;
-  padding:9px 12px;border-radius:8px;background:transparent;border:none;
-  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.8rem;
-  cursor:pointer;transition:background 0.15s;text-align:left;
-}
-.disc-safety-item:hover{background:rgba(255,255,255,0.06)}
-.disc-safety-item.danger{color:#ff6b6b}
-.disc-safety-item.danger:hover{background:rgba(204,31,31,0.12)}
-.disc-safety-divider{height:0.5px;background:rgba(255,255,255,0.07);margin:4px 8px}
-
-/* Messages */
-.disc-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:6px;-webkit-overflow-scrolling:touch}
-.disc-messages::-webkit-scrollbar{width:3px}
-.disc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.07);border-radius:2px}
-
-.disc-date-sep{
-  text-align:center;margin:10px 0 6px;font-size:0.58rem;letter-spacing:0.12em;
-  text-transform:uppercase;color:#2a2a2a;font-family:'DM Mono',monospace;position:relative;
-}
-.disc-date-sep::before,.disc-date-sep::after{content:'';position:absolute;top:50%;width:calc(50% - 46px);height:0.5px;background:rgba(255,255,255,0.04)}
-.disc-date-sep::before{left:0}.disc-date-sep::after{right:0}
-
-.disc-msg{display:flex;align-items:flex-end;gap:8px;max-width:72%;animation:discMsgIn 0.22s cubic-bezier(0.22,1,0.36,1)}
-@keyframes discMsgIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:none}}
-.disc-msg.sent{align-self:flex-end;flex-direction:row-reverse}
-.disc-msg.received{align-self:flex-start}
-.disc-msg-avatar{
-  width:24px;height:24px;border-radius:50%;flex-shrink:0;align-self:flex-end;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:0.62rem;
-  background:linear-gradient(135deg,#1e1e30,#2e2848);color:#c8bef8;
-}
-.disc-msg-avatar.is-admin{background:linear-gradient(135deg,#2a1f0a,#4a3512);color:#f5d78e}
-.disc-msg.sent .disc-msg-avatar{display:none}
-.disc-bubble-wrap{display:flex;flex-direction:column;gap:3px;max-width:100%}
-.disc-msg.sent .disc-bubble-wrap{align-items:flex-end}
-.disc-msg.received .disc-bubble-wrap{align-items:flex-start}
-.disc-bubble{
-  padding:10px 14px;font-size:0.875rem;line-height:1.55;
-  word-break:break-word;position:relative;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-}
-.disc-msg.sent .disc-bubble{
-  background:rgba(232,184,75,0.16);border:0.5px solid rgba(232,184,75,0.32);
-  color:var(--white);border-radius:18px 18px 4px 18px;
-}
-.disc-msg.received .disc-bubble{
-  background:rgba(36,36,36,0.9);border:0.5px solid rgba(255,255,255,0.07);
-  color:var(--white);border-radius:18px 18px 18px 4px;
-}
-.disc-bubble img{max-width:210px;border-radius:10px;display:block;margin-top:4px}
-.disc-bubble-file{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:8px;padding:8px 10px;margin-top:4px}
-.disc-bubble-file-name{font-size:0.75rem;color:var(--gold);text-decoration:none;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.disc-msg-meta{display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#363636;font-family:'DM Mono',monospace}
-.disc-msg.sent .disc-msg-meta{justify-content:flex-end}
-.disc-receipt{display:flex;align-items:center;color:#555}
-.disc-receipt.delivered{color:#777}
-.disc-receipt.read{color:var(--gold)}
-
-/* Typing */
-.disc-typing-wrap{display:flex;align-items:center;gap:8px;padding:0 18px 8px;flex-shrink:0}
-.disc-typing-bubble{background:rgba(36,36,36,0.9);border:0.5px solid rgba(255,255,255,0.07);border-radius:18px;padding:10px 14px;display:flex;align-items:center;gap:4px}
-.disc-typing-dot{width:6px;height:6px;border-radius:50%;background:#555;animation:discTypingBounce 1.2s infinite}
-.disc-typing-dot:nth-child(2){animation-delay:0.2s}
-.disc-typing-dot:nth-child(3){animation-delay:0.4s}
-@keyframes discTypingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);background:var(--gold)}}
-.disc-typing-label{font-size:0.64rem;color:#383838;font-family:'DM Mono',monospace;letter-spacing:0.04em}
-
-/* Emoji picker */
-.disc-emoji-picker{
-  position:absolute;bottom:68px;left:0;right:0;
-  background:rgba(12,12,12,0.98);border-top:0.5px solid rgba(255,255,255,0.06);
-  padding:10px 12px;z-index:20;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  animation:discMenuIn 0.2s ease;
-}
-.disc-emoji-grid{display:flex;flex-wrap:wrap;gap:2px;max-height:150px;overflow-y:auto}
-.disc-emoji-btn-item{
-  width:36px;height:36px;border:none;background:transparent;
-  font-size:1.15rem;cursor:pointer;border-radius:8px;
-  transition:background 0.14s;display:flex;align-items:center;justify-content:center;
-}
-.disc-emoji-btn-item:hover{background:rgba(255,255,255,0.08)}
-
-/* Input bar */
-.disc-input-bar{
-  display:flex;align-items:flex-end;gap:8px;padding:11px 13px 13px;
-  background:rgba(12,12,12,0.99);border-top:0.5px solid rgba(255,255,255,0.06);flex-shrink:0;
-}
-.disc-attach-btn,.disc-emoji-btn{
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);
-  color:#555;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  transition:all 0.18s;
-}
-.disc-attach-btn:hover,.disc-emoji-btn:hover{border-color:rgba(232,184,75,0.4);color:var(--gold);background:rgba(232,184,75,0.07)}
-.disc-input-wrap{flex:1;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.09);border-radius:20px;padding:8px 14px;transition:border-color 0.2s}
-.disc-input-wrap:focus-within{border-color:rgba(232,184,75,0.38)}
-.disc-textarea{
-  width:100%;background:transparent;border:none;
-  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.88rem;line-height:1.5;
-  resize:none;outline:none;max-height:120px;overflow-y:auto;-webkit-appearance:none;
-}
-.disc-textarea::placeholder{color:#2e2e2e}
-.disc-send-btn{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:rgba(232,184,75,0.13);border:0.5px solid rgba(232,184,75,0.38);
-  color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-}
-.disc-send-btn:hover{background:var(--gold);color:#000;box-shadow:0 0 18px rgba(232,184,75,0.4);transform:scale(1.08)}
-.disc-send-btn:active{transform:scale(0.94)}
-
-/* ── MOBILE ── */
-/* Sidebar close X — hidden on desktop, shown on mobile */
-.disc-sidebar-close{
-  display:none;
-  width:34px;height:34px;border-radius:8px;
-  background:rgba(212,175,55,0.08);
-  border:1px solid rgba(212,175,55,0.3);
-  color:#D4AF37 !important;
-  cursor:pointer !important;
-  z-index:1000 !important;
-  align-items:center;justify-content:center;
-  flex-shrink:0;margin-left:auto;
-  transition:background 0.18s,transform 0.18s;
-  position:relative;
-}
-.disc-sidebar-close:hover{background:rgba(212,175,55,0.18);transform:scale(1.08) rotate(90deg)}
-.disc-sidebar-close:active{transform:scale(0.92)}
-
-@media(max-width:767px){
-  /* Full-screen drawer */
-  .disc-sidebar{
-    width:100%;position:absolute;top:0;left:0;bottom:0;
-    transform:translateX(0);
-    z-index:10;
-  }
-  .disc-sidebar.hidden{transform:translateX(-100%)}
-  /* Show the X close button on mobile */
-  .disc-sidebar-close{display:flex}
-  /* Sidebar head: space-between so title and X sit at edges */
-  .disc-sidebar-head{justify-content:space-between}
-  .disc-chat{
-    position:absolute;top:0;left:0;right:0;bottom:0;
-    transform:translateX(100%);
-    transition:transform 0.32s cubic-bezier(0.22,1,0.36,1);
-  }
-  .disc-chat.shown{transform:translateX(0)}
-  .disc-back-btn{display:flex!important}
-  .disc-msg{max-width:86%}
-}
-
-/* ── REAL-TIME STATUS PULSE (online indicator) ── */
-@keyframes disc-pulse-ring{
-  0%{box-shadow:0 0 0 0 rgba(39,174,96,0.7)}
-  60%{box-shadow:0 0 0 5px rgba(39,174,96,0)}
-  100%{box-shadow:0 0 0 0 rgba(39,174,96,0)}
-}
-/* The .online pip animates with a live pulse ring */
-.disc-status-pip.online{
-  animation:disc-pulse-ring 2s ease-out infinite;
-}
-/* Name dot pulse for online users */
-@keyframes disc-dot-blink{
-  0%,100%{opacity:1}
-  50%{opacity:0.55}
-}
-.disc-name-dot.online{
-  animation:disc-pulse-ring 2.4s ease-out infinite;
-}
-/* Role-based avatar border colours */
-.disc-user-avatar.is-admin{border-color:rgba(212,175,55,0.6)!important;box-shadow:0 0 0 2px rgba(212,175,55,0.15)}
-.disc-user-avatar:not(.is-admin){border-color:rgba(255,255,255,0.14)!important}
-/* Role-based name colours */
-.disc-user-name.is-admin .disc-user-name-text{color:#D4AF37}
-.disc-user-name.is-user  .disc-user-name-text{color:#FFFFFF}
-</style>
-
-<!-- ═══════════════════════════════════════════════════════════
-     DISCUSSIONS JAVASCRIPT
-     ═══════════════════════════════════════════════════════════ -->
-<script>
-(function(){
-'use strict';
-
-/* ── State ── */
-var DISC = {
-  currentConvoId: null,
-  convos: {},
-  users: [],
-  activeTab: 'recent',
-  searchQuery: '',
-  emojiOpen: false,
-  menuOpen: false,
-  inited: false,
-};
-
-/* All users directory — admins have isAdmin:true */
-var DEMO_USERS = [
-  {id:'u1', name:'Anna Schmidt',    email:'anna@b1.de',    initials:'AS', isAdmin:false, online:true},
-  {id:'u2', name:'Markus Weber',    email:'markus@b1.de',  initials:'MW', isAdmin:false, online:false},
-  {id:'u3', name:'Lea Dupont',      email:'lea@b1.de',     initials:'LD', isAdmin:false, online:true},
-  {id:'u4', name:'Carlos Ruiz',     email:'carlos@b1.de',  initials:'CR', isAdmin:false, online:false},
-  {id:'u5', name:'Yuki Tanaka',     email:'yuki@b1.de',    initials:'YT', isAdmin:true,  online:true},
-  {id:'u6', name:'Fatima El-Amin', email:'fatima@b1.de',  initials:'FE', isAdmin:true,  online:false},
-  {id:'u7', name:'Sofia Bauer',     email:'sofia@b1.de',   initials:'SB', isAdmin:false, online:true},
-  {id:'u8', name:'Admin Global',    email:'admin@b1.de',   initials:'AG', isAdmin:true,  online:true},
-];
-
-var EMOJIS = ['😊','😂','❤️','👍','🎉','🔥','✅','💡','📚','🇩🇪','🌟','😍','🙌','💪','🤔','😅','👏','🥳','😎','🤩','💬','📖','✏️','🎯','⭐','🏆','😄','🤗','💭','📝','🌈','🎵','🙏','👋','💯','🚀','⚡','🌍','🎓'];
-
-/* ── Init ── */
-function discInit(){
-  if(DISC.inited) return;
-  DISC.inited = true;
-  DISC.users = DEMO_USERS; /* full roster — no pre-filtering */
-
-  /* Default to the global user list tab so every user is visible immediately */
-  DISC.activeTab = 'all';
-  var tabAll    = document.getElementById('disc-tab-all');
-  var tabRecent = document.getElementById('disc-tab-recent');
-  if(tabAll)    tabAll.classList.add('active');
-  if(tabRecent) tabRecent.classList.remove('active');
-
-  buildEmojiGrid();
-  addDemoConvos();
-  renderSidebar();
-
-  document.addEventListener('click', function(e){
-    var menu = document.getElementById('disc-safety-menu');
-    var menuBtn = document.getElementById('disc-header-menu-btn');
-    if(menu && menu.classList.contains('open')){
-      if(!menu.contains(e.target) && (!menuBtn || !menuBtn.contains(e.target))){
-        menu.classList.remove('open');
-        DISC.menuOpen = false;
-      }
-    }
-    var picker = document.getElementById('disc-emoji-picker');
-    var emojiBtn = document.querySelector('.disc-emoji-btn');
-    if(picker && DISC.emojiOpen && !picker.contains(e.target) && emojiBtn && !emojiBtn.contains(e.target)){
-      picker.style.display = 'none';
-      DISC.emojiOpen = false;
-    }
-  });
-}
-
-/* ── Emoji grid ── */
-function buildEmojiGrid(){
-  var grid = document.getElementById('disc-emoji-grid');
-  if(!grid) return;
-  var html = '';
-  for(var i=0;i<EMOJIS.length;i++){
-    html += '<button class="disc-emoji-btn-item" onclick="discInsertEmoji(' + JSON.stringify(EMOJIS[i]) + ')">' + EMOJIS[i] + '</button>';
-  }
-  grid.innerHTML = html;
-}
-
-/* ── Demo convos ── */
-function addDemoConvos(){
-  var u1 = DISC.users[0], u2 = DISC.users[1];
-  DISC.convos['c1'] = {
-    id:'c1', userId:'u1', name:u1.name, initials:u1.initials,
-    isAdmin:u1.isAdmin, online:u1.online,
-    messages:[
-      {id:'m1',text:'Hallo! Wie läuft das Lernen?',sent:false,time:tStr(-120),status:'read'},
-      {id:'m2',text:'Sehr gut! Kapitel 3 ist geschafft',sent:true,time:tStr(-110),status:'read'},
-      {id:'m3',text:'Super! Hast du die Grammatik-Uebungen gemacht?',sent:false,time:tStr(-100),status:'read'},
-    ], unread:0
-  };
-  DISC.convos['c2'] = {
-    id:'c2', userId:'u2', name:u2.name, initials:u2.initials,
-    isAdmin:u2.isAdmin, online:u2.online,
-    messages:[
-      {id:'m4',text:'Kannst du mir mit dem Konjunktiv helfen?',sent:false,time:tStr(-1440),status:'read'},
-      {id:'m5',text:'Natuerlich! Was genau?',sent:true,time:tStr(-1430),status:'delivered'},
-    ], unread:2
-  };
-}
-
-function tStr(off){
-  var d = new Date(Date.now()+off*60000);
-  return pad(d.getHours())+':'+pad(d.getMinutes());
-}
-function pad(n){ return n<10?'0'+n:String(n); }
-
-/* ── Tabs ── */
-window.discSwitchTab = function(tab){
-  DISC.activeTab = tab;
-  document.getElementById('disc-tab-recent').classList.toggle('active', tab==='recent');
-  document.getElementById('disc-tab-all').classList.toggle('active', tab==='all');
-  renderSidebar();
-};
-
-/* ── Search ── */
-window.discFilterUsers = function(q){
-  DISC.searchQuery = q;
-  renderSidebar();
-};
-
-/* ── Render sidebar ── */
-function renderSidebar(){
-  var convoList = document.getElementById('disc-convo-list');
-  var userList  = document.getElementById('disc-user-list');
-  var q = (DISC.searchQuery||'').toLowerCase().trim();
-
-  if(DISC.activeTab === 'all'){
-    convoList.style.display = 'none';
-    userList.style.display  = 'flex';
-    userList.style.flexDirection = 'column';
-    renderUserDirectory(q);
-  } else {
-    userList.style.display  = 'none';
-    convoList.style.display = 'flex';
-    convoList.style.flexDirection = 'column';
-    renderConvoList(q);
-  }
-}
-
-/* ── User directory ──
-   Shows the COMPLETE global user list — no friendship, relationship,
-   or invitation filters applied. Every registered user is visible by
-   default regardless of connection status.
-   Optional `q` is a search string used only to narrow by name/email.
-── */
-function renderUserDirectory(q){
-  var list = document.getElementById('disc-user-list');
-  if(!list) return;
-
-  /* 1. Start from the full roster — zero pre-filters */
-  var allUsers = DISC.users.slice(); /* shallow copy; never mutate source */
-
-  /* 2. Apply search query only (NOT a relationship filter) */
-  var users = q
-    ? allUsers.filter(function(u){
-        var n = (u.name  || '').toLowerCase();
-        var e = (u.email || '').toLowerCase();
-        return n.indexOf(q) !== -1 || e.indexOf(q) !== -1;
-      })
-    : allUsers; /* no query → show everyone */
-
-  /* 3. Sort: admins first, then alphabetically */
-  users.sort(function(a, b){
-    if(a.isAdmin !== b.isAdmin) return a.isAdmin ? -1 : 1;
-    return (a.name || '').localeCompare(b.name || '');
-  });
-
-  /* 4. Empty state */
-  if(!users.length){
-    list.innerHTML = '<div class="disc-empty-state"><p>Kein Nutzer gefunden</p></div>';
-    return;
-  }
-
-  /* 5. Render — grouped by role for visual clarity */
-  var adminGroup = users.filter(function(u){ return  u.isAdmin; });
-  var userGroup  = users.filter(function(u){ return !u.isAdmin; });
-  var html = '';
-
-  if(adminGroup.length){
-    html += '<div class="disc-list-section-label">Admins</div>';
-    adminGroup.forEach(function(u){ html += renderUserRow(u); });
-  }
-  if(userGroup.length){
-    html += '<div class="disc-list-section-label">Nutzer</div>';
-    userGroup.forEach(function(u){ html += renderUserRow(u); });
-  }
-
-  list.innerHTML = html;
-}
-
-/* ── renderUserRow ──
-   Builds a single user row:
-   • Name colour → #D4AF37 (Gold) for admins, #FFFFFF (White) for users
-   • Inline status dot → #27ae60 Green (online) / #7f8c8d Grey (offline)
-   • Avatar pip on the avatar bubble mirrors online/offline state
-── */
-function renderUserRow(u){
-  var avatarClass  = 'disc-user-avatar' + (u.isAdmin ? ' is-admin' : '');
-  var pipClass     = 'disc-status-pip'  + (u.online  ? ' online'   : '');
-  var roleClass    = u.isAdmin ? 'admin'   : 'user';
-  var roleLabel    = u.isAdmin ? 'Admin'   : 'User';
-  var statusTxt    = u.online  ? 'online'  : 'offline';
-  var statusTxtCls = u.online  ? ' online' : '';
-
-  /* Name colour: Gold (#D4AF37) for admins, White (#FFFFFF) for regular users */
-  var nameRoleClass = u.isAdmin ? 'is-admin' : 'is-user';
-
-  /* Inline dot: Green (#27ae60) online, Grey (#7f8c8d) offline */
-  var dotClass = 'disc-name-dot' + (u.online ? ' online' : '');
-
-  return (
-    '<div class="disc-user-row" onclick="discStartConvo(' + JSON.stringify(u.id) + ')">' +
-      /* Avatar bubble with corner pip */
-      '<div class="' + avatarClass + '">' +
-        esc(u.initials) +
-        '<span class="' + pipClass + '"></span>' +
-      '</div>' +
-      /* Info column */
-      '<div class="disc-user-info">' +
-        /* Name row: coloured text + status dot */
-        '<div class="disc-user-name ' + nameRoleClass + '">' +
-          '<span class="disc-user-name-text">' + esc(u.name) + '</span>' +
-          '<span class="' + dotClass + '" title="' + statusTxt + '"></span>' +
-        '</div>' +
-        /* Sub-row: online/offline label */
-        '<div class="disc-user-meta">' +
-          '<span class="disc-user-status-txt' + statusTxtCls + '">' + statusTxt + '</span>' +
-        '</div>' +
-      '</div>' +
-      /* Role badge */
-      '<span class="disc-role-badge ' + roleClass + '">' + roleLabel + '</span>' +
-    '</div>'
-  );
-}
-
-/* ── Convo list (recent) ── */
-function renderConvoList(q){
-  var list  = document.getElementById('disc-convo-list');
-  var empty = document.getElementById('disc-recent-empty');
-  var ids   = Object.keys(DISC.convos);
-
-  var filtered = ids.filter(function(id){
-    if(!q) return true;
-    var c = DISC.convos[id];
-    return c.name.toLowerCase().includes(q);
-  });
-
-  if(!filtered.length){
-    list.innerHTML = '';
-    if(empty) list.appendChild(empty);
-    if(empty) empty.style.display='flex';
-    return;
-  }
-  if(empty) empty.style.display='none';
-
-  var html = '';
-  filtered.forEach(function(id){
-    var c   = DISC.convos[id];
-    var last= c.messages[c.messages.length-1];
-    var preview = last ? (last.sent?'Du: ':'')+last.text : '';
-    var avatarClass = 'disc-convo-avatar' + (c.isAdmin?' is-admin':'');
-    var pipClass    = 'disc-status-pip'   + (c.online?' online':'');
-    html += '<div class="disc-convo-row' + (DISC.currentConvoId===id?' active':'') + '" onclick="discOpenConvo(' + JSON.stringify(id) + ')">' +
-      '<div class="' + avatarClass + '">' + esc(c.initials) +
-        '<span class="' + pipClass + '"></span>' +
-      '</div>' +
-      '<div class="disc-convo-info">' +
-        '<div class="disc-convo-row-top">' +
-          '<span class="disc-convo-name">' + esc(c.name) + '</span>' +
-          '<span class="disc-convo-time">' + (last?last.time:'') + '</span>' +
-        '</div>' +
-        '<div class="disc-convo-preview">' + esc(preview.slice(0,55)) + '</div>' +
-      '</div>' +
-      (c.unread ? '<div class="disc-convo-unread">'+c.unread+'</div>' : '') +
-    '</div>';
-  });
-  list.innerHTML = html;
-}
-
-/* ── Start convo from user directory ── */
-window.discStartConvo = function(userId){
-  var user = DISC.users.filter(function(u){ return u.id===userId; })[0];
-  if(!user) return;
-
-  /* Find existing convo */
-  var existing = null;
-  Object.values(DISC.convos).forEach(function(c){ if(c.userId===userId) existing=c; });
-
-  if(!existing){
-    var id = 'c_'+Date.now();
-    DISC.convos[id] = {
-      id:id, userId:user.id, name:user.name, initials:user.initials,
-      isAdmin:user.isAdmin, online:user.online, messages:[], unread:0
-    };
-    existing = DISC.convos[id];
-  }
-
-  /* Switch to Recent tab */
-  DISC.activeTab = 'recent';
-  document.getElementById('disc-tab-recent').classList.add('active');
-  document.getElementById('disc-tab-all').classList.remove('active');
-  discOpenConvo(existing.id);
-};
-
-/* ── Open convo ── */
-window.discOpenConvo = function(id){
-  DISC.currentConvoId = id;
-  var c = DISC.convos[id];
-  if(!c) return;
-  c.unread = 0;
-
-  /* Set header */
-  var av = document.getElementById('disc-chat-avatar');
-  av.textContent = c.initials;
-  av.className   = 'disc-chat-avatar' + (c.isAdmin?' is-admin':'');
-
-  document.getElementById('disc-chat-header-name').textContent = c.name;
-
-  var dot = document.getElementById('disc-header-status-dot');
-  var stTxt = document.getElementById('disc-status-text');
-  dot.className = 'disc-status-dot' + (c.online?' online':'');
-  stTxt.textContent = c.online ? 'online' : 'offline';
-
-  var rolePill = document.getElementById('disc-header-role-pill');
-  if(c.isAdmin){
-    rolePill.textContent = 'Admin';
-    rolePill.className   = 'disc-header-role-pill admin';
-    rolePill.style.display = 'inline-flex';
-  } else {
-    rolePill.textContent = 'User';
-    rolePill.className   = 'disc-header-role-pill user';
-    rolePill.style.display = 'inline-flex';
-  }
-
-  /* Show chat */
-  document.getElementById('disc-chat-empty').style.display  = 'none';
-  var active = document.getElementById('disc-chat-active');
-  active.style.display  = 'flex';
-  active.style.flexDirection = 'column';
-  active.style.flex     = '1';
-  active.style.height   = '100%';
-
-  renderMessages(c);
-  renderSidebar();
-
-  if(window.innerWidth < 768){
-    document.getElementById('disc-sidebar').classList.add('hidden');
-    document.getElementById('disc-chat').classList.add('shown');
-  }
-
-  /* Simulate typing + auto-reply */
-  setTimeout(function(){
-    if(DISC.currentConvoId !== id) return;
-    showTyping(c.name);
-    setTimeout(function(){
-      if(DISC.currentConvoId !== id) return;
-      hideTyping();
-      var replies = ['Das klingt super!','Weiter so, du schaffst das!','Ich lerne auch fleißig!','Hast du heute Vokabeln geübt?','Die Grammatik ist manchmal schwierig...'];
-      addMessage(id,{id:'a_'+Date.now(),text:replies[Math.floor(Math.random()*replies.length)],sent:false,time:tStr(0),status:'read'});
-    }, 2800);
-  }, 1800);
-};
-
-/* ── Render messages ── */
-function renderMessages(c){
-  var area = document.getElementById('disc-messages');
-  var html = '<div class="disc-date-sep">Heute</div>';
-  c.messages.forEach(function(m){ html += renderBubble(m, c); });
-  area.innerHTML = html;
-  area.scrollTop = area.scrollHeight;
-}
-
-function renderBubble(m, c){
-  var receipt = '';
-  if(m.sent){
-    if(m.status==='read')      receipt='<span class="disc-receipt read">'      + dblCheck() + '</span>';
-    else if(m.status==='delivered') receipt='<span class="disc-receipt delivered">' + dblCheck() + '</span>';
-    else                       receipt='<span class="disc-receipt">'            + sglCheck() + '</span>';
-  }
-  var avClass = c && c.isAdmin ? 'disc-msg-avatar is-admin' : 'disc-msg-avatar';
-  var avHTML  = m.sent ? '' : '<div class="' + avClass + '">' + esc(c?c.initials:'?') + '</div>';
-  var content = esc(m.text);
-  if(m.imageUrl) content += '<img src="' + esc(m.imageUrl) + '" alt="Bild"/>';
-  if(m.fileName) content += '<div class="disc-bubble-file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><a class="disc-bubble-file-name" href="#">' + esc(m.fileName) + '</a></div>';
-
-  return '<div class="disc-msg ' + (m.sent?'sent':'received') + '">' +
-    avHTML +
-    '<div class="disc-bubble-wrap">' +
-      '<div class="disc-bubble">' + content + '</div>' +
-      '<div class="disc-msg-meta">' + m.time + ' ' + receipt + '</div>' +
-    '</div>' +
-  '</div>';
-}
-
-function dblCheck(){ return '<svg width="14" height="9" viewBox="0 0 18 11" fill="currentColor"><path d="M1 5.5L5.5 10L17 1"/><path d="M5 5.5L9.5 10L17 1" opacity="0.6"/></svg>'; }
-function sglCheck(){ return '<svg width="12" height="9" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 5 5 9 13 1"/></svg>'; }
-
-function addMessage(cid, msg){
-  var c = DISC.convos[cid];
-  if(!c) return;
-  c.messages.push(msg);
-  if(DISC.currentConvoId === cid){
-    var area = document.getElementById('disc-messages');
-    var tmp = document.createElement('div');
-    tmp.innerHTML = renderBubble(msg, c);
-    while(tmp.firstChild) area.appendChild(tmp.firstChild);
-    area.scrollTop = area.scrollHeight;
-  } else {
-    c.unread = (c.unread||0)+1;
-  }
-  renderSidebar();
-}
-
-/* ── Send ── */
-window.discSendMessage = function(){
-  var ta = document.getElementById('disc-textarea');
-  var text = ta.value.trim();
-  if(!text || !DISC.currentConvoId) return;
-  var msg = {id:'msg_'+Date.now(),text:text,sent:true,time:tStr(0),status:'sent'};
-  addMessage(DISC.currentConvoId, msg);
-  ta.value=''; ta.style.height='';
-
-  setTimeout(function(){ msg.status='delivered'; refreshReceipt(); }, 700);
-  setTimeout(function(){ msg.status='read';      refreshReceipt(); }, 2000);
-};
-
-function refreshReceipt(){
-  var c = DISC.convos[DISC.currentConvoId];
-  if(!c) return;
-  var sentMsgs = document.querySelectorAll('#disc-messages .disc-msg.sent');
-  if(!sentMsgs.length) return;
-  var last    = sentMsgs[sentMsgs.length-1];
-  var meta    = last.querySelector('.disc-msg-meta');
-  var lastMsg = c.messages.filter(function(m){ return m.sent; }).slice(-1)[0];
-  if(!meta||!lastMsg) return;
-  var r='';
-  if(lastMsg.status==='read')      r='<span class="disc-receipt read">'+dblCheck()+'</span>';
-  else if(lastMsg.status==='delivered') r='<span class="disc-receipt delivered">'+dblCheck()+'</span>';
-  else                             r='<span class="disc-receipt">'+sglCheck()+'</span>';
-  meta.innerHTML = lastMsg.time + ' ' + r;
-}
-
-window.discHandleKey = function(e){
-  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); discSendMessage(); }
-};
-window.discAutoResize = function(el){
-  el.style.height='auto';
-  el.style.height = Math.min(el.scrollHeight,120)+'px';
-};
-
-/* ── Typing ── */
-function showTyping(name){
-  var wrap = document.getElementById('disc-typing-wrap');
-  var lbl  = document.getElementById('disc-typing-label');
-  if(!wrap) return;
-  lbl.textContent = name + ' schreibt...';
-  wrap.style.display = 'flex';
-  var area = document.getElementById('disc-messages');
-  if(area) area.scrollTop = area.scrollHeight;
-}
-function hideTyping(){
-  var wrap = document.getElementById('disc-typing-wrap');
-  if(wrap) wrap.style.display = 'none';
-}
-
-/* ── Emoji ── */
-window.discToggleEmoji = function(){
-  var picker = document.getElementById('disc-emoji-picker');
-  DISC.emojiOpen = !DISC.emojiOpen;
-  picker.style.display = DISC.emojiOpen ? 'block' : 'none';
-};
-window.discInsertEmoji = function(emoji){
-  var ta = document.getElementById('disc-textarea');
-  var pos = ta.selectionStart || ta.value.length;
-  ta.value = ta.value.slice(0,pos) + emoji + ta.value.slice(pos);
-  ta.focus();
-  var p = pos + emoji.length;
-  try{ ta.setSelectionRange(p,p); }catch(e){}
-  document.getElementById('disc-emoji-picker').style.display = 'none';
-  DISC.emojiOpen = false;
-};
-
-/* ── File attach ── */
-window.discHandleFile = function(e){
-  var files = e.target.files;
-  if(!files||!DISC.currentConvoId) return;
-  Array.from(files).forEach(function(f){
-    var msg = {id:'f_'+Date.now(),text:'',sent:true,time:tStr(0),status:'sent'};
-    if(f.type.startsWith('image/')){
-      var reader = new FileReader();
-      reader.onload = function(ev){ msg.imageUrl=ev.target.result; addMessage(DISC.currentConvoId,msg); };
-      reader.readAsDataURL(f);
-    } else {
-      msg.fileName = f.name;
-      addMessage(DISC.currentConvoId, msg);
-    }
-  });
-  e.target.value='';
-};
-
-/* ── Safety menu ── */
-window.discToggleMenu = function(){
-  var menu = document.getElementById('disc-safety-menu');
-  DISC.menuOpen = !DISC.menuOpen;
-  menu.classList.toggle('open', DISC.menuOpen);
-};
-window.discReport = function(){
-  document.getElementById('disc-safety-menu').classList.remove('open');
-  DISC.menuOpen=false;
-  if(typeof showToast==='function') showToast('Gemeldet — Danke fuer dein Feedback');
-  else alert('Nutzer gemeldet');
-};
-window.discBlock = function(){
-  document.getElementById('disc-safety-menu').classList.remove('open');
-  DISC.menuOpen=false;
-  if(!DISC.currentConvoId) return;
-  if(confirm('Möchtest du diesen Nutzer wirklich blockieren?')){
-    delete DISC.convos[DISC.currentConvoId];
-    DISC.currentConvoId=null;
-    document.getElementById('disc-chat-empty').style.display='flex';
-    document.getElementById('disc-chat-active').style.display='none';
-    renderSidebar();
-    if(typeof showToast==='function') showToast('Nutzer blockiert');
-  }
-};
-window.discClearChat = function(){
-  document.getElementById('disc-safety-menu').classList.remove('open');
-  DISC.menuOpen=false;
-  if(!DISC.currentConvoId) return;
-  DISC.convos[DISC.currentConvoId].messages=[];
-  document.getElementById('disc-messages').innerHTML='<div class="disc-date-sep">Heute</div>';
-};
-
-/* ── Mobile back ── */
-window.discGoBack = function(){
-  DISC.currentConvoId=null;
-  document.getElementById('disc-sidebar').classList.remove('hidden');
-  document.getElementById('disc-chat').classList.remove('shown');
-  document.getElementById('disc-chat-empty').style.display='flex';
-  document.getElementById('disc-chat-active').style.display='none';
-};
-
-/* ── Close sidebar drawer (mobile X button) ── */
-window.discCloseSidebar = function(){
-  var sidebar = document.getElementById('disc-sidebar');
-  var chat    = document.getElementById('disc-chat');
-  if(DISC.currentConvoId){
-    /* Convo is open: slide chat panel into view */
-    if(sidebar) sidebar.classList.add('hidden');
-    if(chat)    chat.classList.add('shown');
-  } else {
-    /* No active convo: just close the drawer (navigate back to page) */
-    if(sidebar) sidebar.classList.add('hidden');
-  }
-};
-
-/* ── Util ── */
-function esc(s){
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-/* ── switchPage hook absorbed by the Page-Switch State Manager (end of file) ── */
-
-/* Auto-init if page is active on load */
-if(document.getElementById('page-discussions') &&
-   document.getElementById('page-discussions').classList.contains('active')){
-  discInit();
-}
-})();
-</script>
-
 <!-- QUIZ PAGE -->
 <div class="page" id="page-quiz">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title">QUIZ
-    <span class="title-sub">KI-generierte Fragen · Adaptiv</span>
-  </h1>
-</div>
 <div class="quiz-page">
+<div class="quiz-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+<div class="quiz-hero-title">KI-<span>Quiz</span></div>
+<div class="quiz-hero-sub">KI-generierte Fragen basierend auf deinem Fortschritt</div>
+</div>
 <div class="quiz-config">
 <div>
 <div class="quiz-config-label">Schwierigkeit</div>
 <select class="quiz-select" id="quiz-difficulty">
-<option value="auto">Auto — aus Fortschritt</option>
-<option value="A1">A1 — Anfänger</option>
-<option value="A2">A2 — Grundlagen</option>
-<option value="B1">B1 — Mittelstufe</option>
+<option value="auto">🤖 Auto (aus Fortschritt)</option>
+<option value="A1">A1 – Anfänger</option>
+<option value="A2">A2 – Grundlagen</option>
+<option value="B1">B1 – Mittelstufe</option>
 </select>
 </div>
 <div>
 <div class="quiz-config-label">Thema</div>
 <select class="quiz-select" id="quiz-topic">
-<option value="mixed">Gemischt</option>
-<option value="grammar">Grammatik</option>
-<option value="vocabulary">Vokabeln</option>
-<option value="reading">Leseverständnis</option>
-<option value="wortschatz">Wortschatz B1 — DeutschForYou</option>
+<option value="mixed">🎲 Gemischt</option>
+<option value="grammar">📘 Grammatik</option>
+<option value="vocabulary">📚 Vokabeln</option>
+<option value="reading">📖 Leseverständnis</option>
+<option value="wortschatz">🌐 Wortschatz B1 (DeutschForYou)</option>
 </select>
 </div>
 <div>
@@ -4382,7 +2487,7 @@ if(document.getElementById('page-discussions') &&
 </select>
 </div>
 <button class="quiz-gen-btn" id="quiz-gen-btn" onclick="generateQuiz()">
-<span id="quiz-gen-label">Quiz starten</span>
+<span id="quiz-gen-label">✨ Quiz starten</span>
 <div class="quiz-spinner" id="quiz-gen-spinner" style="display:none;width:18px;height:18px;border-width:2px"></div>
 </button>
 </div>
@@ -4391,18 +2496,15 @@ if(document.getElementById('page-discussions') &&
 </div>
 <!-- LEVEL PAGE -->
 <div class="page" id="page-level">
-<div class="page-title-bar">
-  <div class="flag-stripe"></div>
-  <h1 class="page-title">Niveau
-    <span class="title-sub">Erkenne dein aktuelles Deutsch-Niveau</span>
-  </h1>
-</div>
 <div class="level-page">
+<div class="level-hero">
+<div class="flag-stripe" style="position:static;height:5px;margin-bottom:16px;border-radius:2px"></div>
+<div class="level-hero-title">Niveau-<span>Test</span></div>
+<div class="level-hero-sub">Erkenne dein aktuelles Deutsch-Niveau</div>
+</div>
 <div id="level-area">
 <div class="level-start-card">
-<div class="level-start-icon">
-  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-</div>
+<div class="level-start-icon">🎯</div>
 <div class="level-start-title">Wie gut ist dein Deutsch?</div>
 <div class="level-start-desc">Mach einen adaptiven Test mit 20 KI-generierten Fragen. Das System passt sich deinen Antworten an, um dein genaues Niveau (A1 bis B2) zu ermitteln.</div>
 <button class="level-start-btn" onclick="startLevelTest()">Test starten</button>
@@ -4411,795 +2513,15 @@ if(document.getElementById('page-discussions') &&
 </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     TRANSLATION SYSTEM — DE · EN · AR
-     Provides natural, professional phrasing across all
-     three supported languages. Patches and extends any
-     translation keys already consumed by app.js.
-     ═══════════════════════════════════════════════════ -->
-<script>
-(function(){
-'use strict';
-
-/* ── Complete translation dictionary ── */
-window.TRANSLATIONS = {
-  de: {
-    /* Navigation — exact labels per spec */
-    nav_tracker:     'Tracker',
-    nav_docs:        'Dokumente',
-    nav_news:        'News',
-    nav_translate:   'Translator',
-    nav_quiz:        'Quiz',
-    nav_vocab:       'Vokabeln',
-    nav_listen:      'Hören',
-    nav_level:       'Niveau',
-    nav_admin:       'Admin',
-    nav_alerts:      'Hinweise',
-    nav_profile:     'Profil',
-    nav_discussions: 'Diskussion',
-
-    /* Auth */
-    auth_login:           'Anmelden',
-    auth_register:        'Registrieren',
-    auth_email_label:     'E-Mail',
-    auth_name_label:      'Anzeigename',
-    auth_password_label:  'Passwort',
-    auth_confirm_pwd:     'Passwort bestätigen',
-    auth_forgot_pwd:      'Passwort vergessen?',
-    auth_google_btn:      'Mit Google anmelden',
-    auth_submit_login:    'Anmelden',
-    auth_submit_register: 'Registrieren',
-
-    /* Profile */
-    profile_identity:      'Identität',
-    profile_display_name:  'Anzeigename',
-    profile_name_hint:     'Wird im Header und deinem Profil angezeigt',
-    profile_email:         'E-Mail',
-    profile_security:      'Sicherheit',
-    profile_new_pwd:       'Neues Passwort',
-    profile_confirm_pwd:   'Passwort bestätigen',
-    profile_notifications: 'Benachrichtigungen',
-    profile_reminder_label:'Serien-Erinnerung',
-    profile_reminder_sub:  'Erinnerung 2 Stunden vor Mitternacht bei offenen Aufgaben',
-    profile_save:          'Änderungen speichern',
-    profile_logout:        'Abmelden',
-    profile_weeks:         'Wochen',
-    profile_streak:        'Serie',
-    profile_progress:      'Fortschritt',
-
-    /* Tracker */
-    stats_section_title:  'Statistiken',
-    suggest_section_title:'Empfehlungen',
-    loader_text:          'Verbindung…',
-
-    /* Notifications */
-    notif_panel_title: 'Benachrichtigungen',
-    notif_mark_read:   'Alle gelesen',
-    notif_empty:       'Keine Benachrichtigungen',
-    notif_send_btn:    'Benachrichtigung senden',
-    notif_modal_title: 'Benachrichtigung senden',
-    notif_target_label:'Empfänger',
-    notif_target_all:  'Alle Nutzer',
-    notif_title_label: 'Titel',
-    notif_body_label:  'Nachricht',
-    notif_cancel:      'Abbrechen',
-    notif_send:        'Senden',
-
-    /* Documents */
-    docs_search_placeholder: 'Dokument suchen…',
-    docs_upload_title:       'PDF hochladen',
-    docs_upload_sub:         'Lokal gespeichert · Offline verfügbar · Max 200 MB',
-    docs_all_cat:            'Alle',
-    docs_grammar:            'Grammatik',
-    docs_vocabulary:         'Vokabeln',
-    docs_exercise:           'Übungen',
-    docs_exam:               'Prüfung',
-    docs_other:              'Sonstiges',
-    docs_rename_title:       'Dokument bearbeiten',
-    docs_rename_cancel:      'Abbrechen',
-    docs_rename_save:        'Speichern',
-
-    /* Translator */
-    translate_placeholder:   'Wort oder Satz eingeben…',
-    translate_clear:         'Löschen',
-    translate_listen:        'Anhören',
-    translate_btn:           'Übersetzen',
-    translate_history_label: 'Verlauf',
-    translate_history_clear: 'Löschen',
-
-    /* Quiz */
-    quiz_difficulty_label: 'Schwierigkeit',
-    quiz_topic_label:      'Thema',
-    quiz_count_label:      'Fragen',
-    quiz_start_btn:        'Quiz starten',
-    quiz_opt_auto:         'Auto — aus Fortschritt',
-    quiz_opt_mixed:        'Gemischt',
-    quiz_opt_grammar:      'Grammatik',
-    quiz_opt_vocab:        'Vokabeln',
-    quiz_opt_reading:      'Leseverständnis',
-
-    /* Vocab trainer */
-    vocab_new_round:     'Neue Runde',
-    vocab_new_round_btn: 'Neue Runde',
-    vocab_finished_title:'Ausgezeichnet!',
-    vocab_finished_sub:  'Alle Paare gefunden!',
-
-    /* Listening */
-    speaking_btn: 'Sprechen',
-    speed_slow:   'Langsam',
-    speed_normal: 'Normal',
-    speed_fast:   'Schnell',
-
-    /* Level test */
-    level_hero_title: 'Niveau-Test',
-    level_hero_sub:   'Erkenne dein aktuelles Deutsch-Niveau',
-    level_start_title:'Wie gut ist dein Deutsch?',
-    level_start_btn:  'Test starten',
-
-    /* Scanner */
-    scanner_title:       'Code Scanner',
-    scanner_tab_camera:  'Kamera',
-    scanner_tab_image:   'Bild hochladen',
-    scanner_hint:        'Kamera auf einen QR-Code oder Barcode richten',
-    scanner_image_hint:  'Bild mit QR-Code oder Barcode auswählen',
-    scanner_result_label:'Code erkannt',
-    scanner_copy:        'Kopieren',
-    scanner_open:        'Öffnen',
-
-    /* Admin */
-    admin_role_management:  'Rollenverwaltung',
-    admin_role_desc:        'E-Mail-Adresse eingeben, um die Nutzerrolle zu ändern.',
-    admin_email_label:      'Nutzer-E-Mail',
-    admin_set_user:         'Nutzer setzen',
-    admin_set_admin:        'Admin setzen',
-    admin_registered_users: 'Registrierte Nutzer',
-    admin_refresh:          'Aktualisieren',
-    admin_loading:          'Wird geladen…',
-    admin_pending_label:    'Ausstehende Anfragen',
-    admin_all_users:        'Alle Nutzer',
-    admin_all_docs:         'Alle Nutzerdokumente',
-    admin_hero_sub:         'Nutzerverwaltung & Anmeldestatistiken',
-    admin_total_users:      'Nutzer gesamt',
-    admin_new_today:        'Heute neu',
-    admin_this_week:        'Diese Woche',
-    admin_admins_label:     'Admins',
-    admin_chart_title:      'Anmeldungen — Letzte 7 Tage',
-    admin_users_label:      'Nutzer',
-    admin_pending_short:    'Ausstehend',
-
-    /* General UI */
-    loading:   'Wird geladen…',
-    save:      'Speichern',
-    cancel:    'Abbrechen',
-    delete:    'Löschen',
-    close:     'Schließen',
-    confirm:   'Bestätigen',
-    back:      'Zurück',
-    search:    'Suchen',
-    offline_banner: 'Offline-Modus – Änderungen werden lokal gespeichert',
-  },
-
-  en: {
-    /* Navigation */
-    nav_tracker:     'Tracker',
-    nav_docs:        'Documents',
-    nav_news:        'News',
-    nav_translate:   'Translator',
-    nav_quiz:        'Quiz',
-    nav_vocab:       'Vocab',
-    nav_listen:      'Hören',
-    nav_level:       'Niveau',
-    nav_admin:       'Admin',
-    nav_alerts:      'Alerts',
-    nav_profile:     'Profile',
-    nav_discussions: 'Discuss',
-
-    /* Auth */
-    auth_login:           'Sign In',
-    auth_register:        'Register',
-    auth_email_label:     'Email',
-    auth_name_label:      'Display Name',
-    auth_password_label:  'Password',
-    auth_confirm_pwd:     'Confirm Password',
-    auth_forgot_pwd:      'Forgot password?',
-    auth_google_btn:      'Sign in with Google',
-    auth_submit_login:    'Sign In',
-    auth_submit_register: 'Create Account',
-
-    /* Profile */
-    profile_identity:      'Identity',
-    profile_display_name:  'Display Name',
-    profile_name_hint:     'Shown in the header and your profile',
-    profile_email:         'Email',
-    profile_security:      'Security',
-    profile_new_pwd:       'New Password',
-    profile_confirm_pwd:   'Confirm Password',
-    profile_notifications: 'Notifications',
-    profile_reminder_label:'Streak Reminder',
-    profile_reminder_sub:  'Notify me 2h before midnight if tasks are unfinished',
-    profile_save:          'Save Changes',
-    profile_logout:        'Sign Out',
-    profile_weeks:         'Weeks',
-    profile_streak:        'Streak',
-    profile_progress:      'Progress',
-
-    /* Tracker */
-    stats_section_title:  'Statistics',
-    suggest_section_title:'Recommendations',
-    loader_text:          'Connecting…',
-
-    /* Notifications */
-    notif_panel_title: 'Notifications',
-    notif_mark_read:   'Mark all read',
-    notif_empty:       'No notifications yet',
-    notif_send_btn:    'Send Notification',
-    notif_modal_title: 'Send Notification',
-    notif_target_label:'Recipient',
-    notif_target_all:  'All Users',
-    notif_title_label: 'Title',
-    notif_body_label:  'Message',
-    notif_cancel:      'Cancel',
-    notif_send:        'Send',
-
-    /* Documents */
-    docs_search_placeholder: 'Search documents…',
-    docs_upload_title:       'Upload PDF',
-    docs_upload_sub:         'Stored locally · Available offline · Max 200 MB',
-    docs_all_cat:            'All',
-    docs_grammar:            'Grammar',
-    docs_vocabulary:         'Vocabulary',
-    docs_exercise:           'Exercises',
-    docs_exam:               'Exam',
-    docs_other:              'Other',
-    docs_rename_title:       'Edit Document',
-    docs_rename_cancel:      'Cancel',
-    docs_rename_save:        'Save',
-
-    /* Translator */
-    translate_placeholder:   'Enter a word or sentence…',
-    translate_clear:         'Clear',
-    translate_listen:        'Listen',
-    translate_btn:           'Translate',
-    translate_history_label: 'History',
-    translate_history_clear: 'Clear',
-
-    /* Quiz */
-    quiz_difficulty_label: 'Difficulty',
-    quiz_topic_label:      'Topic',
-    quiz_count_label:      'Questions',
-    quiz_start_btn:        'Start Quiz',
-    quiz_opt_auto:         'Auto — based on progress',
-    quiz_opt_mixed:        'Mixed',
-    quiz_opt_grammar:      'Grammar',
-    quiz_opt_vocab:        'Vocabulary',
-    quiz_opt_reading:      'Reading Comprehension',
-
-    /* Vocab trainer */
-    vocab_new_round:     'New Round',
-    vocab_new_round_btn: 'New Round',
-    vocab_finished_title:'Excellent!',
-    vocab_finished_sub:  'All pairs found!',
-
-    /* Listening */
-    speaking_btn: 'Speak',
-    speed_slow:   'Slow',
-    speed_normal: 'Normal',
-    speed_fast:   'Fast',
-
-    /* Level test */
-    level_hero_title: 'Level Test',
-    level_hero_sub:   'Discover your current German level',
-    level_start_title:'How good is your German?',
-    level_start_btn:  'Start Test',
-
-    /* Scanner */
-    scanner_title:       'Code Scanner',
-    scanner_tab_camera:  'Camera',
-    scanner_tab_image:   'Upload Image',
-    scanner_hint:        'Point the camera at a QR code or barcode',
-    scanner_image_hint:  'Choose an image containing a QR code or barcode',
-    scanner_result_label:'Code detected',
-    scanner_copy:        'Copy',
-    scanner_open:        'Open',
-
-    /* Admin */
-    admin_role_management:  'Role Management',
-    admin_role_desc:        'Enter a user email address to change their role.',
-    admin_email_label:      'User Email',
-    admin_set_user:         'Set as User',
-    admin_set_admin:        'Set as Admin',
-    admin_registered_users: 'Registered Users',
-    admin_refresh:          'Refresh',
-    admin_loading:          'Loading…',
-    admin_pending_label:    'Pending Requests',
-    admin_all_users:        'All Users',
-    admin_all_docs:         'All User Documents',
-    admin_hero_sub:         'User management & signup statistics',
-    admin_total_users:      'Total Users',
-    admin_new_today:        'New Today',
-    admin_this_week:        'This Week',
-    admin_admins_label:     'Admins',
-    admin_chart_title:      'Signups — Last 7 Days',
-    admin_users_label:      'Users',
-    admin_pending_short:    'Pending',
-
-    /* General UI */
-    loading:   'Loading…',
-    save:      'Save',
-    cancel:    'Cancel',
-    delete:    'Delete',
-    close:     'Close',
-    confirm:   'Confirm',
-    back:      'Back',
-    search:    'Search',
-    offline_banner: 'Offline mode – changes saved locally',
-  },
-
-  ar: {
-    /* Navigation */
-    nav_tracker:     'المتتبع',
-    nav_docs:        'المستندات',
-    nav_news:        'الأخبار',
-    nav_translate:   'الترجمة',
-    nav_quiz:        'الاختبار',
-    nav_vocab:       'المفردات',
-    nav_listen:      'الاستماع',
-    nav_level:       'المستوى',
-    nav_admin:       'الإدارة',
-    nav_alerts:      'التنبيهات',
-    nav_profile:     'الملف',
-    nav_discussions: 'النقاش',
-
-    /* Auth */
-    auth_login:           'تسجيل الدخول',
-    auth_register:        'إنشاء حساب',
-    auth_email_label:     'البريد الإلكتروني',
-    auth_name_label:      'الاسم المعروض',
-    auth_password_label:  'كلمة المرور',
-    auth_confirm_pwd:     'تأكيد كلمة المرور',
-    auth_forgot_pwd:      'نسيت كلمة المرور؟',
-    auth_google_btn:      'الدخول عبر Google',
-    auth_submit_login:    'دخول',
-    auth_submit_register: 'إنشاء حساب',
-
-    /* Profile */
-    profile_identity:      'الهوية',
-    profile_display_name:  'الاسم المعروض',
-    profile_name_hint:     'يظهر في الرأس وملفك الشخصي',
-    profile_email:         'البريد الإلكتروني',
-    profile_security:      'الأمان',
-    profile_new_pwd:       'كلمة مرور جديدة',
-    profile_confirm_pwd:   'تأكيد كلمة المرور',
-    profile_notifications: 'الإشعارات',
-    profile_reminder_label:'تذكير السلسلة',
-    profile_reminder_sub:  'تذكير قبل منتصف الليل بساعتين إذا لم تكتمل المهام',
-    profile_save:          'حفظ التغييرات',
-    profile_logout:        'تسجيل الخروج',
-    profile_weeks:         'الأسابيع',
-    profile_streak:        'السلسلة',
-    profile_progress:      'التقدم',
-
-    /* Tracker */
-    stats_section_title:  'الإحصائيات',
-    suggest_section_title:'التوصيات',
-    loader_text:          'جارٍ الاتصال…',
-
-    /* Notifications */
-    notif_panel_title: 'الإشعارات',
-    notif_mark_read:   'تحديد الكل كمقروء',
-    notif_empty:       'لا توجد إشعارات بعد',
-    notif_send_btn:    'إرسال إشعار',
-    notif_modal_title: 'إرسال إشعار',
-    notif_target_label:'المستلم',
-    notif_target_all:  'جميع المستخدمين',
-    notif_title_label: 'العنوان',
-    notif_body_label:  'الرسالة',
-    notif_cancel:      'إلغاء',
-    notif_send:        'إرسال',
-
-    /* Documents */
-    docs_search_placeholder: 'ابحث عن مستند…',
-    docs_upload_title:       'رفع ملف PDF',
-    docs_upload_sub:         'محفوظ محلياً · متاح بدون إنترنت · الحد الأقصى 200 ميغابايت',
-    docs_all_cat:            'الكل',
-    docs_grammar:            'القواعد',
-    docs_vocabulary:         'المفردات',
-    docs_exercise:           'التمارين',
-    docs_exam:               'الامتحان',
-    docs_other:              'أخرى',
-    docs_rename_title:       'تعديل المستند',
-    docs_rename_cancel:      'إلغاء',
-    docs_rename_save:        'حفظ',
-
-    /* Translator */
-    translate_placeholder:   'أدخل كلمة أو جملة…',
-    translate_clear:         'مسح',
-    translate_listen:        'استمع',
-    translate_btn:           'ترجم',
-    translate_history_label: 'السجل',
-    translate_history_clear: 'مسح',
-
-    /* Quiz */
-    quiz_difficulty_label: 'المستوى',
-    quiz_topic_label:      'الموضوع',
-    quiz_count_label:      'الأسئلة',
-    quiz_start_btn:        'ابدأ الاختبار',
-    quiz_opt_auto:         'تلقائي — حسب التقدم',
-    quiz_opt_mixed:        'مختلط',
-    quiz_opt_grammar:      'القواعد',
-    quiz_opt_vocab:        'المفردات',
-    quiz_opt_reading:      'الفهم القرائي',
-
-    /* Vocab trainer */
-    vocab_new_round:     'جولة جديدة',
-    vocab_new_round_btn: 'جولة جديدة',
-    vocab_finished_title:'ممتاز!',
-    vocab_finished_sub:  'تم إيجاد جميع الأزواج!',
-
-    /* Listening */
-    speaking_btn: 'تحدث',
-    speed_slow:   'بطيء',
-    speed_normal: 'عادي',
-    speed_fast:   'سريع',
-
-    /* Level test */
-    level_hero_title: 'اختبار المستوى',
-    level_hero_sub:   'اكتشف مستواك الحالي في الألمانية',
-    level_start_title:'ما مستوى ألمانيتك؟',
-    level_start_btn:  'ابدأ الاختبار',
-
-    /* Scanner */
-    scanner_title:       'ماسح الرموز',
-    scanner_tab_camera:  'الكاميرا',
-    scanner_tab_image:   'رفع صورة',
-    scanner_hint:        'وجّه الكاميرا نحو رمز QR أو الباركود',
-    scanner_image_hint:  'اختر صورة تحتوي على رمز QR أو باركود',
-    scanner_result_label:'تم اكتشاف الرمز',
-    scanner_copy:        'نسخ',
-    scanner_open:        'فتح',
-
-    /* Admin */
-    admin_role_management:  'إدارة الأدوار',
-    admin_role_desc:        'أدخل البريد الإلكتروني لتغيير دور المستخدم.',
-    admin_email_label:      'بريد المستخدم',
-    admin_set_user:         'تعيين كمستخدم',
-    admin_set_admin:        'تعيين كمسؤول',
-    admin_registered_users: 'المستخدمون المسجلون',
-    admin_refresh:          'تحديث',
-    admin_loading:          'جارٍ التحميل…',
-    admin_pending_label:    'الطلبات المعلقة',
-    admin_all_users:        'جميع المستخدمين',
-    admin_all_docs:         'جميع مستندات المستخدمين',
-    admin_hero_sub:         'إدارة المستخدمين وإحصائيات التسجيل',
-    admin_total_users:      'إجمالي المستخدمين',
-    admin_new_today:        'جديد اليوم',
-    admin_this_week:        'هذا الأسبوع',
-    admin_admins_label:     'المسؤولون',
-    admin_chart_title:      'التسجيلات — آخر 7 أيام',
-    admin_users_label:      'المستخدمون',
-    admin_pending_short:    'معلق',
-
-    /* General UI */
-    loading:   'جارٍ التحميل…',
-    save:      'حفظ',
-    cancel:    'إلغاء',
-    delete:    'حذف',
-    close:     'إغلاق',
-    confirm:   'تأكيد',
-    back:      'رجوع',
-    search:    'بحث',
-    offline_banner: 'وضع عدم الاتصال – التغييرات محفوظة محلياً',
-  }
-};
-
-/* ── Apply translations to DOM ── */
-function applyTranslations(lang) {
-  var dict = window.TRANSLATIONS[lang];
-  if (!dict) return;
-
-  /* Text direction for Arabic */
-  var isRTL = lang === 'ar';
-  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-  document.documentElement.lang = lang;
-
-  /* data-i18n elements — set textContent ONLY on leaf nodes that have no
-     child elements (e.g. <span>, <div class="nav-label">, <label>).
-     Buttons and containers that also hold SVG icons are intentionally
-     skipped here to prevent the icon from being wiped out. */
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    var key = el.getAttribute('data-i18n');
-    if (dict[key] === undefined) return;
-    /* Skip if this element has child ELEMENT nodes (e.g. a button with an svg) */
-    var hasChildElements = false;
-    for (var i = 0; i < el.childNodes.length; i++) {
-      if (el.childNodes[i].nodeType === 1) { hasChildElements = true; break; }
-    }
-    if (!hasChildElements) {
-      el.textContent = dict[key];
-    }
-  });
-
-  /* Placeholders */
-  var placeholderMap = {
-    'translate-input':    'translate_placeholder',
-    'docs-search':        'docs_search_placeholder',
-    'notes-area':         null,
-    'admin-user-search':  null,
-    'admin-doc-search':   null,
-  };
-  Object.keys(placeholderMap).forEach(function(id) {
-    var key = placeholderMap[id];
-    if (!key) return;
-    var el = document.getElementById(id);
-    if (el && dict[key]) el.placeholder = dict[key];
-  });
-
-  /* Loader text */
-  var loader = document.getElementById('loader-text');
-  if (loader && dict.loader_text) loader.textContent = dict.loader_text;
-
-  /* Offline banner */
-  var banner = document.getElementById('offline-banner');
-  if (banner && dict.offline_banner) banner.textContent = dict.offline_banner;
-
-  /* Active language button highlight */
-  ['lang-de','lang-en','lang-ar'].forEach(function(id) {
-    var btn = document.getElementById(id);
-    if (btn) btn.classList.remove('active');
-  });
-  var active = document.getElementById('lang-' + lang);
-  if (active) active.classList.add('active');
-
-  /* Persist choice */
-  try { localStorage.setItem('dt_lang', lang); } catch(e){}
-}
-
-/* ── Public API ── */
-window.setLang = function(lang) {
-  applyTranslations(lang);
-  /* Close the language menu if open */
-  var menu = document.getElementById('lang-fab-menu');
-  if (menu) menu.classList.remove('open');
-};
-
-/* ── Auto-apply on load ── */
-document.addEventListener('DOMContentLoaded', function() {
-  var saved;
-  try { saved = localStorage.getItem('dt_lang'); } catch(e){}
-  applyTranslations(saved || 'de');
-});
-})();
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="app.js"></script>
     
 <!-- Avatar emoji picker — lives at body level to escape overflow:hidden clipping -->
 <div class="avatar-emoji-picker" id="avatar-emoji-picker">
-  <div class="avatar-emoji-title" data-i18n-static="Wähle ein Symbol">Wähle ein Symbol</div>
+  <div class="avatar-emoji-title">Choose icon</div>
   <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
-  <div class="avatar-emoji-title" style="margin-top:10px" data-i18n-static="Farbe">Farbe</div>
+  <div class="avatar-emoji-title" style="margin-top:10px">Color</div>
   <div class="avatar-color-row" id="avatar-color-row"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="app.js"></script>
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   PAGE-SWITCH STATE MANAGER
-   Single source of truth for all page transitions.
-   Responsibilities:
-     • currentPage variable tracks the active page at all times
-     • showPage(id) — Hide All / Show One, scroll reset, overlay cleanup
-     • syncNav(id)  — stamps .active on both desktop + mobile nav items
-     • Overlay cleanup: closes notif panel, safety menus, emoji pickers
-     • Discussions: lazy-inits discInit() on first visit
-     • Wraps window.switchPage so app.js calls pass through this manager
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function () {
-  'use strict';
-
-  /* ── 1. State ── */
-  var currentPage = 'tracker'; /* single source of truth */
-
-  /* All page IDs registered in the HTML */
-  var PAGE_IDS = [
-    'tracker','quiz','vocab','listening','level',
-    'translate','news','pdf','discussions','admin'
-  ];
-
-  /* ── 2. Overlay cleanup ── */
-  function closeAllOverlays() {
-    /* Notification dropdown */
-    var notifPanel = document.getElementById('notif-panel');
-    if (notifPanel) notifPanel.classList.remove('open');
-
-    /* Safety / context menu inside Discussions */
-    var safetyMenu = document.getElementById('disc-safety-menu');
-    if (safetyMenu) safetyMenu.classList.remove('open');
-
-    /* Emoji picker inside Discussions */
-    var emojiPicker = document.getElementById('disc-emoji-picker');
-    if (emojiPicker) emojiPicker.style.display = 'none';
-
-    /* Nav drawer (mobile) */
-    var navDrawer = document.querySelector('.nav-drawer');
-    var navOverlay = document.querySelector('.nav-drawer-overlay');
-    if (navDrawer)  navDrawer.classList.remove('open');
-    if (navOverlay) navOverlay.classList.remove('open');
-
-    /* Language FAB menu */
-    var langMenu = document.getElementById('lang-fab-menu');
-    if (langMenu) langMenu.classList.remove('open');
-  }
-
-  /* ── 3. Nav sync — stamps .active on both navs ── */
-  function syncNav(pageId) {
-    /* Desktop nav buttons */
-    document.querySelectorAll('.desk-nav-item[data-page]').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-page') === pageId);
-    });
-    /* Mobile nav items */
-    document.querySelectorAll('.nav-item[data-page]').forEach(function (item) {
-      item.classList.toggle('active', item.getAttribute('data-page') === pageId);
-    });
-  }
-
-  /* ── 4. Core Hide-All / Show-One ── */
-  function showPage(pageId) {
-    /* Guard: no-op if already on this page */
-    if (pageId === currentPage &&
-        document.getElementById('page-' + pageId) &&
-        document.getElementById('page-' + pageId).classList.contains('active')) {
-      return;
-    }
-
-    /* Validate page exists */
-    var target = document.getElementById('page-' + pageId);
-    if (!target) {
-      console.warn('[PageManager] Unknown page:', pageId);
-      return;
-    }
-
-    /* Hide every registered page */
-    PAGE_IDS.forEach(function (id) {
-      var el = document.getElementById('page-' + id);
-      if (el) el.classList.remove('active');
-    });
-
-    /* Show target page */
-    target.classList.add('active');
-
-    /* Reset scroll — both window and the page element itself */
-    window.scrollTo(0, 0);
-    target.scrollTop = 0;
-
-    /* Close all open overlays */
-    closeAllOverlays();
-
-    /* Update state */
-    currentPage = pageId;
-
-    /* Sync nav highlighting */
-    syncNav(pageId);
-
-    /* Lazy-init Discussions on first visit */
-    if (pageId === 'discussions' && typeof discInit === 'function') {
-      setTimeout(discInit, 40);
-    }
-
-    /* Dispatch a custom event so app.js hooks can listen */
-    try {
-      document.dispatchEvent(new CustomEvent('pageChanged', { detail: { page: pageId } }));
-    } catch (e) {}
-  }
-
-  /* ── 5. Public API ── */
-  window.currentPage = currentPage;
-  window.showPage    = showPage;
-
-  /* Override window.switchPage — wraps whatever app.js set */
-  var _appSwitch = window.switchPage;
-  window.switchPage = function (pageId) {
-    /* Let app.js do its own internal work first (XP saves, etc.) */
-    if (typeof _appSwitch === 'function') {
-      try { _appSwitch(pageId); } catch (e) {}
-    }
-    /* Then our manager takes over the DOM */
-    showPage(pageId);
-    /* Keep exported currentPage in sync */
-    window.currentPage = currentPage;
-  };
-
-  /* ── 6. Notification panel toggle helpers ──
-     Both the desktop bell (desk-notif-btn) and mobile bell (mob-notif-btn)
-     ONLY toggle the single header dropdown #notif-panel.
-     No other notification section exists. ── */
-  function _toggleHeaderNotifPanel() {
-    /* Prefer app.js toggleNotifPanel if available (handles badge resets etc.) */
-    if (typeof window.toggleNotifPanel === 'function') {
-      window.toggleNotifPanel();
-      return;
-    }
-    /* Fallback: toggle the header dropdown directly */
-    var p = document.getElementById('notif-panel');
-    if (!p) return;
-    var isOpen = p.classList.contains('open');
-    /* Close all overlays first (prevents double-open edge cases) */
-    closeAllOverlays();
-    if (!isOpen) p.classList.add('open');
-  }
-
-  window.mobToggleNotif = function (e) {
-    if (e) e.stopPropagation();
-    _toggleHeaderNotifPanel();
-  };
-
-  /* Legacy alias — some older app.js code may call toggleNotifications() */
-  window.toggleNotifications = function () {
-    _toggleHeaderNotifPanel();
-  };
-
-  /* ── 7. Boot: sync nav to whichever page is .active in the HTML ── */
-  document.addEventListener('DOMContentLoaded', function () {
-    var bootPage = 'tracker';
-    PAGE_IDS.forEach(function (id) {
-      var el = document.getElementById('page-' + id);
-      if (el && el.classList.contains('active')) bootPage = id;
-    });
-    currentPage = bootPage;
-    window.currentPage = bootPage;
-    syncNav(bootPage);
-
-    /* If Discussions is the boot page, init it */
-    if (bootPage === 'discussions' && typeof discInit === 'function') {
-      setTimeout(discInit, 40);
-    }
-  });
-
-})();
-</script>
-
-<!-- Removed floating theme toggle (relocated to header) -->
-
-<script>
-(function(){
-  'use strict';
-
-  var STORAGE_KEY = 'dt_theme';
-
-  function applyTheme(theme){
-    document.documentElement.setAttribute('data-theme', theme);
-    /* Update meta theme-color for browser chrome */
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.content = theme === 'light' ? '#f0ece3' : '#0e0e0e';
-  }
-
-  /* Boot — restore saved preference or respect OS setting */
-  (function boot(){
-    var saved;
-    try { saved = localStorage.getItem(STORAGE_KEY); } catch(e){}
-    if(saved === 'light' || saved === 'dark'){
-      applyTheme(saved);
-    } else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
-      applyTheme('light');
-    }
-    /* default stays dark — no attribute needed */
-  })();
-
-  /* Toggle */
-  window.toggleTheme = function(){
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = (current === 'light') ? 'dark' : 'light';
-    applyTheme(next);
-    try { localStorage.setItem(STORAGE_KEY, next); } catch(e){}
-  };
-
-  /* Sync with OS preference changes */
-  try {
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e){
-      var hasSaved;
-      try { hasSaved = localStorage.getItem(STORAGE_KEY); } catch(err){}
-      if(!hasSaved) applyTheme(e.matches ? 'light' : 'dark');
-    });
-  } catch(e){}
-})();
-</script>
 </body>
 </html>
