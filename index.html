@@ -1779,7 +1779,7 @@ h1 span{color:var(--gold)}
 
 /* BOTTOM NAV */
 .nav-item{min-width:64px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 6px;transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1);scroll-snap-align:start;-webkit-tap-highlight-color:transparent;position:relative}
-.nav-item::before{content:attr(data-page);position:absolute;top:2px;left:50%;transform:translateX(-50%) scaleX(0);width:24px;height:3px;background:var(--gold);border-radius:0 0 3px 3px;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);font-size:0;color:transparent;line-height:0;overflow:hidden;pointer-events:none}
+.nav-item::before{content:'';position:absolute;top:2px;left:50%;transform:translateX(-50%) scaleX(0);width:24px;height:3px;background:var(--gold);border-radius:0 0 3px 3px;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1)}
 .nav-item.active::before{transform:translateX(-50%) scaleX(1)}
 .nav-item:active{transform:scale(0.88)}
 .nav-icon{font-size:1.55rem;line-height:1;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),filter 0.2s;filter:grayscale(0.5) opacity(0.5)}
@@ -1813,7 +1813,7 @@ h1 span{color:var(--gold)}
 }
 /* Animated gold-glow halo — behind the button */
 .desk-nav-item::before{
-  content:attr(data-page);
+  content:"";
   position:absolute;top:-2px;left:-2px;
   width:calc(100% + 4px);height:calc(100% + 4px);
   border-radius:10px;z-index:-1;
@@ -1824,7 +1824,6 @@ h1 span{color:var(--gold)}
   opacity:0;
   transition:opacity 0.25s ease-in-out;
   will-change:opacity,filter;
-  font-size:0;color:transparent;line-height:0;overflow:hidden;pointer-events:none;
 }
 /* Solid fill layer — sits above halo, below content */
 .desk-nav-item::after{
@@ -2359,7 +2358,8 @@ h1 span{color:var(--gold)}
   <!-- 3. Vokabeln -->
   <button class="desk-nav-item" data-page="vocab" onclick="switchPage('vocab')" aria-label="Vokabeln" type="button">
     <svg fill="none" height="15" width="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    <span class="desk-nav-label" data-i18n="nav_vocab">Vokabeln</span>
+    <!-- Updated nav label to match data-page and translation -->
+    <span class="desk-nav-label" data-i18n="nav_vocab">Vocab</span>
   </button>
 
   <!-- 4. Hören — interactive study tool -->
@@ -2942,7 +2942,8 @@ h1 span{color:var(--gold)}
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
       </svg>
     </div>
-    <div class="nav-label" data-i18n="nav_vocab">Vokabeln</div>
+    <!-- Updated nav label to match data-page and translation -->
+    <div class="nav-label" data-i18n="nav_vocab">Vocab</div>
   </div>
   <!-- 4. Hören -->
   <div class="nav-item" data-page="listening" onclick="switchPage('listening')">
@@ -4402,7 +4403,7 @@ window.TRANSLATIONS = {
     nav_news:        'News',
     nav_translate:   'Translator',
     nav_quiz:        'Quiz',
-    nav_vocab:       'Vokabeln',
+    nav_vocab:       'Vocab',
     nav_listen:      'Hören',
     nav_level:       'Niveau',
     nav_admin:       'Admin',
