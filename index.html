@@ -32,7 +32,7 @@
   --m4: #cc2020;
   --m5: #8b3dba;
   --burgundy: #4a1020;
-  --rail-w: 60px;
+  --rail-w: 52px;
   --rail-expanded: 220px;
   --radius: 12px;
   --transition: 300ms cubic-bezier(0.4,0,0.2,1);
@@ -102,7 +102,7 @@ body::after {
   transition: width var(--transition);
   overflow: hidden;
 }
-.rail.expanded { width: var(--rail-expanded); align-items: flex-start; padding: 20px 12px 16px; }
+.rail.expanded { width: var(--rail-w); align-items: flex-start; padding: 20px 12px 16px; }
 
 .rail-logo {
   width: 36px; height: 36px;
@@ -132,6 +132,9 @@ body::after {
   flex-shrink: 0;
   overflow: hidden;
 }
+/* Hide nav items & spacer when collapsed — only logo + toggle visible */
+.rail:not(.expanded) .rail-item,
+.rail:not(.expanded) .rail-spacer { display: none; }
 .rail.expanded .rail-item {
   width: 100%; justify-content: flex-start;
   padding: 0 10px; gap: 12px;
@@ -172,6 +175,7 @@ body::after {
   color: var(--muted);
   transition: all 0.2s;
   flex-shrink: 0;
+  margin-top: auto;
 }
 .rail-toggle:hover { color: var(--white); background: var(--surface-2); }
 .rail-toggle svg { width: 14px; height: 14px; transition: transform var(--transition); }
@@ -370,6 +374,9 @@ body::after {
   border-radius: var(--radius);
   padding: 24px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+  overflow: visible;
 }
 
 .timeline-track {
@@ -378,6 +385,7 @@ body::after {
   justify-content: space-between;
   gap: 8px;
   position: relative;
+  overflow: visible;
 }
 .timeline-track::before {
   content: '';
@@ -483,28 +491,39 @@ body::after {
 
 /* Month dropdown panel */
 .month-panel {
-  width: 220px;
-  background: #111111;
+  width: clamp(320px, 28vw, 420px);
+  max-width: min(420px, calc(100vw - 32px));
+  background: #141414;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   pointer-events: none;
-  transition: max-height 350ms cubic-bezier(0.4,0,0.2,1), opacity 300ms ease, transform 300ms ease;
-  transform: translateY(-8px);
+  transition: max-height 400ms cubic-bezier(0.4,0,0.2,1), opacity 300ms ease, transform 300ms ease;
+  transform: translateY(-10px) scale(0.97);
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 14px);
   left: 50%;
   translate: -50% 0;
-  z-index: 100;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  z-index: 200;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+}
+.month-card.open { z-index: 30; }
+.month-card:first-child .month-panel {
+  left: 0;
+  translate: 0 0;
+}
+.month-card:last-child .month-panel {
+  left: auto;
+  right: 0;
+  translate: 0 0;
 }
 .month-card.open .month-panel {
-  max-height: 400px;
+  max-height: 500px;
   opacity: 1;
   pointer-events: all;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .month-panel-header {
@@ -565,26 +584,29 @@ body::after {
   letter-spacing: 0.06em;
 }
 
-.task-list { padding: 4px 8px 10px; }
+.task-list { padding: 6px 10px 12px; }
 .task-tile {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 6px;
-  border-radius: 7px;
-  transition: background 0.15s;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 8px;
+  transition: background 0.15s, transform 0.1s;
   cursor: pointer;
+  user-select: none;
 }
-.task-tile:hover { background: var(--surface); }
-.task-tile.done { opacity: 0.55; }
+.task-tile:hover { background: var(--surface); transform: translateX(2px); }
+.task-tile:active { transform: scale(0.98); }
+.task-tile.done { opacity: 0.5; }
+.task-tile.done .tile-name { text-decoration: line-through; }
 .task-tile.active { background: rgba(255,193,7,0.06); }
 .tile-check {
-  width: 16px; height: 16px;
-  border-radius: 4px;
+  width: 18px; height: 18px;
+  border-radius: 5px;
   border: 1.5px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   color: var(--green);
   transition: all 0.2s;
 }
@@ -594,22 +616,24 @@ body::after {
 }
 .task-tile.active .tile-check {
   border-color: var(--gold);
-  box-shadow: 0 0 0 2px rgba(255,193,7,0.15);
+  box-shadow: 0 0 0 3px rgba(255,193,7,0.15);
 }
 .tile-text { flex: 1; min-width: 0; }
 .tile-name {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: var(--white);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s;
 }
+.task-tile.done .tile-name { color: var(--muted); }
 .tile-tag {
   font-size: 0.52rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 4px;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -1039,16 +1063,28 @@ body::after {
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
+        .rail-item:not(.expanded) .rail-label { display: none; }
+        .month-panel { width: 100px; }
+        .rail.expanded .rail-item {
+            width: 100%;
+            padding: 0;
+            justify-content: flex-start;
+            gap: 5px;
+        }
+    } {
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
   .timeline-track::before { top: 25px; }
   .month-dot { width: 48px; height: 48px; }
-  .month-panel { width: 190px; }
+  .month-panel { width: min(340px, calc(100vw - 32px)); }
   .main { padding: 20px 16px 36px; }
 }
 @media (max-width: 600px) {
   .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .month-sub { display: none; }
-  .month-panel { width: 175px; font-size: 0.9em; }
+  .month-panel {
+    width: min(280px, calc(100vw - 24px));
+    font-size: 0.95em;
+  }
   .timeline-track { gap: 0; overflow-x: auto; padding-bottom: 8px; }
   .month-inner { min-width: 58px; }
   .grid-2 { grid-template-columns: 1fr; }
@@ -1067,6 +1103,94 @@ body::after {
 .page-header      { animation: fadeUp 0.4s ease 0.1s  both; }
 .timeline-section { animation: fadeUp 0.4s ease 0.15s both; }
 .grid-2           { animation: fadeUp 0.4s ease 0.2s  both; }
+
+/* ═══════════════════════════════════════════
+   TOAST NOTIFICATION
+═══════════════════════════════════════════ */
+#toast-container {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,193,7,0.3);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 30px rgba(255,193,7,0.06);
+  min-width: 260px;
+  max-width: 380px;
+  pointer-events: auto;
+  animation: toastIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.toast.hide {
+  animation: toastOut 0.35s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes toastIn {
+  from { opacity:0; transform: translateY(40px) scale(0.88); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity:1; transform: translateY(0) scale(1); }
+  to   { opacity:0; transform: translateY(20px) scale(0.94); }
+}
+.toast-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  background: var(--gold-soft);
+  border: 1px solid var(--border-glow);
+}
+.toast-body { flex: 1; min-width: 0; }
+.toast-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.toast-msg {
+  font-size: 0.75rem;
+  color: var(--white);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+.toast-close {
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.toast-close:hover { color: var(--white); }
+.confetti-particle {
+  position: fixed;
+  width: 7px; height: 7px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 9998;
+  animation: confettiFall linear both;
+}
+@keyframes confettiFall {
+  0%   { opacity:1; transform: translateY(0) rotate(0deg) scale(1); }
+  80%  { opacity:1; }
+  100% { opacity:0; transform: translateY(200px) rotate(720deg) scale(0.3); }
+}
 </style>
 </head>
 <body>
@@ -1193,7 +1317,7 @@ body::after {
               <div class="month-name">Jan</div>
               <div class="month-sub">A2 Basics<br>Abgeschlossen</div>
             </div>
-            <div class="month-panel">
+            <div class="month-panel" onclick="event.stopPropagation()">
               <div class="month-panel-header">
                 <span class="month-panel-title">Monat 1</span>
                 <span class="month-panel-pct" style="color:var(--green)">100%</span>
@@ -1204,10 +1328,10 @@ body::after {
                 <span class="panel-vocab-num">200 Wörter</span>
               </div>
               <div class="task-list">
-                <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Alphabet & Aussprache</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">200 Basis-Vokabeln</div></div><span class="tile-tag vocab">Wort.</span></div>
-                <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Slow German Podcast</div></div><span class="tile-tag listen">Hören</span></div>
-                <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Nomen + Artikel</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile done" onclick="toggleTask(event,this)"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Alphabet & Aussprache</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile done" onclick="toggleTask(event,this)"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">200 Basis-Vokabeln</div></div><span class="tile-tag vocab">Wort.</span></div>
+                <div class="task-tile done" onclick="toggleTask(event,this)"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Slow German Podcast</div></div><span class="tile-tag listen">Hören</span></div>
+                <div class="task-tile done" onclick="toggleTask(event,this)"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Nomen + Artikel</div></div><span class="tile-tag grammar">Gram.</span></div>
               </div>
             </div>
           </div>
@@ -1219,7 +1343,7 @@ body::after {
               <div class="month-name">Feb</div>
               <div class="month-sub">Struktur &<br>Grammatik</div>
             </div>
-            <div class="month-panel">
+            <div class="month-panel" onclick="event.stopPropagation()">
               <div class="month-panel-header">
                 <span class="month-panel-title">Monat 2</span>
                 <span class="month-panel-pct" style="color:var(--m2)">45%</span>
@@ -1230,10 +1354,10 @@ body::after {
                 <span class="panel-vocab-num">350 Wörter</span>
               </div>
               <div class="task-list">
-                <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Perfekt-Konstruktionen</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile active"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Dativ vs. Akkusativ</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Trennbare Verben</div></div><span class="tile-tag vocab">Wort.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Sprechen mit Tandem</div></div><span class="tile-tag speak">Sprechen</span></div>
+                <div class="task-tile done" onclick="toggleTask(event,this)"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Perfekt-Konstruktionen</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile active" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Dativ vs. Akkusativ</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Trennbare Verben</div></div><span class="tile-tag vocab">Wort.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Sprechen mit Tandem</div></div><span class="tile-tag speak">Sprechen</span></div>
               </div>
             </div>
           </div>
@@ -1245,7 +1369,7 @@ body::after {
               <div class="month-name">Mär</div>
               <div class="month-sub">Hören &<br>Sprechen</div>
             </div>
-            <div class="month-panel">
+            <div class="month-panel" onclick="event.stopPropagation()">
               <div class="month-panel-header">
                 <span class="month-panel-title">Monat 3</span>
                 <span class="month-panel-pct" style="color:var(--m3)">0%</span>
@@ -1256,10 +1380,10 @@ body::after {
                 <span class="panel-vocab-num">500 Wörter</span>
               </div>
               <div class="task-list">
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Deutsche Podcasts</div></div><span class="tile-tag listen">Hören</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Konjunktiv II</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Adjektiv-Endungen</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schreiben: Briefe</div></div><span class="tile-tag speak">Sprechen</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Deutsche Podcasts</div></div><span class="tile-tag listen">Hören</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Konjunktiv II</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Adjektiv-Endungen</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schreiben: Briefe</div></div><span class="tile-tag speak">Sprechen</span></div>
               </div>
             </div>
           </div>
@@ -1271,7 +1395,7 @@ body::after {
               <div class="month-name">Apr</div>
               <div class="month-sub">B1-Niveau<br>Vorbereitung</div>
             </div>
-            <div class="month-panel">
+            <div class="month-panel" onclick="event.stopPropagation()">
               <div class="month-panel-header">
                 <span class="month-panel-title">Monat 4</span>
                 <span class="month-panel-pct" style="color:var(--m4)">0%</span>
@@ -1282,10 +1406,10 @@ body::after {
                 <span class="panel-vocab-num">700 Wörter</span>
               </div>
               <div class="task-list">
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Übungen</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Vergangenheitsformen</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Mock-Prüfungen</div></div><span class="tile-tag speak">Sprechen</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Leseverständnis</div></div><span class="tile-tag listen">Lesen</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Übungen</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Vergangenheitsformen</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Mock-Prüfungen</div></div><span class="tile-tag speak">Sprechen</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Leseverständnis</div></div><span class="tile-tag listen">Lesen</span></div>
               </div>
             </div>
           </div>
@@ -1297,7 +1421,7 @@ body::after {
               <div class="month-name">Mai</div>
               <div class="month-sub">B1 Prüfung<br>🎯</div>
             </div>
-            <div class="month-panel">
+            <div class="month-panel" onclick="event.stopPropagation()">
               <div class="month-panel-header">
                 <span class="month-panel-title">Monat 5</span>
                 <span class="month-panel-pct" style="color:var(--m5)">0%</span>
@@ -1308,9 +1432,9 @@ body::after {
                 <span class="panel-vocab-num">1000+ Wörter</span>
               </div>
               <div class="task-list">
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Prüfungssimulation</div></div><span class="tile-tag grammar">Prüfung</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schwachstellen-Review</div></div><span class="tile-tag vocab">Wort.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Prüfung</div></div><span class="tile-tag speak">🏆</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Prüfungssimulation</div></div><span class="tile-tag grammar">Prüfung</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schwachstellen-Review</div></div><span class="tile-tag vocab">Wort.</span></div>
+                <div class="task-tile" onclick="toggleTask(event,this)"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Prüfung</div></div><span class="tile-tag speak">🏆</span></div>
               </div>
             </div>
           </div>
@@ -1457,9 +1581,11 @@ body::after {
   </div>
 </div>
 
+<div id="toast-container"></div>
+
 <script>
 /* ═══════════════════════════════════════════
-   DATA: Vocabulary word banks per level
+   WORD BANKS
 ═══════════════════════════════════════════ */
 const wordBanks = {
   high: [
@@ -1654,10 +1780,167 @@ function showDayDetail(idx) {
 /* ═══════════════════════════════════════════
    TIMELINE CARD TOGGLE
 ═══════════════════════════════════════════ */
-function toggleCard(card) {
-  const wasOpen = card.classList.contains('open');
+function closeMonthCards() {
   document.querySelectorAll('.month-card').forEach(c => c.classList.remove('open'));
-  if (!wasOpen) card.classList.add('open');
+}
+
+function toggleCard(card) {
+  document.querySelectorAll('.month-card').forEach(c => {
+    if (c !== card) c.classList.remove('open');
+  });
+  card.classList.add('open');
+}
+
+function getMonthAccent(card, pct = 0) {
+  if (pct >= 100 || card.classList.contains('done')) return 'var(--green)';
+  if (card.classList.contains('m1')) return 'var(--m1)';
+  if (card.classList.contains('m2')) return 'var(--m2)';
+  if (card.classList.contains('m3')) return 'var(--m3)';
+  if (card.classList.contains('m4')) return 'var(--m4)';
+  if (card.classList.contains('m5')) return 'var(--m5)';
+  return 'var(--gold)';
+}
+
+function getMonthProgress(tileOrCard) {
+  const card = tileOrCard.classList?.contains('month-card') ? tileOrCard : tileOrCard.closest('.month-card');
+  if (!card) return null;
+  const tasks = [...card.querySelectorAll('.task-tile')];
+  const done = tasks.filter(task => task.classList.contains('done')).length;
+  const total = tasks.length || 1;
+  const pct = Math.round((done / total) * 100);
+  const title = card.querySelector('.month-panel-title')?.textContent?.trim() || 'Plan';
+  return { card, done, total, pct, title };
+}
+
+function updateMonthProgress(tileOrCard) {
+  const progress = getMonthProgress(tileOrCard);
+  if (!progress) return null;
+  const { card, done, total, pct } = progress;
+  const pctEl = card.querySelector('.month-panel-pct');
+  const fillEl = card.querySelector('.panel-progress-fill');
+  if (pctEl) {
+    pctEl.textContent = `${pct}%`;
+    pctEl.style.color = getMonthAccent(card, pct);
+  }
+  if (fillEl) fillEl.style.width = `${pct}%`;
+  card.dataset.progress = String(pct);
+  card.dataset.done = String(done);
+  card.dataset.total = String(total);
+  return progress;
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.month-card')) closeMonthCards();
+});
+
+/* ═══════════════════════════════════════════
+   TASK TILE TOGGLE + TOAST
+═══════════════════════════════════════════ */
+const taskMessages = {
+  complete: [
+    { icon: '🔥', title: 'Ausgezeichnet!', msg: 'Aufgabe erledigt — weiter so!' },
+    { icon: '⭐', title: 'Super gemacht!', msg: 'Du kommst dem B1 näher!' },
+    { icon: '🚀', title: 'Stark!', msg: 'Dein Deutsch wird besser!' },
+    { icon: '✅', title: 'Perfekt!', msg: 'Eine Aufgabe weniger — Fortschritt!' },
+    { icon: '🏆', title: 'Wunderbar!', msg: 'Disziplin zahlt sich aus!' },
+  ],
+  undo: [
+    { icon: '↩️', title: 'Rückgängig', msg: 'Aufgabe als offen markiert.' },
+  ]
+};
+
+function toggleTask(e, tile) {
+  e.stopPropagation();
+  const wasDone = tile.classList.contains('done');
+  const check = tile.querySelector('.tile-check');
+  const name = tile.querySelector('.tile-name')?.textContent || '';
+
+  if (wasDone) {
+    tile.classList.remove('done');
+    check.textContent = '';
+  } else {
+    tile.classList.add('done');
+    tile.classList.remove('active');
+    check.textContent = '✓';
+    spawnConfetti(e);
+  }
+
+  const progress = updateMonthProgress(tile);
+  showToast(wasDone ? 'undo' : 'complete', name, progress);
+}
+
+/* ═══════════════════════════════════════════
+   TOAST SYSTEM
+═══════════════════════════════════════════ */
+let toastTimer = null;
+function showToast(type, taskName, progress) {
+  const pool = taskMessages[type];
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  const container = document.getElementById('toast-container');
+  const progressLine = progress
+    ? `<div style="margin-top:6px;opacity:0.72;font-size:0.68rem;">${progress.title}: ${progress.done}/${progress.total} Aufgaben · ${progress.pct}%</div>`
+    : '';
+
+  // Remove existing toast
+  const old = container.querySelector('.toast');
+  if (old) old.remove();
+  clearTimeout(toastTimer);
+
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `
+    <div class="toast-icon">${pick.icon}</div>
+    <div class="toast-body">
+      <div class="toast-title">${pick.title}</div>
+      <div class="toast-msg">${pick.msg}<br><span style="opacity:0.55;font-size:0.68rem;">${taskName}</span>${progressLine}</div>
+    </div>
+    <div class="toast-close" onclick="this.parentElement.classList.add('hide');setTimeout(()=>this.parentElement.remove(),400)">✕</div>
+  `;
+  container.appendChild(el);
+
+  toastTimer = setTimeout(() => {
+    el.classList.add('hide');
+    setTimeout(() => el.remove(), 400);
+  }, 4200);
+}
+
+/* ═══════════════════════════════════════════
+   CONFETTI BURST
+═══════════════════════════════════════════ */
+const confettiColors = ['#FFC107','#3dba6e','#4d8ef7','#cc2020','#8b3dba','#FFD54F','#c4903a'];
+function spawnConfetti(e) {
+  const x = e.clientX || window.innerWidth / 2;
+  const y = e.clientY || window.innerHeight / 2;
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-particle';
+    const angle = (360 / count) * i + (Math.random() - 0.5) * 30;
+    const dist  = 60 + Math.random() * 80;
+    const rad   = angle * Math.PI / 180;
+    const tx    = Math.cos(rad) * dist;
+    const ty    = Math.sin(rad) * dist - 40;
+    const dur   = 0.55 + Math.random() * 0.5;
+    const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+    const size  = 5 + Math.random() * 6;
+    p.style.cssText = `
+      left:${x}px; top:${y}px;
+      width:${size}px; height:${size}px;
+      background:${color};
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration:${dur}s;
+      --tx:${tx}px; --ty:${ty}px;
+    `;
+    p.style.animation = `none`;
+    document.body.appendChild(p);
+    // trigger reflow then animate
+    requestAnimationFrame(() => {
+      p.style.transition = `transform ${dur}s cubic-bezier(0.25,0.46,0.45,0.94), opacity ${dur}s ease`;
+      p.style.transform  = `translate(${tx}px, ${ty}px) rotate(${angle * 3}deg) scale(0.2)`;
+      p.style.opacity    = '0';
+    });
+    setTimeout(() => p.remove(), dur * 1000 + 100);
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1689,6 +1972,8 @@ window.addEventListener('load', () => {
     if (vocabBar) vocabBar.style.width = '42.35%';
     if (vocabStat) vocabStat.style.width = '42.35%';
   }, 400);
+
+  document.querySelectorAll('.month-card').forEach(card => updateMonthProgress(card));
 });
 </script>
 </body>
