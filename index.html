@@ -102,7 +102,12 @@ body::after {
   transition: width var(--transition);
   overflow: hidden;
 }
-.rail.expanded { width: var(--rail-w); align-items: flex-start; padding: 20px 12px 16px; }
+.rail.expanded { width: var(--rail-expanded); align-items: flex-start; padding: 20px 12px 16px; }
+
+/* When the navigation rail is expanded, shift the main content over to prevent overlap */
+.rail.expanded + .main {
+  margin-left: var(--rail-expanded);
+}
 
 .rail-logo {
   width: 36px; height: 36px;
@@ -1063,20 +1068,22 @@ body::after {
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
-        .rail-item:not(.expanded) .rail-label { display: none; }
-        .month-panel { width: 100px; }
-        .rail.expanded .rail-item {
-            width: 100%;
-            padding: 0;
-            justify-content: flex-start;
-            gap: 5px;
-        }
-    } {
-  .stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .timeline-track::before { top: 25px; }
-  .month-dot { width: 48px; height: 48px; }
-  .month-panel { width: min(340px, calc(100vw - 32px)); }
-  .main { padding: 20px 16px 36px; }
+    /* Hide rail labels when the rail isn't expanded */
+    .rail:not(.expanded) .rail-label { display: none; }
+    /* Adjust month panel width on medium screens */
+    .month-panel { width: min(340px, calc(100vw - 32px)); }
+    /* Expand each rail item to full width when the rail is expanded */
+    .rail.expanded .rail-item {
+        width: 100%;
+        padding: 0;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+    /* Tweak layout for smaller screens */
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .timeline-track::before { top: 25px; }
+    .month-dot { width: 48px; height: 48px; }
+    .main { padding: 20px 16px 36px; }
 }
 @media (max-width: 600px) {
   .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; }
