@@ -91,11 +91,41 @@ body::after {
    NAV RAIL
 ═══════════════════════════════════════════ */
 #screen-app { flex-direction:row; }
+
+/* ── Floating DE toggle button (always visible on mobile) ── */
+.rail-fab {
+  position:fixed; top:16px; left:16px; z-index:1100;
+  width:40px; height:40px; border-radius:10px;
+  background:linear-gradient(135deg,var(--gold) 0%,#c4903a 100%);
+  display:none; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:1.05rem; color:#0D0D0D;
+  box-shadow:0 4px 16px rgba(255,193,7,0.35); cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.rail-fab:hover { transform:scale(1.06); }
+.rail-fab.admin-aura { box-shadow:0 0 10px var(--gold), 0 4px 16px rgba(255,193,7,0.5); }
+
+/* ── Backdrop ── */
+.rail-backdrop {
+  display:none; position:fixed; inset:0; z-index:999;
+  background:rgba(0,0,0,0.4);
+}
+.rail-backdrop.open {
+  display:block;
+  animation:fadeIn 0.25s ease both;
+}
+/* Blur the main content behind the open drawer */
+.rail-backdrop.open ~ .main,
+.menu-open ~ .main {
+  filter: blur(3px);
+  pointer-events: none;
+}
+
 .rail {
   position:fixed; top:0; left:0; bottom:0; width:var(--rail-w);
   display:flex; flex-direction:column; align-items:center; padding:20px 0 16px; gap:4px;
   background:rgba(10,10,13,0.85); backdrop-filter:blur(28px) saturate(160%);
-  border-right:1px solid var(--border); z-index:200; transition:width var(--transition); overflow:hidden;
+  border-right:1px solid var(--border); z-index:1000; transition:width var(--transition), transform var(--transition); overflow:hidden;
 }
 .rail.expanded { width:var(--rail-expanded); align-items:flex-start; padding:20px 12px 16px; }
 .rail.expanded + .main { margin-left:var(--rail-expanded); }
@@ -123,7 +153,7 @@ body::after {
 /* ═══════════════════════════════════════════
    MAIN CONTENT
 ═══════════════════════════════════════════ */
-.main { margin-left:var(--rail-w); flex:1; padding:28px 28px 48px; min-width:0; transition:margin-left var(--transition); }
+.main { margin-left:var(--rail-w); flex:1; padding:28px 28px 48px; min-width:0; transition:margin-left var(--transition), filter 0.3s ease; }
 .page { display:none; }
 .page.active { display:block; animation:fadeUp 0.35s ease both; }
 
@@ -499,6 +529,33 @@ body::after {
   .admin-panels { grid-template-columns:1fr; }
   .admin-panel-full { grid-column:1; }
 }
+
+/* Mobile hidden drawer */
+@media (max-width:768px) {
+  .rail-fab { display:flex; }
+  .rail {
+    transform:translateX(-100%);
+    width:var(--rail-expanded) !important;
+    align-items:flex-start !important;
+    padding:20px 12px 16px !important;
+  }
+  .rail .rail-item,
+  .rail .rail-spacer { display:flex !important; }
+  .rail .rail-item { width:100% !important; justify-content:flex-start !important; padding:0 10px !important; gap:12px !important; }
+  .rail .rail-label { opacity:1 !important; pointer-events:auto !important; }
+  .rail .rail-item.active::before { display:none !important; }
+  .rail-toggle { display:none; }
+  .rail.menu-open { transform:translateX(0); }
+  .main {
+    margin-left:0 !important;
+    width:100%;
+    padding:64px 16px 40px;
+  }
+  .main.blurred {
+    filter:blur(3px);
+    pointer-events:none;
+  }
+}
 @media (max-width:640px) {
   .stats-bar { grid-template-columns:repeat(2,1fr); gap:8px; }
   .month-sub { display:none; }
@@ -569,6 +626,12 @@ body::after {
 
 <!-- ══════ MAIN APP ══════ -->
 <div class="screen" id="screen-app">
+
+  <!-- Floating DE toggle (mobile only) -->
+  <div class="rail-fab" id="railFab" onclick="toggleMobileMenu()" title="Menü öffnen">DE</div>
+
+  <!-- Backdrop overlay -->
+  <div class="rail-backdrop" id="railBackdrop" onclick="closeMobileMenu()"></div>
 
   <!-- NAV RAIL -->
   <nav class="rail" id="rail">
@@ -1311,7 +1374,7 @@ function initApp(user) {
   const initials=user.username.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
   document.getElementById('userAvatar').textContent=initials;
   document.getElementById('userNameDisplay').textContent=user.username;
-  if(isAdmin) document.getElementById('adminNavItem').style.display='';
+  if(isAdmin){ document.getElementById('adminNavItem').style.display=''; document.getElementById('railFab').classList.add('admin-aura'); }
   loadWeekState();
   buildHeatmapData();
   buildMiniHeatmap();
@@ -1355,8 +1418,32 @@ function loadDailyWords() {
 /* ════════════════════════════════════════════════
    NAV
 ════════════════════════════════════════════════ */
-function toggleRail(){document.getElementById('rail').classList.toggle('expanded');}
+function isMobile(){return window.innerWidth<=768;}
+
+function toggleRail(){
+  if(isMobile()){toggleMobileMenu();}
+  else{document.getElementById('rail').classList.toggle('expanded');}
+}
+
+function toggleMobileMenu(){
+  const rail=document.getElementById('rail');
+  const backdrop=document.getElementById('railBackdrop');
+  const main=document.querySelector('.main');
+  if(rail.classList.contains('menu-open')){closeMobileMenu();}
+  else{
+    rail.classList.add('menu-open');
+    backdrop.classList.add('open');
+    main.classList.add('blurred');
+  }
+}
+
+function closeMobileMenu(){
+  document.getElementById('rail').classList.remove('menu-open');
+  document.getElementById('railBackdrop').classList.remove('open');
+  document.querySelector('.main').classList.remove('blurred');
+}
 function switchPage(name,el){
+  if(isMobile())closeMobileMenu();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.rail-item').forEach(i=>i.classList.remove('active'));
   const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');
