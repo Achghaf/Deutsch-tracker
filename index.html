@@ -10,16 +10,17 @@
    TOKENS & RESET
 ═══════════════════════════════════════════ */
 :root {
-  --bg: #080a0f;
+  --bg: #0D0D0D;
   --surface: rgba(255,255,255,0.04);
   --surface-2: rgba(255,255,255,0.07);
+  --surface-hover: rgba(255,255,255,0.06);
   --border: rgba(255,255,255,0.08);
-  --border-glow: rgba(232,184,75,0.25);
+  --border-glow: rgba(255,193,7,0.3);
   --white: #f0ede8;
   --muted: rgba(240,237,232,0.42);
-  --gold: #e8b84b;
-  --gold-soft: rgba(232,184,75,0.15);
-  --gold-glow: rgba(232,184,75,0.35);
+  --gold: #FFC107;
+  --gold-soft: rgba(255,193,7,0.12);
+  --gold-glow: rgba(255,193,7,0.35);
   --red: #cc2020;
   --red-soft: rgba(204,32,32,0.15);
   --green: #3dba6e;
@@ -30,10 +31,11 @@
   --m3: #3aaa74;
   --m4: #cc2020;
   --m5: #8b3dba;
+  --burgundy: #4a1020;
   --rail-w: 60px;
   --rail-expanded: 220px;
   --radius: 12px;
-  --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+  --transition: 300ms cubic-bezier(0.4,0,0.2,1);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { font-size: 15px; }
@@ -57,22 +59,21 @@ body::before {
   background:
     radial-gradient(ellipse 70% 55% at 8% 20%,  rgba(91,126,201,0.12) 0%, transparent 65%),
     radial-gradient(ellipse 55% 70% at 92% 75%,  rgba(139,61,186,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 55% 5%,   rgba(232,184,75,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 55% 5%,   rgba(255,193,7,0.07) 0%, transparent 55%),
     radial-gradient(ellipse 40% 60% at 50% 100%,  rgba(204,32,32,0.06) 0%, transparent 50%);
 }
-/* subtle dot grid */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
 /* ═══════════════════════════════════════════
-   LAYOUT: RAIL + CONTENT
+   LAYOUT
 ═══════════════════════════════════════════ */
 #app {
   display: flex;
@@ -93,7 +94,7 @@ body::after {
   align-items: center;
   padding: 20px 0 16px;
   gap: 4px;
-  background: rgba(10,12,18,0.82);
+  background: rgba(10,10,13,0.85);
   backdrop-filter: blur(28px) saturate(160%);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   border-right: 1px solid var(--border);
@@ -112,13 +113,13 @@ body::after {
   margin-bottom: 10px;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.1rem;
-  color: #080a0f;
+  color: #0D0D0D;
   letter-spacing: 0.05em;
-  box-shadow: 0 4px 16px rgba(232,184,75,0.3);
+  box-shadow: 0 4px 16px rgba(255,193,7,0.35);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.rail-logo:hover { transform: scale(1.05); }
+.rail-logo:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(255,193,7,0.5); }
 
 .rail-item {
   width: 40px; height: 40px;
@@ -151,7 +152,6 @@ body::after {
 .rail.expanded .rail-label { opacity: 1; pointer-events: auto; }
 .rail-item.active .rail-label { color: var(--gold); }
 
-/* active indicator */
 .rail-item.active::before {
   content: '';
   position: absolute; left: 0; top: 50%; transform: translateY(-50%);
@@ -177,13 +177,12 @@ body::after {
 .rail-toggle svg { width: 14px; height: 14px; transition: transform var(--transition); }
 .rail.expanded .rail-toggle svg { transform: rotate(180deg); }
 
-/* tooltip for collapsed rail */
 .rail-item[data-tip]:not(.active)::after {
   content: attr(data-tip);
   position: absolute;
   left: calc(var(--rail-w) + 8px);
   top: 50%; transform: translateY(-50%);
-  background: rgba(10,12,18,0.95);
+  background: rgba(10,10,13,0.95);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 5px 10px;
@@ -202,289 +201,344 @@ body::after {
    MAIN CONTENT
 ═══════════════════════════════════════════ */
 .main {
-  flex: 1;
   margin-left: var(--rail-w);
-  padding: 28px 28px 40px;
+  flex: 1;
+  padding: 28px 28px 48px;
+  min-width: 0;
   transition: margin-left var(--transition);
-  max-width: calc(100vw - var(--rail-w));
-}
-.rail.expanded ~ .main {
-  margin-left: var(--rail-expanded);
-  max-width: calc(100vw - var(--rail-expanded));
 }
 
 /* ═══════════════════════════════════════════
-   QUICK STATS BAR
+   STATS BAR — 4 column grid
 ═══════════════════════════════════════════ */
 .stats-bar {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  background: rgba(10,12,18,0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: #1A1A1A;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 28px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.stat-cell {
-  flex: 1;
-  padding: 14px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  padding: 18px 20px;
   position: relative;
-  border-right: 1px solid var(--border);
-  transition: background 0.2s;
+  overflow: hidden;
+  transition: border-color var(--transition), transform 0.2s;
 }
-.stat-cell:last-child { border-right: none; }
-.stat-cell:hover { background: var(--surface); }
+.stat-card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent-color, var(--gold));
+  opacity: 0.6;
+}
+.stat-card.gold-card { --accent-color: var(--gold); }
+.stat-card.green-card { --accent-color: var(--green); }
+.stat-card.blue-card { --accent-color: var(--blue); }
+.stat-card.red-card { --accent-color: var(--red); }
+
 .stat-num {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.9rem;
+  font-size: 2.4rem;
   line-height: 1;
-  color: var(--white);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  color: var(--gold);
+  margin-bottom: 4px;
 }
-.stat-num.gold { color: var(--gold); }
 .stat-num.green { color: var(--green); }
 .stat-num.red { color: var(--red); }
+.stat-num.blue { color: var(--blue); }
 .stat-label {
-  font-size: 0.62rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
   color: var(--muted);
-  font-weight: 500;
 }
 .stat-badge {
-  position: absolute;
-  top: 10px; right: 14px;
+  display: inline-block;
+  margin-top: 8px;
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 20px;
+  background: var(--surface-2);
+  color: var(--muted);
 }
-.stat-badge.up { background: var(--green-soft); color: var(--green); }
-.stat-badge.warn { background: var(--red-soft); color: var(--red); }
-.stat-badge.neutral { background: var(--gold-soft); color: var(--gold); }
+.stat-badge.up { background: rgba(61,186,110,0.15); color: var(--green); }
+.stat-badge.warn { background: rgba(255,193,7,0.12); color: var(--gold); }
+.stat-badge.neutral { background: rgba(77,142,247,0.15); color: var(--blue); }
+
+/* Progress bar inside vocab stat */
+.stat-progress-wrap {
+  margin-top: 10px;
+}
+.stat-progress-track {
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.stat-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, #FFD54F 100%);
+  border-radius: 99px;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 8px rgba(255,193,7,0.4);
+}
 
 /* ═══════════════════════════════════════════
    PAGE HEADER
 ═══════════════════════════════════════════ */
 .page-header {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 12px;
+}
+.flag-bar {
+  width: 36px; height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #000 33%, #d00 33% 66%, var(--gold) 66%);
+  margin-bottom: 8px;
 }
 .page-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2rem,5vw,3.2rem);
-  letter-spacing: 0.02em;
-  line-height: 1;
+  font-size: 2rem;
+  letter-spacing: 0.06em;
   color: var(--white);
+  line-height: 1;
 }
 .page-title span { color: var(--gold); }
 .level-pill {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: var(--red-soft);
-  color: var(--red);
-  border: 1px solid rgba(204,32,32,0.3);
-  padding: 4px 12px;
+  background: var(--gold-soft);
+  color: var(--gold);
+  border: 1px solid var(--border-glow);
+  padding: 5px 12px;
   border-radius: 20px;
 }
-/* German flag stripe accent on title */
-.flag-bar {
-  width: 44px; height: 5px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #1a1a1a 33.3%, var(--red) 33.3% 66.6%, var(--gold) 66.6%);
-  margin-bottom: 10px;
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: #1A1A1A;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px 5px 6px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.user-chip:hover { border-color: var(--border-glow); }
+.user-avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold) 0%, #c4903a 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 700;
+  color: #0D0D0D;
 }
 
 /* ═══════════════════════════════════════════
-   PROGRESS TIMELINE (horizontal)
+   SECTION LABEL
 ═══════════════════════════════════════════ */
-.timeline-section {
-  margin-bottom: 32px;
-}
 .section-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
 }
 
-/* connector track */
+/* ═══════════════════════════════════════════
+   TIMELINE
+═══════════════════════════════════════════ */
+.timeline-section {
+  background: #1A1A1A;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
 .timeline-track {
-  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 0;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
 }
 .timeline-track::before {
   content: '';
   position: absolute;
-  top: 28px;
-  left: 28px;
-  right: 28px;
+  top: 26px; left: 30px; right: 30px;
   height: 2px;
   background: var(--border);
   z-index: 0;
 }
 
+/* connector fills */
+.month-card.done + .month-card::before {
+  content: '';
+  position: absolute;
+  top: 26px; left: -50%;
+  width: 100%; height: 2px;
+  background: var(--green);
+  z-index: 1;
+  pointer-events: none;
+}
+.month-card.active + .month-card::before {
+  background: linear-gradient(90deg, var(--gold), var(--border));
+}
+
 /* month card */
 .month-card {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-  z-index: 1;
   cursor: pointer;
+  z-index: 2;
 }
-.month-card + .month-card::before {
-  content: '';
-  position: absolute;
-  top: 27px; left: -50%;
-  width: 50%; height: 2px;
-  z-index: -1;
-  transition: background 0.4s;
-}
-.month-card.done + .month-card::before { background: var(--green); }
-.month-card.active + .month-card::before { background: linear-gradient(90deg, var(--gold), var(--border)); }
 
 .month-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 8px;
+  gap: 6px;
+  z-index: 2;
+  position: relative;
 }
+
 .month-dot {
-  width: 56px; height: 56px;
+  width: 52px; height: 52px;
   border-radius: 50%;
+  background: #1A1A1A;
   border: 2px solid var(--border);
-  background: rgba(10,12,18,0.9);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.2rem;
   color: var(--muted);
-  transition: all 0.3s;
+  transition: all var(--transition);
   position: relative;
-  margin-bottom: 10px;
+  z-index: 2;
 }
 .month-card.done .month-dot {
+  background: var(--green-soft);
   border-color: var(--green);
   color: var(--green);
-  background: var(--green-soft);
-  box-shadow: 0 0 0 4px rgba(61,186,110,0.08), 0 0 24px rgba(61,186,110,0.2);
+  box-shadow: 0 0 0 4px rgba(61,186,110,0.12);
 }
 .month-card.active .month-dot {
+  background: var(--gold-soft);
   border-color: var(--gold);
   color: var(--gold);
-  background: var(--gold-soft);
-  box-shadow: 0 0 0 4px rgba(232,184,75,0.1), 0 0 28px rgba(232,184,75,0.35);
+  box-shadow: 0 0 0 6px rgba(255,193,7,0.15), 0 0 20px rgba(255,193,7,0.25);
+  animation: goldPulse 2s ease-in-out infinite;
 }
-.month-card:hover .month-dot {
-  transform: translateY(-3px);
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(255,193,7,0.15), 0 0 20px rgba(255,193,7,0.25); }
+  50% { box-shadow: 0 0 0 10px rgba(255,193,7,0.08), 0 0 30px rgba(255,193,7,0.35); }
+}
+.month-card:not(.done):not(.active):hover .month-dot {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--white);
+  transform: scale(1.08);
 }
 .month-dot .check-icon { display: none; }
 .month-card.done .month-dot .check-icon { display: block; }
 .month-card.done .month-dot .num { display: none; }
 
 .month-name {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
   color: var(--muted);
   text-align: center;
-  transition: color 0.2s;
+  transition: color var(--transition);
 }
 .month-card.active .month-name { color: var(--gold); }
 .month-card.done .month-name { color: var(--green); }
+
 .month-sub {
   font-size: 0.58rem;
-  color: rgba(240,237,232,0.25);
+  color: var(--muted);
   text-align: center;
-  margin-top: 2px;
-  line-height: 1.3;
-  max-width: 80px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
 }
 
-/* expanded glassmorphic card panel */
+/* Month dropdown panel */
 .month-panel {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  width: 220px;
+  background: #111111;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  transform-origin: top center;
-  transition: opacity 0.25s, transform 0.25s;
+  max-height: 0;
   opacity: 0;
-  transform: scaleY(0.92) translateY(-8px);
   pointer-events: none;
+  transition: max-height 350ms cubic-bezier(0.4,0,0.2,1), opacity 300ms ease, transform 300ms ease;
+  transform: translateY(-8px);
   position: absolute;
-  top: 80px;
+  top: calc(100% + 12px);
   left: 50%;
   translate: -50% 0;
-  width: clamp(220px, 18vw, 280px);
-  z-index: 50;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06);
+  z-index: 100;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
 }
 .month-card.open .month-panel {
+  max-height: 400px;
   opacity: 1;
-  transform: scaleY(1) translateY(0);
-  pointer-events: auto;
+  pointer-events: all;
+  transform: translateY(0);
 }
 
 .month-panel-header {
-  padding: 12px 14px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px 8px;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 .month-panel-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 .month-panel-pct {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
 }
+
 .panel-progress {
-  height: 2px;
-  background: var(--border);
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  margin: 0 14px 12px;
+  border-radius: 99px;
+  overflow: hidden;
 }
 .panel-progress-fill {
   height: 100%;
-  border-radius: 2px;
-  transition: width 0.5s ease;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
 }
-.month-card.m1 .panel-progress-fill,
-.month-card.m1 .month-panel-title { background: var(--m1); }
-.month-card.m1 .month-panel-title { background: none; color: var(--m1); }
+
+.month-card.m1 .panel-progress-fill { background: var(--m1); }
+.month-card.m1 .month-panel-title { color: var(--m1); }
 .month-card.m2 .panel-progress-fill { background: var(--m2); }
 .month-card.m2 .month-panel-title { color: var(--m2); }
 .month-card.m3 .panel-progress-fill { background: var(--m3); }
@@ -494,150 +548,167 @@ body::after {
 .month-card.m5 .panel-progress-fill { background: var(--m5); }
 .month-card.m5 .month-panel-title { color: var(--m5); }
 
-.task-list { padding: 8px 0; }
+/* Vocab target row in panel */
+.panel-vocab-target {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 14px 8px;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  margin-bottom: 4px;
+}
+.panel-vocab-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+}
 
-/* ═══════════════════════════════════════════
-   ACTIVITY TILES
-═══════════════════════════════════════════ */
+.task-list { padding: 4px 8px 10px; }
 .task-tile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 14px;
-  cursor: pointer;
+  gap: 8px;
+  padding: 7px 6px;
+  border-radius: 7px;
   transition: background 0.15s;
-  border-radius: 0;
-  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
-.task-tile:hover { background: rgba(255,255,255,0.04); }
-.task-tile:active { background: rgba(255,255,255,0.02); }
-
+.task-tile:hover { background: var(--surface); }
+.task-tile.done { opacity: 0.55; }
+.task-tile.active { background: rgba(255,193,7,0.06); }
 .tile-check {
-  width: 20px; height: 20px;
-  border-radius: 6px;
+  width: 16px; height: 16px;
+  border-radius: 4px;
   border: 1.5px solid var(--border);
-  flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.55rem;
+  color: var(--green);
   transition: all 0.2s;
-  font-size: 0.6rem;
-  color: transparent;
 }
 .task-tile.done .tile-check {
-  background: var(--green);
+  background: var(--green-soft);
   border-color: var(--green);
-  color: #fff;
-  box-shadow: 0 0 8px rgba(61,186,110,0.4);
 }
 .task-tile.active .tile-check {
   border-color: var(--gold);
-  box-shadow: 0 0 8px rgba(232,184,75,0.3);
+  box-shadow: 0 0 0 2px rgba(255,193,7,0.15);
 }
-
 .tile-text { flex: 1; min-width: 0; }
 .tile-name {
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 500;
   color: var(--white);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.task-tile.done .tile-name { color: var(--muted); text-decoration: line-through; }
 .tile-tag {
-  font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   padding: 2px 6px;
   border-radius: 4px;
+  text-transform: uppercase;
   flex-shrink: 0;
 }
-.tile-tag.grammar { background: rgba(77,142,247,0.2); color: var(--blue); }
+.tile-tag.grammar { background: rgba(77,142,247,0.18); color: var(--blue); }
 .tile-tag.vocab   { background: rgba(196,144,58,0.2); color: var(--m2); }
-.tile-tag.listen  { background: rgba(58,170,116,0.2); color: var(--m3); }
-.tile-tag.speak   { background: rgba(204,32,32,0.2);  color: var(--red); }
-
-/* active task glow accent */
-.task-tile.active .tile-name { color: #fff; }
-.task-tile.active {
-  background: linear-gradient(90deg, rgba(232,184,75,0.07) 0%, transparent 100%);
-  border-left: 2px solid rgba(232,184,75,0.5);
-  padding-left: 12px;
-}
+.tile-tag.listen  { background: rgba(61,186,110,0.15); color: var(--green); }
+.tile-tag.speak   { background: rgba(139,61,186,0.18); color: var(--m5); }
 
 /* ═══════════════════════════════════════════
-   BOTTOM GRID: ACTIVITY + OVERVIEW
+   BOTTOM GRID
 ═══════════════════════════════════════════ */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin-bottom: 20px;
 }
-@media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
 
 .glass-card {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #1A1A1A;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color var(--transition);
 }
-.glass-card:hover {
-  border-color: rgba(255,255,255,0.12);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06);
-}
+.glass-card:hover { border-color: rgba(255,255,255,0.12); }
 
 .card-head {
+  display: flex; align-items: center; justify-content: space-between;
   padding: 14px 16px 12px;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 .card-head-title {
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: 0.65rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .card-head-action {
   font-size: 0.65rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gold);
   cursor: pointer;
   letter-spacing: 0.04em;
   opacity: 0.8;
-  transition: opacity 0.2s;
+  transition: opacity var(--transition), color var(--transition);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
 }
-.card-head-action:hover { opacity: 1; }
+.card-head-action:hover {
+  opacity: 1;
+  background: var(--gold-soft);
+  border-color: var(--border-glow);
+}
 
-/* Activity heatmap */
+/* ═══════════════════════════════════════════
+   HEATMAP
+═══════════════════════════════════════════ */
 .heatmap-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 4px;
-  padding: 14px 16px;
+  padding: 16px;
 }
 .hmap-cell {
   aspect-ratio: 1;
-  border-radius: 4px;
-  background: var(--surface);
-  transition: background 0.2s, transform 0.15s;
-  cursor: default;
+  border-radius: 3px;
+  background: rgba(74,16,32,0.25);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
 }
-.hmap-cell:hover { transform: scale(1.2); }
-.hmap-cell.l1 { background: rgba(232,184,75,0.20); }
-.hmap-cell.l2 { background: rgba(232,184,75,0.40); }
-.hmap-cell.l3 { background: rgba(232,184,75,0.65); }
-.hmap-cell.l4 { background: var(--gold); box-shadow: 0 0 6px rgba(232,184,75,0.4); }
-.hmap-cell.miss { background: rgba(204,32,32,0.18); }
+.hmap-cell:hover { transform: scale(1.3); z-index: 10; }
+/* Burgundy-to-gold color scale */
+.hmap-cell.l0 { background: rgba(74,16,32,0.3); }
+.hmap-cell.l1 { background: rgba(120,30,50,0.55); }
+.hmap-cell.l2 { background: rgba(180,90,20,0.5); }
+.hmap-cell.l3 { background: rgba(255,193,7,0.55); }
+.hmap-cell.l4 { background: var(--gold); box-shadow: 0 0 8px rgba(255,193,7,0.5); }
+.hmap-cell.miss { background: rgba(204,32,32,0.2); }
 
-/* Week labels */
+.hmap-cell:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: rgba(10,10,13,0.95);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.58rem;
+  white-space: nowrap;
+  color: var(--white);
+  pointer-events: none;
+  z-index: 100;
+}
+
 .hmap-labels {
   display: flex;
   justify-content: space-between;
@@ -645,10 +716,26 @@ body::after {
   font-size: 0.58rem;
   font-family: 'DM Mono', monospace;
   color: var(--muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
-/* Overview arc */
+.hmap-legend {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 16px 14px;
+  font-size: 0.55rem;
+  color: var(--muted);
+}
+.hmap-legend-bar {
+  display: flex; gap: 3px; align-items: center;
+}
+.hmap-legend-cell {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS ARC
+═══════════════════════════════════════════ */
 .overview-body {
   padding: 20px 16px;
   display: flex;
@@ -658,13 +745,11 @@ body::after {
 }
 .arc-wrap {
   position: relative;
-  width: 130px;
-  height: 75px;
+  width: 140px; height: 80px;
   overflow: hidden;
 }
 .arc-wrap svg {
-  width: 130px;
-  height: 130px;
+  width: 140px; height: 140px;
   margin-top: -55px;
 }
 .arc-pct {
@@ -672,13 +757,40 @@ body::after {
   bottom: 0; left: 50%;
   transform: translateX(-50%);
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--white);
   line-height: 1;
 }
+
+/* Overall vocab progress bar */
+.vocab-progress-section {
+  width: 100%;
+  padding: 0 16px 16px;
+}
+.vocab-progress-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.vocab-progress-label span:last-child { color: var(--gold); }
+.vocab-progress-track {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.vocab-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #8B5E1A 0%, var(--gold) 100%);
+  box-shadow: 0 0 12px rgba(255,193,7,0.35);
+  transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+
 .progress-legend {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -686,16 +798,16 @@ body::after {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   color: var(--muted);
 }
 .legend-dot {
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
 }
 
 /* ═══════════════════════════════════════════
-   UPCOMING TASKS WIDGET
+   UPCOMING TASKS
 ═══════════════════════════════════════════ */
 .upcoming-list { padding: 4px 0; }
 .upcoming-item {
@@ -711,14 +823,14 @@ body::after {
 .upcoming-item:hover { background: var(--surface); }
 .upcoming-date {
   font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--muted);
   min-width: 52px;
   font-weight: 500;
 }
 .upcoming-name {
   flex: 1;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 500;
   color: var(--white);
 }
@@ -729,15 +841,180 @@ body::after {
 }
 
 /* ═══════════════════════════════════════════
-   SCROLLBARS
+   HEATMAP MODAL / DEEP DIVE
 ═══════════════════════════════════════════ */
-* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  background: #111111;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  width: min(900px, 95vw);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95) translateY(20px);
+  transition: transform 300ms cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04);
+}
+.modal-overlay.open .modal-box {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: var(--white);
+}
+.modal-title span { color: var(--gold); }
+.modal-close {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+.modal-close:hover { background: var(--surface-2); color: var(--white); border-color: rgba(255,255,255,0.15); }
+
+.modal-body {
+  overflow-y: auto;
+  padding: 24px;
+  flex: 1;
+}
+
+.modal-heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.modal-hmap-cell {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+.modal-hmap-cell:hover {
+  transform: scale(1.15);
+  z-index: 5;
+}
+.modal-hmap-cell.selected {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.day-detail {
+  background: #1A1A1A;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.day-detail-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.day-detail-date {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+.day-detail-stats {
+  display: flex; gap: 20px;
+  flex-wrap: wrap;
+}
+.day-stat {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.day-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+.day-stat-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.day-words-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+.word-chip {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.2s;
+}
+.word-chip:hover { background: var(--surface-2); border-color: rgba(255,255,255,0.12); }
+.word-de {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.word-en {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+.word-type {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* No activity state */
+.no-activity {
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
 
 /* ═══════════════════════════════════════════
-   PAGE SYSTEM (Vocab / News stubs)
+   PAGE SYSTEM
 ═══════════════════════════════════════════ */
 .page { display: none; }
 .page.active { display: block; }
@@ -751,59 +1028,45 @@ body::after {
 .stub-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; color: var(--muted); }
 
 /* ═══════════════════════════════════════════
+   SCROLLBARS
+═══════════════════════════════════════════ */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+/* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .timeline-track::before { top: 22px; }
-  .month-dot { width: 44px; height: 44px; font-size: 1rem; }
-  .month-panel { width: 200px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .timeline-track::before { top: 25px; }
+  .month-dot { width: 48px; height: 48px; }
+  .month-panel { width: 190px; }
   .main { padding: 20px 16px 36px; }
 }
 @media (max-width: 600px) {
-  .stats-bar { flex-wrap: wrap; }
-  .stat-cell { flex: 1 0 40%; border-bottom: 1px solid var(--border); }
-  .stat-cell:nth-child(3),
-  .stat-cell:nth-child(4) { border-bottom: none; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .month-sub { display: none; }
-  .month-panel { width: 180px; font-size: 0.9em; }
+  .month-panel { width: 175px; font-size: 0.9em; }
   .timeline-track { gap: 0; overflow-x: auto; padding-bottom: 8px; }
-  .month-inner { min-width: 60px; }
+  .month-inner { min-width: 58px; }
   .grid-2 { grid-template-columns: 1fr; }
+  .modal-heatmap-grid { grid-template-columns: repeat(7, 1fr); }
+  .day-words-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* ═══════════════════════════════════════════
-   FADE-IN ANIMATION
+   ANIMATIONS
 ═══════════════════════════════════════════ */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
-.stats-bar       { animation: fadeUp 0.4s ease 0.05s both; }
-.page-header     { animation: fadeUp 0.4s ease 0.1s  both; }
-.timeline-section{ animation: fadeUp 0.4s ease 0.15s both; }
-.grid-2          { animation: fadeUp 0.4s ease 0.2s  both; }
-
-/* user chip */
-.user-chip {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px 5px 6px;
-  font-size: 0.7rem;
-  color: var(--muted);
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-.user-chip:hover { border-color: var(--border-glow); }
-.user-avatar {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: var(--gold);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.6rem; font-weight: 700;
-  color: #080a0f;
-}
+.stats-bar        { animation: fadeUp 0.4s ease 0.05s both; }
+.page-header      { animation: fadeUp 0.4s ease 0.1s  both; }
+.timeline-section { animation: fadeUp 0.4s ease 0.15s both; }
+.grid-2           { animation: fadeUp 0.4s ease 0.2s  both; }
 </style>
 </head>
 <body>
@@ -870,25 +1133,30 @@ body::after {
     <!-- ─── TRACKER PAGE ─── -->
     <div class="page active" id="page-tracker">
 
-      <!-- Quick Stats Bar -->
+      <!-- 4-column Key Stats -->
       <div class="stats-bar">
-        <div class="stat-cell">
+        <div class="stat-card gold-card">
           <div class="stat-num gold">847</div>
           <div class="stat-label">Vokabeln</div>
           <span class="stat-badge up">+12 heute</span>
+          <div class="stat-progress-wrap">
+            <div class="stat-progress-track">
+              <div class="stat-progress-fill" id="vocabStatBar" style="width:0%"></div>
+            </div>
+          </div>
         </div>
-        <div class="stat-cell">
-          <div class="stat-num">148</div>
+        <div class="stat-card blue-card">
+          <div class="stat-num blue">148</div>
           <div class="stat-label">Stunden total</div>
           <span class="stat-badge neutral">B1-Ziel</span>
         </div>
-        <div class="stat-cell">
+        <div class="stat-card green-card">
           <div class="stat-num green">62</div>
           <div class="stat-label">Lerntage</div>
           <span class="stat-badge up">🔥 14 Streak</span>
         </div>
-        <div class="stat-cell">
-          <div class="stat-num red">38%</div>
+        <div class="stat-card red-card">
+          <div class="stat-num" style="color:var(--gold)">38%</div>
           <div class="stat-label">Gesamt-Fortschritt</div>
           <span class="stat-badge warn">Monat 2</span>
         </div>
@@ -915,12 +1183,12 @@ body::after {
 
         <div class="timeline-track" id="timeline">
 
-          <!-- Month 1 -->
+          <!-- Month 1 — DONE -->
           <div class="month-card m1 done" onclick="toggleCard(this)">
             <div class="month-inner">
               <div class="month-dot">
                 <span class="num">1</span>
-                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
               <div class="month-name">Jan</div>
               <div class="month-sub">A2 Basics<br>Abgeschlossen</div>
@@ -931,6 +1199,10 @@ body::after {
                 <span class="month-panel-pct" style="color:var(--green)">100%</span>
               </div>
               <div class="panel-progress"><div class="panel-progress-fill" style="width:100%"></div></div>
+              <div class="panel-vocab-target">
+                <span>Ziel-Vokabeln</span>
+                <span class="panel-vocab-num">200 Wörter</span>
+              </div>
               <div class="task-list">
                 <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Alphabet & Aussprache</div></div><span class="tile-tag grammar">Gram.</span></div>
                 <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">200 Basis-Vokabeln</div></div><span class="tile-tag vocab">Wort.</span></div>
@@ -940,7 +1212,7 @@ body::after {
             </div>
           </div>
 
-          <!-- Month 2 -->
+          <!-- Month 2 — ACTIVE -->
           <div class="month-card m2 active open" onclick="toggleCard(this)">
             <div class="month-inner">
               <div class="month-dot"><span class="num">2</span></div>
@@ -953,6 +1225,10 @@ body::after {
                 <span class="month-panel-pct" style="color:var(--m2)">45%</span>
               </div>
               <div class="panel-progress"><div class="panel-progress-fill" style="width:45%"></div></div>
+              <div class="panel-vocab-target">
+                <span>Ziel-Vokabeln</span>
+                <span class="panel-vocab-num">350 Wörter</span>
+              </div>
               <div class="task-list">
                 <div class="task-tile done"><div class="tile-check">✓</div><div class="tile-text"><div class="tile-name">Perfekt-Konstruktionen</div></div><span class="tile-tag grammar">Gram.</span></div>
                 <div class="task-tile active"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Dativ vs. Akkusativ</div></div><span class="tile-tag grammar">Gram.</span></div>
@@ -975,10 +1251,14 @@ body::after {
                 <span class="month-panel-pct" style="color:var(--m3)">0%</span>
               </div>
               <div class="panel-progress"><div class="panel-progress-fill" style="width:0%"></div></div>
+              <div class="panel-vocab-target">
+                <span>Ziel-Vokabeln</span>
+                <span class="panel-vocab-num">500 Wörter</span>
+              </div>
               <div class="task-list">
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Deutsche Podcasts</div></div><span class="tile-tag listen">Hören</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Konjunktiv II</div></div><span class="tile-tag grammar">Gram.</span></div>
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">500+ Wörter</div></div><span class="tile-tag vocab">Wort.</span></div>
+                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Adjektiv-Endungen</div></div><span class="tile-tag grammar">Gram.</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schreiben: Briefe</div></div><span class="tile-tag speak">Sprechen</span></div>
               </div>
             </div>
@@ -989,7 +1269,7 @@ body::after {
             <div class="month-inner">
               <div class="month-dot"><span class="num">4</span></div>
               <div class="month-name">Apr</div>
-              <div class="month-sub">B1-Niveau<br>vorbereitung</div>
+              <div class="month-sub">B1-Niveau<br>Vorbereitung</div>
             </div>
             <div class="month-panel">
               <div class="month-panel-header">
@@ -997,8 +1277,13 @@ body::after {
                 <span class="month-panel-pct" style="color:var(--m4)">0%</span>
               </div>
               <div class="panel-progress"><div class="panel-progress-fill" style="width:0%"></div></div>
+              <div class="panel-vocab-target">
+                <span>Ziel-Vokabeln</span>
+                <span class="panel-vocab-num">700 Wörter</span>
+              </div>
               <div class="task-list">
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Übungen</div></div><span class="tile-tag grammar">Gram.</span></div>
+                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Vergangenheitsformen</div></div><span class="tile-tag grammar">Gram.</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Mock-Prüfungen</div></div><span class="tile-tag speak">Sprechen</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Leseverständnis</div></div><span class="tile-tag listen">Lesen</span></div>
               </div>
@@ -1018,8 +1303,12 @@ body::after {
                 <span class="month-panel-pct" style="color:var(--m5)">0%</span>
               </div>
               <div class="panel-progress"><div class="panel-progress-fill" style="width:0%"></div></div>
+              <div class="panel-vocab-target">
+                <span>Ziel-Vokabeln</span>
+                <span class="panel-vocab-num">1000+ Wörter</span>
+              </div>
               <div class="task-list">
-                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Vollständige Prüfungssimulation</div></div><span class="tile-tag grammar">Prüfung</span></div>
+                <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Prüfungssimulation</div></div><span class="tile-tag grammar">Prüfung</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Schwachstellen-Review</div></div><span class="tile-tag vocab">Wort.</span></div>
                 <div class="task-tile"><div class="tile-check"></div><div class="tile-text"><div class="tile-name">Goethe B1 Prüfung</div></div><span class="tile-tag speak">🏆</span></div>
               </div>
@@ -1036,31 +1325,42 @@ body::after {
         <div class="glass-card">
           <div class="card-head">
             <span class="card-head-title">Aktivität · Letzte 12 Wochen</span>
-            <span class="card-head-action">Details →</span>
+            <span class="card-head-action" onclick="openHeatmapModal()">Details →</span>
           </div>
           <div class="heatmap-grid" id="heatmap"></div>
+          <div class="hmap-legend">
+            <span>Weniger</span>
+            <div class="hmap-legend-bar">
+              <div class="hmap-legend-cell" style="background:rgba(74,16,32,0.3)"></div>
+              <div class="hmap-legend-cell" style="background:rgba(120,30,50,0.55)"></div>
+              <div class="hmap-legend-cell" style="background:rgba(180,90,20,0.5)"></div>
+              <div class="hmap-legend-cell" style="background:rgba(255,193,7,0.55)"></div>
+              <div class="hmap-legend-cell" style="background:var(--gold)"></div>
+            </div>
+            <span>Mehr</span>
+          </div>
           <div class="hmap-labels">
             <span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span>
           </div>
         </div>
 
-        <!-- Upcoming + Arc -->
+        <!-- Progress + Upcoming -->
         <div style="display:flex;flex-direction:column;gap:16px;">
 
-          <!-- Arc overview -->
+          <!-- Arc Overview -->
           <div class="glass-card">
             <div class="card-head">
               <span class="card-head-title">Gesamt-Fortschritt</span>
-              <span class="card-head-action">38%</span>
+              <span class="card-head-action">847 / 2000</span>
             </div>
             <div class="overview-body">
               <div class="arc-wrap">
-                <svg viewBox="0 0 130 130">
-                  <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
-                  <circle cx="65" cy="65" r="52" fill="none" stroke="var(--gold)" stroke-width="10"
-                    stroke-dasharray="326.7" stroke-dashoffset="202.5"
-                    stroke-linecap="round" transform="rotate(-180 65 65)"
-                    style="filter:drop-shadow(0 0 8px rgba(232,184,75,0.5))"/>
+                <svg viewBox="0 0 140 140">
+                  <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
+                  <circle cx="70" cy="70" r="56" fill="none" stroke="var(--gold)" stroke-width="10"
+                    stroke-dasharray="351.9" stroke-dashoffset="218.2"
+                    stroke-linecap="round" transform="rotate(-180 70 70)"
+                    style="filter:drop-shadow(0 0 10px rgba(255,193,7,0.55));transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)"/>
                 </svg>
                 <div class="arc-pct">38%</div>
               </div>
@@ -1070,9 +1370,19 @@ body::after {
                 <div class="legend-item"><div class="legend-dot" style="background:var(--border)"></div>Ausstehend: 3</div>
               </div>
             </div>
+            <!-- Vocab Goal Progress Bar -->
+            <div class="vocab-progress-section">
+              <div class="vocab-progress-label">
+                <span>Vokabeln-Ziel (B1)</span>
+                <span id="vocabPct">42.4%</span>
+              </div>
+              <div class="vocab-progress-track">
+                <div class="vocab-progress-fill" id="vocabProgressBar" style="width:0%"></div>
+              </div>
+            </div>
           </div>
 
-          <!-- Upcoming tasks -->
+          <!-- Upcoming Tasks -->
           <div class="glass-card">
             <div class="card-head">
               <span class="card-head-title">Bevorstehende Aufgaben</span>
@@ -1082,7 +1392,7 @@ body::after {
               <div class="upcoming-item">
                 <span class="upcoming-date">Heute</span>
                 <span class="upcoming-name">Dativ vs. Akkusativ</span>
-                <div class="upcoming-dot" style="background:var(--gold);box-shadow:0 0 6px rgba(232,184,75,0.5)"></div>
+                <div class="upcoming-dot" style="background:var(--gold);box-shadow:0 0 6px rgba(255,193,7,0.5)"></div>
               </div>
               <div class="upcoming-item">
                 <span class="upcoming-date">Mo, 07</span>
@@ -1101,31 +1411,24 @@ body::after {
               </div>
             </div>
           </div>
-
         </div>
 
       </div><!-- /grid-2 -->
     </div><!-- /page-tracker -->
 
-    <!-- ─── VOCAB PAGE STUB ─── -->
+    <!-- Stub pages -->
     <div class="page" id="page-vocab">
       <div class="page-header"><div><div class="flag-bar"></div><h1 class="page-title">Voka<span>beln</span></h1></div></div>
       <div class="stub"><div class="stub-icon">📚</div><div class="stub-title">Vokabeln</div><span>Flashcard-System & Wortlisten</span></div>
     </div>
-
-    <!-- ─── NEWS PAGE STUB ─── -->
     <div class="page" id="page-news">
       <div class="page-header"><div><div class="flag-bar"></div><h1 class="page-title">Nach<span>richten</span></h1></div></div>
       <div class="stub"><div class="stub-icon">📰</div><div class="stub-title">Deutsche Nachrichten</div><span>Aktuelle Artikel auf Deutsch</span></div>
     </div>
-
-    <!-- ─── QUIZ PAGE STUB ─── -->
     <div class="page" id="page-quiz">
       <div class="page-header"><div><div class="flag-bar"></div><h1 class="page-title">KI-<span>Quiz</span></h1></div></div>
       <div class="stub"><div class="stub-icon">🧠</div><div class="stub-title">KI-Quiz</div><span>Adaptiver Lerntest</span></div>
     </div>
-
-    <!-- ─── SETTINGS PAGE STUB ─── -->
     <div class="page" id="page-settings">
       <div class="page-header"><div><div class="flag-bar"></div><h1 class="page-title">Einstel<span>lungen</span></h1></div></div>
       <div class="stub"><div class="stub-icon">⚙️</div><div class="stub-title">Einstellungen</div><span>Profil und Präferenzen</span></div>
@@ -1134,50 +1437,259 @@ body::after {
   </main>
 </div>
 
+<!-- ═══ HEATMAP DEEP DIVE MODAL ═══ -->
+<div class="modal-overlay" id="heatmapModal" onclick="handleModalClick(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Aktivitäts-<span>Deep Dive</span></div>
+      <div class="modal-close" onclick="closeHeatmapModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="section-label" style="margin-bottom:12px">12 Wochen · Klicke einen Tag für Details</div>
+      <div class="modal-heatmap-grid" id="modalHeatmap"></div>
+
+      <div class="day-detail" id="dayDetail">
+        <div style="text-align:center;padding:20px;color:var(--muted);font-size:0.78rem;">
+          👆 Klicke auf einen Tag um Vokabeln zu sehen
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ─── RAIL TOGGLE ─── */
-function toggleRail() {
-  document.getElementById('rail').classList.toggle('expanded');
+/* ═══════════════════════════════════════════
+   DATA: Vocabulary word banks per level
+═══════════════════════════════════════════ */
+const wordBanks = {
+  high: [
+    {de:'die Vergangenheit',en:'the past',type:'Nomen'},
+    {de:'verstehen',en:'to understand',type:'Verb'},
+    {de:'die Entwicklung',en:'development',type:'Nomen'},
+    {de:'aufgeben',en:'to give up',type:'Verb'},
+    {de:'gleichzeitig',en:'simultaneously',type:'Adverb'},
+    {de:'die Möglichkeit',en:'possibility',type:'Nomen'},
+    {de:'überzeugen',en:'to convince',type:'Verb'},
+    {de:'verantwortlich',en:'responsible',type:'Adjektiv'},
+    {de:'die Entscheidung',en:'decision',type:'Nomen'},
+    {de:'zuverlässig',en:'reliable',type:'Adjektiv'},
+    {de:'zusammenfassen',en:'to summarize',type:'Verb'},
+    {de:'die Gewohnheit',en:'habit',type:'Nomen'},
+  ],
+  medium: [
+    {de:'der Bahnhof',en:'train station',type:'Nomen'},
+    {de:'kaufen',en:'to buy',type:'Verb'},
+    {de:'schwierig',en:'difficult',type:'Adjektiv'},
+    {de:'manchmal',en:'sometimes',type:'Adverb'},
+    {de:'die Wohnung',en:'apartment',type:'Nomen'},
+    {de:'brauchen',en:'to need',type:'Verb'},
+    {de:'natürlich',en:'of course',type:'Adverb'},
+    {de:'der Freund',en:'friend',type:'Nomen'},
+  ],
+  low: [
+    {de:'der Hund',en:'dog',type:'Nomen'},
+    {de:'gehen',en:'to go',type:'Verb'},
+    {de:'groß',en:'big',type:'Adjektiv'},
+    {de:'heute',en:'today',type:'Adverb'},
+  ]
+};
+
+/* ═══════════════════════════════════════════
+   HEATMAP DATA GENERATION
+═══════════════════════════════════════════ */
+const heatmapData = [];
+const weekDays = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+const months = ['Jan','Jan','Jan','Feb','Feb','Feb','Mär','Mär','Mär','Apr','Apr','Apr'];
+
+function getWords(count, level) {
+  const bank = level === 'l4' ? wordBanks.high :
+               level === 'l3' ? [...wordBanks.high, ...wordBanks.medium] :
+               level === 'l2' ? wordBanks.medium :
+               wordBanks.low;
+  const shuffled = [...bank].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
-/* ─── PAGE SWITCH ─── */
-function switchPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.rail-item').forEach(i => i.classList.remove('active'));
-  var pg = document.getElementById('page-' + name);
-  if (pg) pg.classList.add('active');
-  if (el) el.classList.add('active');
+function buildHeatmapData() {
+  const levels = ['l0','l1','l2','l3','l4','miss'];
+  for (let i = 0; i < 84; i++) {
+    const r = Math.random() * 100;
+    let lvl, wordsLearned, minutes;
+    if (r < 10) { lvl = 'miss'; wordsLearned = 0; minutes = 0; }
+    else if (r < 22) { lvl = 'l0'; wordsLearned = 0; minutes = 0; }
+    else if (r < 42) { lvl = 'l1'; wordsLearned = Math.floor(Math.random()*3)+1; minutes = Math.floor(Math.random()*20)+10; }
+    else if (r < 65) { lvl = 'l2'; wordsLearned = Math.floor(Math.random()*5)+3; minutes = Math.floor(Math.random()*30)+20; }
+    else if (r < 82) { lvl = 'l3'; wordsLearned = Math.floor(Math.random()*8)+5; minutes = Math.floor(Math.random()*45)+30; }
+    else { lvl = 'l4'; wordsLearned = Math.floor(Math.random()*12)+8; minutes = Math.floor(Math.random()*60)+45; }
+
+    const week = Math.floor(i / 7);
+    const day = i % 7;
+    const month = months[week] || 'Apr';
+    const dateStr = `${weekDays[day]}, ${month} W${week+1}`;
+
+    heatmapData.push({
+      index: i,
+      level: lvl,
+      date: dateStr,
+      week: week + 1,
+      day: weekDays[day],
+      words: wordsLearned,
+      minutes,
+      vocab: getWords(wordsLearned, lvl)
+    });
+  }
+}
+buildHeatmapData();
+
+/* ═══════════════════════════════════════════
+   BUILD MINI HEATMAP (dashboard)
+═══════════════════════════════════════════ */
+function buildMiniHeatmap() {
+  const grid = document.getElementById('heatmap');
+  if (!grid) return;
+  grid.innerHTML = heatmapData.map((d,i) => {
+    const label = d.level === 'miss' ? 'Kein Eintrag' :
+                  d.level === 'l0' ? 'Kein Eintrag' :
+                  `${d.words} Wörter · ${d.minutes}min`;
+    return `<div class="hmap-cell ${d.level}" data-tooltip="${d.date}: ${label}" data-index="${i}"></div>`;
+  }).join('');
+}
+buildMiniHeatmap();
+
+/* ═══════════════════════════════════════════
+   MODAL: HEATMAP DEEP DIVE
+═══════════════════════════════════════════ */
+function openHeatmapModal() {
+  const modal = document.getElementById('heatmapModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  buildModalHeatmap();
 }
 
-/* ─── TIMELINE CARD TOGGLE ─── */
+function closeHeatmapModal() {
+  const modal = document.getElementById('heatmapModal');
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  // reset selection
+  document.querySelectorAll('.modal-hmap-cell').forEach(c => c.classList.remove('selected'));
+}
+
+function handleModalClick(e) {
+  if (e.target === document.getElementById('heatmapModal')) closeHeatmapModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeHeatmapModal();
+});
+
+function buildModalHeatmap() {
+  const grid = document.getElementById('modalHeatmap');
+  if (!grid) return;
+  grid.innerHTML = heatmapData.map((d, i) => {
+    const bg = d.level === 'l4' ? 'var(--gold)' :
+               d.level === 'l3' ? 'rgba(255,193,7,0.55)' :
+               d.level === 'l2' ? 'rgba(180,90,20,0.5)' :
+               d.level === 'l1' ? 'rgba(120,30,50,0.55)' :
+               d.level === 'miss' ? 'rgba(204,32,32,0.2)' :
+               'rgba(74,16,32,0.3)';
+    const shadow = d.level === 'l4' ? 'box-shadow:0 0 8px rgba(255,193,7,0.5);' : '';
+    return `<div class="modal-hmap-cell" style="background:${bg};${shadow}" onclick="showDayDetail(${i})" title="${d.date}"></div>`;
+  }).join('');
+}
+
+function showDayDetail(idx) {
+  const d = heatmapData[idx];
+  // Update selection
+  document.querySelectorAll('.modal-hmap-cell').forEach((c,i) => {
+    c.classList.toggle('selected', i === idx);
+  });
+
+  const detail = document.getElementById('dayDetail');
+  const intensityLabel = d.level === 'l4' ? 'Intensiv 🔥' :
+                         d.level === 'l3' ? 'Stark' :
+                         d.level === 'l2' ? 'Mittel' :
+                         d.level === 'l1' ? 'Leicht' :
+                         d.level === 'miss' ? 'Kein Eintrag' : 'Keine Aktivität';
+
+  if (!d.words) {
+    detail.innerHTML = `
+      <div class="day-detail-header">
+        <div class="day-detail-date">${d.date}</div>
+      </div>
+      <div class="no-activity">
+        ${d.level === 'miss' ? '❌ Tag verpasst — kein Eintrag' : '📭 Keine Lernaktivität an diesem Tag'}
+      </div>`;
+    return;
+  }
+
+  const wordHtml = d.vocab.map(w => `
+    <div class="word-chip">
+      <div class="word-de">${w.de}</div>
+      <div class="word-en">${w.en}</div>
+      <div class="word-type">${w.type}</div>
+    </div>`).join('');
+
+  detail.innerHTML = `
+    <div class="day-detail-header">
+      <div class="day-detail-date">${d.date}</div>
+      <div class="day-detail-stats">
+        <div class="day-stat">
+          <div class="day-stat-num">${d.words}</div>
+          <div class="day-stat-label">Neue Wörter</div>
+        </div>
+        <div class="day-stat">
+          <div class="day-stat-num">${d.minutes}</div>
+          <div class="day-stat-label">Minuten</div>
+        </div>
+        <div class="day-stat">
+          <div class="day-stat-num" style="color:${d.level==='l4'?'var(--gold)':d.level==='miss'?'var(--red)':'var(--green)'}">${intensityLabel}</div>
+          <div class="day-stat-label">Intensität</div>
+        </div>
+      </div>
+    </div>
+    <div class="section-label" style="margin-bottom:10px">Gelernte Vokabeln</div>
+    <div class="day-words-grid">${wordHtml}</div>`;
+}
+
+/* ═══════════════════════════════════════════
+   TIMELINE CARD TOGGLE
+═══════════════════════════════════════════ */
 function toggleCard(card) {
-  var wasOpen = card.classList.contains('open');
-  // close all panels first
+  const wasOpen = card.classList.contains('open');
   document.querySelectorAll('.month-card').forEach(c => c.classList.remove('open'));
   if (!wasOpen) card.classList.add('open');
 }
 
-/* ─── HEATMAP GENERATION ─── */
-(function buildHeatmap() {
-  var levels = ['','l1','l2','l3','l4','miss'];
-  var weights = [10, 15, 20, 20, 20, 15]; // '' miss l1 l2 l3 l4
-  var grid = document.getElementById('heatmap');
-  if (!grid) return;
-  // 12 weeks × 7 days = 84 cells, show 84 in a 12-col grid
-  var cells = '';
-  for (var i = 0; i < 84; i++) {
-    var r = Math.random() * 100;
-    var lvl = '';
-    if (r < 10) lvl = 'miss';
-    else if (r < 28) lvl = '';
-    else if (r < 48) lvl = 'l1';
-    else if (r < 68) lvl = 'l2';
-    else if (r < 85) lvl = 'l3';
-    else lvl = 'l4';
-    cells += '<div class="hmap-cell ' + lvl + '" title="' + (lvl ? lvl : 'kein Eintrag') + '"></div>';
-  }
-  grid.innerHTML = cells;
-})();
+/* ═══════════════════════════════════════════
+   RAIL TOGGLE
+═══════════════════════════════════════════ */
+function toggleRail() {
+  document.getElementById('rail').classList.toggle('expanded');
+}
+
+/* ═══════════════════════════════════════════
+   PAGE SWITCH
+═══════════════════════════════════════════ */
+function switchPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rail-item').forEach(i => i.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATE PROGRESS BARS ON LOAD
+═══════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  // 847/2000 = 42.35%
+  setTimeout(() => {
+    const vocabBar = document.getElementById('vocabProgressBar');
+    const vocabStat = document.getElementById('vocabStatBar');
+    if (vocabBar) vocabBar.style.width = '42.35%';
+    if (vocabStat) vocabStat.style.width = '42.35%';
+  }, 400);
+});
 </script>
 </body>
 </html>
