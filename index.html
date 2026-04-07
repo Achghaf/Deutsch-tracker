@@ -1308,6 +1308,39 @@ body::after {
           </div>
         </div>
 
+        <!-- ── Bulk Import Panel ── -->
+        <div class="admin-panel admin-panel-full">
+          <div class="admin-panel-head">
+            <span class="admin-panel-title">🤖 Bulk-Import · KI-Verbdatenbank</span>
+            <span class="admin-panel-badge" id="masterVerbCountBadge">0 Verben gespeichert</span>
+          </div>
+          <div style="padding:16px 20px 18px;display:flex;flex-direction:column;gap:12px;">
+            <p style="font-size:0.68rem;color:var(--muted);line-height:1.6;">
+              Füge hier den JSON-Block ein, den ein KI-Tool (ChatGPT, Gemini, Claude) für dich generiert hat.
+              Die Verben werden in der Master-Datenbank gespeichert. Das Fokus-Karussell wechselt dann automatisch täglich die angezeigten Verben.
+            </p>
+            <textarea id="bulk-json-input" placeholder='Beispiel: [{"id":1,"verb":"warten","prep":"auf","case":"Akkusativ","translation":"to wait for","example":"Ich warte auf den Bus."},...]'
+              style="width:100%;min-height:130px;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'DM Mono',monospace;font-size:0.68rem;line-height:1.6;outline:none;resize:vertical;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='var(--border-glow)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="verb-push-btn" onclick="bulkImportVerbs()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Importieren &amp; Speichern
+              </button>
+              <button onclick="clearMasterVerbDB()" style="padding:10px 16px;background:var(--red-soft);border:1px solid rgba(204,32,32,0.3);border-radius:8px;color:var(--red);font-size:0.72rem;font-weight:600;cursor:pointer;letter-spacing:0.04em;">
+                🗑 Datenbank leeren
+              </button>
+            </div>
+            <div id="bulkImportResult" style="display:none;font-size:0.68rem;border-radius:8px;padding:8px 12px;"></div>
+            <div style="background:rgba(77,142,247,0.07);border:1px solid rgba(77,142,247,0.2);border-radius:10px;padding:12px 14px;">
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">💡 KI-Prompt — kopiere das direkt in ChatGPT / Gemini</div>
+              <div style="font-size:0.65rem;color:var(--muted);line-height:1.6;font-family:'DM Mono',monospace;white-space:pre-wrap;user-select:all;">Ich brauche eine Datenbank von 50 deutschen B1-Verben mit festen Präpositionen.
+Antworte NUR mit einem rohen JSON-Array. Kein Text davor oder danach. Format:
+[{"id":1,"verb":"warten","prep":"auf","case":"Akkusativ","translation":"to wait for","example":"Wir warten auf den Bus."}]</div>
+            </div>
+          </div>
+        </div>
+
         <div class="admin-panel">
           <div class="admin-panel-head"><span class="admin-panel-title">Schwierigste Wörter</span><span class="admin-panel-badge">Fehlerrate</span></div>
           <div class="hard-words-list">
@@ -1828,6 +1861,7 @@ function initApp(user) {
 ════════════════════════════════════════════════ */
 function buildAdminPanel() {
   buildVerbManager();
+  updateMasterVerbBadge();
   const users=getUsers();
   document.getElementById('adminTotalUsers').textContent=users.length;
   document.getElementById('adminUsersToday').textContent=`+${users.length} registriert`;
@@ -1961,9 +1995,26 @@ const DEFAULT_FOCUS_VERBS = [
   { verb:'gehören', type:'Verb', translation:'to belong to', prep:'… zu', case:'Dativ', example:'Das Buch gehört meiner Schwester.' },
 ];
 
+function getMasterVerbDB() {
+  try { const d=JSON.parse(localStorage.getItem('master_vocab_db')); return Array.isArray(d)&&d.length?d:null; } catch { return null; }
+}
+
+function getDailyFocusVerbs() {
+  const allVerbs = getMasterVerbDB();
+  if(!allVerbs) return null;
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const startIdx = (dayOfYear * 10) % allVerbs.length;
+  return allVerbs.slice(startIdx, startIdx + 10);
+}
+
 function getFocusVerbs() {
-  try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); return Array.isArray(d)&&d.length?d:DEFAULT_FOCUS_VERBS; }
-  catch { return DEFAULT_FOCUS_VERBS; }
+  // Priority 1: manually pinned verbs from Admin Verb-Manager
+  try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); if(Array.isArray(d)&&d.length) return d; } catch {}
+  // Priority 2: auto daily rotation from master DB
+  const daily = getDailyFocusVerbs();
+  if(daily && daily.length) return daily;
+  // Priority 3: built-in defaults
+  return DEFAULT_FOCUS_VERBS;
 }
 function getMasteredVerbs() {
   try { return JSON.parse(localStorage.getItem('dt_mastered_verbs')||'{}'); } catch { return {}; }
@@ -2045,6 +2096,66 @@ function toggleMastery(idx) {
     const card = document.getElementById('vc-'+idx);
     if(card && nowMastered) card.classList.add('mastered');
   });
+}
+
+/* ── Admin: Bulk Import ── */
+function bulkImportVerbs() {
+  const input = document.getElementById('bulk-json-input');
+  const result = document.getElementById('bulkImportResult');
+  const jsonText = input ? input.value.trim() : '';
+  if(!jsonText) {
+    showBulkResult('⚠️ Bitte JSON einfügen.', false);
+    return;
+  }
+  try {
+    // Strip optional markdown code fences
+    const clean = jsonText.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const parsed = JSON.parse(clean);
+    if(!Array.isArray(parsed)) throw new Error('Kein Array');
+    // Normalise: ensure 'type' field exists (verb manager uses it)
+    const normalised = parsed.map((v,i) => ({
+      id: v.id || i+1,
+      verb: v.verb || '',
+      type: v.type || 'Verb',
+      prep: v.prep || '',
+      case: v.case || '',
+      translation: v.translation || '',
+      example: v.example || ''
+    }));
+    localStorage.setItem('master_vocab_db', JSON.stringify(normalised));
+    buildFokusCarousel();
+    updateMasterVerbBadge();
+    if(input) input.value = '';
+    showBulkResult(`✅ Erfolg! ${normalised.length} Verben importiert. Das Fokus-Karussell rotiert jetzt automatisch täglich.`, true);
+  } catch(e) {
+    showBulkResult('❌ Ungültiges JSON. Überprüfe die KI-Ausgabe und versuche es erneut.', false);
+  }
+}
+
+function clearMasterVerbDB() {
+  if(!confirm('Master-Verbdatenbank wirklich leeren?')) return;
+  localStorage.removeItem('master_vocab_db');
+  buildFokusCarousel();
+  updateMasterVerbBadge();
+  showBulkResult('🗑 Datenbank geleert. Standard-Verben werden wieder angezeigt.', false);
+}
+
+function showBulkResult(msg, success) {
+  const el = document.getElementById('bulkImportResult');
+  if(!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.color = success ? 'var(--green)' : 'var(--gold)';
+  el.style.background = success ? 'var(--green-soft)' : 'var(--gold-soft)';
+  el.style.border = success ? '1px solid rgba(61,186,110,0.3)' : '1px solid rgba(255,193,7,0.25)';
+  setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+
+function updateMasterVerbBadge() {
+  const badge = document.getElementById('masterVerbCountBadge');
+  if(!badge) return;
+  const db = getMasterVerbDB();
+  badge.textContent = db ? `${db.length} Verben gespeichert` : '0 Verben gespeichert';
 }
 
 /* ── Admin: Verb-Manager ── */
