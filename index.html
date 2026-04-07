@@ -704,6 +704,63 @@ body::after {
 .toast-close { color:var(--muted); cursor:pointer; font-size:0.8rem; padding:4px 6px; border-radius:4px; flex-shrink:0; }
 .toast-close:hover { color:var(--white); }
 .confetti-particle { position:fixed; pointer-events:none; z-index:9998; }
+
+/* ═══════════════════════════════════════════
+   LANGUAGE SWITCHER (rail bottom)
+═══════════════════════════════════════════ */
+.lang-switcher {
+  width:100%;
+  padding:14px 12px 10px;
+  border-top:1px solid var(--border);
+  margin-top:8px;
+  flex-shrink:0;
+}
+.lang-switcher-label {
+  font-size:0.52rem; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.lang-switcher-label svg { width:10px; height:10px; opacity:0.6; }
+.lang-toggle {
+  display:flex; align-items:center;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:3px;
+  gap:3px;
+  position:relative;
+}
+.lang-opt {
+  flex:1; display:flex; align-items:center; justify-content:center;
+  gap:7px; padding:8px 10px; border-radius:8px;
+  cursor:pointer; position:relative; z-index:1;
+  transition:color 0.25s;
+  user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.lang-opt-flag {
+  font-size:1rem; line-height:1; flex-shrink:0;
+}
+.lang-opt-text {
+  font-size:0.65rem; font-weight:600; letter-spacing:0.06em;
+  color:var(--muted); transition:color 0.25s;
+  white-space:nowrap;
+}
+.lang-opt.active .lang-opt-text { color:var(--white); }
+
+/* Sliding pill indicator */
+.lang-toggle-track {
+  position:absolute; top:3px; bottom:3px;
+  width:calc(50% - 3px);
+  background:linear-gradient(135deg,rgba(255,193,7,0.18) 0%,rgba(196,144,58,0.12) 100%);
+  border:1px solid var(--border-glow);
+  border-radius:7px;
+  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+}
+/* EN active → slide right */
+.lang-toggle.en .lang-toggle-track { transform:translateX(calc(100% + 3px)); }
+/* DE active → stays at left (default) */
+.lang-toggle.de .lang-toggle-track { transform:translateX(0); }
 </style>
 </head>
 <body>
@@ -783,6 +840,26 @@ body::after {
       <span class="rail-label">Admin</span>
     </div>
     <div class="rail-spacer"></div>
+
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+      <div class="lang-switcher-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Sprache · Language
+      </div>
+      <div class="lang-toggle de" id="langToggle">
+        <div class="lang-toggle-track"></div>
+        <div class="lang-opt active" id="langDE" onclick="setLang('de')">
+          <span class="lang-opt-flag">🇩🇪</span>
+          <span class="lang-opt-text">Deutsch</span>
+        </div>
+        <div class="lang-opt" id="langEN" onclick="setLang('en')">
+          <span class="lang-opt-flag">🇬🇧</span>
+          <span class="lang-opt-text">English</span>
+        </div>
+      </div>
+    </div>
+
     <div class="rail-toggle" onclick="toggleRail()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
@@ -1630,12 +1707,112 @@ function scrollToActivePlaner(){
   });
 }
 
+
+/* ════════════════════════════════════════════════
+   LANGUAGE SWITCHER
+════════════════════════════════════════════════ */
+const TRANSLATIONS = {
+  de: {
+    'page-title-tracker': 'Mein Ziel: <span>Deutsch B1</span>',
+    'nav-tracker': 'Tracker',
+    'nav-vocab': 'Vokabeln',
+    'nav-news': 'Nachrichten',
+    'nav-quiz': 'Quiz',
+    'nav-settings': 'Einstellungen',
+    'nav-admin': 'Admin',
+    'fab-label': 'Menü',
+    'stat-label-days': 'Lerntage',
+    'stat-label-words': 'Vokabeln',
+    'stat-label-streak': 'Streak',
+    'stat-label-progress': 'Fortschritt',
+    'section-week': 'Diese Woche',
+    'section-plan': 'Monatsplan',
+    'section-heatmap': 'Aktivitäts-Heatmap',
+    'logout': 'Abmelden',
+    'lang-label': 'Sprache · Language',
+  },
+  en: {
+    'page-title-tracker': 'My Goal: <span>German B1</span>',
+    'nav-tracker': 'Tracker',
+    'nav-vocab': 'Vocabulary',
+    'nav-news': 'News',
+    'nav-quiz': 'Quiz',
+    'nav-settings': 'Settings',
+    'nav-admin': 'Admin',
+    'fab-label': 'Menu',
+    'stat-label-days': 'Study Days',
+    'stat-label-words': 'Words',
+    'stat-label-streak': 'Streak',
+    'stat-label-progress': 'Progress',
+    'section-week': 'This Week',
+    'section-plan': 'Monthly Plan',
+    'section-heatmap': 'Activity Heatmap',
+    'logout': 'Log Out',
+    'lang-label': 'Language · Sprache',
+  }
+};
+
+let currentLang = localStorage.getItem('dt_lang') || 'de';
+
+function setLang(lang) {
+  if(lang === currentLang) return;
+  currentLang = lang;
+  localStorage.setItem('dt_lang', lang);
+  applyLang();
+}
+
+function applyLang() {
+  const t = TRANSLATIONS[currentLang];
+  const toggle = document.getElementById('langToggle');
+  const de = document.getElementById('langDE');
+  const en = document.getElementById('langEN');
+  const fabLabel = document.querySelector('.rail-fab-label');
+
+  // Toggle classes
+  toggle.classList.toggle('de', currentLang === 'de');
+  toggle.classList.toggle('en', currentLang === 'en');
+  de.classList.toggle('active', currentLang === 'de');
+  en.classList.toggle('active', currentLang === 'en');
+
+  // FAB label
+  if(fabLabel) fabLabel.textContent = t['fab-label'];
+
+  // Nav labels
+  const navMap = {
+    'nav-tracker': 0, 'nav-vocab': 1, 'nav-news': 2,
+    'nav-quiz': 3, 'nav-settings': 4
+  };
+  const railItems = document.querySelectorAll('.rail-item .rail-label');
+  railItems[0] && (railItems[0].textContent = t['nav-tracker']);
+  railItems[1] && (railItems[1].textContent = t['nav-vocab']);
+  railItems[2] && (railItems[2].textContent = t['nav-news']);
+  railItems[3] && (railItems[3].textContent = t['nav-quiz']);
+  railItems[4] && (railItems[4].textContent = t['nav-settings']);
+  railItems[5] && (railItems[5].textContent = t['nav-admin']);
+
+  // Page title
+  const title = document.querySelector('#page-tracker .page-title');
+  if(title) title.innerHTML = t['page-title-tracker'];
+
+  // Lang switcher label
+  const langLabel = document.querySelector('.lang-switcher-label');
+  if(langLabel) langLabel.lastChild.textContent = ' ' + t['lang-label'];
+
+  // Section labels — use data-i18n attribute approach
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(t[key]) el.textContent = t[key];
+  });
+}
+
 /* ════════════════════════════════════════════════
    BOOT
 ════════════════════════════════════════════════ */
 window.addEventListener('load',()=>{
+  currentLang=localStorage.getItem('dt_lang')||'de';
   const session=getSession();
   if(session){initApp(session);}else{showScreen('login');}
+  applyLang();
   document.getElementById('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
   document.getElementById('reg-confirm').addEventListener('keydown',e=>{if(e.key==='Enter')handleRegister();});
 });
