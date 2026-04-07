@@ -761,6 +761,235 @@ body::after {
 .lang-toggle.en .lang-toggle-track { transform:translateX(calc(100% + 3px)); }
 /* DE active → stays at left (default) */
 .lang-toggle.de .lang-toggle-track { transform:translateX(0); }
+
+/* ═══════════════════════════════════════════
+   FOKUS-VERBEN CAROUSEL
+═══════════════════════════════════════════ */
+.fokus-section {
+  background:#1A1A1A;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px 0 0;
+  margin-bottom:20px;
+  animation:fadeUp 0.4s ease 0.15s both;
+  overflow:hidden;
+}
+.fokus-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px 14px;
+}
+.fokus-title {
+  display:flex; align-items:center; gap:8px;
+  font-size:0.62rem; font-weight:700; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--muted);
+}
+.fokus-title-badge {
+  font-size:0.55rem; font-weight:700; letter-spacing:0.06em;
+  padding:2px 8px; border-radius:20px;
+  background:var(--gold-soft); color:var(--gold);
+  border:1px solid var(--border-glow);
+}
+.fokus-progress-label {
+  font-size:0.6rem; color:var(--muted);
+}
+.fokus-progress-label span { color:var(--green); font-weight:700; }
+
+/* Carousel track */
+.fokus-carousel {
+  display:flex;
+  gap:14px;
+  padding:4px 20px 20px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.fokus-carousel::-webkit-scrollbar { display:none; }
+
+/* Individual verb card */
+.verb-card {
+  flex:0 0 200px;
+  min-height:200px;
+  scroll-snap-align:start;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(12px);
+  position:relative;
+  cursor:pointer;
+  /* 3-D flip container */
+  perspective:600px;
+  transition:border-color 0.3s, box-shadow 0.3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.verb-card.mastered {
+  border-color:rgba(61,186,110,0.5);
+  box-shadow:0 0 16px rgba(61,186,110,0.12);
+}
+.verb-card.revealed .verb-card-back { opacity:1; transform:none; filter:none; }
+.verb-card.revealed .verb-card-hint { opacity:0; }
+
+/* Card inner face */
+.verb-card-inner {
+  padding:18px 16px 14px;
+  display:flex; flex-direction:column;
+  height:100%; min-height:200px;
+  position:relative;
+}
+
+/* Gold verb name on top */
+.verb-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.55rem; letter-spacing:0.04em;
+  color:var(--gold);
+  line-height:1.1;
+  margin-bottom:4px;
+}
+.verb-type {
+  font-size:0.55rem; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:12px;
+}
+
+/* Translation always visible */
+.verb-translation {
+  font-size:0.72rem; color:var(--muted);
+  line-height:1.4; flex:1;
+}
+
+/* Hidden back info — blur-to-clear reveal */
+.verb-card-back {
+  margin-top:10px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding-top:10px;
+  opacity:0;
+  filter:blur(6px);
+  transform:translateY(6px);
+  transition:opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+.verb-prep {
+  font-size:0.8rem; font-weight:600;
+  color:var(--white);
+  margin-bottom:5px;
+}
+.verb-prep em {
+  color:var(--gold); font-style:normal;
+  background:var(--gold-soft);
+  padding:1px 6px; border-radius:5px;
+}
+.verb-case-pill {
+  display:inline-block;
+  font-size:0.52rem; font-weight:700; letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:2px 8px; border-radius:20px;
+  background:rgba(77,142,247,0.15); color:var(--blue);
+  border:1px solid rgba(77,142,247,0.25);
+  margin-bottom:8px;
+}
+.verb-example {
+  font-size:0.62rem; color:var(--muted);
+  font-style:italic; line-height:1.4;
+}
+
+/* Tap hint */
+.verb-card-hint {
+  position:absolute; bottom:12px; right:14px;
+  font-size:0.58rem; color:var(--muted);
+  opacity:0.6;
+  display:flex; align-items:center; gap:4px;
+  transition:opacity 0.2s;
+  pointer-events:none;
+}
+.verb-card-hint svg { width:10px; height:10px; }
+
+/* Mastery toggle (checkmark button) */
+.verb-mastery-btn {
+  position:absolute; top:12px; right:12px;
+  width:26px; height:26px; border-radius:50%;
+  border:1.5px solid var(--border);
+  background:transparent;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:all 0.2s;
+  color:var(--muted);
+  z-index:2;
+}
+.verb-mastery-btn:hover { border-color:var(--green); color:var(--green); }
+.verb-card.mastered .verb-mastery-btn {
+  border-color:var(--green);
+  background:var(--green-soft);
+  color:var(--green);
+}
+.verb-mastery-btn svg { width:12px; height:12px; }
+
+/* Card counter dots */
+.fokus-dots {
+  display:flex; justify-content:center; gap:6px;
+  padding:0 0 16px;
+}
+.fokus-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  transition:background 0.3s, transform 0.3s;
+}
+.fokus-dot.active {
+  background:var(--gold);
+  transform:scale(1.3);
+}
+
+/* Empty state */
+.fokus-empty {
+  margin:0 20px 20px;
+  border:1px dashed rgba(255,193,7,0.3);
+  border-radius:12px;
+  padding:28px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:0.72rem;
+  line-height:1.6;
+}
+.fokus-empty-icon { font-size:2rem; margin-bottom:10px; opacity:0.5; }
+
+/* ── Admin Verb Manager panel ── */
+.verb-manager-grid { padding:16px 20px; display:flex; flex-direction:column; gap:10px; }
+.verb-entry {
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  position:relative;
+}
+.verb-entry-num {
+  position:absolute; top:-8px; left:12px;
+  font-size:0.52rem; font-weight:700; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--gold);
+  background:#1A1A1A; padding:0 4px;
+}
+.verb-entry input {
+  width:100%; padding:7px 10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:7px; color:var(--white);
+  font-family:'DM Sans',sans-serif; font-size:0.72rem;
+  outline:none; transition:border-color 0.2s;
+}
+.verb-entry input:focus { border-color:var(--border-glow); }
+.verb-entry input::placeholder { color:rgba(240,237,232,0.2); }
+.verb-entry input.full { grid-column:1/-1; }
+.verb-push-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px;
+  background:linear-gradient(135deg,var(--gold),#c4903a);
+  border:none; border-radius:8px;
+  font-family:'Bebas Neue',sans-serif; font-size:0.95rem;
+  letter-spacing:0.08em; color:#0D0D0D;
+  cursor:pointer; transition:transform 0.15s;
+  box-shadow:0 4px 16px rgba(255,193,7,0.3);
+}
+.verb-push-btn:hover { transform:translateY(-1px); }
 </style>
 </head>
 <body>
@@ -959,24 +1188,18 @@ body::after {
 
       <!-- Bottom Grid -->
       <div class="grid-2">
-        <div class="glass-card">
-          <div class="card-head">
-            <span class="card-head-title">Aktivität · Letzte 12 Wochen</span>
-            <span class="card-head-action" onclick="openHeatmapModal()">Details →</span>
-          </div>
-          <div class="heatmap-grid" id="heatmap"></div>
-          <div class="hmap-legend">
-            <span>Weniger</span>
-            <div class="hmap-legend-bar">
-              <div class="hmap-legend-cell" style="background:rgba(74,16,32,0.3)"></div>
-              <div class="hmap-legend-cell" style="background:rgba(120,30,50,0.55)"></div>
-              <div class="hmap-legend-cell" style="background:rgba(180,90,20,0.5)"></div>
-              <div class="hmap-legend-cell" style="background:rgba(255,193,7,0.55)"></div>
-              <div class="hmap-legend-cell" style="background:var(--gold)"></div>
+        <!-- FOKUS-VERBEN CAROUSEL -->
+        <div class="fokus-section" id="fokusSection">
+          <div class="fokus-head">
+            <div class="fokus-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Fokus-Verben (B1)
+              <span class="fokus-title-badge" id="fokusWeekBadge">Woche 1</span>
             </div>
-            <span>Mehr</span>
+            <span class="fokus-progress-label" id="fokusProgressLabel"></span>
           </div>
-          <div class="hmap-labels"><span>Jan</span><span>Feb</span><span>Mär</span><span>Apr</span></div>
+          <div class="fokus-carousel" id="fokusCarousel"></div>
+          <div class="fokus-dots" id="fokusDots"></div>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:16px;">
@@ -1070,6 +1293,21 @@ body::after {
             <div id="publishSuccess" style="display:none;margin-top:12px;font-size:0.68rem;color:var(--green);background:var(--green-soft);border:1px solid rgba(61,186,110,0.3);border-radius:8px;padding:8px 12px;">✅ Tages-10 wurde erfolgreich veröffentlicht!</div>
           </div>
         </div>
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <span class="admin-panel-title">Verb-Manager · Fokus-Verben</span>
+            <span class="admin-panel-badge">Wöchentlich</span>
+          </div>
+          <div class="verb-manager-grid" id="verbManagerGrid"></div>
+          <div style="padding:0 20px 16px;display:flex;flex-direction:column;gap:10px;">
+            <button class="verb-push-btn" onclick="publishFocusVerbs()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+              Auf Dashboard pushen
+            </button>
+            <div id="verbPushSuccess" style="display:none;font-size:0.68rem;color:var(--green);background:var(--green-soft);border:1px solid rgba(61,186,110,0.3);border-radius:8px;padding:8px 12px;">✅ Fokus-Verben wurden aktualisiert!</div>
+          </div>
+        </div>
+
         <div class="admin-panel">
           <div class="admin-panel-head"><span class="admin-panel-title">Schwierigste Wörter</span><span class="admin-panel-badge">Fehlerrate</span></div>
           <div class="hard-words-list">
@@ -1581,6 +1819,7 @@ function initApp(user) {
   // Open month 2 by default (active month)
   if(!openMonthId) { openMonthId=2; renderPlaner(2); document.getElementById('monthPlaner').classList.add('open'); buildTimeline(); scrollToActivePlaner(); }
   loadDailyWords();
+  buildFokusCarousel();
   setTimeout(()=>updateOverallProgress(),300);
 }
 
@@ -1588,6 +1827,7 @@ function initApp(user) {
    ADMIN PANEL
 ════════════════════════════════════════════════ */
 function buildAdminPanel() {
+  buildVerbManager();
   const users=getUsers();
   document.getElementById('adminTotalUsers').textContent=users.length;
   document.getElementById('adminUsersToday').textContent=`+${users.length} registriert`;
@@ -1707,6 +1947,144 @@ function scrollToActivePlaner(){
   });
 }
 
+
+
+/* ════════════════════════════════════════════════
+   FOKUS-VERBEN SYSTEM
+════════════════════════════════════════════════ */
+const DEFAULT_FOCUS_VERBS = [
+  { verb:'interessieren', type:'Reflexivverb', translation:'to be interested in', prep:'sich … für', case:'Akkusativ', example:'Ich interessiere mich für deutsche Kultur.' },
+  { verb:'träumen', type:'Verb', translation:'to dream of', prep:'… von', case:'Dativ', example:'Er träumt von einer Reise nach Berlin.' },
+  { verb:'denken', type:'Verb', translation:'to think about', prep:'… an', case:'Akkusativ', example:'Ich denke oft an meine Heimat.' },
+  { verb:'warten', type:'Verb', translation:'to wait for', prep:'… auf', case:'Akkusativ', example:'Wir warten auf den Bus.' },
+  { verb:'sich freuen', type:'Reflexivverb', translation:'to look forward to', prep:'… auf / über', case:'Akkusativ', example:'Ich freue mich auf den Urlaub.' },
+  { verb:'gehören', type:'Verb', translation:'to belong to', prep:'… zu', case:'Dativ', example:'Das Buch gehört meiner Schwester.' },
+];
+
+function getFocusVerbs() {
+  try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); return Array.isArray(d)&&d.length?d:DEFAULT_FOCUS_VERBS; }
+  catch { return DEFAULT_FOCUS_VERBS; }
+}
+function getMasteredVerbs() {
+  try { return JSON.parse(localStorage.getItem('dt_mastered_verbs')||'{}'); } catch { return {}; }
+}
+function setMastered(verb, val) {
+  const m=getMasteredVerbs(); if(val) m[verb]=true; else delete m[verb];
+  localStorage.setItem('dt_mastered_verbs', JSON.stringify(m));
+}
+
+function buildFokusCarousel() {
+  const carousel = document.getElementById('fokusCarousel');
+  const dotsEl   = document.getElementById('fokusDots');
+  const prog      = document.getElementById('fokusProgressLabel');
+  if(!carousel) return;
+
+  const verbs   = getFocusVerbs();
+  const mastered = getMasteredVerbs();
+
+  if(!verbs.length) {
+    carousel.innerHTML = `<div class="fokus-empty"><div class="fokus-empty-icon">📌</div>Keine Verben markiert.<br>Besuchen Sie das Admin-Panel, um Schwerpunkte zu setzen.</div>`;
+    if(dotsEl) dotsEl.innerHTML='';
+    return;
+  }
+
+  const masteredCount = verbs.filter(v=>mastered[v.verb]).length;
+  if(prog) prog.innerHTML = `<span>${masteredCount}</span> / ${verbs.length} gemeistert`;
+
+  // Render cards
+  carousel.innerHTML = verbs.map((v,i) => {
+    const isMastered = !!mastered[v.verb];
+    return `
+    <div class="verb-card${isMastered?' mastered':''}" id="vc-${i}" onclick="revealCard(${i})">
+      <div class="verb-card-inner">
+        <button class="verb-mastery-btn" onclick="event.stopPropagation();toggleMastery(${i})" title="Als gemeistert markieren">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+        <div class="verb-name">${v.verb}</div>
+        <div class="verb-type">${v.type}</div>
+        <div class="verb-translation">${v.translation}</div>
+        <div class="verb-card-back">
+          <div class="verb-prep">… <em>${v.prep.replace('…','').trim()}</em></div>
+          <div class="verb-case-pill">${v.case}</div>
+          <div class="verb-example">"${v.example}"</div>
+        </div>
+        <div class="verb-card-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Tippen
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Dots
+  if(dotsEl) {
+    dotsEl.innerHTML = verbs.map((_,i)=>`<div class="fokus-dot${i===0?' active':''}" id="fd-${i}"></div>`).join('');
+    // Update dot on scroll
+    carousel.addEventListener('scroll', ()=>{
+      const idx = Math.round(carousel.scrollLeft / (carousel.offsetWidth * 0.75));
+      document.querySelectorAll('.fokus-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+    }, {passive:true});
+  }
+}
+
+function revealCard(idx) {
+  const card = document.getElementById('vc-'+idx);
+  if(card) card.classList.toggle('revealed');
+}
+
+function toggleMastery(idx) {
+  const verbs = getFocusVerbs();
+  const v = verbs[idx]; if(!v) return;
+  const m = getMasteredVerbs();
+  const nowMastered = !m[v.verb];
+  setMastered(v.verb, nowMastered);
+  // Rebuild carousel to refresh counts
+  buildFokusCarousel();
+  // Re-reveal if it was revealed
+  requestAnimationFrame(()=>{
+    const card = document.getElementById('vc-'+idx);
+    if(card && nowMastered) card.classList.add('mastered');
+  });
+}
+
+/* ── Admin: Verb-Manager ── */
+function buildVerbManager() {
+  const grid = document.getElementById('verbManagerGrid'); if(!grid) return;
+  const verbs = getFocusVerbs();
+  grid.innerHTML = Array.from({length:5},(_,i)=>{
+    const v = verbs[i]||{};
+    return `
+    <div class="verb-entry">
+      <span class="verb-entry-num">Verb ${i+1}</span>
+      <input type="text" placeholder="Verb (z.B. träumen)" id="fv-verb-${i}" value="${v.verb||''}"/>
+      <input type="text" placeholder="Typ (z.B. Reflexivverb)" id="fv-type-${i}" value="${v.type||''}"/>
+      <input type="text" placeholder="Übersetzung (EN)" id="fv-trans-${i}" value="${v.translation||''}"/>
+      <input type="text" placeholder="Präposition (z.B. von)" id="fv-prep-${i}" value="${v.prep||''}"/>
+      <input type="text" placeholder="Kasus (Akkusativ / Dativ)" id="fv-case-${i}" value="${v.case||''}"/>
+      <input type="text" class="full" placeholder="Beispielsatz" id="fv-ex-${i}" value="${v.example||''}"/>
+    </div>`;
+  }).join('');
+}
+
+function publishFocusVerbs() {
+  const verbs = [];
+  for(let i=0;i<5;i++){
+    const verb=(document.getElementById(`fv-verb-${i}`)?.value||'').trim();
+    if(!verb) continue;
+    verbs.push({
+      verb, type:(document.getElementById(`fv-type-${i}`)?.value||'Verb').trim(),
+      translation:(document.getElementById(`fv-trans-${i}`)?.value||'').trim(),
+      prep:(document.getElementById(`fv-prep-${i}`)?.value||'').trim(),
+      case:(document.getElementById(`fv-case-${i}`)?.value||'').trim(),
+      example:(document.getElementById(`fv-ex-${i}`)?.value||'').trim(),
+    });
+  }
+  if(!verbs.length){alert('Bitte mindestens ein Verb eingeben.');return;}
+  localStorage.setItem('dt_focus_verbs', JSON.stringify(verbs));
+  buildFokusCarousel();
+  const s=document.getElementById('verbPushSuccess');
+  s.style.display='block'; setTimeout(()=>s.style.display='none',4000);
+}
 
 /* ════════════════════════════════════════════════
    LANGUAGE SWITCHER
