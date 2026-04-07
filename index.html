@@ -250,27 +250,29 @@ body::after {
   border-radius:var(--radius); padding:24px 24px 0;
   margin-bottom:20px; position:relative; z-index:10;
   animation:fadeUp 0.4s ease 0.15s both;
-  overflow:hidden;
+  overflow:visible;
 }
 
 /* ── Node track ── */
 .timeline-track {
   display:flex; align-items:flex-start;
-  gap:8px; position:relative; padding-bottom:20px;
-  overflow-x:auto; scroll-snap-type:x mandatory;
+  gap:8px; position:relative;
+  padding-top:14px; padding-bottom:20px;
+  overflow-x:auto; overflow-y:visible;
+  scroll-snap-type:x mandatory;
   padding-right:40px;
   /* hide scrollbar but keep scroll functional */
   scrollbar-width:none; -ms-overflow-style:none;
 }
 .timeline-track::-webkit-scrollbar { display:none; }
 .timeline-track::before {
-  content:''; position:absolute; top:26px; left:30px; right:40px;
+  content:''; position:absolute; top:40px; left:30px; right:40px;
   height:2px; background:var(--border); z-index:0;
 }
 
 /* Dynamic connector segments — injected via JS */
 .tl-connector {
-  position:absolute; top:26px; height:2px; z-index:1;
+  position:absolute; top:40px; height:2px; z-index:1;
   transition:width 0.6s cubic-bezier(0.4,0,0.2,1), background 0.4s;
   pointer-events:none; border-radius:99px;
 }
