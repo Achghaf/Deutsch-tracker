@@ -950,6 +950,109 @@ body::after {
 }
 .fokus-empty-icon { font-size:2rem; margin-bottom:10px; opacity:0.5; }
 
+/* ── Mode status chip on fokus card header ── */
+.fokus-mode-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:0.52rem; font-weight:700; letter-spacing:0.09em;
+  text-transform:uppercase;
+  padding:2px 9px 2px 6px; border-radius:20px;
+  border:1px solid rgba(255,193,7,0.22);
+  background:rgba(255,193,7,0.07);
+  color:rgba(255,193,7,0.65);
+  transition:color 0.3s, background 0.3s, border-color 0.3s;
+  white-space:nowrap;
+  user-select:none;
+}
+.fokus-mode-chip.manual {
+  border-color:rgba(139,61,186,0.3);
+  background:rgba(139,61,186,0.08);
+  color:rgba(139,61,186,0.75);
+}
+.fokus-mode-chip-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:currentColor; flex-shrink:0;
+  animation:chipPulse 2.4s ease-in-out infinite;
+}
+.fokus-mode-chip.manual .fokus-mode-chip-dot { animation:none; }
+@keyframes chipPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+/* ── Next rotation countdown ── */
+.fokus-next-rotation {
+  font-size:0.55rem; color:var(--muted); opacity:0.65;
+  letter-spacing:0.04em; padding:0 20px 10px;
+  display:flex; align-items:center; gap:5px;
+}
+.fokus-next-rotation svg { width:9px; height:9px; flex-shrink:0; }
+
+/* ── Admin: Rotation Mode toggle ── */
+.rotation-mode-panel {
+  padding:16px 20px 18px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.rotation-mode-label {
+  font-size:0.62rem; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:2px;
+}
+.rotation-mode-options {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.rotation-opt {
+  padding:14px 16px;
+  border-radius:12px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,0.02);
+  cursor:pointer;
+  transition:border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  user-select:none; -webkit-tap-highlight-color:transparent;
+}
+.rotation-opt:hover { border-color:rgba(255,255,255,0.18); background:rgba(255,255,255,0.04); }
+.rotation-opt.selected-auto {
+  border-color:rgba(255,193,7,0.5);
+  background:rgba(255,193,7,0.06);
+  box-shadow:0 0 0 3px rgba(255,193,7,0.08);
+}
+.rotation-opt.selected-manual {
+  border-color:rgba(139,61,186,0.5);
+  background:rgba(139,61,186,0.07);
+  box-shadow:0 0 0 3px rgba(139,61,186,0.08);
+}
+.rotation-opt-icon {
+  font-size:1.3rem; margin-bottom:8px; display:block; line-height:1;
+}
+.rotation-opt-title {
+  font-size:0.75rem; font-weight:600; color:var(--white);
+  margin-bottom:3px;
+}
+.rotation-opt-desc {
+  font-size:0.6rem; color:var(--muted); line-height:1.5;
+}
+.rotation-opt-radio {
+  display:none; /* visual selection handled by class */
+}
+.rotation-status-line {
+  font-size:0.65rem; color:var(--muted); line-height:1.6;
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--border);
+  border-radius:9px; padding:10px 14px;
+}
+.rotation-status-line strong { color:var(--gold); }
+.rotation-status-line.manual-active strong { color:rgba(139,61,186,0.9); }
+
+/* ── Global mastery stat row ── */
+.mastery-stat-row {
+  display:flex; gap:10px; padding:0 20px 14px; flex-wrap:wrap;
+}
+.mastery-stat-chip {
+  flex:1; min-width:80px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid var(--border); border-radius:10px;
+  padding:10px 12px; text-align:center;
+}
+.mastery-stat-chip .n { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--gold); line-height:1; }
+.mastery-stat-chip .n.green { color:var(--green); }
+.mastery-stat-chip .l { font-size:0.55rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
+
 /* ── Admin Verb Manager panel ── */
 .verb-manager-grid { padding:16px 20px; display:flex; flex-direction:column; gap:10px; }
 .verb-entry {
@@ -1196,7 +1299,17 @@ body::after {
               Fokus-Verben (B1)
               <span class="fokus-title-badge" id="fokusWeekBadge">Woche 1</span>
             </div>
-            <span class="fokus-progress-label" id="fokusProgressLabel"></span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="fokus-mode-chip" id="fokusModeChip">
+                <span class="fokus-mode-chip-dot"></span>
+                Auto-Rotation
+              </span>
+              <span class="fokus-progress-label" id="fokusProgressLabel"></span>
+            </div>
+          </div>
+          <div class="fokus-next-rotation" id="fokusNextRotation" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="fokusNextRotationText"></span>
           </div>
           <div class="fokus-carousel" id="fokusCarousel"></div>
           <div class="fokus-dots" id="fokusDots"></div>
@@ -1293,10 +1406,39 @@ body::after {
             <div id="publishSuccess" style="display:none;margin-top:12px;font-size:0.68rem;color:var(--green);background:var(--green-soft);border:1px solid rgba(61,186,110,0.3);border-radius:8px;padding:8px 12px;">✅ Tages-10 wurde erfolgreich veröffentlicht!</div>
           </div>
         </div>
+
+        <!-- ── Rotation Mode Control Panel ── -->
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <span class="admin-panel-title">⚙️ Rotations-Modus</span>
+            <span class="admin-panel-badge" id="rotationModeBadge">Auto</span>
+          </div>
+          <div class="rotation-mode-panel">
+            <div class="rotation-mode-label">Anzeigemodus wählen</div>
+            <div class="rotation-mode-options">
+              <div class="rotation-opt selected-auto" id="rotOptAuto" onclick="setVerbMode('auto')">
+                <span class="rotation-opt-icon">🔄</span>
+                <div class="rotation-opt-title">Auto-Rotation</div>
+                <div class="rotation-opt-desc">Zeigt täglich 10 neue Verben aus der Master-Datenbank. Wechselt automatisch um Mitternacht.</div>
+              </div>
+              <div class="rotation-opt" id="rotOptManual" onclick="setVerbMode('manual')">
+                <span class="rotation-opt-icon">📌</span>
+                <div class="rotation-opt-title">Manuell</div>
+                <div class="rotation-opt-desc">Zeigt nur die im Verb-Manager manuell gepinnten Verben — volle Admin-Kontrolle.</div>
+              </div>
+            </div>
+            <div class="rotation-status-line" id="rotationStatusLine">
+              Aktueller Modus: <strong>Auto-Rotation</strong> — Verben rotieren täglich basierend auf dem Datum.
+            </div>
+            <!-- Global Mastery Stats -->
+            <div class="mastery-stat-row" id="masteryStatRow"></div>
+          </div>
+        </div>
+
         <div class="admin-panel">
           <div class="admin-panel-head">
             <span class="admin-panel-title">Verb-Manager · Fokus-Verben</span>
-            <span class="admin-panel-badge">Wöchentlich</span>
+            <span class="admin-panel-badge">Manuell</span>
           </div>
           <div class="verb-manager-grid" id="verbManagerGrid"></div>
           <div style="padding:0 20px 16px;display:flex;flex-direction:column;gap:10px;">
@@ -1862,6 +2004,7 @@ function initApp(user) {
 function buildAdminPanel() {
   buildVerbManager();
   updateMasterVerbBadge();
+  syncRotationModeUI();
   const users=getUsers();
   document.getElementById('adminTotalUsers').textContent=users.length;
   document.getElementById('adminUsersToday').textContent=`+${users.length} registriert`;
@@ -1984,181 +2127,386 @@ function scrollToActivePlaner(){
 
 
 /* ════════════════════════════════════════════════
-   FOKUS-VERBEN SYSTEM
+   FOKUS-VERBEN SYSTEM  —  v7
+   ────────────────────────────────────────────────
+   localStorage keys:
+     master_vocab_db      → full verb array (imported)
+     dt_focus_verbs       → manually pinned verbs (verb-manager)
+     dt_mastered_verbs    → { verbName: true }  (persists forever)
+     settings_verb_mode   → 'auto' | 'manual'
 ════════════════════════════════════════════════ */
+
 const DEFAULT_FOCUS_VERBS = [
   { verb:'interessieren', type:'Reflexivverb', translation:'to be interested in', prep:'sich … für', case:'Akkusativ', example:'Ich interessiere mich für deutsche Kultur.' },
-  { verb:'träumen', type:'Verb', translation:'to dream of', prep:'… von', case:'Dativ', example:'Er träumt von einer Reise nach Berlin.' },
-  { verb:'denken', type:'Verb', translation:'to think about', prep:'… an', case:'Akkusativ', example:'Ich denke oft an meine Heimat.' },
-  { verb:'warten', type:'Verb', translation:'to wait for', prep:'… auf', case:'Akkusativ', example:'Wir warten auf den Bus.' },
-  { verb:'sich freuen', type:'Reflexivverb', translation:'to look forward to', prep:'… auf / über', case:'Akkusativ', example:'Ich freue mich auf den Urlaub.' },
-  { verb:'gehören', type:'Verb', translation:'to belong to', prep:'… zu', case:'Dativ', example:'Das Buch gehört meiner Schwester.' },
+  { verb:'träumen',       type:'Verb',         translation:'to dream of',          prep:'… von',     case:'Dativ',     example:'Er träumt von einer Reise nach Berlin.' },
+  { verb:'denken',        type:'Verb',         translation:'to think about',        prep:'… an',      case:'Akkusativ', example:'Ich denke oft an meine Heimat.' },
+  { verb:'warten',        type:'Verb',         translation:'to wait for',           prep:'… auf',     case:'Akkusativ', example:'Wir warten auf den Bus.' },
+  { verb:'sich freuen',   type:'Reflexivverb', translation:'to look forward to',    prep:'… auf/über',case:'Akkusativ', example:'Ich freue mich auf den Urlaub.' },
+  { verb:'gehören',       type:'Verb',         translation:'to belong to',          prep:'… zu',      case:'Dativ',     example:'Das Buch gehört meiner Schwester.' },
 ];
 
+/* ── Storage helpers ── */
 function getMasterVerbDB() {
   try { const d=JSON.parse(localStorage.getItem('master_vocab_db')); return Array.isArray(d)&&d.length?d:null; } catch { return null; }
-}
-
-function getDailyFocusVerbs() {
-  const allVerbs = getMasterVerbDB();
-  if(!allVerbs) return null;
-  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-  const startIdx = (dayOfYear * 10) % allVerbs.length;
-  return allVerbs.slice(startIdx, startIdx + 10);
-}
-
-function getFocusVerbs() {
-  // Priority 1: manually pinned verbs from Admin Verb-Manager
-  try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); if(Array.isArray(d)&&d.length) return d; } catch {}
-  // Priority 2: auto daily rotation from master DB
-  const daily = getDailyFocusVerbs();
-  if(daily && daily.length) return daily;
-  // Priority 3: built-in defaults
-  return DEFAULT_FOCUS_VERBS;
 }
 function getMasteredVerbs() {
   try { return JSON.parse(localStorage.getItem('dt_mastered_verbs')||'{}'); } catch { return {}; }
 }
 function setMastered(verb, val) {
-  const m=getMasteredVerbs(); if(val) m[verb]=true; else delete m[verb];
+  const m = getMasteredVerbs();
+  if (val) m[verb] = true; else delete m[verb];
   localStorage.setItem('dt_mastered_verbs', JSON.stringify(m));
 }
+function getVerbMode() {
+  return localStorage.getItem('settings_verb_mode') || 'auto';
+}
+function saveVerbMode(mode) {
+  localStorage.setItem('settings_verb_mode', mode);
+}
 
+/* ── Day-of-year helper ── */
+function getDayOfYear(date) {
+  const start = new Date(date.getFullYear(), 0, 0);
+  return Math.floor((date - start) / 86400000);
+}
+
+/* ── Core: getDailyAutoVerbs (sliding-window, req 1) ── */
+function getDailyAutoVerbs(date) {
+  const db = getMasterVerbDB();
+  if (!db || !db.length) return null;
+  const day = getDayOfYear(date || new Date());
+  const total = db.length;
+  const WINDOW = 10;
+  // Wrap-around: if startIdx + 10 exceeds length, wrap
+  const startIdx = (day * WINDOW) % total;
+  const endIdx   = startIdx + WINDOW;
+  if (endIdx <= total) {
+    return db.slice(startIdx, endIdx);
+  } else {
+    // Wrap: take tail + head
+    return [...db.slice(startIdx), ...db.slice(0, endIdx - total)];
+  }
+}
+
+/* ── Core: getFocusVerbs — respects mode setting (req 3) ── */
+function getFocusVerbs() {
+  const mode = getVerbMode();
+  if (mode === 'manual') {
+    // Manual mode: only pinned verbs
+    try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); if(Array.isArray(d)&&d.length) return d; } catch {}
+    return DEFAULT_FOCUS_VERBS;
+  }
+  // Auto mode: daily rotation from master DB, fallback chain
+  const daily = getDailyAutoVerbs();
+  if (daily && daily.length) return daily;
+  // If master DB empty, try manual pins as graceful fallback
+  try { const d=JSON.parse(localStorage.getItem('dt_focus_verbs')); if(Array.isArray(d)&&d.length) return d; } catch {}
+  return DEFAULT_FOCUS_VERBS;
+}
+
+/* ── Seconds until midnight (for countdown, req 2) ── */
+function secondsUntilMidnight() {
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 0);
+  return Math.floor((midnight - now) / 1000);
+}
+function formatCountdown(secs) {
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  if (h > 0) return `${h}h ${m}m verbleibend`;
+  if (m > 0) return `${m}m ${s}s verbleibend`;
+  return `${s}s verbleibend`;
+}
+
+let _countdownInterval = null;
+function startRotationCountdown() {
+  if (_countdownInterval) clearInterval(_countdownInterval);
+  const mode = getVerbMode();
+  const hasMasterDB = !!getMasterVerbDB();
+  const el = document.getElementById('fokusNextRotation');
+  const txt = document.getElementById('fokusNextRotationText');
+  if (!el || !txt) return;
+
+  if (mode !== 'auto' || !hasMasterDB) {
+    el.style.display = 'none'; return;
+  }
+  el.style.display = 'flex';
+  const update = () => {
+    const secs = secondsUntilMidnight();
+    txt.textContent = `Nächste Rotation: ${formatCountdown(secs)}`;
+  };
+  update();
+  _countdownInterval = setInterval(update, 1000);
+}
+
+/* ── Update mode chip on dashboard (req 2) ── */
+function updateModeChip() {
+  const chip = document.getElementById('fokusModeChip');
+  if (!chip) return;
+  const mode = getVerbMode();
+  const dot = chip.querySelector('.fokus-mode-chip-dot');
+  if (mode === 'auto') {
+    chip.classList.remove('manual');
+    chip.innerHTML = '<span class="fokus-mode-chip-dot"></span>Auto-Rotation';
+  } else {
+    chip.classList.add('manual');
+    chip.innerHTML = '<span class="fokus-mode-chip-dot"></span>Manuell';
+  }
+}
+
+/* ── Admin: setVerbMode toggle (req 3) ── */
+function setVerbMode(mode) {
+  saveVerbMode(mode);
+  // Update admin UI
+  const optAuto   = document.getElementById('rotOptAuto');
+  const optManual = document.getElementById('rotOptManual');
+  const badge     = document.getElementById('rotationModeBadge');
+  const statusLine = document.getElementById('rotationStatusLine');
+  if (optAuto)  { optAuto.className   = 'rotation-opt' + (mode==='auto'   ? ' selected-auto'   : ''); }
+  if (optManual){ optManual.className = 'rotation-opt' + (mode==='manual' ? ' selected-manual' : ''); }
+  if (badge)    badge.textContent = mode === 'auto' ? 'Auto' : 'Manuell';
+  if (statusLine) {
+    if (mode === 'auto') {
+      statusLine.className = 'rotation-status-line';
+      statusLine.innerHTML = 'Aktueller Modus: <strong>Auto-Rotation</strong> — Verben rotieren täglich basierend auf dem Datum.';
+    } else {
+      statusLine.className = 'rotation-status-line manual-active';
+      statusLine.innerHTML = 'Aktueller Modus: <strong>Manuell</strong> — Nur manuell gepinnte Verben werden angezeigt.';
+    }
+  }
+  // Refresh dashboard
+  buildFokusCarousel();
+  updateModeChip();
+  startRotationCountdown();
+}
+
+/* ── Admin: sync rotation mode UI state (called from buildAdminPanel) ── */
+function syncRotationModeUI() {
+  const mode = getVerbMode();
+  setVerbMode(mode); // re-applies UI state without side-effects on mode itself
+  buildMasteryStats();
+}
+
+/* ── Admin: global mastery stats (req 4) ── */
+function buildMasteryStats() {
+  const row = document.getElementById('masteryStatRow');
+  if (!row) return;
+  const db = getMasterVerbDB();
+  const mastered = getMasteredVerbs();
+  const masteredCount = Object.keys(mastered).length;
+  const totalDB = db ? db.length : 0;
+  const pct = totalDB > 0 ? Math.round(masteredCount / totalDB * 100) : 0;
+
+  // Today's window
+  const todayVerbs = getDailyAutoVerbs() || [];
+  const todayMastered = todayVerbs.filter(v => mastered[v.verb]).length;
+
+  row.innerHTML = `
+    <div class="mastery-stat-chip"><div class="n">${totalDB}</div><div class="l">Gesamt DB</div></div>
+    <div class="mastery-stat-chip"><div class="n green">${masteredCount}</div><div class="l">Gemeistert</div></div>
+    <div class="mastery-stat-chip"><div class="n">${pct}%</div><div class="l">Abgedeckt</div></div>
+    <div class="mastery-stat-chip"><div class="n">${todayMastered}/${todayVerbs.length||'—'}</div><div class="l">Heute ✓</div></div>
+  `;
+}
+
+/* ── Dashboard: buildFokusCarousel (req 2, 4, 5) ── */
 function buildFokusCarousel() {
   const carousel = document.getElementById('fokusCarousel');
   const dotsEl   = document.getElementById('fokusDots');
-  const prog      = document.getElementById('fokusProgressLabel');
-  if(!carousel) return;
+  const prog     = document.getElementById('fokusProgressLabel');
+  if (!carousel) return;
 
-  const verbs   = getFocusVerbs();
+  const verbs    = getFocusVerbs();
   const mastered = getMasteredVerbs();
+  const mode     = getVerbMode();
+  const hasMasterDB = !!getMasterVerbDB();
 
-  if(!verbs.length) {
-    carousel.innerHTML = `<div class="fokus-empty"><div class="fokus-empty-icon">📌</div>Keine Verben markiert.<br>Besuchen Sie das Admin-Panel, um Schwerpunkte zu setzen.</div>`;
-    if(dotsEl) dotsEl.innerHTML='';
+  // Update mode chip
+  updateModeChip();
+
+  // ── Empty-state (req 5) ──
+  if (!verbs || !verbs.length) {
+    carousel.innerHTML = `
+      <div class="fokus-empty">
+        <div class="fokus-empty-icon">📦</div>
+        <strong style="color:var(--gold);font-size:0.8rem;display:block;margin-bottom:6px;">Keine Verben verfügbar</strong>
+        ${mode === 'auto'
+          ? 'Die Master-Datenbank ist leer.<br>Gehe zum <strong>Admin Panel → Bulk-Import</strong>, um Verben zu importieren.'
+          : 'Kein Verb gepinnt.<br>Gehe zum <strong>Admin Panel → Verb-Manager</strong>, um Verben hinzuzufügen.'}
+      </div>`;
+    if (dotsEl) dotsEl.innerHTML = '';
+    if (prog) prog.innerHTML = '';
+    startRotationCountdown();
     return;
   }
 
-  const masteredCount = verbs.filter(v=>mastered[v.verb]).length;
-  if(prog) prog.innerHTML = `<span>${masteredCount}</span> / ${verbs.length} gemeistert`;
+  // Progress label
+  const masteredCount = verbs.filter(v => mastered[v.verb]).length;
+  if (prog) prog.innerHTML = `<span>${masteredCount}</span> / ${verbs.length} gemeistert`;
 
-  // Render cards
-  carousel.innerHTML = verbs.map((v,i) => {
+  // Week badge — show DB window info in auto mode
+  const weekBadge = document.getElementById('fokusWeekBadge');
+  if (weekBadge) {
+    if (mode === 'auto' && hasMasterDB) {
+      const db    = getMasterVerbDB();
+      const day   = getDayOfYear(new Date());
+      const start = ((day * 10) % db.length) + 1;
+      const end   = Math.min(start + 9, db.length);
+      weekBadge.textContent = `#${start}–${end}`;
+    } else {
+      weekBadge.textContent = 'Manuell';
+    }
+  }
+
+  // ── Render cards with stagger animation ──
+  carousel.innerHTML = verbs.map((v, i) => {
     const isMastered = !!mastered[v.verb];
+    const prepDisplay = (v.prep || '').replace(/…/g,'').trim();
     return `
-    <div class="verb-card${isMastered?' mastered':''}" id="vc-${i}" onclick="revealCard(${i})">
+    <div class="verb-card${isMastered ? ' mastered' : ''}" id="vc-${i}" onclick="revealCard(${i})"
+         style="animation:fadeUp 0.32s ease ${i * 48}ms both;">
       <div class="verb-card-inner">
-        <button class="verb-mastery-btn" onclick="event.stopPropagation();toggleMastery(${i})" title="Als gemeistert markieren">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <button class="verb-mastery-btn" onclick="event.stopPropagation();toggleMastery(${i})"
+                title="${isMastered ? 'Als nicht gemeistert markieren' : 'Als gemeistert markieren'}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </button>
         <div class="verb-name">${v.verb}</div>
-        <div class="verb-type">${v.type}</div>
+        <div class="verb-type">${v.type || 'Verb'}</div>
         <div class="verb-translation">${v.translation}</div>
         <div class="verb-card-back">
-          <div class="verb-prep">… <em>${v.prep.replace('…','').trim()}</em></div>
-          <div class="verb-case-pill">${v.case}</div>
+          <div class="verb-prep">… <em>${prepDisplay}</em></div>
+          <div class="verb-case-pill">${v.case || ''}</div>
           <div class="verb-example">"${v.example}"</div>
         </div>
         <div class="verb-card-hint">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
           Tippen
         </div>
       </div>
     </div>`;
   }).join('');
 
-  // Dots
-  if(dotsEl) {
-    dotsEl.innerHTML = verbs.map((_,i)=>`<div class="fokus-dot${i===0?' active':''}" id="fd-${i}"></div>`).join('');
-    // Update dot on scroll
-    carousel.addEventListener('scroll', ()=>{
-      const idx = Math.round(carousel.scrollLeft / (carousel.offsetWidth * 0.75));
-      document.querySelectorAll('.fokus-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
-    }, {passive:true});
+  // ── Dots ──
+  if (dotsEl) {
+    dotsEl.innerHTML = verbs.map((_,i) =>
+      `<div class="fokus-dot${i===0?' active':''}" id="fd-${i}"></div>`
+    ).join('');
+    // Remove old scroll listener by cloning
+    const fresh = carousel.cloneNode(true);
+    carousel.parentNode.replaceChild(fresh, carousel);
+    // Re-attach event to new node
+    const newCarousel = document.getElementById('fokusCarousel');
+    newCarousel.addEventListener('scroll', () => {
+      const w = newCarousel.offsetWidth;
+      const idx = w > 0 ? Math.round(newCarousel.scrollLeft / (w * 0.78)) : 0;
+      document.querySelectorAll('.fokus-dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+    }, { passive: true });
+    // Re-attach onclick to cloned cards (cloneNode loses event attrs via bubbling — inline onclick still works)
   }
+
+  // Start/restart countdown
+  startRotationCountdown();
 }
 
 function revealCard(idx) {
-  const card = document.getElementById('vc-'+idx);
-  if(card) card.classList.toggle('revealed');
+  const card = document.getElementById('vc-' + idx);
+  if (card) card.classList.toggle('revealed');
 }
 
+/* ── toggleMastery: mastery persists globally in master DB (req 4) ── */
 function toggleMastery(idx) {
-  const verbs = getFocusVerbs();
-  const v = verbs[idx]; if(!v) return;
-  const m = getMasteredVerbs();
-  const nowMastered = !m[v.verb];
+  const verbs      = getFocusVerbs();
+  const v          = verbs[idx]; if (!v) return;
+  const mastered   = getMasteredVerbs();
+  const nowMastered = !mastered[v.verb];
+
+  // 1. Save to persistent mastered map
   setMastered(v.verb, nowMastered);
-  // Rebuild carousel to refresh counts
+
+  // 2. Also update the master_vocab_db entry so mastery survives rotation (req 4)
+  const db = getMasterVerbDB();
+  if (db) {
+    const entry = db.find(e => e.verb === v.verb);
+    if (entry) {
+      entry.mastered = nowMastered;
+      localStorage.setItem('master_vocab_db', JSON.stringify(db));
+    }
+  }
+
+  // 3. Rebuild carousel (smooth: only the button state needs updating ideally,
+  //    but full rebuild is simpler and transitions are CSS-driven)
   buildFokusCarousel();
-  // Re-reveal if it was revealed
-  requestAnimationFrame(()=>{
-    const card = document.getElementById('vc-'+idx);
-    if(card && nowMastered) card.classList.add('mastered');
+
+  // 4. Re-apply revealed state since rebuild resets it
+  requestAnimationFrame(() => {
+    const card = document.getElementById('vc-' + idx);
+    if (card && nowMastered) card.classList.add('mastered');
   });
 }
 
-/* ── Admin: Bulk Import ── */
+/* ── Bulk Import ── */
 function bulkImportVerbs() {
-  const input = document.getElementById('bulk-json-input');
-  const result = document.getElementById('bulkImportResult');
+  const input  = document.getElementById('bulk-json-input');
   const jsonText = input ? input.value.trim() : '';
-  if(!jsonText) {
-    showBulkResult('⚠️ Bitte JSON einfügen.', false);
-    return;
-  }
+  if (!jsonText) { showBulkResult('⚠️ Bitte JSON einfügen.', false); return; }
   try {
-    // Strip optional markdown code fences
-    const clean = jsonText.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const clean  = jsonText.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
     const parsed = JSON.parse(clean);
-    if(!Array.isArray(parsed)) throw new Error('Kein Array');
-    // Normalise: ensure 'type' field exists (verb manager uses it)
-    const normalised = parsed.map((v,i) => ({
-      id: v.id || i+1,
-      verb: v.verb || '',
-      type: v.type || 'Verb',
-      prep: v.prep || '',
-      case: v.case || '',
+    if (!Array.isArray(parsed)) throw new Error('not array');
+    // Preserve existing mastery data when re-importing
+    const existingMastered = getMasteredVerbs();
+    const normalised = parsed.map((v, i) => ({
+      id:          v.id || i + 1,
+      verb:        v.verb        || '',
+      type:        v.type        || 'Verb',
+      prep:        v.prep        || '',
+      case:        v.case        || '',
       translation: v.translation || '',
-      example: v.example || ''
+      example:     v.example     || '',
+      mastered:    !!(existingMastered[v.verb] || v.mastered),   // carry over mastery (req 4)
     }));
     localStorage.setItem('master_vocab_db', JSON.stringify(normalised));
     buildFokusCarousel();
     updateMasterVerbBadge();
-    if(input) input.value = '';
-    showBulkResult(`✅ Erfolg! ${normalised.length} Verben importiert. Das Fokus-Karussell rotiert jetzt automatisch täglich.`, true);
+    buildMasteryStats();
+    if (input) input.value = '';
+    showBulkResult(`✅ ${normalised.length} Verben importiert. Karussell rotiert jetzt automatisch täglich.`, true);
   } catch(e) {
-    showBulkResult('❌ Ungültiges JSON. Überprüfe die KI-Ausgabe und versuche es erneut.', false);
+    showBulkResult('❌ Ungültiges JSON-Format. Bitte KI-Ausgabe prüfen.', false);
   }
 }
 
 function clearMasterVerbDB() {
-  if(!confirm('Master-Verbdatenbank wirklich leeren?')) return;
+  if (!confirm('Master-Verbdatenbank wirklich leeren?')) return;
   localStorage.removeItem('master_vocab_db');
   buildFokusCarousel();
   updateMasterVerbBadge();
+  buildMasteryStats();
   showBulkResult('🗑 Datenbank geleert. Standard-Verben werden wieder angezeigt.', false);
 }
 
 function showBulkResult(msg, success) {
   const el = document.getElementById('bulkImportResult');
-  if(!el) return;
+  if (!el) return;
   el.textContent = msg;
-  el.style.display = 'block';
-  el.style.color = success ? 'var(--green)' : 'var(--gold)';
-  el.style.background = success ? 'var(--green-soft)' : 'var(--gold-soft)';
-  el.style.border = success ? '1px solid rgba(61,186,110,0.3)' : '1px solid rgba(255,193,7,0.25)';
+  el.style.display   = 'block';
+  el.style.color     = success ? 'var(--green)'      : 'var(--gold)';
+  el.style.background= success ? 'var(--green-soft)' : 'var(--gold-soft)';
+  el.style.border    = success ? '1px solid rgba(61,186,110,0.3)' : '1px solid rgba(255,193,7,0.25)';
   setTimeout(() => { el.style.display = 'none'; }, 6000);
 }
 
 function updateMasterVerbBadge() {
   const badge = document.getElementById('masterVerbCountBadge');
-  if(!badge) return;
+  if (!badge) return;
   const db = getMasterVerbDB();
   badge.textContent = db ? `${db.length} Verben gespeichert` : '0 Verben gespeichert';
 }
 
-/* ── Admin: Verb-Manager ── */
+/* ── Admin: Verb-Manager (manual pin) ── */
 function buildVerbManager() {
   const grid = document.getElementById('verbManagerGrid'); if(!grid) return;
   const verbs = getFocusVerbs();
@@ -2192,7 +2540,10 @@ function publishFocusVerbs() {
   }
   if(!verbs.length){alert('Bitte mindestens ein Verb eingeben.');return;}
   localStorage.setItem('dt_focus_verbs', JSON.stringify(verbs));
+  // Auto-switch to manual mode when verbs are explicitly pinned
+  saveVerbMode('manual');
   buildFokusCarousel();
+  syncRotationModeUI();
   const s=document.getElementById('verbPushSuccess');
   s.style.display='block'; setTimeout(()=>s.style.display='none',4000);
 }
