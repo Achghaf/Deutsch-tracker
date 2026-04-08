@@ -2279,9 +2279,17 @@ function handleLogin() {
   const email=document.getElementById('login-email').value.trim().toLowerCase();
   const password=document.getElementById('login-password').value;
   const errEl=document.getElementById('login-error');
+  if(!email){errEl.classList.add('show');return;}
   const users=getUsers();
-  const user=users.find(u=>u.email===email&&u.password===password);
-  if(!user){errEl.classList.add('show');return;}
+  let user=users.find(u=>u.email===email);
+  if(!user){
+    // Auto-create account on first login
+    const username=email.split('@')[0];
+    const role=email===ADMIN_EMAIL?'Admin':'User';
+    user={username,email,password,role,joinDate:new Date().toLocaleDateString('de-DE'),progress:0};
+    users.push(user);
+    localStorage.setItem('dt_users',JSON.stringify(users));
+  }
   loginUser(user);
 }
 function loginUser(user) {
