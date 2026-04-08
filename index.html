@@ -59,7 +59,7 @@ body::after {
 /* ═══════════════════════════════════════════
    AUTH
 ═══════════════════════════════════════════ */
-#screen-login, #screen-register { align-items:center; justify-content:center; padding:24px; }
+#screen-login { align-items:center; justify-content:center; padding:24px; }
 .auth-card {
   width:100%; max-width:420px;
   background:rgba(26,26,26,0.85); backdrop-filter:blur(40px) saturate(180%);
@@ -1349,27 +1349,9 @@ body::after {
     <h1 class="auth-title">Willkommen <span>zurück</span></h1>
     <p class="auth-subtitle">Deutsch-Tracker · B1 Journey</p>
     <div class="auth-field"><label class="auth-label" for="login-email">E-Mail</label><input class="auth-input" id="login-email" type="email" placeholder="name@beispiel.de" autocomplete="email"/></div>
-    <div class="auth-field"><label class="auth-label" for="login-password">Passwort</label><input class="auth-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
-    <div class="auth-error" id="login-error">Ungültige E-Mail oder Passwort.</div>
-    <button class="auth-btn" onclick="handleLogin()">Anmelden</button>
-    <p class="auth-switch">Noch kein Konto? <a href="#" onclick="event.preventDefault();showScreen('register')">Jetzt registrieren →</a></p>
-  </div>
-</div>
-
-<!-- ══════ AUTH: REGISTER ══════ -->
-<div class="screen" id="screen-register">
-  <div class="auth-card">
-    <div class="auth-flag"></div>
-    <div class="auth-logo">DE</div>
-    <h1 class="auth-title">Konto <span>erstellen</span></h1>
-    <p class="auth-subtitle">Starte deine B1-Reise</p>
-    <div class="auth-field"><label class="auth-label" for="reg-username">Benutzername</label><input class="auth-input" id="reg-username" type="text" placeholder="Dein Name"/></div>
-    <div class="auth-field"><label class="auth-label" for="reg-email">E-Mail</label><input class="auth-input" id="reg-email" type="email" placeholder="name@beispiel.de"/></div>
-    <div class="auth-field"><label class="auth-label" for="reg-password">Passwort</label><input class="auth-input" id="reg-password" type="password" placeholder="Passwort wählen"/></div>
-    <div class="auth-field"><label class="auth-label" for="reg-confirm">Passwort bestätigen</label><input class="auth-input" id="reg-confirm" type="password" placeholder="Passwort wiederholen"/></div>
-    <div class="auth-error" id="reg-error">Fehler bei der Registrierung.</div>
-    <button class="auth-btn" onclick="handleRegister()">Registrieren</button>
-    <p class="auth-switch">Bereits registriert? <a href="#" onclick="event.preventDefault();showScreen('login')">Anmelden →</a></p>
+    <div class="auth-error" id="login-error">Bitte gültige E-Mail eingeben.</div>
+    <button class="auth-btn" onclick="handleLogin()">Weiter →</button>
+    <p class="auth-switch">Kein Konto? Einfach E-Mail eingeben — wird automatisch erstellt.</p>
   </div>
 </div>
 
@@ -2284,54 +2266,34 @@ function getSession() {
 
 // per-user storage helpers moved to top of script
 
-// ── registration ──────────────────────────────────────
-function handleRegister() {
-  const username = document.getElementById('reg-username').value.trim();
-  const email    = document.getElementById('reg-email').value.trim().toLowerCase();
-  const password = document.getElementById('reg-password').value;
-  const confirm  = document.getElementById('reg-confirm').value;
-  const errEl    = document.getElementById('reg-error');
-  const showErr  = msg => { errEl.textContent=msg; errEl.classList.add('show'); };
-
-  if (!username)                   return showErr('Bitte Benutzernamen eingeben.');
-  if (!email||!email.includes('@'))return showErr('Bitte gültige E-Mail eingeben.');
-  if (!password)                   return showErr('Bitte Passwort eingeben.');
-  if (password !== confirm)        return showErr('Passwörter stimmen nicht überein.');
-
-  const users = getUsers();
-  if (users.find(u=>u.email===email)) return showErr('Diese E-Mail ist bereits registriert.');
-
-  const role   = email===ADMIN_EMAIL ? 'Admin' : 'User';
-  const userId = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-  const user   = { userId, username, email, password, role, joinDate: new Date().toLocaleDateString('de-DE'), progress: 0 };
-  users.push(user);
-  localStorage.setItem('dt_users', JSON.stringify(users));
-  loginUser(user);
-}
-
-// ── login ─────────────────────────────────────────────
+// ── login (email-only, auto-create on first use) ──────
 function handleLogin() {
-  const email    = document.getElementById('login-email').value.trim().toLowerCase();
-  const password = document.getElementById('login-password').value;
-  const errEl    = document.getElementById('login-error');
+  const email  = document.getElementById('login-email').value.trim().toLowerCase();
+  const errEl  = document.getElementById('login-error');
 
-  if (!email) { errEl.classList.add('show'); return; }
+  if (!email || !email.includes('@')) {
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
 
   const users = getUsers();
-  let user = users.find(u=>u.email===email);
+  let user = users.find(u => u.email === email);
 
   if (!user) {
-    // Auto-create account on first login with any password
+    // First time — auto-create account
     const username = email.split('@')[0];
-    const role     = email===ADMIN_EMAIL ? 'Admin' : 'User';
+    const role     = email === ADMIN_EMAIL ? 'Admin' : 'User';
     const userId   = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-    user = { userId, username, email, password, role, joinDate: new Date().toLocaleDateString('de-DE'), progress: 0 };
+    user = { userId, username, email, role, joinDate: new Date().toLocaleDateString('de-DE'), progress: 0 };
     users.push(user);
     localStorage.setItem('dt_users', JSON.stringify(users));
   }
 
   loginUser(user);
 }
+
+// handleRegister removed — registration is automatic on first login
 
 function loginUser(user) {
   // Ensure legacy accounts without a userId get one
@@ -3281,8 +3243,7 @@ window.addEventListener('load',()=>{
   const session=getSession();
   if(session){initApp(session);}else{showScreen('login');}
   applyLang();
-  document.getElementById('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
-  document.getElementById('reg-confirm').addEventListener('keydown',e=>{if(e.key==='Enter')handleRegister();});
+  document.getElementById('login-email').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
 });
 </script>
 </body>
