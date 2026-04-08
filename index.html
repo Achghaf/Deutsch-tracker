@@ -1247,7 +1247,7 @@ body::after {
             <div class="planer-header">
               <div class="planer-title-group">
                 <div class="planer-month-label" id="planerTitle">Monat 1</div>
-                <div class="planer-topic-label" id="planerTopic">A2 Grundlagen</div>
+                <div class="planer-topic-label" id="planerTopic">A1-Fundament · Berlin</div>
               </div>
               <div class="planer-meta">
                 <div class="planer-vocab-chip" id="planerVocab">200 Wörter</div>
@@ -1497,58 +1497,58 @@ Antworte NUR mit einem rohen JSON-Array. Kein Text davor oder danach. Format:
 ════════════════════════════════════════════════ */
 const MONTHS = [
   {
-    id: 1, key: 'm1', name: 'Monat 1', short: 'Monat 1', topic: 'A2 Grundlagen',
+    id: 1, key: 'm1', name: 'Monat 1', short: 'Monat 1', topic: 'A1-Fundament · Berlin',
     color: '#5b7ec9', soft: 'rgba(91,126,201,0.14)', border: 'rgba(91,126,201,0.3)',
     vocab: '200 Wörter',
     weeks: [
-      { w: 1, label: 'Alphabet & Aussprache', tag: 'Gram.', tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 2, label: '200 Basis-Vokabeln',    tag: 'Wort.',  tagColor: 'rgba(91,126,201,0.18)', tagText: '#5b7ec9' },
-      { w: 3, label: 'Slow German Podcast',   tag: 'Hören',  tagColor: 'rgba(61,186,110,0.15)', tagText: '#3dba6e' },
-      { w: 4, label: 'Nomen + Artikel',       tag: 'Gram.', tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 1, label: 'Präsens & Akkusativ-Kasus',      tag: 'Gram.',  tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 2, label: 'Grüße, Zahlen & Uhrzeit',        tag: 'Wort.',  tagColor: 'rgba(91,126,201,0.18)', tagText: '#5b7ec9' },
+      { w: 3, label: 'Modalverben & Trennbare Verben', tag: 'Gram.',  tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 4, label: 'Berlin: Essen & Einkaufen',      tag: 'Thema',  tagColor: 'rgba(61,186,110,0.15)', tagText: '#3dba6e' },
     ]
   },
   {
-    id: 2, key: 'm2', name: 'Monat 2', short: 'Monat 2', topic: 'Grammatik & Struktur',
+    id: 2, key: 'm2', name: 'Monat 2', short: 'Monat 2', topic: 'A2-Aufbau · Wien',
     color: '#b5832a', soft: 'rgba(181,131,42,0.14)', border: 'rgba(181,131,42,0.3)',
-    vocab: '350 Wörter',
+    vocab: '400 Wörter',
     weeks: [
-      { w: 5, label: 'Perfekt-Konstruktionen', tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 6, label: 'Dativ vs. Akkusativ',    tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 7, label: 'Trennbare Verben',       tag: 'Wort.',   tagColor: 'rgba(181,131,42,0.2)',  tagText: '#b5832a' },
-      { w: 8, label: 'Sprechen mit Tandem',    tag: 'Sprechen', tagColor: 'rgba(139,61,186,0.18)', tagText: '#8b3dba' },
+      { w: 5, label: 'Dativ-Kasus & Präpositionen',    tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 6, label: 'Familie, Berufe & Schulsystem',  tag: 'Wort.',    tagColor: 'rgba(181,131,42,0.2)',  tagText: '#b5832a' },
+      { w: 7, label: 'Possessiv-Adj. & Wortstellung',  tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 8, label: 'Wien: Nahverkehr & Geschichte',  tag: 'Thema',    tagColor: 'rgba(139,61,186,0.18)', tagText: '#8b3dba' },
     ]
   },
   {
-    id: 3, key: 'm3', name: 'Monat 3', short: 'Monat 3', topic: 'Hören & Kommunikation',
+    id: 3, key: 'm3', name: 'Monat 3', short: 'Monat 3', topic: 'A2/B1-Brücke · Wohnen',
     color: '#3aaa74', soft: 'rgba(58,170,116,0.14)', border: 'rgba(58,170,116,0.3)',
-    vocab: '500 Wörter',
+    vocab: '600 Wörter',
     weeks: [
-      { w: 9,  label: 'Deutsche Podcasts',   tag: 'Hören',  tagColor: 'rgba(61,186,110,0.15)', tagText: '#3dba6e' },
-      { w: 10, label: 'Konjunktiv II',       tag: 'Gram.', tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 11, label: 'Adjektiv-Endungen',   tag: 'Gram.', tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 12, label: 'Schreiben: Briefe',   tag: 'Schreib.', tagColor: 'rgba(58,170,116,0.18)', tagText: '#3aaa74' },
+      { w: 9,  label: 'Perfekt & Präteritum',          tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 10, label: 'Möbel & Wohnungsbeschreibung',  tag: 'Wort.',    tagColor: 'rgba(58,170,116,0.18)', tagText: '#3aaa74' },
+      { w: 11, label: 'Zwei-Wege-Präpositionen',       tag: 'Gram.',    tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 12, label: 'Imperativ & Wegbeschreibung',   tag: 'Sprechen', tagColor: 'rgba(61,186,110,0.15)', tagText: '#3dba6e' },
     ]
   },
   {
-    id: 4, key: 'm4', name: 'Monat 4', short: 'Monat 4', topic: 'B1-Vorbereitung',
+    id: 4, key: 'm4', name: 'Monat 4', short: 'Monat 4', topic: 'B1 Grammatik · Medien',
     color: '#cc2020', soft: 'rgba(204,32,32,0.14)', border: 'rgba(204,32,32,0.3)',
-    vocab: '700 Wörter',
+    vocab: '800 Wörter',
     weeks: [
-      { w: 13, label: 'Goethe B1 Übungen',     tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 14, label: 'Vergangenheitsformen',   tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
-      { w: 15, label: 'Mock-Prüfungen',         tag: 'Sprechen',tagColor: 'rgba(139,61,186,0.18)', tagText: '#8b3dba' },
-      { w: 16, label: 'Leseverständnis',        tag: 'Lesen',   tagColor: 'rgba(204,32,32,0.15)',  tagText: '#cc2020' },
+      { w: 13, label: 'Nebensätze & Verbend-Stellung',  tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 14, label: 'Medien, Nachrichten & Meinungen',tag: 'Wort.',   tagColor: 'rgba(181,131,42,0.2)',  tagText: '#b5832a' },
+      { w: 15, label: 'Genitiv & Relativsätze',         tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 16, label: 'Komplexe Sozialthemen debattieren', tag: 'Sprechen', tagColor: 'rgba(204,32,32,0.15)', tagText: '#cc2020' },
     ]
   },
   {
-    id: 5, key: 'm5', name: 'Monat 5', short: 'Monat 5', topic: 'B1 Prüfung 🎯',
+    id: 5, key: 'm5', name: 'Monat 5', short: 'Monat 5', topic: 'B1 Flüssigkeit 🎯',
     color: '#8b3dba', soft: 'rgba(139,61,186,0.14)', border: 'rgba(139,61,186,0.3)',
     vocab: '1000+ Wörter',
     weeks: [
-      { w: 17, label: 'Prüfungssimulation',     tag: 'Prüfung', tagColor: 'rgba(139,61,186,0.18)', tagText: '#8b3dba' },
-      { w: 18, label: 'Schwachstellen-Review',  tag: 'Wort.',   tagColor: 'rgba(181,131,42,0.2)',  tagText: '#b5832a' },
-      { w: 19, label: 'Goethe B1 Prüfung',      tag: '🏆',      tagColor: 'rgba(255,193,7,0.12)',  tagText: '#FFC107' },
-      { w: 20, label: 'Finale Vorbereitung',    tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 17, label: 'Konjunktiv II & Passiv',         tag: 'Gram.',   tagColor: 'rgba(77,142,247,0.15)', tagText: '#4d8ef7' },
+      { w: 18, label: 'Infinitivsätze mit "zu"',         tag: 'Gram.',   tagColor: 'rgba(139,61,186,0.18)', tagText: '#8b3dba' },
+      { w: 19, label: 'Business-Deutsch & Etikette',    tag: 'Wort.',   tagColor: 'rgba(181,131,42,0.2)',  tagText: '#b5832a' },
+      { w: 20, label: 'Goethe B1 Finale Simulation',   tag: '🏆',      tagColor: 'rgba(255,193,7,0.12)',  tagText: '#FFC107' },
     ]
   }
 ];
