@@ -1057,6 +1057,7 @@ body::after {
 .verb-entry input:focus { border-color:var(--border-glow); }
 .verb-entry input::placeholder { color:rgba(240,237,232,0.2); }
 .verb-entry input.full { grid-column:1/-1; }
+
 .verb-push-btn {
   display:inline-flex; align-items:center; gap:8px;
   padding:10px 20px;
@@ -1068,9 +1069,276 @@ body::after {
   box-shadow:0 4px 16px rgba(255,193,7,0.3);
 }
 .verb-push-btn:hover { transform:translateY(-1px); }
+
+/* ═══════════════════════════════════════════
+   AI ASSISTANT PAGE
+═══════════════════════════════════════════ */
+.rail-item.ai-item { color:var(--gold); }
+
+#page-ai {
+  display:none;
+  flex-direction:column;
+  height:calc(100vh - 56px);
+  max-height:calc(100vh - 56px);
+  overflow:hidden;
+  padding:0;
+}
+#page-ai.active { display:flex; }
+
+.ai-header {
+  padding:20px 24px 16px;
+  flex-shrink:0;
+  animation:fadeUp 0.35s ease both;
+}
+.ai-header-inner {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  margin-bottom:0;
+}
+.ai-header-left { display:flex; flex-direction:column; gap:4px; }
+.ai-title-row { display:flex; align-items:center; gap:10px; }
+.ai-logo-badge {
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg,rgba(255,193,7,0.2) 0%,rgba(139,61,186,0.25) 100%);
+  border:1px solid rgba(255,193,7,0.25);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.ai-logo-badge svg { width:16px; height:16px; color:var(--gold); }
+.ai-page-title {
+  font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.06em;
+  color:var(--white); line-height:1;
+}
+.ai-page-title span { color:var(--gold); }
+.ai-subtitle {
+  font-size:0.62rem; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--muted);
+}
+.ai-status-pill {
+  display:flex; align-items:center; gap:6px;
+  padding:5px 12px; border-radius:20px;
+  background:rgba(61,186,110,0.1); border:1px solid rgba(61,186,110,0.25);
+  font-size:0.62rem; font-weight:700; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--green);
+}
+.ai-status-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--green);
+  animation:statusPulse 2s ease-in-out infinite;
+}
+@keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── Suggestion chips ── */
+.ai-suggestions {
+  display:flex; gap:8px; flex-wrap:wrap;
+  padding:0 24px 14px;
+  flex-shrink:0;
+  animation:fadeUp 0.35s ease 0.05s both;
+}
+.ai-chip {
+  padding:6px 14px; border-radius:20px;
+  background:var(--surface-2); border:1px solid var(--border);
+  font-size:0.65rem; font-weight:500; color:var(--muted);
+  cursor:pointer; transition:all 0.2s; white-space:nowrap;
+}
+.ai-chip:hover {
+  border-color:var(--border-glow); color:var(--gold);
+  background:var(--gold-soft);
+}
+
+/* ── Chat history ── */
+.ai-history {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:8px 24px 16px;
+  display:flex; flex-direction:column; gap:14px;
+  scroll-behavior:smooth;
+}
+.ai-history::-webkit-scrollbar { width:3px; }
+.ai-history::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:99px; }
+
+/* Welcome state */
+.ai-welcome {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  flex:1; gap:16px; padding:32px 16px; text-align:center;
+  color:var(--muted);
+}
+.ai-welcome-icon {
+  width:64px; height:64px; border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,193,7,0.15),rgba(139,61,186,0.2));
+  border:1px solid rgba(255,193,7,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.8rem;
+  box-shadow:0 0 32px rgba(255,193,7,0.1);
+}
+.ai-welcome h3 {
+  font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.06em;
+  color:var(--white); margin-bottom:2px;
+}
+.ai-welcome p { font-size:0.72rem; line-height:1.6; max-width:320px; }
+
+/* ── Message bubbles ── */
+.ai-msg {
+  display:flex; gap:10px; align-items:flex-end;
+  animation:msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  max-width:85%;
+}
+@keyframes msgIn { from{opacity:0;transform:translateY(12px) scale(0.95)} to{opacity:1;transform:none} }
+
+.ai-msg.user { align-self:flex-end; flex-direction:row-reverse; }
+.ai-msg.bot  { align-self:flex-start; }
+
+.ai-avatar {
+  width:28px; height:28px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:0.75rem;
+}
+.ai-msg.bot .ai-avatar {
+  background:linear-gradient(135deg,rgba(255,193,7,0.2),rgba(139,61,186,0.25));
+  border:1px solid rgba(255,193,7,0.2);
+}
+.ai-msg.user .ai-avatar {
+  background:linear-gradient(135deg,var(--gold) 0%,#c4903a 100%);
+  font-weight:700; color:#0D0D0D; font-size:0.6rem;
+}
+
+.ai-bubble {
+  padding:12px 16px; border-radius:16px;
+  font-size:0.8rem; line-height:1.65;
+  position:relative;
+}
+.ai-msg.bot .ai-bubble {
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.09);
+  border-bottom-left-radius:4px;
+  color:var(--white);
+}
+.ai-msg.user .ai-bubble {
+  background:rgba(255,193,7,0.1);
+  border:1px solid rgba(255,193,7,0.25);
+  border-bottom-right-radius:4px;
+  color:var(--white);
+}
+
+/* Markdown-ish formatting inside bubbles */
+.ai-bubble strong { color:var(--gold); font-weight:600; }
+.ai-bubble em { color:var(--muted); font-style:italic; }
+.ai-bubble code {
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);
+  border-radius:5px; padding:1px 6px;
+  font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--gold);
+}
+.ai-bubble ul { padding-left:18px; margin-top:6px; display:flex; flex-direction:column; gap:4px; }
+.ai-bubble li { font-size:0.78rem; }
+.ai-bubble .example-block {
+  margin-top:10px; padding:8px 12px;
+  background:rgba(255,193,7,0.06); border-left:2px solid var(--gold);
+  border-radius:0 8px 8px 0; font-size:0.75rem; color:var(--white); opacity:0.9;
+}
+
+/* Typing indicator */
+.ai-typing {
+  display:flex; align-items:center; gap:5px;
+  padding:12px 16px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09);
+  border-radius:16px; border-bottom-left-radius:4px;
+  width:60px;
+}
+.ai-typing span {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--gold); opacity:0.4;
+  animation:typingBounce 1.2s ease-in-out infinite;
+}
+.ai-typing span:nth-child(2) { animation-delay:0.2s; }
+.ai-typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes typingBounce {
+  0%,60%,100% { transform:translateY(0); opacity:0.4; }
+  30% { transform:translateY(-6px); opacity:1; }
+}
+
+/* ── Input bar ── */
+.ai-input-bar {
+  flex-shrink:0;
+  padding:12px 24px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(10,10,13,0.8);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  animation:fadeUp 0.35s ease 0.1s both;
+}
+.ai-input-wrap {
+  display:flex; gap:10px; align-items:flex-end;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:14px; padding:8px 8px 8px 16px;
+  transition:border-color 0.25s, box-shadow 0.25s;
+}
+.ai-input-wrap:focus-within {
+  border-color:rgba(255,193,7,0.35);
+  box-shadow:0 0 0 3px rgba(255,193,7,0.08);
+}
+.ai-textarea {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--white); font-family:'DM Sans',sans-serif; font-size:0.85rem;
+  line-height:1.5; resize:none; min-height:22px; max-height:120px;
+  padding:2px 0; overflow-y:auto;
+}
+.ai-textarea::placeholder { color:rgba(240,237,232,0.25); }
+.ai-send-btn {
+  width:36px; height:36px; border-radius:10px; flex-shrink:0;
+  background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.2s; color:var(--muted);
+}
+.ai-send-btn.active {
+  background:linear-gradient(135deg,var(--gold) 0%,#c4903a 100%);
+  border-color:transparent; color:#0D0D0D;
+  box-shadow:0 4px 16px rgba(255,193,7,0.4);
+}
+.ai-send-btn.active:hover { transform:scale(1.07); box-shadow:0 6px 20px rgba(255,193,7,0.5); }
+.ai-send-btn svg { width:16px; height:16px; }
+
+.ai-footer-hint {
+  text-align:center; font-size:0.58rem; color:var(--muted);
+  margin-top:8px; opacity:0.6; letter-spacing:0.04em;
+}
+
+/* Key API warning banner */
+.ai-key-banner {
+  margin:0 24px 12px;
+  padding:10px 14px;
+  background:rgba(255,193,7,0.07); border:1px solid rgba(255,193,7,0.2);
+  border-radius:10px; font-size:0.68rem; color:var(--muted); line-height:1.6;
+  display:none;
+}
+.ai-key-banner.show { display:block; }
+.ai-key-banner a { color:var(--gold); font-weight:600; }
+.ai-key-input-row {
+  display:flex; gap:8px; margin-top:8px;
+}
+.ai-key-input {
+  flex:1; padding:7px 12px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px; color:var(--white); font-family:'DM Mono',monospace;
+  font-size:0.72rem; outline:none;
+  transition:border-color 0.2s;
+}
+.ai-key-input:focus { border-color:var(--border-glow); }
+.ai-key-save-btn {
+  padding:7px 14px; background:var(--gold-soft); border:1px solid var(--border-glow);
+  border-radius:8px; color:var(--gold); font-size:0.68rem; font-weight:700;
+  cursor:pointer; white-space:nowrap; transition:all 0.2s;
+}
+.ai-key-save-btn:hover { background:rgba(255,193,7,0.2); }
+
+@media (max-width:640px) {
+  #page-ai { height:calc(100vh - 96px); max-height:calc(100vh - 96px); }
+  .ai-history { padding:8px 16px 12px; }
+  .ai-input-bar { padding:10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  .ai-suggestions { padding:0 16px 12px; }
+  .ai-header { padding:16px 16px 12px; }
+  .ai-key-banner { margin:0 16px 10px; }
+  .ai-msg { max-width:92%; }
+}
 </style>
 </head>
-<body>
 
 <!-- ══════ AUTH: LOGIN ══════ -->
 <div class="screen active" id="screen-login">
@@ -1141,6 +1409,10 @@ body::after {
     <div class="rail-item" data-tip="Einstellungen" onclick="switchPage('settings',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span class="rail-label">Einstellungen</span>
+    </div>
+    <div class="rail-item ai-item" data-tip="KI-Assistent" onclick="switchPage('ai',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+      <span class="rail-label">KI-Assistent</span>
     </div>
     <div class="rail-item admin-item" id="adminNavItem" onclick="switchPage('admin',this)" style="display:none;" data-tip="Admin">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -1471,6 +1743,71 @@ Antworte NUR mit einem rohen JSON-Array. Kein Text davor oder danach. Format:
         </div>
       </div>
     </div><!-- /page-admin -->
+
+    <!-- ─── KI-ASSISTENT PAGE ─── -->
+    <div class="page" id="page-ai">
+      <div class="ai-header">
+        <div class="ai-header-inner">
+          <div class="ai-header-left">
+            <div class="ai-title-row">
+              <div class="ai-logo-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              </div>
+              <div class="ai-page-title">KI-<span>Assistent</span></div>
+            </div>
+            <div class="ai-subtitle">Dein persönlicher B1-Sprachtutor</div>
+          </div>
+          <div class="ai-status-pill" id="aiStatusPill">
+            <div class="ai-status-dot"></div>
+            Gemini · Bereit
+          </div>
+        </div>
+      </div>
+
+      <!-- API Key Banner -->
+      <div class="ai-key-banner" id="aiKeyBanner">
+        <strong style="color:var(--gold);">🔑 Gemini API-Schlüssel erforderlich</strong> —
+        Hole dir deinen kostenlosen Key auf <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>, dann füge ihn hier ein:
+        <div class="ai-key-input-row">
+          <input class="ai-key-input" id="aiKeyInput" type="password" placeholder="AIza..."/>
+          <button class="ai-key-save-btn" onclick="saveApiKey()">Speichern</button>
+        </div>
+      </div>
+
+      <!-- Quick suggestion chips -->
+      <div class="ai-suggestions">
+        <div class="ai-chip" onclick="sendChip(this)">Was bedeutet „obwohl"?</div>
+        <div class="ai-chip" onclick="sendChip(this)">Erkläre den Dativ</div>
+        <div class="ai-chip" onclick="sendChip(this)">Trennbare Verben Beispiele</div>
+        <div class="ai-chip" onclick="sendChip(this)">Konjunktiv II erklären</div>
+        <div class="ai-chip" onclick="sendChip(this)">Perfekt vs. Präteritum</div>
+      </div>
+
+      <!-- Chat history -->
+      <div class="ai-history" id="aiHistory">
+        <div class="ai-welcome" id="aiWelcome">
+          <div class="ai-welcome-icon">✨</div>
+          <div>
+            <h3>Hallo! Ich bin dein B1-Tutor</h3>
+            <p>Frag mich alles über deutsche Grammatik, Vokabeln oder Aussprache. Ich erkläre es kurz und klar — immer mit Beispielen.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="ai-input-bar">
+        <div class="ai-input-wrap">
+          <textarea class="ai-textarea" id="aiInput" rows="1"
+            placeholder="Frag mich etwas auf Deutsch…"
+            oninput="onAiInputChange(this)"
+            onkeydown="onAiKeydown(event)"></textarea>
+          <button class="ai-send-btn" id="aiSendBtn" onclick="sendAiMessage()" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="ai-footer-hint">Powered by Google Gemini · Kostenlose Stufe</div>
+      </div>
+    </div><!-- /page-ai -->
 
   </main>
 </div><!-- /screen-app -->
@@ -1959,9 +2296,11 @@ function initApp(user) {
   currentSession=user; isAdmin=(user.role==='Admin'||user.email===ADMIN_EMAIL);
   showScreen('app');
   const initials=user.username.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  userInitials = initials || '?';
   document.getElementById('userAvatar').textContent=initials;
   document.getElementById('userNameDisplay').textContent=user.username;
   if(isAdmin){ document.getElementById('adminNavItem').style.display=''; document.getElementById('railFab').classList.add('admin-aura'); }
+  initAiPage();
   loadWeekState();
   buildHeatmapData();
   buildMiniHeatmap();
@@ -2628,6 +2967,229 @@ function applyLang() {
 
   // Re-render timeline month names with correct language
   if(typeof buildTimeline === 'function') buildTimeline();
+}
+
+/* ════════════════════════════════════════════════
+   KI-ASSISTENT — Gemini API
+════════════════════════════════════════════════ */
+const AI_SYSTEM_PROMPT = `Du bist ein freundlicher und geduldiger Deutschlehrer für B1-Lernende.
+Deine Regeln:
+- Antworte IMMER auf Deutsch (außer wenn der Nutzer explizit Englisch verlangt).
+- Halte Erklärungen kurz und klar — maximal 3–4 Sätze pro Punkt.
+- Gib IMMER mindestens ein konkretes Beispielsatz.
+- Hebe wichtige Wörter mit **fett** hervor.
+- Wenn du Vokabeln erklärst, zeige: Wort → Bedeutung → Beispiel.
+- Wenn du Grammatik erklärst: Regel → Ausnahme (falls vorhanden) → Beispiel.
+- Sei ermutigend und positiv.`;
+
+const GEMINI_MODEL = 'gemini-2.0-flash';
+let aiChatHistory = [];
+let aiIsTyping = false;
+let userInitials = '?';
+
+function getApiKey() { return localStorage.getItem('dt_gemini_key') || ''; }
+function saveApiKey() {
+  const v = document.getElementById('aiKeyInput').value.trim();
+  if (!v) return;
+  localStorage.setItem('dt_gemini_key', v);
+  document.getElementById('aiKeyBanner').classList.remove('show');
+  document.getElementById('aiStatusPill').innerHTML = '<div class="ai-status-dot"></div>Gemini · Bereit';
+  showAiToast('✅ API-Schlüssel gespeichert!');
+}
+
+function initAiPage() {
+  const key = getApiKey();
+  if (!key) {
+    document.getElementById('aiKeyBanner').classList.add('show');
+    document.getElementById('aiStatusPill').innerHTML =
+      '<div class="ai-status-dot" style="background:var(--gold);"></div>Key fehlt';
+  }
+  // Auto-resize textarea
+  const ta = document.getElementById('aiInput');
+  if (ta) {
+    ta.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+  }
+}
+
+function onAiInputChange(ta) {
+  const btn = document.getElementById('aiSendBtn');
+  const hasText = ta.value.trim().length > 0;
+  btn.disabled = !hasText;
+  btn.classList.toggle('active', hasText);
+}
+
+function onAiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendAiMessage();
+  }
+}
+
+function sendChip(el) {
+  const text = el.textContent.trim();
+  const ta = document.getElementById('aiInput');
+  ta.value = text;
+  onAiInputChange(ta);
+  sendAiMessage();
+}
+
+function sendAiMessage() {
+  const ta = document.getElementById('aiInput');
+  const text = ta.value.trim();
+  if (!text || aiIsTyping) return;
+
+  // Check API key
+  if (!getApiKey()) {
+    document.getElementById('aiKeyBanner').classList.add('show');
+    return;
+  }
+
+  // Hide welcome
+  const welcome = document.getElementById('aiWelcome');
+  if (welcome) welcome.style.display = 'none';
+
+  // Add user message
+  appendMessage('user', text);
+  aiChatHistory.push({ role: 'user', parts: [{ text }] });
+
+  // Clear input
+  ta.value = '';
+  ta.style.height = 'auto';
+  onAiInputChange(ta);
+
+  // Show typing
+  showTyping();
+  askGemini(text);
+}
+
+function appendMessage(role, text) {
+  const history = document.getElementById('aiHistory');
+  const msg = document.createElement('div');
+  msg.className = `ai-msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'ai-avatar';
+  avatar.textContent = role === 'user' ? userInitials : '✨';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'ai-bubble';
+  bubble.innerHTML = formatAiText(text);
+
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  history.appendChild(msg);
+  history.scrollTop = history.scrollHeight;
+}
+
+function formatAiText(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/📌 (.+)/g, '<div class="example-block">📌 $1</div>')
+    .replace(/➡️ (.+)/g, '<div class="example-block">➡️ $1</div>')
+    .replace(/Beispiel: (.+)/g, '<div class="example-block">📖 Beispiel: $1</div>')
+    .replace(/\n/g, '<br>')
+    .replace(/
+/g, '<br>');
+}
+
+function showTyping() {
+  aiIsTyping = true;
+  const history = document.getElementById('aiHistory');
+  const wrap = document.createElement('div');
+  wrap.className = 'ai-msg bot';
+  wrap.id = 'aiTypingMsg';
+  const avatar = document.createElement('div');
+  avatar.className = 'ai-avatar';
+  avatar.textContent = '✨';
+  const typing = document.createElement('div');
+  typing.className = 'ai-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(avatar);
+  wrap.appendChild(typing);
+  history.appendChild(wrap);
+  history.scrollTop = history.scrollHeight;
+
+  // Update status
+  document.getElementById('aiStatusPill').innerHTML =
+    '<div class="ai-status-dot" style="background:var(--gold);animation:none;opacity:1;"></div>Tippt…';
+}
+
+function hideTyping() {
+  aiIsTyping = false;
+  const el = document.getElementById('aiTypingMsg');
+  if (el) el.remove();
+  document.getElementById('aiStatusPill').innerHTML =
+    '<div class="ai-status-dot"></div>Gemini · Bereit';
+}
+
+async function askGemini(userText) {
+  const key = getApiKey();
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
+
+  // Build contents array with system instruction baked in as first turn
+  const contents = [
+    { role: 'user', parts: [{ text: AI_SYSTEM_PROMPT + '\n\nNutzer: ' + userText }] }
+  ];
+
+  // If we have prior history (beyond the first message), append it
+  if (aiChatHistory.length > 1) {
+    // Rebuild: system + full history
+    const fullHistory = [
+      { role: 'user', parts: [{ text: AI_SYSTEM_PROMPT }] },
+      { role: 'model', parts: [{ text: 'Verstanden! Ich bin dein B1-Deutschlehrer. Wie kann ich dir helfen?' }] },
+      ...aiChatHistory
+    ];
+    contents.length = 0;
+    fullHistory.forEach(m => contents.push(m));
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents,
+        generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Keine Antwort erhalten.';
+
+    hideTyping();
+    appendMessage('bot', reply);
+    aiChatHistory.push({ role: 'model', parts: [{ text: reply }] });
+
+  } catch (err) {
+    hideTyping();
+    const errMsg = err.message.includes('API_KEY_INVALID') || err.message.includes('400')
+      ? '🔑 Ungültiger API-Schlüssel. Bitte überprüfe deinen Gemini-Key.'
+      : `❌ Fehler: ${err.message}`;
+    appendMessage('bot', errMsg);
+    if (err.message.includes('key') || err.message.includes('400')) {
+      document.getElementById('aiKeyBanner').classList.add('show');
+    }
+  }
+}
+
+function showAiToast(msg) {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.borderColor = 'rgba(61,186,110,0.4)';
+  el.innerHTML = `<div class="toast-icon" style="background:var(--green-soft);border-color:rgba(61,186,110,0.3)">✅</div><div class="toast-body"><div class="toast-msg">${msg}</div></div>`;
+  c.appendChild(el);
+  setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 400); }, 3000);
 }
 
 /* ════════════════════════════════════════════════
