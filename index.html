@@ -1339,6 +1339,7 @@ body::after {
 }
 </style>
 </head>
+<body>
 
 <!-- ══════ AUTH: LOGIN ══════ -->
 <div class="screen active" id="screen-login">
@@ -2266,7 +2267,6 @@ function handleRegister() {
   const showErr=msg=>{errEl.textContent=msg;errEl.classList.add('show')};
   if(!username)return showErr('Bitte Benutzernamen eingeben.');
   if(!email||!email.includes('@'))return showErr('Bitte gültige E-Mail eingeben.');
-  if(password.length<6)return showErr('Passwort muss mindestens 6 Zeichen haben.');
   if(password!==confirm)return showErr('Passwörter stimmen nicht überein.');
   const users=getUsers();
   if(users.find(u=>u.email===email))return showErr('Diese E-Mail ist bereits registriert.');
