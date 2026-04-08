@@ -1901,10 +1901,10 @@ let isAdmin = false;
 let currentSession = null;
 
 function loadWeekState() {
-  try { weekState = JSON.parse(localStorage.getItem('dt_week_state') || '{}'); } catch { weekState = {}; }
+  weekState = uGet('dt_week_state', '{}');
 }
 function saveWeekState() {
-  localStorage.setItem('dt_week_state', JSON.stringify(weekState));
+  uSet('dt_week_state', weekState);
 }
 function isWeekDone(w) { return !!weekState[`w${w}`]; }
 function setWeekDone(w, val) { weekState[`w${w}`] = val; saveWeekState(); }
@@ -2250,74 +2250,141 @@ function showDayDetail(idx) {
 /* ════════════════════════════════════════════════
    AUTH SYSTEM
 ════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   AUTH SYSTEM — open registration, superuser firewall,
+   per-user data isolation via namespaced localStorage keys
+════════════════════════════════════════════════ */
+
+// ── helpers ──────────────────────────────────────────
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('screen-'+name); if(el)el.classList.add('active');
   document.querySelectorAll('.auth-error').forEach(e=>e.classList.remove('show'));
 }
-function getUsers() { try{return JSON.parse(localStorage.getItem('dt_users')||'[]')}catch{return[]} }
-function getSession() { try{return JSON.parse(localStorage.getItem('dt_session')||'null')}catch{return null} }
 
+function getUsers() { try{return JSON.parse(localStorage.getItem('dt_users')||'[]')}catch{return[]} }
+
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('dt_session')||'null'); }
+  catch { return null; }
+}
+
+// ── per-user namespaced storage ───────────────────────
+// All user-specific keys are prefixed with their userId so
+// two users on the same browser never share progress data.
+function userKey(key) {
+  return currentSession ? `u_${currentSession.userId}_${key}` : key;
+}
+function uGet(key, fallback='{}') {
+  try { return JSON.parse(localStorage.getItem(userKey(key))||fallback); } catch { return JSON.parse(fallback); }
+}
+function uSet(key, value) {
+  localStorage.setItem(userKey(key), JSON.stringify(value));
+}
+
+// ── registration ──────────────────────────────────────
 function handleRegister() {
-  const username=document.getElementById('reg-username').value.trim();
-  const email=document.getElementById('reg-email').value.trim().toLowerCase();
-  const password=document.getElementById('reg-password').value;
-  const confirm=document.getElementById('reg-confirm').value;
-  const errEl=document.getElementById('reg-error');
-  const showErr=msg=>{errEl.textContent=msg;errEl.classList.add('show')};
-  if(!username)return showErr('Bitte Benutzernamen eingeben.');
-  if(!email||!email.includes('@'))return showErr('Bitte gültige E-Mail eingeben.');
-  if(password!==confirm)return showErr('Passwörter stimmen nicht überein.');
-  const users=getUsers();
-  if(users.find(u=>u.email===email))return showErr('Diese E-Mail ist bereits registriert.');
-  const role=email===ADMIN_EMAIL?'Admin':'User';
-  const user={username,email,password,role,joinDate:new Date().toLocaleDateString('de-DE'),progress:0};
-  users.push(user); localStorage.setItem('dt_users',JSON.stringify(users));
+  const username = document.getElementById('reg-username').value.trim();
+  const email    = document.getElementById('reg-email').value.trim().toLowerCase();
+  const password = document.getElementById('reg-password').value;
+  const confirm  = document.getElementById('reg-confirm').value;
+  const errEl    = document.getElementById('reg-error');
+  const showErr  = msg => { errEl.textContent=msg; errEl.classList.add('show'); };
+
+  if (!username)                   return showErr('Bitte Benutzernamen eingeben.');
+  if (!email||!email.includes('@'))return showErr('Bitte gültige E-Mail eingeben.');
+  if (!password)                   return showErr('Bitte Passwort eingeben.');
+  if (password !== confirm)        return showErr('Passwörter stimmen nicht überein.');
+
+  const users = getUsers();
+  if (users.find(u=>u.email===email)) return showErr('Diese E-Mail ist bereits registriert.');
+
+  const role   = email===ADMIN_EMAIL ? 'Admin' : 'User';
+  const userId = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  const user   = { userId, username, email, password, role, joinDate: new Date().toLocaleDateString('de-DE'), progress: 0 };
+  users.push(user);
+  localStorage.setItem('dt_users', JSON.stringify(users));
   loginUser(user);
 }
+
+// ── login ─────────────────────────────────────────────
 function handleLogin() {
-  const email=document.getElementById('login-email').value.trim().toLowerCase();
-  const password=document.getElementById('login-password').value;
-  const errEl=document.getElementById('login-error');
-  if(!email){errEl.classList.add('show');return;}
-  const users=getUsers();
-  let user=users.find(u=>u.email===email);
-  if(!user){
-    // Auto-create account on first login
-    const username=email.split('@')[0];
-    const role=email===ADMIN_EMAIL?'Admin':'User';
-    user={username,email,password,role,joinDate:new Date().toLocaleDateString('de-DE'),progress:0};
+  const email    = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+
+  if (!email) { errEl.classList.add('show'); return; }
+
+  const users = getUsers();
+  let user = users.find(u=>u.email===email);
+
+  if (!user) {
+    // Auto-create account on first login with any password
+    const username = email.split('@')[0];
+    const role     = email===ADMIN_EMAIL ? 'Admin' : 'User';
+    const userId   = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+    user = { userId, username, email, password, role, joinDate: new Date().toLocaleDateString('de-DE'), progress: 0 };
     users.push(user);
-    localStorage.setItem('dt_users',JSON.stringify(users));
+    localStorage.setItem('dt_users', JSON.stringify(users));
   }
+
   loginUser(user);
 }
+
 function loginUser(user) {
-  localStorage.setItem('dt_session',JSON.stringify({email:user.email,role:user.role,username:user.username}));
-  initApp(user);
+  // Ensure legacy accounts without a userId get one
+  if (!user.userId) {
+    user.userId = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+    const users = getUsers().map(u => u.email===user.email ? user : u);
+    localStorage.setItem('dt_users', JSON.stringify(users));
+  }
+  const session = { userId: user.userId, email: user.email, role: user.role, username: user.username };
+  localStorage.setItem('dt_session', JSON.stringify(session));
+  initApp(session);
 }
-function handleLogout() { localStorage.removeItem('dt_session'); showScreen('login'); }
+
+function handleLogout() {
+  localStorage.removeItem('dt_session');
+  showScreen('login');
+}
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
+// ── app bootstrap ─────────────────────────────────────
 function initApp(user) {
-  currentSession=user; isAdmin=(user.role==='Admin'||user.email===ADMIN_EMAIL);
+  currentSession = user;
+  isAdmin = (user.email === ADMIN_EMAIL);
+
   showScreen('app');
-  const initials=user.username.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  userInitials = initials || '?';
-  document.getElementById('userAvatar').textContent=initials;
-  document.getElementById('userNameDisplay').textContent=user.username;
-  if(isAdmin){ document.getElementById('adminNavItem').style.display=''; document.getElementById('railFab').classList.add('admin-aura'); }
+  const initials = user.username.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) || '?';
+  userInitials = initials;
+  document.getElementById('userAvatar').textContent = initials;
+  document.getElementById('userNameDisplay').textContent = user.username;
+
+  // ── Admin firewall: only superuser sees Admin nav ──
+  const adminNav = document.getElementById('adminNavItem');
+  if (isAdmin) {
+    adminNav.style.display = '';
+    document.getElementById('railFab').classList.add('admin-aura');
+  } else {
+    adminNav.style.display = 'none';
+  }
+
   initAiPage();
-  loadWeekState();
+  loadWeekState();     // now reads from user-namespaced key
   buildHeatmapData();
   buildMiniHeatmap();
   buildTimeline();
-  // Open month 2 by default (active month)
-  if(!openMonthId) { openMonthId=2; renderPlaner(2); document.getElementById('monthPlaner').classList.add('open'); buildTimeline(); scrollToActivePlaner(); }
+  if (!openMonthId) {
+    openMonthId = 2;
+    renderPlaner(2);
+    document.getElementById('monthPlaner').classList.add('open');
+    buildTimeline();
+    scrollToActivePlaner();
+  }
   loadDailyWords();
   buildFokusCarousel();
-  setTimeout(()=>updateOverallProgress(),300);
+  setTimeout(()=>updateOverallProgress(), 300);
 }
 
 /* ════════════════════════════════════════════════
@@ -2404,13 +2471,17 @@ function _closeMobileMenuCore(){
 function closeMobileMenu(){ _menuGuard(()=>_closeMobileMenuCore()); }
 
 function switchPage(name,el){
-  _closeMobileMenuCore(); // close menu on all screens
+  // ── Security firewall: redirect non-admins away from admin page ──
+  if (name === 'admin' && !isAdmin) {
+    name = 'tracker';
+    el = document.querySelector('.rail-item[onclick*="tracker"]');
+  }
+  _closeMobileMenuCore();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.rail-item').forEach(i=>i.classList.remove('active'));
   const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
   if(name==='admin')buildAdminPanel();
-  // Scroll anchor: after page switch, scroll main to top
   if(isMobile()){
     requestAnimationFrame(()=>{ document.querySelector('.main').scrollTop=0; window.scrollTo(0,0); });
   }
@@ -2469,12 +2540,12 @@ function getMasterVerbDB() {
   try { const d=JSON.parse(localStorage.getItem('master_vocab_db')); return Array.isArray(d)&&d.length?d:null; } catch { return null; }
 }
 function getMasteredVerbs() {
-  try { return JSON.parse(localStorage.getItem('dt_mastered_verbs')||'{}'); } catch { return {}; }
+  return uGet('dt_mastered_verbs', '{}');
 }
 function setMastered(verb, val) {
   const m = getMasteredVerbs();
   if (val) m[verb] = true; else delete m[verb];
-  localStorage.setItem('dt_mastered_verbs', JSON.stringify(m));
+  uSet('dt_mastered_verbs', m);
 }
 function getVerbMode() {
   return localStorage.getItem('settings_verb_mode') || 'auto';
