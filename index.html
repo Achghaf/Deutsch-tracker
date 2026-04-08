@@ -1352,7 +1352,7 @@ body::after {
     <div class="auth-field"><label class="auth-label" for="login-password">Passwort</label><input class="auth-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
     <div class="auth-error" id="login-error">Ungültige E-Mail oder Passwort.</div>
     <button class="auth-btn" onclick="handleLogin()">Anmelden</button>
-    <p class="auth-switch">Noch kein Konto? <a onclick="showScreen('register')">Jetzt registrieren →</a></p>
+    <p class="auth-switch">Noch kein Konto? <a href="#" onclick="event.preventDefault();showScreen('register')">Jetzt registrieren →</a></p>
   </div>
 </div>
 
@@ -1365,11 +1365,11 @@ body::after {
     <p class="auth-subtitle">Starte deine B1-Reise</p>
     <div class="auth-field"><label class="auth-label" for="reg-username">Benutzername</label><input class="auth-input" id="reg-username" type="text" placeholder="Dein Name"/></div>
     <div class="auth-field"><label class="auth-label" for="reg-email">E-Mail</label><input class="auth-input" id="reg-email" type="email" placeholder="name@beispiel.de"/></div>
-    <div class="auth-field"><label class="auth-label" for="reg-password">Passwort</label><input class="auth-input" id="reg-password" type="password" placeholder="Mindestens 6 Zeichen"/></div>
+    <div class="auth-field"><label class="auth-label" for="reg-password">Passwort</label><input class="auth-input" id="reg-password" type="password" placeholder="Passwort wählen"/></div>
     <div class="auth-field"><label class="auth-label" for="reg-confirm">Passwort bestätigen</label><input class="auth-input" id="reg-confirm" type="password" placeholder="Passwort wiederholen"/></div>
     <div class="auth-error" id="reg-error">Fehler bei der Registrierung.</div>
     <button class="auth-btn" onclick="handleRegister()">Registrieren</button>
-    <p class="auth-switch">Bereits registriert? <a onclick="showScreen('login')">Anmelden →</a></p>
+    <p class="auth-switch">Bereits registriert? <a href="#" onclick="event.preventDefault();showScreen('login')">Anmelden →</a></p>
   </div>
 </div>
 
