@@ -1830,6 +1830,20 @@ Antworte NUR mit einem rohen JSON-Array. Kein Text davor oder danach. Format:
 <div id="toast-container"></div>
 
 <script>
+/* ── per-user namespaced storage helpers (must be first) ── */
+let currentSession = null;
+function userKey(key) {
+  return currentSession ? 'u_' + currentSession.userId + '_' + key : key;
+}
+function uGet(key, fallback) {
+  if (fallback === undefined) fallback = '{}';
+  try { return JSON.parse(localStorage.getItem(userKey(key)) || fallback); } catch { return JSON.parse(fallback); }
+}
+function uSet(key, value) {
+  localStorage.setItem(userKey(key), JSON.stringify(value));
+}
+
+
 /* ════════════════════════════════════════════════
    MONTH DATA
 ════════════════════════════════════════════════ */
@@ -1898,7 +1912,6 @@ const ADMIN_EMAIL = 'achrafbensaid01@gmail.com';
 let weekState = {}; // { 'w1': true, 'w2': false, ... }
 let openMonthId = null;
 let isAdmin = false;
-let currentSession = null;
 
 function loadWeekState() {
   weekState = uGet('dt_week_state', '{}');
@@ -2269,18 +2282,7 @@ function getSession() {
   catch { return null; }
 }
 
-// ── per-user namespaced storage ───────────────────────
-// All user-specific keys are prefixed with their userId so
-// two users on the same browser never share progress data.
-function userKey(key) {
-  return currentSession ? `u_${currentSession.userId}_${key}` : key;
-}
-function uGet(key, fallback='{}') {
-  try { return JSON.parse(localStorage.getItem(userKey(key))||fallback); } catch { return JSON.parse(fallback); }
-}
-function uSet(key, value) {
-  localStorage.setItem(userKey(key), JSON.stringify(value));
-}
+// per-user storage helpers moved to top of script
 
 // ── registration ──────────────────────────────────────
 function handleRegister() {
